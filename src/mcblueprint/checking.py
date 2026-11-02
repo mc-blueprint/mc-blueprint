@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import json
 import re
-from collections.abc import Iterable, Iterator
+from collections.abc import Callable, Iterable, Iterator
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -93,26 +93,62 @@ def check_preset(path: Path, version: str) -> CheckResult:
 
 
 def check_component(path: Path, version: str) -> CheckResult:
-    result = CheckResult(path, "component")
     name = path.stem
     probe = _blueprint(
-        version, name, operations=[{"type": "component", "name": name, "position": [0, 0, 0]}]
+        version,
+        name,
+        operations=[{"type": "component", "name": name, "position": [0, 0, 0]}],
     )
     search = (path.resolve().parent, *components.default_search_paths())
-    with components.component_search_paths(search):
-        errors = validate(probe)
-        strip = f"operations[0]<{name}>"
-        for err in errors:
-            rel = err.path
-            if rel.startswith(strip):
-                rel = rel[len(strip) :].lstrip(".")
-            elif rel.startswith("operations[0]"):
-                rel = rel[len("operations[0]") :].lstrip(".")
-            result.errors.append(ValidationError(rel, err.message, err.op_type, err.value))
-        if errors:
+    return _check_component_probe(
+        path,
+        probe,
+        lambda: components.load_component(name),
+        search,
+        f"operations[0]<{name}>",
+    )
+
+
+def check_component_data(path: Path, version: str, raw: dict[str, Any]) -> CheckResult:
+    """Inspect component-shaped data directly without resolving it by filename."""
+    name = path.stem
+    probe = _blueprint(
+        version,
+        name,
+        **{key: raw[key] for key in ("palettes", "operations") if key in raw},
+    )
+    return _check_component_probe(
+        path,
+        probe,
+        lambda: raw,
+        components.default_search_paths(),
+        None,
+    )
+
+
+def _check_component_probe(
+    path: Path,
+    probe: dict[str, Any],
+    load_component: Callable[[], dict[str, Any]],
+    search_paths: tuple[Path, ...],
+    error_prefix: str | None,
+) -> CheckResult:
+    result = CheckResult(path, "component")
+    with components.component_search_paths(search_paths):
+        for error in validate(probe):
+            error_path = error.path
+            if error_prefix is not None:
+                if error_path.startswith(error_prefix):
+                    error_path = error_path[len(error_prefix) :].lstrip(".")
+                elif error_path.startswith("operations[0]"):
+                    error_path = error_path[len("operations[0]") :].lstrip(".")
+            result.errors.append(
+                ValidationError(error_path, error.message, error.op_type, error.value)
+            )
+        if result.errors:
             return result
         try:
-            raw = components.load_component(name)
+            raw = load_component()
             volume = generate(load_blueprint_dict(probe))
         except BlueprintError as exc:
             result.errors.append(ValidationError("", f"{exc}."))

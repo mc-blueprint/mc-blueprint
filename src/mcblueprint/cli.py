@@ -65,6 +65,7 @@ from mcblueprint.model.vec import AABB, Vec3
 from mcblueprint.operations.base import Operation
 from mcblueprint.operations.building import BuildingOperation
 from mcblueprint.operations.nested import NestedOperation
+from mcblueprint.pattern_checking import check_patterns
 from mcblueprint.preview import (
     DEFAULT_VIEWS,
     VIEWS,
@@ -812,6 +813,23 @@ def _run_check(args: argparse.Namespace, out: TextIO) -> int:
         raise BlueprintError(
             "Nothing to check: give paths or run where designs/ or components/ exist"
         )
+    if len(paths) == 1 and paths[0].is_dir() and (paths[0] / "styles").is_dir():
+        results = check_patterns(paths[0], args.minecraft_version)
+        errors = warnings = 0
+        for result in results:
+            if result.ok and not result.warnings:
+                continue
+            print(f"{result.path.as_posix()} ({result.kind})", file=out)
+            for error in result.errors:
+                print(_indent(error.format()), file=out)
+            for warning in result.warnings:
+                print(_indent(warning.format()), file=out)
+            errors += len(result.errors)
+            warnings += len(result.warnings)
+        print(
+            f"{len(results)} files checked: {errors} error(s), {warnings} warning(s).", file=out
+        )
+        return EXIT_VALIDATION_ERROR if errors or (warnings and args.strict) else EXIT_OK
     results = check_paths(paths, args.minecraft_version)
     errors = warnings = 0
     for result in results:

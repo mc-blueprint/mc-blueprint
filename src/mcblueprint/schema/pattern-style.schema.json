@@ -1,0 +1,161 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Pattern style v1",
+  "type": "object",
+  "required": [
+    "formatVersion",
+    "name",
+    "grid",
+    "modules",
+    "roles"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "formatVersion": {
+      "const": 1
+    },
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z0-9_-]+$"
+    },
+    "grid": {
+      "type": "object",
+      "required": [
+        "bay",
+        "story_height"
+      ],
+      "properties": {
+        "bay": {
+          "$ref": "#/$defs/range"
+        },
+        "story_height": {
+          "$ref": "#/$defs/range"
+        }
+      },
+      "additionalProperties": false
+    },
+    "depth_layers": {
+      "type": "object",
+      "additionalProperties": {
+        "oneOf": [
+          {
+            "type": "integer"
+          },
+          {
+            "$ref": "#/$defs/range"
+          }
+        ]
+      }
+    },
+    "decoration": {
+      "type": "object",
+      "properties": {
+        "density": {
+          "$ref": "#/$defs/unitRange"
+        },
+        "band_course": {
+          "type": "boolean"
+        },
+        "cornice": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": true
+    },
+    "roofs": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "gable",
+          "hip",
+          "shed",
+          "flat",
+          "spire"
+        ]
+      }
+    },
+    "modules": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "pattern": "^[a-z0-9_-]+[.][a-z0-9_-]+$"
+        }
+      }
+    },
+    "roles": {
+      "type": "object",
+      "additionalProperties": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/material"
+          },
+          {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/material"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "$defs": {
+    "range": {
+      "type": "array",
+      "prefixItems": [
+        {
+          "type": "integer",
+          "minimum": 0
+        },
+        {
+          "type": "integer",
+          "minimum": 0
+        }
+      ],
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "unitRange": {
+      "type": "array",
+      "prefixItems": [
+        {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      ],
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "material": {
+      "enum": [
+        "stone",
+        "brick",
+        "wood",
+        "plaster",
+        "terracotta",
+        "concrete",
+        "metal",
+        "glass",
+        "soil",
+        "sand",
+        "plant",
+        "wool",
+        "ice_snow",
+        "ore",
+        "mineral",
+        "light",
+        "liquid",
+        "other"
+      ]
+    }
+  }
+}

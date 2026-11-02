@@ -17,6 +17,98 @@ from mcblueprint.errors import BlueprintError
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
+
+def test_patterns_cli_validates_schemas_and_references(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    root = tmp_path / "patterns"
+    (root / "styles").mkdir(parents=True)
+    (root / "modules" / "medieval").mkdir(parents=True)
+    (root / "styles" / "medieval.yaml").write_text(
+        "formatVersion: 1\nname: medieval\ngrid: {bay: [3, 5], story_height: [4, 5]}\n"
+        "modules: {window: [medieval.window]}\nroles: {}\n",
+        encoding="utf-8",
+    )
+    (root / "modules" / "medieval" / "window.json").write_text(
+        json.dumps(
+            {
+                "formatVersion": 1,
+                "name": "medieval.window",
+                "operations": [
+                    {"type": "set", "position": [0, 0, 0], "block": "stone"}
+                ],
+                "parameters": {},
+                "anchors": {},
+            }
+        ),
+        encoding="utf-8",
+    )
+    (root / "sources.yaml").write_text("formatVersion: 1\nsources: []\n", encoding="utf-8")
+    assert main(["check", str(root)]) == EXIT_OK
+    assert "0 error(s)" in capsys.readouterr().out
+    (root / "styles" / "medieval.yaml").write_text(
+        "formatVersion: 1\nname: medieval\ngrid: {}\n"
+        "modules: {window: [medieval.missing]}\nroles: {}\nextra: true\n",
+        encoding="utf-8",
+    )
+    assert main(["check", str(root)]) == EXIT_VALIDATION_ERROR
+    assert "unknown module" in capsys.readouterr().out
+
+
+def test_patterns_accept_existing_components_as_modules(
+    tmp_path: Path, capsys: pytest.CaptureFixture[str]
+) -> None:
+    root = tmp_path / "patterns"
+    (root / "styles").mkdir(parents=True)
+    module_dir = root / "modules" / "legacy"
+    module_dir.mkdir(parents=True)
+    names = []
+    for source in sorted((REPO_ROOT / "components").glob("*.json")):
+        name = f"legacy.{source.stem}"
+        names.append(name)
+        data = json.loads(source.read_text(encoding="utf-8"))
+        data["name"] = name
+        (module_dir / source.name).write_text(json.dumps(data), encoding="utf-8")
+    (root / "styles" / "legacy.yaml").write_text(
+        "formatVersion: 1\nname: legacy\ngrid:\n  bay: [3, 5]\n  story_height: [4, 5]\n"
+        f"modules:\n  window: [{', '.join(names)}]\nroles: {{frame: wood}}\n",
+        encoding="utf-8",
+    )
+    (root / "sources.yaml").write_text("formatVersion: 1\nsources: []\n", encoding="utf-8")
+    assert main(["check", str(root)]) == EXIT_OK
+    assert "0 error(s)" in capsys.readouterr().out
+
+
+def test_module_role_reference_in_nested_operation_is_rejected(tmp_path: Path) -> None:
+    from mcblueprint.pattern_checking import check_patterns
+
+    root = tmp_path / "patterns"
+    module_dir = root / "modules" / "legacy"
+    module_dir.mkdir(parents=True)
+    (root / "styles").mkdir()
+    (module_dir / "nested.json").write_text(
+        json.dumps(
+            {
+                "formatVersion": 1,
+                "name": "legacy.nested",
+                "operations": [
+                    {
+                        "type": "repeat",
+                        "operations": [
+                            {"type": "set", "position": [0, 0, 0], "block": {
+                                "role": "frame", "shape": "stairs", "state": {}
+                            }}
+                        ],
+                    }
+                ],
+            }
+        ),
+        encoding="utf-8",
+    )
+    results = check_patterns(root)
+    module = next(result for result in results if result.kind == "module")
+    assert any("materialized" in error.message for error in module.errors)
+
 GOOD_PRESET = """# good
 
 ```json

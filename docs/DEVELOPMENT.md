@@ -68,7 +68,7 @@ mcblueprint components
 
 `design <file.schem|.litematic|.json>` は既存の建築の様式（役割ごとの Palette、壁の厚さ、階高、屋根の形、窓の寸法と間隔、入口、照明）を推定してデザインプリセット `designs/local/<name>.md` を書く。`--part NAME=FILE` でパーツを部品に変換して md から参照し、`--reference` で建物全体を `components/<name>_reference.json` にする。窓や入口の周りに枠・窓台・アーチなどの装飾があれば `components/<name>_window.json` / `<name>_door.json`（2 種類目以降は `_window2` …）として切り出し、md から参照する（`--no-parts` で省略）。`--no-views` で参考図（平面図・立面図）を省く。書き出し後に `check` と同じ検証を行う。
 
-`check [PATH ...]` はデザインプリセット（`*.md` の ```json ブロック）と部品（`*.json`）を検証する。パスを省略するとカレントディレクトリの `designs/` と `components/`（`designs/local/` を含む）が対象。出力は `validate` と同じ `ERROR` / `WARNING` 形式で、終了コードは `0` / `1`（エラー、`--strict` なら警告も）/ `2`。既定では最も古い同梱バージョンのブロックデータで検証する（`--minecraft-version` で変更）。`components` は探索パス上の部品の名前・大きさ・説明を一覧する（`--json` 可）。
+`check [PATH ...]` はデザインプリセット（`*.md` の ```json ブロック）と部品（`*.json`）を検証する。`patterns/`（`styles/` を含むディレクトリ）を1つ指定した場合はパターン v1 の様式 YAML・モジュール JSON・`sources.yaml` をスキーマと相互参照で検証する。様式名とファイル名、モジュール名と配置の一致、参照先モジュールの存在を確認する。役割参照を含むモジュールは Materialize 前のため検証エラーとなる。終了コードは成功 `0`、データ検証エラー `1`、引数・入出力エラー `2`。既定では最も古い同梱バージョンのブロックデータで検証する（`--minecraft-version` で変更）。`components` は探索パス上の部品の名前・大きさ・説明を一覧する（`--json` 可）。
 
 `preview` は既定で `preview/<名前>-top.png` / `-north.png` / `-east.png` / `-isometric.png` を出力する。`--views` で面を選び、`--layer 3`（複数可）や `--layers 1..5` / `--layers all` で高さごとの水平断面（`-y03.png` など。1 つ下の段を薄く重ねる）を出力する。断面だけ欲しいときは `--views` を省略する。`--grid 5` で 5 ブロックごとの罫線と座標ラベル、`origin` の赤い印を付ける。色が登録されていないブロックは灰色になり、ID を `WARNING` で表示する（`src/mcblueprint/data/colors.json` に追加する）。
 
