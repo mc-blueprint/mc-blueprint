@@ -3,6 +3,7 @@ name: japanese
 grid:
   bay: [4, 4]
   story_height: [4, 4]
+roofs: [gable, hip]
 modules: {}
 roles:
   wall_secondary: plaster

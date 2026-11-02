@@ -8,3 +8,4 @@ examples/house.json text eol=lf
 examples/tower.json text eol=lf
 examples/village_path.json text eol=lf
 evaluation/cases/fixed-cases.json text eol=lf
+src/mcblueprint/data/** text eol=lf

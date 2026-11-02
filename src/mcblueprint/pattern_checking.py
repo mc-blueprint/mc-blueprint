@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import json
-from copy import deepcopy
 from pathlib import Path
 from typing import Any
 
@@ -12,7 +11,7 @@ from jsonschema import Draft202012Validator
 from referencing import Registry, Resource
 from yaml import YAMLError
 
-from mcblueprint import blockdata
+from mcblueprint import blockdata, components
 from mcblueprint.checking import CheckResult, check_component_data
 from mcblueprint.errors import ValidationError
 
@@ -39,14 +38,6 @@ def _validate(
 
 def _module_registry(schema: dict[str, Any]) -> Registry[Any]:
     blueprint = _schema("blueprint.schema.json")
-    blueprint = deepcopy(blueprint)
-    definitions = blueprint["$defs"]
-    definitions["block"] = {
-        "oneOf": [
-            definitions["block"],
-            {"$ref": f"{schema['$id']}#/$defs/roleReference"},
-        ]
-    }
     return (
         Registry()
         .with_resource(blueprint["$id"], Resource.from_contents(blueprint))
@@ -55,21 +46,18 @@ def _module_registry(schema: dict[str, Any]) -> Registry[Any]:
 
 
 def _role_references(value: Any, path: str = "") -> list[str]:
+    references = []
     if isinstance(value, dict):
-        if "role" in value:
-            return [path or "block"]
-        return [
-            ref
-            for key, child in value.items()
-            for ref in _role_references(child, f"{path}.{key}" if path else key)
-        ]
-    if isinstance(value, list):
-        return [
-            ref
-            for index, child in enumerate(value)
-            for ref in _role_references(child, f"{path}[{index}]")
-        ]
-    return []
+        for key, child in value.items():
+            child_path = f"{path}.{key}" if path else key
+            if key == "block" and isinstance(child, dict) and "role" in child:
+                references.append(child_path)
+            else:
+                references.extend(_role_references(child, child_path))
+    elif isinstance(value, list):
+        for index, child in enumerate(value):
+            references.extend(_role_references(child, f"{path}[{index}]"))
+    return references
 
 
 def check_patterns(root: Path, version: str | None = None) -> list[CheckResult]:
@@ -86,7 +74,7 @@ def check_patterns(root: Path, version: str | None = None) -> list[CheckResult]:
         try:
             data = yaml.safe_load(path.read_text(encoding="utf-8"))
             errors = _validate(data, style_schema)
-            if isinstance(data, dict):
+            if isinstance(data, dict) and isinstance(data.get("modules", {}), dict):
                 styles[path.stem] = data
                 if data.get("name") != path.stem:
                     errors.append(ValidationError("name", f"must match filename {path.stem!r}"))
@@ -104,7 +92,7 @@ def check_patterns(root: Path, version: str | None = None) -> list[CheckResult]:
                 modules.add(name)
                 if data.get("name") != name:
                     errors.append(ValidationError("name", f"must match module path {name!r}"))
-                for role_path in _role_references(data):
+                for role_path in _role_references(data.get("operations", []), "operations"):
                     errors.append(
                         ValidationError(
                             role_path, "role references must be materialized before validation"
@@ -112,11 +100,15 @@ def check_patterns(root: Path, version: str | None = None) -> list[CheckResult]:
                     )
                 warnings = []
                 if not errors:
-                    component = check_component_data(
-                        path,
-                        version or blockdata.supported_versions()[0],
-                        data,
-                    )
+                    search = (root / "modules", *components.default_search_paths())
+                    with components.component_search_paths(search):
+                        component = check_component_data(
+                            path,
+                            version or blockdata.supported_versions()[0],
+                            data,
+                            search,
+                            bundled_patterns=False,
+                        )
                     errors.extend(component.errors)
                     warnings = component.warnings
         except (OSError, json.JSONDecodeError) as exc:
@@ -124,7 +116,7 @@ def check_patterns(root: Path, version: str | None = None) -> list[CheckResult]:
         results.append(CheckResult(path, "module", errors, warnings))
 
     for path, style in styles.items():
-        for group, names in style.get("modules", {}).items():
+        for group, names in (style.get("modules") or {}).items():
             for i, name in enumerate(names):
                 if name not in modules:
                     file = root / "styles" / f"{path}.yaml"

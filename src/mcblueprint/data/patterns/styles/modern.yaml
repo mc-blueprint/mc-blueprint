@@ -3,6 +3,7 @@ name: modern
 grid:
   bay: [3, 6]
   story_height: [4, 4]
+roofs: [flat]
 modules: {}
 roles:
   wall_main: concrete

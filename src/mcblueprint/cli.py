@@ -814,7 +814,13 @@ def _run_check(args: argparse.Namespace, out: TextIO) -> int:
         raise BlueprintError(
             "Nothing to check: give paths or run where designs/ or components/ exist"
         )
-    if len(paths) == 1 and paths[0].is_dir() and (paths[0] / "styles").is_dir():
+    if (
+        len(paths) == 1
+        and paths[0].is_dir()
+        and (paths[0] / "styles").is_dir()
+        and (paths[0] / "modules").is_dir()
+        and (paths[0] / "sources.yaml").is_file()
+    ):
         results = check_patterns(paths[0], args.minecraft_version)
         errors = warnings = 0
         for result in results:

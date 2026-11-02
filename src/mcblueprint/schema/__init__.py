@@ -35,4 +35,10 @@ def load_component_schema() -> dict[str, Any]:
     schema["required"] = ["formatVersion", "name", "operations"]
     for key in COMPONENT_EXCLUDED_KEYS:
         schema["properties"].pop(key, None)
+    schema["properties"]["parameters"] = {"type": "object"}
+    schema["properties"]["anchors"] = {
+        "type": "object",
+        "additionalProperties": {"$ref": "#/$defs/position"},
+    }
+    schema["properties"]["name"]["pattern"] = "^(?:[a-z0-9_]+|[a-z0-9_]+\\.[a-z0-9_]+)$"
     return schema
