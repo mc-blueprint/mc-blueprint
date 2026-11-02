@@ -39,7 +39,7 @@ python scripts/benchmark.py --repetitions 3 --output benchmarks/baseline.json
 
 `benchmarks/baseline.json` は測定した環境、実行回数、fixtureのハッシュと段階ごとの結果を保存する。記録は測定したOSとPython版に限った基準であり、未実行OSの性能を示さない。時間は開発者が環境を揃えて比較するための証跡で、CIの合否閾値ではない。
 
-Windows 11 / Python 3.14.4 / MCBlueprint 0.1.0 での代表値（3回の中央値、秒）は次のとおり。
+Windows 11 / Python 3.14.4 / mc-blueprint 0.1.0 での代表値（3回の中央値、秒）は次のとおり。
 
 | 負荷 | 実セル / bounds | 検証 | 生成 | 描画 | CLI 3呼出合計 | 単一パス |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |

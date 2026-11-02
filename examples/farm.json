@@ -3,7 +3,7 @@
   "minecraftVersion": "1.21.11",
   "name": "Farm and Flower Bed",
   "description": "garden の例。柵と門とランタン付きの畑（小麦、水路）と、Palette で花を散らした花壇。",
-  "author": "MCBlueprint examples",
+  "author": "mc-blueprint examples",
   "seed": 21,
   "origin": [0, 0, 0],
   "size": [24, 3, 11],

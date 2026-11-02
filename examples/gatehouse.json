@@ -3,7 +3,7 @@
   "minecraftVersion": "1.21.11",
   "name": "Gatehouse",
   "description": "部品（component）の例。石壁に arched_gate の門、medieval_window の窓、lantern_post の街灯を配置し、rotation で向きを変える。",
-  "author": "MCBlueprint examples",
+  "author": "mc-blueprint examples",
   "seed": 3,
   "origin": [7, 0, -3],
   "size": [17, 9, 11],

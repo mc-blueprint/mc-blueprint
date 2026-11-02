@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "mcblueprint"
+name = "mc-blueprint"
 dynamic = ["version"]
 description = "AI コーディングエージェント向けの Minecraft 建築設計ツールキット。Blueprint JSON から .schem を生成する。"
 readme = "README.md"
@@ -37,8 +37,8 @@ dev = [
 mcblueprint = "mcblueprint.cli:main"
 
 [project.urls]
-Repository = "https://github.com/rs0325/MCBlueprint"
-Issues = "https://github.com/rs0325/MCBlueprint/issues"
+Repository = "https://github.com/mc-blueprint/mc-blueprint"
+Issues = "https://github.com/mc-blueprint/mc-blueprint/issues"
 
 [tool.hatch.version]
 path = "src/mcblueprint/__init__.py"

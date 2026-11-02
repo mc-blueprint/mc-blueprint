@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/rs0325/MCBlueprint/schema/blueprint.schema.json",
-  "title": "MCBlueprint Blueprint",
+  "$id": "https://github.com/mc-blueprint/mc-blueprint/schema/blueprint.schema.json",
+  "title": "mc-blueprint Blueprint",
   "description": "Declarative Minecraft structure description (formatVersion 1). See docs/FORMAT.md and docs/OPERATIONS.md.",
   "type": "object",
   "required": [

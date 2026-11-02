@@ -1,6 +1,6 @@
 # AI エージェント向けガイド
 
-Codex、Claude Code などのコーディングエージェントから MCBlueprint を使って Minecraft の建築を生成する手順。
+Codex、Claude Code などのコーディングエージェントから mc-blueprint を使って Minecraft の建築を生成する手順。
 エージェントに依存しない共通の流れをここに書き、各エージェント固有の設定は Skill / 設定ファイルに置く。
 
 ## 役割分担

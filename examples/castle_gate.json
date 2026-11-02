@@ -3,7 +3,7 @@
   "minecraftVersion": "1.21.11",
   "name": "Castle Gate",
   "description": "城壁の中央に gate（アーチの通路、歩廊と胸壁、落とし格子、両脇の塔）を置いた例。壁は wall と fill で作り、歩廊の高さを gate に合わせる。",
-  "author": "MCBlueprint examples",
+  "author": "mc-blueprint examples",
   "seed": 5,
   "origin": [0, 0, 0],
   "size": [41, 22, 9],

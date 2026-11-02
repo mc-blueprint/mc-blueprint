@@ -3,7 +3,7 @@
   "minecraftVersion": "1.21.11",
   "name": "Stone Bridge",
   "description": "川を渡す石の太鼓橋。bridge（arch、欄干、橋脚）と、両岸・川床を作る fill の例。",
-  "author": "MCBlueprint examples",
+  "author": "mc-blueprint examples",
   "seed": 11,
   "origin": [0, 4, 2],
   "size": [25, 12, 7],
