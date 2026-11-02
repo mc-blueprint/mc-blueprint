@@ -1,0 +1,39 @@
+{
+  "formatVersion": 1,
+  "name": "medieval.lantern_post",
+  "description": "石の台座に樫のフェンス 2 段、上にランタン（高さ 4）",
+  "operations": [
+    {
+      "type": "set",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "block": "minecraft:stone_bricks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        0,
+        1,
+        0
+      ],
+      "to": [
+        0,
+        2,
+        0
+      ],
+      "block": "minecraft:oak_fence"
+    },
+    {
+      "type": "set",
+      "position": [
+        0,
+        3,
+        0
+      ],
+      "block": "minecraft:lantern"
+    }
+  ]
+}

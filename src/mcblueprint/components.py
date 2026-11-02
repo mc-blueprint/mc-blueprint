@@ -19,7 +19,10 @@ from typing import Any
 from mcblueprint.errors import BlueprintError
 
 COMPONENTS_DIR = "components"
+PATTERNS_DIR = Path(__file__).parent / "data" / "patterns" / "modules"
 NAME_PATTERN = re.compile(r"^[a-z0-9_]+$")
+MODULE_NAME_PATTERN = re.compile(r"^[a-z0-9_]+\.[a-z0-9_]+$")
+COMPONENT_NAME_PATTERN = re.compile(r"^(?:[a-z0-9_]+|[a-z0-9_]+\.[a-z0-9_]+)$")
 
 _search_paths: ContextVar[tuple[Path, ...]] = ContextVar("component_search_paths")
 _loading: ContextVar[tuple[str, ...]] = ContextVar("component_loading", default=())
@@ -53,6 +56,12 @@ def component_search_paths(paths: Sequence[Path]) -> Iterator[None]:
 
 
 def resolve(name: str) -> Path:
+    if MODULE_NAME_PATTERN.fullmatch(name):
+        style, module = name.split(".")
+        path = PATTERNS_DIR / style / f"{module}.json"
+        if path.is_file():
+            return path
+        raise BlueprintError(f"Component {name!r} not found (bundled pattern module)")
     if not NAME_PATTERN.match(name):
         raise BlueprintError(f"Invalid component name {name!r} (use a-z, 0-9 and _)")
     for directory in search_paths():

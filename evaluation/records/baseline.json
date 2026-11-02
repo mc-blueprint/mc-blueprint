@@ -20,7 +20,7 @@
       "caseId": "single-house",
       "caseDefinition": {
         "path": "evaluation/cases/fixed-cases.json",
-        "sha256": "e170ac1339251acd9ce4658fe88ecfc552b3a96a4eb5b3be35b64f29358bf4cf"
+        "sha256": "8636cafff3ab5c5d16cfa03d14e7ab0463b2d019da20660db6091dd9f8cdc952"
       },
       "status": "success",
       "attemptKind": "existing-example-control",
@@ -122,7 +122,7 @@
       "caseId": "standalone-tower",
       "caseDefinition": {
         "path": "evaluation/cases/fixed-cases.json",
-        "sha256": "e170ac1339251acd9ce4658fe88ecfc552b3a96a4eb5b3be35b64f29358bf4cf"
+        "sha256": "8636cafff3ab5c5d16cfa03d14e7ab0463b2d019da20660db6091dd9f8cdc952"
       },
       "status": "success",
       "attemptKind": "existing-example-control",
@@ -239,13 +239,13 @@
       "caseId": "slope-settlement",
       "caseDefinition": {
         "path": "evaluation/cases/fixed-cases.json",
-        "sha256": "e170ac1339251acd9ce4658fe88ecfc552b3a96a4eb5b3be35b64f29358bf4cf"
+        "sha256": "8636cafff3ab5c5d16cfa03d14e7ab0463b2d019da20660db6091dd9f8cdc952"
       },
       "status": "unhandled",
       "attemptKind": "capability-audit",
       "input": {
         "path": "examples/village_path.json",
-        "sha256": "d7644276a2c15cbbfbd21a7ec581cbbb10662a37c670da459822b922b52f3351"
+        "sha256": "c933225529e92d64a8d51c5356d9ff2652da887a8466239909a52faa5e7a3318"
       },
       "output": null,
       "execution": {
@@ -323,7 +323,7 @@
       "caseId": "connected-pair",
       "caseDefinition": {
         "path": "evaluation/cases/fixed-cases.json",
-        "sha256": "e170ac1339251acd9ce4658fe88ecfc552b3a96a4eb5b3be35b64f29358bf4cf"
+        "sha256": "8636cafff3ab5c5d16cfa03d14e7ab0463b2d019da20660db6091dd9f8cdc952"
       },
       "status": "unhandled",
       "attemptKind": "capability-audit",

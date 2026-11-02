@@ -238,7 +238,14 @@ class TestComponents:
             encoding="utf-8",
         )
         results = list_components([tree / "components", other, tree / "missing"])
-        assert [r.path.stem for r in results] == ["broken", "floating", "lamp"]
+        assert [r.path.stem for r in results] == [
+            "broken",
+            "floating",
+            "lamp",
+            "arched_gate",
+            "lantern_post",
+            "window",
+        ]
         assert results[2].path.parent == tree / "components"
 
 
@@ -271,7 +278,7 @@ class TestCli:
         assert "bad.md (preset)" in out and "broken.json (component)" in out
         assert "ERROR json[0].palettes.wall[0].block" in out
         assert "WARNING [0, 1, 0] minecraft:lantern" in out
-        assert "5 files checked: 4 error(s), 1 warning(s)." in out
+        assert "12 files checked: 4 error(s), 1 warning(s)." in out
         assert "good.md" not in out and "lamp.json" not in out
 
     def test_check_explicit_paths_and_strict(
@@ -304,7 +311,14 @@ class TestCli:
         assert "[1 error(s)]" in out and "[1 warning(s)]" in out
         assert main(["components", "--json"]) == EXIT_OK
         rows = json.loads(capsys.readouterr().out)["components"]
-        assert {r["name"] for r in rows} == {"broken", "floating", "lamp"}
+        assert {r["name"] for r in rows} == {
+            "broken",
+            "floating",
+            "lamp",
+            "medieval.arched_gate",
+            "medieval.lantern_post",
+            "medieval.window",
+        }
         assert next(r for r in rows if r["name"] == "lamp")["size"] == [1, 2, 1]
 
     def test_components_none_found(
@@ -312,7 +326,8 @@ class TestCli:
     ) -> None:
         monkeypatch.chdir(tmp_path)
         assert main(["components"]) == EXIT_OK
-        assert "No components found" in capsys.readouterr().out
+        out = capsys.readouterr().out
+        assert "medieval.window" in out and "medieval.arched_gate" in out
 
     def test_bundled_check_passes(self, capsys: pytest.CaptureFixture[str]) -> None:
         with components.component_search_paths([REPO_ROOT / "components"]):

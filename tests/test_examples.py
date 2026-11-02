@@ -1,17 +1,25 @@
 import json
+import shutil
+from copy import deepcopy
 from pathlib import Path
 
 import nbtlib
 import pytest
 
-from mcblueprint import blockdata
+from mcblueprint import blockdata, components
 from mcblueprint.cli import EXIT_OK, main
 from mcblueprint.generator import generate
-from mcblueprint.loader import load_blueprint, read_blueprint_json
+from mcblueprint.loader import load_blueprint, load_blueprint_dict, read_blueprint_json
 from mcblueprint.validator import validate
 
 EXAMPLES_DIR = Path(__file__).resolve().parent.parent / "examples"
 EXAMPLES = sorted(EXAMPLES_DIR.glob("*.json"))
+LEGACY_COMPONENTS = Path(__file__).parent / "data" / "patterns-baseline"
+LEGACY_NAMES = {
+    "medieval.arched_gate": "arched_gate",
+    "medieval.lantern_post": "lantern_post",
+    "medieval.window": "medieval_window",
+}
 
 
 def test_examples_exist() -> None:
@@ -32,6 +40,31 @@ def test_example_generates_within_declared_size(path: Path) -> None:
     assert blueprint.size is not None
     size = bounds.size
     assert (size.x, size.y, size.z) <= (blueprint.size.x, blueprint.size.y, blueprint.size.z)
+
+
+@pytest.mark.parametrize("path", EXAMPLES, ids=lambda p: p.name)
+def test_pattern_migration_preserves_example_volumes(path: Path, tmp_path: Path) -> None:
+    raw = read_blueprint_json(path)
+
+    def use_legacy_names(value: object) -> None:
+        if isinstance(value, dict):
+            for key, child in value.items():
+                if key in {"name", "component"} and isinstance(child, str):
+                    value[key] = LEGACY_NAMES.get(child, child)
+                else:
+                    use_legacy_names(child)
+        elif isinstance(value, list):
+            for child in value:
+                use_legacy_names(child)
+
+    old_blueprint = deepcopy(raw)
+    use_legacy_names(old_blueprint)
+    old_components = tmp_path / "components"
+    shutil.copytree(LEGACY_COMPONENTS, old_components)
+    with components.component_search_paths([old_components]):
+        before = generate(load_blueprint_dict(old_blueprint))
+    after = generate(load_blueprint(path))
+    assert dict(before) == dict(after)
 
 
 @pytest.mark.parametrize("path", EXAMPLES, ids=lambda p: p.name)

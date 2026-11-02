@@ -1,0 +1,66 @@
+{
+  "formatVersion": 1,
+  "name": "medieval.window",
+  "description": "濃い樫の枠 3×3 と中央 1×2 の板ガラス。壁が X 方向に伸びる面に置く（原点は枠の左下）",
+  "palettes": {
+    "frame": [
+      {
+        "block": "minecraft:dark_oak_planks",
+        "weight": 80
+      },
+      {
+        "block": "minecraft:stripped_dark_oak_log[axis=y]",
+        "weight": 20
+      }
+    ]
+  },
+  "operations": [
+    {
+      "type": "fill",
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        2,
+        2,
+        0
+      ],
+      "palette": "frame",
+      "comment": "枠"
+    },
+    {
+      "type": "window",
+      "position": [
+        1,
+        1,
+        0
+      ],
+      "axis": "x",
+      "width": 1,
+      "height": 2,
+      "comment": "ガラス"
+    },
+    {
+      "type": "set",
+      "position": [
+        1,
+        0,
+        0
+      ],
+      "block": "minecraft:dark_oak_stairs[facing=north,half=top]",
+      "comment": "窓台"
+    },
+    {
+      "type": "set",
+      "position": [
+        1,
+        3,
+        0
+      ],
+      "block": "minecraft:dark_oak_slab[type=bottom]",
+      "comment": "庇"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+formatVersion: 1
+sources:
+  - id: mc-blueprint-pattern-migration
+    source: https://github.com/mc-blueprint/mc-blueprint/tree/9d4ec83d0306e4ec243b236d141226474ab01d0c
+    license: MIT
+    attribution: mc-blueprint（9d4ec83d0306e4ec243b236d141226474ab01d0c）から移行
+    modules:
+      - medieval.window
+      - medieval.arched_gate
+      - medieval.lantern_post
+  - id: mc-blueprint-patterns-original
+    source: https://github.com/mc-blueprint/mc-blueprint-patterns
+    license: MIT
+    attribution: mc-blueprint-patterns にて作成

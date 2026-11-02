@@ -12,7 +12,7 @@ from __future__ import annotations
 from collections.abc import Mapping, Sequence
 from typing import Any, Self
 
-from mcblueprint.components import NAME_PATTERN
+from mcblueprint.components import COMPONENT_NAME_PATTERN
 from mcblueprint.errors import BlueprintError
 from mcblueprint.model.block import BlockState
 from mcblueprint.model.vec import Vec3
@@ -105,7 +105,7 @@ class PathOperation(CompositeOperation):
             if (component is None) == (self.light_block is None):
                 raise BlueprintError(f"{sub}: give exactly one of 'component' or 'block'")
             if component is not None and (
-                not isinstance(component, str) or not NAME_PATTERN.match(component)
+                not isinstance(component, str) or not COMPONENT_NAME_PATTERN.match(component)
             ):
                 raise BlueprintError(f"{sub}.component: must be a component name")
             self.light_component = component

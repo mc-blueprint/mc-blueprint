@@ -1,0 +1,14 @@
+formatVersion: 1
+name: japanese
+grid:
+  bay: [4, 4]
+  story_height: [4, 4]
+modules: {}
+roles:
+  wall_secondary: plaster
+  frame: wood
+  window_frame: wood
+  floor: wood
+  foundation: [stone, brick]
+  roof: [stone, wood]
+  path: [sand, stone]

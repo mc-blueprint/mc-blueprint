@@ -1,0 +1,13 @@
+formatVersion: 1
+name: modern
+grid:
+  bay: [3, 6]
+  story_height: [4, 4]
+modules: {}
+roles:
+  wall_main: concrete
+  wall_secondary: concrete
+  floor: mineral
+  foundation: stone
+  roof: mineral
+  path: wood

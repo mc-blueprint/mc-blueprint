@@ -1,0 +1,54 @@
+{
+  "formatVersion": 1,
+  "name": "medieval.arched_gate",
+  "description": "幅 3・高さ 4 の石のアーチ門。壁は X 方向、通路は Z 方向（原点は左の柱の足元）",
+  "operations": [
+    {
+      "type": "arch",
+      "position": [
+        1,
+        0,
+        0
+      ],
+      "axis": "x",
+      "width": 3,
+      "height": 4,
+      "style": "round",
+      "block": "minecraft:stone_bricks",
+      "trim": "minecraft:stone_brick_stairs",
+      "comment": "通路（アーチの下）を空けて縁取る"
+    },
+    {
+      "type": "pillar",
+      "position": [
+        0,
+        0,
+        0
+      ],
+      "height": 4,
+      "block": "minecraft:stone_bricks",
+      "base": "minecraft:chiseled_stone_bricks"
+    },
+    {
+      "type": "pillar",
+      "position": [
+        4,
+        0,
+        0
+      ],
+      "height": 4,
+      "block": "minecraft:stone_bricks",
+      "base": "minecraft:chiseled_stone_bricks"
+    },
+    {
+      "type": "set",
+      "position": [
+        2,
+        5,
+        0
+      ],
+      "block": "minecraft:stone_brick_slab[type=bottom]",
+      "comment": "要石"
+    }
+  ]
+}

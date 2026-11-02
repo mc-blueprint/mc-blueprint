@@ -105,7 +105,9 @@ class TestSlopesAndCorners:
 
 class TestLights:
     def test_component_lights_beside_the_edge(self) -> None:
-        volume = run(path(edge="cobblestone", lights={"spacing": 4, "component": "lantern_post"}))
+        volume = run(
+            path(edge="cobblestone", lights={"spacing": 4, "component": "medieval.lantern_post"})
+        )
         # right of travel (+z): edge at z 2, post base at z 3 one above the surface
         for x in (0, 4, 8):
             assert volume.get(Vec3(x, 1, 3)) == B("stone_bricks")
@@ -122,7 +124,7 @@ class TestLights:
             ({"spacing": 3}, "exactly one"),
             ({"spacing": 3, "component": "a", "block": "torch"}, "exactly one"),
             ({"spacing": 3, "component": "Bad Name"}, "component name"),
-            ({"component": "lantern_post"}, "spacing"),
+            ({"component": "medieval.lantern_post"}, "spacing"),
         ],
     )
     def test_invalid_lights(self, lights: dict[str, Any], match: str) -> None:
@@ -157,7 +159,7 @@ class TestValidation:
                             block=None,
                             edge="cobblestone",
                             stairs="cobblestone_stairs",
-                            lights={"spacing": 5, "component": "lantern_post"},
+                            lights={"spacing": 5, "component": "medieval.lantern_post"},
                         ),
                         palettes={"p": [{"block": "minecraft:gravel", "weight": 1}]},
                     )

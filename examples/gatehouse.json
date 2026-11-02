@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "minecraftVersion": "1.21.11",
   "name": "Gatehouse",
-  "description": "部品（component）の例。石壁に arched_gate の門、medieval_window の窓、lantern_post の街灯を配置し、rotation で向きを変える。",
+  "description": "部品（component）の例。石壁に medieval.arched_gate の門、medieval.window の窓、medieval.lantern_post の街灯を配置し、rotation で向きを変える。",
   "author": "mc-blueprint examples",
   "seed": 3,
   "origin": [7, 0, -3],
@@ -17,12 +17,12 @@
   "operations": [
     { "type": "floor", "from": [0, 0, 0], "to": [14, 0, 6], "palette": "stone_wall", "comment": "土台" },
     { "type": "wall", "from": [0, 1, 0], "to": [14, 1, 6], "height": 6, "palette": "stone_wall", "comment": "外周壁" },
-    { "type": "component", "name": "arched_gate", "position": [5, 1, 0], "comment": "北面の門（門の内側に通路が開く）" },
-    { "type": "component", "name": "medieval_window", "position": [1, 2, 0], "comment": "北面左の窓" },
-    { "type": "component", "name": "medieval_window", "position": [11, 2, 0], "comment": "北面右の窓" },
-    { "type": "component", "name": "medieval_window", "position": [14, 2, 2], "rotation": 90, "comment": "東面の窓（90° 回転で Z 方向の壁に合わせる）" },
-    { "type": "component", "name": "lantern_post", "position": [3, 1, -2], "comment": "門の前の街灯" },
-    { "type": "component", "name": "lantern_post", "position": [11, 1, -2] },
+    { "type": "component", "name": "medieval.arched_gate", "position": [5, 1, 0], "comment": "北面の門（門の内側に通路が開く）" },
+    { "type": "component", "name": "medieval.window", "position": [1, 2, 0], "comment": "北面左の窓" },
+    { "type": "component", "name": "medieval.window", "position": [11, 2, 0], "comment": "北面右の窓" },
+    { "type": "component", "name": "medieval.window", "position": [14, 2, 2], "rotation": 90, "comment": "東面の窓（90° 回転で Z 方向の壁に合わせる）" },
+    { "type": "component", "name": "medieval.lantern_post", "position": [3, 1, -2], "comment": "門の前の街灯" },
+    { "type": "component", "name": "medieval.lantern_post", "position": [11, 1, -2] },
     { "type": "floor", "from": [0, 7, 0], "to": [14, 7, 6], "block": "minecraft:stone_bricks", "comment": "屋上の床" },
     { "type": "wall", "from": [0, 8, 0], "to": [14, 8, 6], "height": 1, "block": "minecraft:stone_bricks", "comment": "胸壁" }
   ]

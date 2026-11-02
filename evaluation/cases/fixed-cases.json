@@ -85,7 +85,7 @@
           "path": "examples/village_path.json",
           "role": "同梱作例。斜面道路の参照に限り、建物配置の正解例として扱わない",
           "license": "MIT (repository LICENSE)",
-          "sha256": "d7644276a2c15cbbfbd21a7ec581cbbb10662a37c670da459822b922b52f3351"
+          "sha256": "c933225529e92d64a8d51c5356d9ff2652da887a8466239909a52faa5e7a3318"
         }
       ],
       "views": [
