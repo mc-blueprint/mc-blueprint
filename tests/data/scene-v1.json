@@ -7,7 +7,8 @@
   "origin": [0, 0, 0],
   "palette": [
     {"state": "minecraft:air", "render": "invisible", "emission": 0, "opacity": 0, "tint": "none"},
-    {"state": "minecraft:stone", "render": "model", "emission": 0, "opacity": 15, "tint": "none"}
+    {"state": "minecraft:stone", "render": "model", "emission": 0, "opacity": 15, "tint": "none"},
+    {"state": "minecraft:oak_leaves", "render": "model", "emission": 0, "opacity": 1, "tint": "fixed", "tintColor": [0.65, -0.08, 0.12]}
   ],
   "chunks": [{"at": [0, 0, 0], "blocks": "AAABAAEAAAA=", "sources": "BwAAAAcAAAAHAAAABwAAAA=="}],
   "indexWidth": 16,
