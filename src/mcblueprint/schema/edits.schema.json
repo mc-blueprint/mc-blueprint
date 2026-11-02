@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/mc-blueprint/mc-blueprint/schema/edits.schema.json",
+  "title": "mc-blueprint edits",
+  "description": "viewer が保存し mcblueprint apply-edits が読む edits v1。",
+  "type": "object",
+  "required": ["formatVersion", "scene", "edits"],
+  "additionalProperties": false,
+  "properties": {
+    "formatVersion": {"const": 1},
+    "scene": {"type": "string", "pattern": "^[0-9a-fA-F]{64}$", "description": "gzip を展開した後の scene JSON のバイト列の SHA-256。現在の生成結果と一致しない場合は競合として適用しない。"},
+    "edits": {"type": "array", "items": {"oneOf": [{"$ref": "#/$defs/replace"}, {"$ref": "#/$defs/delete"}, {"$ref": "#/$defs/param"}, {"$ref": "#/$defs/note"}]}}
+  },
+  "$defs": {
+    "position": {"type": "array", "items": {"type": "integer"}, "minItems": 3, "maxItems": 3, "description": "scene の最小コーナーを [0,0,0] とするローカル座標。"},
+    "base": {"type": "object", "required": ["id", "kind"], "properties": {"id": {"type": "string", "minLength": 1}, "kind": {"type": "string"}}},
+    "replace": {"allOf": [{"$ref": "#/$defs/base"}, {"type": "object", "required": ["region", "block"], "additionalProperties": false, "properties": {"id": {"type": "string", "minLength": 1}, "kind": {"const": "replace"}, "region": {"type": "array", "items": {"$ref": "#/$defs/position"}, "minItems": 2, "maxItems": 2}, "block": {"type": "string", "minLength": 1}}}]},
+    "delete": {"allOf": [{"$ref": "#/$defs/base"}, {"type": "object", "required": ["at"], "additionalProperties": false, "properties": {"id": {"type": "string", "minLength": 1}, "kind": {"const": "delete"}, "at": {"$ref": "#/$defs/position"}}}]},
+    "param": {"allOf": [{"$ref": "#/$defs/base"}, {"type": "object", "required": ["element", "param", "value"], "additionalProperties": false, "properties": {"id": {"type": "string", "minLength": 1}, "kind": {"const": "param"}, "element": {"type": "string", "minLength": 1}, "param": {"type": "string", "minLength": 1}, "value": {}}}]},
+    "note": {"allOf": [{"$ref": "#/$defs/base"}, {"type": "object", "required": ["element", "text"], "additionalProperties": false, "properties": {"id": {"type": "string", "minLength": 1}, "kind": {"const": "note"}, "element": {"type": "string", "minLength": 1}, "text": {"type": "string"}}}]}
+  }
+}

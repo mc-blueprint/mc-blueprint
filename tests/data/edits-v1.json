@@ -1,0 +1,10 @@
+{
+  "formatVersion": 1,
+  "scene": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "edits": [
+    {"id": "e1", "kind": "replace", "region": [[0, 0, 0], [1, 1, 1]], "block": "minecraft:glass"},
+    {"id": "e2", "kind": "delete", "at": [2, 3, 4]},
+    {"id": "e3", "kind": "param", "element": "tower#3", "param": "height", "value": 30},
+    {"id": "e4", "kind": "note", "element": "tower#3", "text": "屋根を変更"}
+  ]
+}

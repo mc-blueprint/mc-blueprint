@@ -1,0 +1,18 @@
+{
+  "formatVersion": 1,
+  "minecraftVersion": "26.3",
+  "engine": {"version": "0.1.0", "commit": "0123456789abcdef"},
+  "source": {"kind": "spec", "path": "blueprints/sample.yaml", "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},
+  "size": [2, 1, 2],
+  "origin": [0, 0, 0],
+  "palette": [
+    {"state": "minecraft:air", "render": "invisible", "emission": 0, "opacity": 0, "tint": "none"},
+    {"state": "minecraft:stone", "render": "model", "emission": 0, "opacity": 15, "tint": "none"}
+  ],
+  "chunks": [{"at": [0, 0, 0], "blocks": "AAABAAEAAAA=", "sources": "BwAAAAcAAAAHAAAABwAAAA=="}],
+  "indexWidth": 16,
+  "sources": [{"id": 7, "element": "wall#1"}],
+  "blockEntities": [],
+  "environment": {"biome": "plains", "tints": {"grass": {"l": 0.5, "a": 0.1, "b": 0.2}, "foliage": {"l": 0.5, "a": 0.1, "b": 0.2}, "water": {"l": 0.5, "a": 0.1, "b": 0.2}}},
+  "preview": {"enabled": true, "shader": "vanilla", "shadows": true, "brightness": 0.5, "timeOfDay": 6000, "blockLight": true, "quality": "auto"}
+}
