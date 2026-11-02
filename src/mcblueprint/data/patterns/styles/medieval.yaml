@@ -3,6 +3,7 @@ name: medieval
 grid:
   bay: [3, 5]
   story_height: [4, 5]
+roofs: [gable, hip]
 modules:
   window:
     - medieval.window

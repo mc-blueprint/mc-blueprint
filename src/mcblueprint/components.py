@@ -26,6 +26,7 @@ COMPONENT_NAME_PATTERN = re.compile(r"^(?:[a-z0-9_]+|[a-z0-9_]+\.[a-z0-9_]+)$")
 
 _search_paths: ContextVar[tuple[Path, ...]] = ContextVar("component_search_paths")
 _loading: ContextVar[tuple[str, ...]] = ContextVar("component_loading", default=())
+_bundled_patterns: ContextVar[bool] = ContextVar("component_bundled_patterns", default=True)
 
 
 def default_search_paths(blueprint_path: Path | None = None) -> tuple[Path, ...]:
@@ -46,22 +47,33 @@ def search_paths() -> tuple[Path, ...]:
 
 
 @contextmanager
-def component_search_paths(paths: Sequence[Path]) -> Iterator[None]:
+def component_search_paths(
+    paths: Sequence[Path], *, bundled_patterns: bool = True
+) -> Iterator[None]:
     """Use ``paths`` (in order) to resolve component names inside the block."""
     token = _search_paths.set(tuple(Path(p) for p in paths))
+    bundled_token = _bundled_patterns.set(bundled_patterns)
     try:
         yield
     finally:
+        _bundled_patterns.reset(bundled_token)
         _search_paths.reset(token)
 
 
 def resolve(name: str) -> Path:
     if MODULE_NAME_PATTERN.fullmatch(name):
         style, module = name.split(".")
-        path = PATTERNS_DIR / style / f"{module}.json"
-        if path.is_file():
-            return path
-        raise BlueprintError(f"Component {name!r} not found (bundled pattern module)")
+        for directory in search_paths():
+            path = directory / style / f"{module}.json"
+            if path.is_file():
+                return path
+        if _bundled_patterns.get():
+            path = PATTERNS_DIR / style / f"{module}.json"
+            if path.is_file():
+                return path
+        raise BlueprintError(
+            f"Component {name!r} not found (searched: {', '.join(map(str, search_paths()))})"
+        )
     if not NAME_PATTERN.match(name):
         raise BlueprintError(f"Invalid component name {name!r} (use a-z, 0-9 and _)")
     for directory in search_paths():

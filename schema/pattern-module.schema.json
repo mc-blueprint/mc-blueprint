@@ -14,7 +14,7 @@
     },
     "name": {
       "type": "string",
-      "pattern": "^[a-z0-9_-]+[.][a-z0-9_-]+$"
+      "pattern": "^[a-z0-9_]+[.][a-z0-9_]+$"
     },
     "description": {
       "type": "string"
@@ -170,6 +170,17 @@
         }
       },
       "additionalProperties": false
+    },
+    "block": {
+      "$dynamicAnchor": "block",
+      "anyOf": [
+        {
+          "$ref": "blueprint.schema.json#/$defs/block"
+        },
+        {
+          "$ref": "https://github.com/mc-blueprint/mc-blueprint/schema/pattern-module.schema.json#/$defs/roleReference"
+        }
+      ]
     }
   },
   "$id": "https://github.com/mc-blueprint/mc-blueprint/schema/pattern-module.schema.json"

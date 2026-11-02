@@ -109,7 +109,14 @@ def check_component(path: Path, version: str) -> CheckResult:
     )
 
 
-def check_component_data(path: Path, version: str, raw: dict[str, Any]) -> CheckResult:
+def check_component_data(
+    path: Path,
+    version: str,
+    raw: dict[str, Any],
+    search_paths: tuple[Path, ...] | None = None,
+    *,
+    bundled_patterns: bool = True,
+) -> CheckResult:
     """Inspect component-shaped data directly without resolving it by filename."""
     name = path.stem
     probe = _blueprint(
@@ -121,8 +128,9 @@ def check_component_data(path: Path, version: str, raw: dict[str, Any]) -> Check
         path,
         probe,
         lambda: raw,
-        components.default_search_paths(),
+        search_paths or components.default_search_paths(),
         None,
+        bundled_patterns,
     )
 
 
@@ -132,9 +140,10 @@ def _check_component_probe(
     load_component: Callable[[], dict[str, Any]],
     search_paths: tuple[Path, ...],
     error_prefix: str | None,
+    bundled_patterns: bool = True,
 ) -> CheckResult:
     result = CheckResult(path, "component")
-    with components.component_search_paths(search_paths):
+    with components.component_search_paths(search_paths, bundled_patterns=bundled_patterns):
         for error in validate(probe):
             error_path = error.path
             if error_prefix is not None:
