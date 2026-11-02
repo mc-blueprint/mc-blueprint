@@ -1,4 +1,4 @@
-# MCBlueprint
+# mc-blueprint
 
 このリポジトリは、AI コーディングエージェントが Minecraft の建築設計データ（Blueprint JSON）を作成し、`.schem` へ変換するためのツールキットです。
 
@@ -53,7 +53,7 @@
 
 ## worktree 運用
 
-分離単位は AI 名ではなくタスクとする。`<workspace>/MCBlueprint/` を人間・IDE 用の primary、`<workspace>/worktrees/<task-id>/MCBlueprint/` をタスク専用 worktree とする。
+分離単位は AI 名ではなくタスクとする。`<workspace>/mc-blueprint/` を人間・IDE 用の primary、`<workspace>/worktrees/<task-id>/mc-blueprint/` をタスク専用 worktree とする。
 
 - 変更 Issue ごとに専用 worktree を使う。調査・レビューだけなら原則として作成しない。
 - task-id、Issue、単一の変更 repo、同時書込 owner、起点 commit を記録する。同じタスクの同時書込 owner は一人とし、primary や他 owner の worktree で作業しない。

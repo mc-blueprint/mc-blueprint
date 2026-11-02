@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "MCBlueprint 分割出力 manifest v1",
+  "title": "mc-blueprint 分割出力 manifest v1",
   "type": "object",
   "additionalProperties": false,
   "required": [

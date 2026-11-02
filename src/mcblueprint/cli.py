@@ -1,4 +1,4 @@
-"""Command-line entry point for MCBlueprint (see docs/ARCHITECTURE.md section 11).
+"""Command-line entry point for mc-blueprint (see docs/ARCHITECTURE.md section 11).
 
 mcblueprint validate <blueprint.json> [--strict] [--max-dimension N] [--minecraft-version V]
                                       [--json] [--kind KIND ...] [--path PATH ...]

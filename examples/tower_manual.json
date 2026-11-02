@@ -3,7 +3,7 @@
   "minecraftVersion": "1.21.11",
   "name": "Stone Tower (manual)",
   "description": "石レンガの円塔を基本 Operation だけで書いた例（tower.json と同じ塔）。cylinder / circle / sphere / line と、repeat による階層構造の例。",
-  "author": "MCBlueprint examples",
+  "author": "mc-blueprint examples",
   "seed": 42,
   "origin": [0, 0, 0],
   "size": [15, 31, 15],

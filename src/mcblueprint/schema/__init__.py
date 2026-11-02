@@ -31,7 +31,7 @@ COMPONENT_EXCLUDED_KEYS = ("minecraftVersion", "origin", "size", "seed")
 def load_component_schema() -> dict[str, Any]:
     """Schema for ``components/*.json``: a Blueprint without version / placement keys."""
     schema = json.loads(json.dumps(load_schema()))
-    schema["title"] = "MCBlueprint Component"
+    schema["title"] = "mc-blueprint Component"
     schema["required"] = ["formatVersion", "name", "operations"]
     for key in COMPONENT_EXCLUDED_KEYS:
         schema["properties"].pop(key, None)

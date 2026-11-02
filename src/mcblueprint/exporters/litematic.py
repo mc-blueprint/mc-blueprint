@@ -124,7 +124,7 @@ class LitematicExporter(Exporter):
                 "Metadata": Compound(
                     {
                         "Name": String(blueprint.name),
-                        "Author": String(blueprint.author or "MCBlueprint"),
+                        "Author": String(blueprint.author or "mc-blueprint"),
                         "Description": String(blueprint.description or ""),
                         "RegionCount": Int(1),
                         "TotalVolume": Int(size.x * size.y * size.z),

@@ -3,7 +3,7 @@
   "minecraftVersion": "1.21.11",
   "name": "Cottage",
   "description": "house.json と同じ家を room + roof で書いた例。床・壁・天井・ドア・窓を room 1 つで作り、屋根と煙突を足す。",
-  "author": "MCBlueprint examples",
+  "author": "mc-blueprint examples",
   "seed": 7,
   "origin": [5, 1, 4],
   "size": [13, 12, 11],

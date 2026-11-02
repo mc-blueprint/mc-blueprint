@@ -1,6 +1,6 @@
 # アーキテクチャ
 
-MCBlueprint の内部構成と各モジュールの責務を定義する。実装は本書に従う。
+mc-blueprint の内部構成と各モジュールの責務を定義する。実装は本書に従う。
 Blueprint JSON の仕様は [FORMAT.md](FORMAT.md)、Operation の仕様は [OPERATIONS.md](OPERATIONS.md) を参照。
 
 ## 1. 処理フロー
@@ -345,7 +345,7 @@ Litematica 用の `.litematic`。ルート Compound は無名、gzip 圧縮。1 
 |---|---|
 | `MinecraftDataVersion` | `blockdata.data_version(minecraftVersion)` |
 | `Version` | `6` |
-| `Metadata` | `Name` / `Author`（省略時 `MCBlueprint`）/ `Description` / `RegionCount: 1` / `TotalVolume` / `TotalBlocks`（air 以外）/ `EnclosingSize` / `TimeCreated` / `TimeModified` |
+| `Metadata` | `Name` / `Author`（省略時 `mc-blueprint`）/ `Description` / `RegionCount: 1` / `TotalVolume` / `TotalBlocks`（air 以外）/ `EnclosingSize` / `TimeCreated` / `TimeModified` |
 | `Regions.Main.Position` | `bounds.min − origin` |
 | `Regions.Main.Size` | バウンディングボックスの各辺 |
 | `Regions.Main.BlockStatePalette` | `{Name, Properties}` の List。index 0 は必ず `minecraft:air` |

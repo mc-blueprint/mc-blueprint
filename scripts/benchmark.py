@@ -1,4 +1,4 @@
-"""MCBlueprint 段階別ベンチマークを測定・記録する。"""
+"""mc-blueprint 段階別ベンチマークを測定・記録する。"""
 
 from __future__ import annotations
 

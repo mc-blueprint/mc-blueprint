@@ -1,4 +1,4 @@
-"""Exception and error types shared across MCBlueprint."""
+"""Exception and error types shared across mc-blueprint."""
 
 from __future__ import annotations
 

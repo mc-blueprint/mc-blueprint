@@ -1,4 +1,4 @@
-# MCBlueprint
+# mc-blueprint
 
 Codex や Claude Code などの AI コーディングエージェントに Minecraft の建築を設計させ、WorldEdit / Litematica で読み込める `.schem` を生成するツールキットです。
 
@@ -48,11 +48,11 @@ Blueprint の `minecraftVersion` にはこのいずれかを書きます。別�
 ## インストール
 
 ```bash
-git clone https://github.com/rs0325/MCBlueprint.git
+git clone https://github.com/mc-blueprint/mc-blueprint.git
 ```
 
 ```bash
-cd MCBlueprint
+cd mc-blueprint
 ```
 
 ```bash
@@ -199,7 +199,7 @@ schema/       Blueprint JSON Schema（エディタ補完用）
 - `arch` / `room` / `bridge` などの高レベル建築 Operation の追加
 - 複数 Minecraft バージョンのブロックデータ同梱
 
-進捗は [Issues](https://github.com/rs0325/MCBlueprint/issues) を参照してください。
+進捗は [Issues](https://github.com/mc-blueprint/mc-blueprint/issues) を参照してください。
 
 ## ライセンス
 
