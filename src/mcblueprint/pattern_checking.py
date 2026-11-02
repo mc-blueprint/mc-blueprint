@@ -70,12 +70,20 @@ def check_patterns(root: Path, version: str | None = None) -> list[CheckResult]:
     module_registry = _module_registry(module_schema)
     sources_schema = _schema("pattern-sources.schema.json")
 
+    for directory in ("styles", "modules"):
+        path = root / directory
+        if not path.is_dir():
+            results.append(
+                CheckResult(path, directory, [ValidationError("", "directory is required")])
+            )
+
     for path in sorted((root / "styles").glob("*.yaml")):
         try:
             data = yaml.safe_load(path.read_text(encoding="utf-8"))
             errors = _validate(data, style_schema)
-            if isinstance(data, dict) and isinstance(data.get("modules", {}), dict):
-                styles[path.stem] = data
+            if isinstance(data, dict):
+                if not _validate(data.get("modules", {}), style_schema["properties"]["modules"]):
+                    styles[path.stem] = data
                 if data.get("name") != path.stem:
                     errors.append(ValidationError("name", f"must match filename {path.stem!r}"))
         except (OSError, YAMLError) as exc:
@@ -100,15 +108,13 @@ def check_patterns(root: Path, version: str | None = None) -> list[CheckResult]:
                     )
                 warnings = []
                 if not errors:
-                    search = (root / "modules", *components.default_search_paths())
-                    with components.component_search_paths(search):
-                        component = check_component_data(
-                            path,
-                            version or blockdata.supported_versions()[0],
-                            data,
-                            search,
-                            bundled_patterns=False,
-                        )
+                    component = check_component_data(
+                        path,
+                        version or blockdata.supported_versions()[0],
+                        data,
+                        components.default_search_paths(),
+                        module_paths=(root / "modules",),
+                    )
                     errors.extend(component.errors)
                     warnings = component.warnings
         except (OSError, json.JSONDecodeError) as exc:

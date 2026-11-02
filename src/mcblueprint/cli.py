@@ -814,30 +814,12 @@ def _run_check(args: argparse.Namespace, out: TextIO) -> int:
         raise BlueprintError(
             "Nothing to check: give paths or run where designs/ or components/ exist"
         )
-    if (
-        len(paths) == 1
-        and paths[0].is_dir()
-        and (paths[0] / "styles").is_dir()
-        and (paths[0] / "modules").is_dir()
-        and (paths[0] / "sources.yaml").is_file()
-    ):
-        results = check_patterns(paths[0], args.minecraft_version)
-        errors = warnings = 0
-        for result in results:
-            if result.ok and not result.warnings:
-                continue
-            print(f"{result.path.as_posix()} ({result.kind})", file=out)
-            for error in result.errors:
-                print(_indent(error.format()), file=out)
-            for warning in result.warnings:
-                print(_indent(warning.format()), file=out)
-            errors += len(result.errors)
-            warnings += len(result.warnings)
-        print(
-            f"{len(results)} files checked: {errors} error(s), {warnings} warning(s).", file=out
-        )
-        return EXIT_VALIDATION_ERROR if errors or (warnings and args.strict) else EXIT_OK
-    results = check_paths(paths, args.minecraft_version)
+    results = []
+    for path in paths:
+        if path.name != "designs" and (path / "styles").is_dir():
+            results.extend(check_patterns(path, args.minecraft_version))
+        else:
+            results.extend(check_paths([path], args.minecraft_version))
     if default_paths:
         results.extend(check_patterns(components.PATTERNS_DIR.parent, args.minecraft_version))
     errors = warnings = 0
@@ -867,11 +849,7 @@ def _run_components(args: argparse.Namespace, out: TextIO) -> int:
     results = list_components(components.search_paths(), args.minecraft_version)
     rows = [
         {
-            "name": (
-                f"{result.path.parent.name}.{result.path.stem}"
-                if result.path.parent.parent.name == "modules"
-                else result.path.stem
-            ),
+            "name": result.name,
             "path": result.path.as_posix(),
             "size": result.size.to_list() if result.size is not None else None,
             "description": result.description,

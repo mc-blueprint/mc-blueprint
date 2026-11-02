@@ -212,6 +212,40 @@ class TestPresets:
 
 
 class TestComponents:
+    @pytest.mark.parametrize(
+        "contents", ['{"operations":', '[]', '{"formatVersion": 1, "operations": []}']
+    )
+    def test_explicit_dotted_file_is_checked_directly(
+        self, tmp_path: Path, capsys, contents: str
+    ) -> None:
+        path = tmp_path / "medieval.window.json"
+        path.write_text(contents, encoding="utf-8")
+        assert main(["check", str(path)]) == EXIT_VALIDATION_ERROR
+        assert path.as_posix() in capsys.readouterr().out
+
+    def test_display_name_is_not_a_reference_name(self, tmp_path: Path) -> None:
+        path = tmp_path / "window.json"
+        path.write_text(
+            component("和風の窓", [{"type": "set", "position": [0, 0, 0], "block": "stone"}]),
+            encoding="utf-8",
+        )
+        assert check_component(path, "1.21.11").ok
+
+    def test_listing_uses_all_search_paths_for_nested_components(self, tmp_path: Path) -> None:
+        first, second = tmp_path / "first", tmp_path / "second"
+        first.mkdir()
+        second.mkdir()
+        (first / "frame.json").write_text(
+            component("枠", [{"type": "component", "name": "leaf", "position": [0, 0, 0]}]),
+            encoding="utf-8",
+        )
+        (second / "leaf.json").write_text(
+            component("葉", [{"type": "set", "position": [0, 0, 0], "block": "stone"}]),
+            encoding="utf-8",
+        )
+        results = list_components([first, second])
+        assert all(result.ok for result in results)
+
     def test_component_size_description_and_warning(self, tree: Path) -> None:
         lamp = check_component(tree / "components" / "lamp.json", "1.21.11")
         assert lamp.ok and lamp.size is not None and lamp.size.to_list() == [1, 2, 1]

@@ -2,6 +2,7 @@ import hashlib
 import json
 from pathlib import Path
 
+import pytest
 from jsonschema import Draft202012Validator
 from referencing import Registry, Resource
 
@@ -199,3 +200,58 @@ def test_invalid_styles_module_shape_reports_validation_error(
     monkeypatch.chdir(tmp_path)
     assert main(["check", "patterns"]) == EXIT_VALIDATION_ERROR
     assert "modules" in capsys.readouterr().out
+
+
+@pytest.mark.parametrize("references", ["null", "[{}]", "[medieval.window-wide]"])
+def test_invalid_style_references_report_schema_errors(
+    tmp_path: Path, capsys, references: str
+) -> None:
+    (tmp_path / "styles").mkdir()
+    (tmp_path / "modules").mkdir()
+    (tmp_path / "sources.yaml").write_text("formatVersion: 1\nsources: []\n", encoding="utf-8")
+    (tmp_path / "styles" / "bad.yaml").write_text(
+        "formatVersion: 1\nname: bad\ngrid: {}\n"
+        f"modules: {{window: {references}}}\n",
+        encoding="utf-8",
+    )
+    assert main(["check", str(tmp_path)]) == EXIT_VALIDATION_ERROR
+    assert "modules.window" in capsys.readouterr().out
+
+
+@pytest.mark.parametrize("missing", ["sources.yaml", "modules", "both"])
+def test_incomplete_patterns_are_checked(
+    tmp_path: Path, capsys, missing: str
+) -> None:
+    root = tmp_path / "patterns"
+    (root / "styles").mkdir(parents=True)
+    (root / "styles" / "bad.yaml").write_text("modules: []\n", encoding="utf-8")
+    if missing == "sources.yaml":
+        (root / "modules").mkdir()
+    if missing == "modules":
+        (root / "sources.yaml").write_text("formatVersion: 1\nsources: []\n", encoding="utf-8")
+    assert main(["check", str(root)]) == EXIT_VALIDATION_ERROR
+    output = capsys.readouterr().out
+    assert "bad.yaml (style)" in output
+    assert "required" in output
+    if missing in ("sources.yaml", "both"):
+        assert "sources.yaml (sources)" in output
+    if missing in ("modules", "both"):
+        assert "modules (modules)" in output
+
+
+def test_multiple_check_targets_include_incomplete_patterns(tmp_path: Path, capsys) -> None:
+    (tmp_path / "patterns" / "styles").mkdir(parents=True)
+    (tmp_path / "designs" / "styles").mkdir(parents=True)
+    assert main(["check", str(tmp_path / "designs"), str(tmp_path / "patterns")]) == 1
+    assert "sources.yaml (sources)" in capsys.readouterr().out
+
+
+def test_module_search_context_is_restored(tmp_path: Path) -> None:
+    with components.component_search_paths([], module_paths=(tmp_path,)):
+        with components.component_search_paths([]):
+            assert components.resolve("medieval.window").is_file()
+        from mcblueprint.errors import BlueprintError
+
+        with pytest.raises(BlueprintError, match="not found"):
+            components.resolve("medieval.window")
+    assert components.resolve("medieval.window").is_file()

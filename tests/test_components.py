@@ -283,6 +283,43 @@ class TestValidation:
 
 
 class TestBundled:
+    def test_resolution_listing_and_checking_share_namespaces(
+        self, tmp_path: Path, monkeypatch: pytest.MonkeyPatch, capsys
+    ) -> None:
+        from mcblueprint.checking import check_component
+
+        directory = tmp_path / "components"
+        write_component(directory / "medieval", "window", {**POST, "operations": []})
+        invalid = write_component(directory, "medieval.window", {**POST, "operations": []})
+        local = write_component(directory, "window", {**POST, "name": "和風の窓"})
+        monkeypatch.chdir(tmp_path)
+        bundled = components.PATTERNS_DIR / "medieval" / "window.json"
+        assert components.resolve("medieval.window") == bundled
+        assert components.resolve("window") == local
+        with components.component_search_paths([directory]):
+            bp = blueprint(
+                {"type": "component", "name": "window", "position": [0, 0, 0]},
+                {"type": "component", "name": "medieval.window", "position": [10, 0, 0]},
+            )
+            assert validate(bp) == []
+            placed = load_blueprint_dict(bp)
+            assert len(placed.operations[0].operations) == len(POST["operations"])
+            assert len(placed.operations[1].operations) == len(
+                components.load_component("medieval.window")["operations"]
+            )
+        assert main(["components", "--json"]) == EXIT_OK
+        rows = json.loads(capsys.readouterr().out)["components"]
+        listed = {row["name"]: row for row in rows}
+        assert len(rows) == len(listed)
+        for name, path in (("window", local), ("medieval.window", bundled)):
+            assert Path(listed[name]["path"]) == path
+            result = check_component(path, "1.21.11")
+            assert result.ok
+            assert listed[name]["size"] == result.size.to_list()
+        assert not check_component(invalid, "1.21.11").ok
+        assert main(["check", str(invalid)]) == EXIT_VALIDATION_ERROR
+        assert "operations" in capsys.readouterr().out
+
     @pytest.mark.parametrize(
         "name", ["medieval.lantern_post", "medieval.window", "medieval.arched_gate"]
     )

@@ -120,7 +120,9 @@
 
 | type | 必須 | 任意 | 動作 |
 |---|---|---|---|
-| `component` | `name`（`components/` のファイル名）, `position` | `rotation`(0 / 90 / 180 / 270) | 部品の原点を `position` に置いて配置。向きは自動で回る |
+| `component` | `name`（利用者部品または同梱モジュールの参照名）, `position` | `rotation`(0 / 90 / 180 / 270) | 部品の原点を `position` に置いて配置。向きは自動で回る |
+
+単純名は利用者の `components/<name>.json`、`medieval.window` のようなドット名は同梱モジュールから解決する。利用者部品のサブディレクトリやドット付きファイルで同梱品を上書きできない。部品データ内の `name` は表示名で、日本語も使える。詳細は `docs/FORMAT.md` §11・`docs/PATTERNS.md` を参照。
 
 同梱部品は `components/README.md` を見る（`lantern_post`, `medieval_window`, `arched_gate` など）。同じ部品を何度も使うときや、依頼者が部品を用意しているときに使う。新しい部品を作るときは `components/<name>.json` に Blueprint と同じ書式で書く（`minecraftVersion` / `origin` / `size` / `seed` は不要、座標は `[0,0,0]` 基準）。
 
