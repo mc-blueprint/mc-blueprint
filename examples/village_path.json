@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "minecraftVersion": "1.21.11",
   "name": "Village Path",
-  "description": "path の例。草地の上に砂利と土の道を折れ線で敷き、坂は階段でつなぎ、縁石と街灯（lantern_post 部品）を並べる。",
+  "description": "path の例。草地の上に砂利と土の道を折れ線で敷き、坂は階段でつなぎ、縁石と街灯（medieval.lantern_post 部品）を並べる。",
   "author": "MCBlueprint examples",
   "seed": 8,
   "origin": [0, 1, 0],
@@ -25,7 +25,7 @@
       "palette": "road",
       "edge": "minecraft:cobblestone",
       "stairs": "minecraft:cobblestone_stairs",
-      "lights": { "spacing": 7, "component": "lantern_post" },
+      "lights": { "spacing": 7, "component": "medieval.lantern_post" },
       "comment": "幅 3 の道。x=10〜17 で高台へ 4 ブロック登る（階段）。7 ブロックごとに進行方向右側へ街灯"
     }
   ]

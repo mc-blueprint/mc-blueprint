@@ -283,15 +283,17 @@ class TestValidation:
 
 
 class TestBundled:
-    @pytest.mark.parametrize("name", ["lantern_post", "medieval_window", "arched_gate"])
+    @pytest.mark.parametrize(
+        "name", ["medieval.lantern_post", "medieval.window", "medieval.arched_gate"]
+    )
     def test_bundled_component_is_valid(self, name: str) -> None:
-        with components.component_search_paths([REPO_ROOT / "components"]):
-            assert (
-                validate(blueprint({"type": "component", "name": name, "position": [0, 0, 0]}))
-                == []
-            )
+        assert validate(blueprint({"type": "component", "name": name, "position": [0, 0, 0]})) == []
 
-    def test_readme_lists_bundled_components(self) -> None:
-        readme = (REPO_ROOT / "components" / "README.md").read_text(encoding="utf-8")
-        for path in (REPO_ROOT / "components").glob("*.json"):
-            assert f"`{path.stem}`" in readme, path.stem
+    def test_cli_lists_bundled_modules(self, capsys: pytest.CaptureFixture[str]) -> None:
+        assert main(["components", "--json"]) == EXIT_OK
+        listed = json.loads(capsys.readouterr().out)["components"]
+        assert {item["name"] for item in listed} >= {
+            "medieval.lantern_post",
+            "medieval.window",
+            "medieval.arched_gate",
+        }

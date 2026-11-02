@@ -31,10 +31,6 @@
 - ゲーム内で作ったパーツは `mcblueprint import <file.schem> --component --name <name>` で部品ファイルに変換できる（座標は自動で原点基準になる）。
 - `mcblueprint components` で探索パス上の部品（名前・大きさ・説明）を一覧できる。`mcblueprint check components/` は各部品を原点に置いて検証し、ランタンなど支持が必要なブロックの警告も出す（`--strict` で警告をエラー扱い）。
 
-## 同梱部品
+## 部品の正本
 
-| 名前 | 内容 | 原点 |
-|---|---|---|
-| `lantern_post` | 石の台座 + フェンス 2 段 + ランタン（高さ 4） | 台座の位置 |
-| `medieval_window` | 濃い樫の枠 3×3 と中央の板ガラス 1×2（壁は X 方向） | 枠の左下 |
-| `arched_gate` | 幅 3・高さ 4 の石のアーチ門（壁は X 方向、通路は Z 方向） | 左の柱の足元 |
+このディレクトリは利用者が追加する部品（`mcblueprint design` の出力を含む）用です。共通の様式と部品の正本は [mc-blueprint-patterns](https://github.com/mc-blueprint/mc-blueprint-patterns) です。同梱モジュールは `component` Operation から `medieval.window` のような名前で参照できます。

@@ -181,7 +181,7 @@ Palette は、複数のブロックから重み付きでランダムに 1 つを
 - ファイルは Blueprint と同じ書式で、`minecraftVersion` / `origin` / `size` / `seed` は書かない（`formatVersion`, `name`, `operations` が必須。`description`, `author`, `palettes`, `metadata` は任意）。
 - 座標は部品の原点 `[0, 0, 0]` からの相対。`component` の `position` がその原点になり、`rotation` で原点を軸に回転してから配置する。
 - 部品の `palettes` は部品内で優先され、書かれていない名前は呼び出し元の Blueprint の Palette を参照する。
-- 探索順は「Blueprint ファイルと同じ階層の `components/`」→「カレントディレクトリの `components/`」。名前は `^[a-z0-9_]+$`。
+- 利用者部品は「Blueprint ファイルと同じ階層の `components/`」→「カレントディレクトリの `components/`」から探索する。名前は `^[a-z0-9_]+$`。同梱パターンモジュールは `medieval.window` のような `<style>.<module>` 名で参照する。
 - 部品は入れ子にできる。循環参照とネスト深さ 8 超は検証エラー。
 - 部品の内容も Blueprint と同じ検証（Schema・ブロック ID・Palette 参照）を受け、エラーは `operations[3]<name>.operations[0].block` のように部品名付きのパスで報告される。
 

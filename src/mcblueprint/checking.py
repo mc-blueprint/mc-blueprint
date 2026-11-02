@@ -220,4 +220,11 @@ def list_components(paths: Iterable[Path], version: str | None = None) -> list[C
                 continue
             seen.add(path.stem)
             results.append(check_component(path, version))
+    for path in sorted(components.PATTERNS_DIR.glob("*/*.json")):
+        name = f"{path.parent.name}.{path.stem}"
+        if name in seen:
+            continue
+        seen.add(name)
+        raw = json.loads(path.read_text(encoding="utf-8"))
+        results.append(check_component_data(path, version, raw))
     return results

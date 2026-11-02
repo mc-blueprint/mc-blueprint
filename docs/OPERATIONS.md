@@ -39,7 +39,7 @@ Operation は Blueprint JSON の `operations` 配列に並べる建築の単位�
 | 建築 | [`gate`](#gate) | 城門（アーチの通路、歩廊と胸壁、落とし格子、両脇の塔） |
 | 建築 | [`garden`](#garden) | 畑（耕地・作物・水路）と花壇、柵と門 |
 | 建築 | [`path`](#path) | 道（経由点をつなぐ路面、段差の階段、縁石、街灯） |
-| 部品 | [`component`](#component) | `components/<name>.json` の部品を配置 |
+| 部品 | [`component`](#component) | 利用者部品または同梱パターンモジュールを配置 |
 
 ## 共通の記法
 
@@ -875,16 +875,16 @@ Pythonの `BuildingOperation.apply_without_face(ctx, face)` は接続操作へ�
 
 ### component
 
-`components/<name>.json` に書いた部品を配置する（[FORMAT.md §11](FORMAT.md#11-部品component)）。
+利用者部品または同梱パターンモジュールを配置する（[FORMAT.md §11](FORMAT.md#11-部品component)）。
 
 | キー | 型 | 必須 | 既定値 | 説明 |
 |---|---|---|---|---|
-| `name` | string | ✓ | | 部品名（ファイル名から `.json` を除いたもの。`^[a-z0-9_]+$`） |
+| `name` | string | ✓ | | 利用者部品名（`^[a-z0-9_]+$`）または同梱モジュール名（例 `medieval.window`） |
 | `position` | Pos | ✓ | | 部品の原点を置く位置 |
 | `rotation` | `0` / `90` / `180` / `270` | | `0` | 部品の原点を軸に上から見て時計回りに回転 |
 
 ```json
-{ "type": "component", "name": "medieval_window", "position": [14, 2, 2], "rotation": 90 }
+{ "type": "component", "name": "medieval.window", "position": [14, 2, 2], "rotation": 90 }
 ```
 
 - 部品の Operation を、回転 → 平行移動の変換で実行する。`facing` / `axis` / 接続プロパティは自動で回る。

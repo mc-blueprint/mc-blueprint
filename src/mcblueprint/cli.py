@@ -230,7 +230,7 @@ def build_parser() -> argparse.ArgumentParser:
     versions_parser.add_argument("--json", action="store_true", help="machine-readable output")
 
     check_parser = subparsers.add_parser(
-        "check", help="validate design presets (designs/*.md) and components (components/*.json)"
+        "check", help="validate design presets, components, or pattern libraries"
     )
     check_parser.add_argument(
         "paths",
@@ -808,6 +808,7 @@ def _run_import(args: argparse.Namespace, out: TextIO) -> int:
 
 
 def _run_check(args: argparse.Namespace, out: TextIO) -> int:
+    default_paths = not args.paths
     paths = list(args.paths) or [Path(name) for name in DEFAULT_TARGETS if Path(name).is_dir()]
     if not paths:
         raise BlueprintError(
@@ -831,6 +832,8 @@ def _run_check(args: argparse.Namespace, out: TextIO) -> int:
         )
         return EXIT_VALIDATION_ERROR if errors or (warnings and args.strict) else EXIT_OK
     results = check_paths(paths, args.minecraft_version)
+    if default_paths:
+        results.extend(check_patterns(components.PATTERNS_DIR.parent, args.minecraft_version))
     errors = warnings = 0
     for result in results:
         if result.ok and not result.warnings:
@@ -858,7 +861,11 @@ def _run_components(args: argparse.Namespace, out: TextIO) -> int:
     results = list_components(components.search_paths(), args.minecraft_version)
     rows = [
         {
-            "name": result.path.stem,
+            "name": (
+                f"{result.path.parent.name}.{result.path.stem}"
+                if result.path.parent.parent.name == "modules"
+                else result.path.stem
+            ),
             "path": result.path.as_posix(),
             "size": result.size.to_list() if result.size is not None else None,
             "description": result.description,

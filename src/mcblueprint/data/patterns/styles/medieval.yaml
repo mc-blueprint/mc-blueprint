@@ -1,0 +1,20 @@
+formatVersion: 1
+name: medieval
+grid:
+  bay: [3, 5]
+  story_height: [4, 5]
+modules:
+  window:
+    - medieval.window
+  gate:
+    - medieval.arched_gate
+  lantern:
+    - medieval.lantern_post
+roles:
+  foundation: [stone, brick]
+  wall_main: [brick, stone]
+  wall_secondary: plaster
+  frame: wood
+  window_frame: wood
+  floor: wood
+  roof: wood

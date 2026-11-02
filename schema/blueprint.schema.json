@@ -2159,7 +2159,7 @@
               },
               "component": {
                 "type": "string",
-                "pattern": "^[a-z0-9_]+$"
+                "pattern": "^(?:[a-z0-9_]+|[a-z0-9_]+\\.[a-z0-9_]+)$"
               },
               "block": {
                 "$ref": "#/$defs/block"
@@ -2191,7 +2191,7 @@
           },
           "name": {
             "type": "string",
-            "pattern": "^[a-z0-9_]+$"
+            "pattern": "^(?:[a-z0-9_]+|[a-z0-9_]+\\.[a-z0-9_]+)$"
           },
           "position": {
             "$ref": "#/$defs/position"

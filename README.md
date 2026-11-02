@@ -27,7 +27,7 @@ mcblueprint build      …… Operation を実行して .schem / .litematic を�
 - **Import と diff**: 既存の `.schem` / `.litematic` を Blueprint に変換でき、2 つの Blueprint の生成結果を比較できる。
 - **AI 非依存**: Core は Codex / Claude Code に依存しない。両方に同じ Skill を同梱し、他のエージェントからも同じ CLI で使える。
 - **デザインプリセット**: 様式・材質・寸法規則を `designs/` のファイルにまとめ、名前で参照できる。
-- **部品**: 窓・門・街灯などを `components/` に置き、`component` Operation で回転して配置できる。
+- **部品**: `components/` の利用者部品と、同梱 patterns の `medieval.window` などのモジュールを `component` Operation で配置できる。様式と部品の正本は [mc-blueprint-patterns](https://github.com/mc-blueprint/mc-blueprint-patterns) です。
 - **既存の建築から**: `mcblueprint design` でゲーム内の建物の様式（Palette・階高・屋根・窓）をデザインプリセットに、`mcblueprint import --component` でパーツを部品に変換できる。
 - **Git で管理できる**: Blueprint JSON がソース、`.schem` は生成物。
 
@@ -169,7 +169,7 @@ ERROR operations[4] (cylinder)
 | 構造 | `mirror`, `repeat`, `translate`, `rotate`（ネスト可） |
 | 編集 | `replace`, `copy` |
 | 建築 | `stairs`, `spiral_stairs`, `roof`, `pillar`, `doorway`, `window`, `arch`, `room`, `tower`, `bridge`, `gate`, `garden`, `path` |
-| 部品 | `component`（`components/<name>.json` を配置） |
+| 部品 | `component`（`components/<name>.json` または同梱モジュール名 `medieval.window` を配置） |
 
 ## ディレクトリ
 
