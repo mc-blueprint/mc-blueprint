@@ -40,5 +40,4 @@ def load_component_schema() -> dict[str, Any]:
         "type": "object",
         "additionalProperties": {"$ref": "#/$defs/position"},
     }
-    schema["properties"]["name"]["pattern"] = "^(?:[a-z0-9_]+|[a-z0-9_]+\\.[a-z0-9_]+)$"
     return schema

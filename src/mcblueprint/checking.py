@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import json
 import re
-from collections.abc import Callable, Iterable, Iterator
+from collections.abc import Iterable, Iterator
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
@@ -22,7 +22,7 @@ from mcblueprint.generator import generate
 from mcblueprint.loader import load_blueprint_dict
 from mcblueprint.model.vec import Vec3
 from mcblueprint.support import SupportWarning, check_support
-from mcblueprint.validator import validate
+from mcblueprint.validator import validate, validate_schema
 
 FENCED_JSON = re.compile(r"```json[^\n]*\n(.*?)```", re.S)
 DEFAULT_TARGETS = ("designs", "components")
@@ -36,6 +36,7 @@ class CheckResult:
     warnings: list[SupportWarning] = field(default_factory=list)
     size: Vec3 | None = None  # generated extent of a component
     description: str | None = None
+    name: str | None = None
 
     @property
     def ok(self) -> bool:
@@ -92,72 +93,51 @@ def check_preset(path: Path, version: str) -> CheckResult:
 # --- components ---------------------------------------------------------------
 
 
-def check_component(path: Path, version: str) -> CheckResult:
-    name = path.stem
-    probe = _blueprint(
-        version,
-        name,
-        operations=[{"type": "component", "name": name, "position": [0, 0, 0]}],
+def check_component(
+    path: Path, version: str, *, search_paths: tuple[Path, ...] | None = None
+) -> CheckResult:
+    """指定されたファイル自体を検査する。入れ子の参照だけを名前解決する。"""
+    try:
+        raw = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError as exc:
+        return CheckResult(path, "component", [ValidationError("", f"Invalid JSON: {exc}")])
+    search = (
+        (path.resolve().parent, *components.default_search_paths())
+        if search_paths is None
+        else search_paths
     )
-    search = (path.resolve().parent, *components.default_search_paths())
-    return _check_component_probe(
-        path,
-        probe,
-        lambda: components.load_component(name),
-        search,
-        f"operations[0]<{name}>",
-    )
+    return check_component_data(path, version, raw, search)
 
 
 def check_component_data(
     path: Path,
     version: str,
-    raw: dict[str, Any],
+    raw: Any,
     search_paths: tuple[Path, ...] | None = None,
     *,
-    bundled_patterns: bool = True,
+    module_paths: tuple[Path, ...] | None = None,
 ) -> CheckResult:
-    """Inspect component-shaped data directly without resolving it by filename."""
+    """部品データのスキーマ・参照・生成結果を検査する。
+
+    search_paths は単純名、module_paths はドット名の探索先（既定は同梱品）。
+    """
+    result = CheckResult(path, "component", validate_schema(raw, component=True))
+    if result.errors:
+        return result
     name = path.stem
     probe = _blueprint(
         version,
         name,
         **{key: raw[key] for key in ("palettes", "operations") if key in raw},
     )
-    return _check_component_probe(
-        path,
-        probe,
-        lambda: raw,
-        search_paths or components.default_search_paths(),
-        None,
-        bundled_patterns,
-    )
-
-
-def _check_component_probe(
-    path: Path,
-    probe: dict[str, Any],
-    load_component: Callable[[], dict[str, Any]],
-    search_paths: tuple[Path, ...],
-    error_prefix: str | None,
-    bundled_patterns: bool = True,
-) -> CheckResult:
-    result = CheckResult(path, "component")
-    with components.component_search_paths(search_paths, bundled_patterns=bundled_patterns):
-        for error in validate(probe):
-            error_path = error.path
-            if error_prefix is not None:
-                if error_path.startswith(error_prefix):
-                    error_path = error_path[len(error_prefix) :].lstrip(".")
-                elif error_path.startswith("operations[0]"):
-                    error_path = error_path[len("operations[0]") :].lstrip(".")
-            result.errors.append(
-                ValidationError(error_path, error.message, error.op_type, error.value)
-            )
+    with components.component_search_paths(
+        components.default_search_paths() if search_paths is None else search_paths,
+        module_paths=module_paths,
+    ):
+        result.errors.extend(validate(probe))
         if result.errors:
             return result
         try:
-            raw = load_component()
             volume = generate(load_blueprint_dict(probe))
         except BlueprintError as exc:
             result.errors.append(ValidationError("", f"{exc}."))
@@ -217,23 +197,13 @@ def check_paths(paths: Iterable[Path], version: str | None = None) -> list[Check
 
 
 def list_components(paths: Iterable[Path], version: str | None = None) -> list[CheckResult]:
-    """Every ``*.json`` directly inside ``paths`` (first hit per name wins), checked."""
+    """配置と同じ探索順で参照名を解決し、各ファイルを検査して返す。"""
     version = version or blockdata.supported_versions()[0]
-    seen: set[str] = set()
+    search = tuple(paths)
     results = []
-    for directory in paths:
-        if not directory.is_dir():
-            continue
-        for path in sorted(directory.glob("*.json")):
-            if path.stem in seen:
-                continue
-            seen.add(path.stem)
-            results.append(check_component(path, version))
-    for path in sorted(components.PATTERNS_DIR.glob("*/*.json")):
-        name = f"{path.parent.name}.{path.stem}"
-        if name in seen:
-            continue
-        seen.add(name)
-        raw = json.loads(path.read_text(encoding="utf-8"))
-        results.append(check_component_data(path, version, raw))
+    with components.component_search_paths(search):
+        for name, path in components.iter_components():
+            result = check_component(path, version, search_paths=search)
+            result.name = name
+            results.append(result)
     return results

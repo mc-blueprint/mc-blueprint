@@ -1,8 +1,10 @@
 # パターンライブラリ v1
 
-`src/mcblueprint/data/patterns/` は mc-blueprint-patterns の確定 commit `0aa54b7424bc4e3fca0907353e6edbc00ba507f8` を同梱する。更新時は正本の develop に取り込まれた commit を決め、その commit から `styles/`・`modules/`・`sources.yaml` を置き換え、`src/mcblueprint/data/lock.json` の commit と SHA-256 を更新する。SHA-256 は対象ファイルを相対パスの UTF-8 バイト列順に並べ、各ファイルについて `相対パス + NUL + ファイル内容 + NUL` を連結したバイト列の SHA-256。
+`src/mcblueprint/data/patterns/` は mc-blueprint-patterns の確定 commit を同梱する。同梱元・commit・SHA-256 の正本は [lock.json の `patterns`](../src/mcblueprint/data/lock.json) とする。更新時は正本の develop に取り込まれた commit を決め、その commit から `styles/`・`modules/`・`sources.yaml` を置き換え、lock の commit と SHA-256 を更新する。SHA-256 は対象ファイルを相対パスの UTF-8 バイト列順に並べ、各ファイルについて `相対パス + NUL + ファイル内容 + NUL` を連結したバイト列の SHA-256。
 
 `component` のドット区切り名（例 `medieval.window`）は同梱モジュールを参照する。利用者の `components/<name>.json` は従来どおり Blueprint と作業ディレクトリから探索する。
+
+配置・`mcblueprint components` の一覧・参照の検査では同じ名前解決を使います。単純名は利用者部品、ドット名は同梱モジュールの名前空間です。利用者の `components/medieval/window.json` と `components/medieval.window.json` は `medieval.window` を上書きしません。参照名の各要素は `^[a-z0-9_]+$` です。利用者部品のデータ内の `name` は表示名なので、日本語を含む任意の文字列を使えます。
 
 パターンデータの形式の正本は `schema/pattern-style.schema.json`、`pattern-module.schema.json`、`pattern-sources.schema.json` です。各スキーマは実行時にも使えるよう `src/mcblueprint/schema/` に同一内容で同梱します。
 
@@ -23,3 +25,7 @@ mcblueprint check patterns/
 ```
 
 成功は終了コード `0`、スキーマ・名前・参照エラーは `1`、パスなどの引数・入出力エラーは `2` です。
+
+`styles/` のあるディレクトリは patterns として検査し、`modules/`・`sources.yaml` の欠落もエラーにします。`designs/` はプリセットとして検査するため、配下の `styles/` と混同しません。複数の検査パスもそれぞれ判定します。
+
+外部 patterns の検査では、ドット名の探索先をその `modules/` だけに置き換え、同梱品では補完しません。JSON ファイルを直接指定した `mcblueprint check <file.json>` は名前から解決し直さず、指定ファイル自体を検査します。

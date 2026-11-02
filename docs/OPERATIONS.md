@@ -883,6 +883,8 @@ Pythonの `BuildingOperation.apply_without_face(ctx, face)` は接続操作へ�
 | `position` | Pos | ✓ | | 部品の原点を置く位置 |
 | `rotation` | `0` / `90` / `180` / `270` | | `0` | 部品の原点を軸に上から見て時計回りに回転 |
 
+ここでの `name` は参照名で、部品データ内の表示名 `name` とは異なる。単純名は利用者の `components/`、ドット名は同梱モジュールから解決する。利用者の `components/` 内のサブディレクトリやドット付きファイル名はドット名の解決に使わない。探索順は [FORMAT.md §11](FORMAT.md#11-部品component) を参照。
+
 ```json
 { "type": "component", "name": "medieval.window", "position": [14, 2, 2], "rotation": 90 }
 ```
