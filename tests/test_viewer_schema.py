@@ -41,6 +41,47 @@ def test_scene_rejects_unknown_render_and_out_of_range_emission() -> None:
     assert list(Draft202012Validator(schema).iter_errors(scene))
 
 
+def test_scene_requires_air_first_and_fixed_tint_color() -> None:
+    schema = json.loads((ROOT / "schema" / "scene.schema.json").read_text(encoding="utf-8"))
+    scene: dict[str, Any] = json.loads(
+        (ROOT / "tests" / "data" / "scene-v1.json").read_text(encoding="utf-8")
+    )
+    assert scene["palette"][0]["state"] == "minecraft:air"
+    scene["palette"][0]["state"] = "minecraft:stone"
+    assert list(Draft202012Validator(schema).iter_errors(scene))
+    scene["palette"][0]["state"] = "minecraft:air"
+    del scene["palette"][2]["tintColor"]
+    assert list(Draft202012Validator(schema).iter_errors(scene))
+    scene["palette"][2]["tint"] = "foliage"
+    scene["palette"][2]["tintColor"] = [0.65, -0.08, 0.12]
+    assert list(Draft202012Validator(schema).iter_errors(scene))
+
+
+def test_scene_palette_zero_requires_palette_entry_fields() -> None:
+    schema = json.loads((ROOT / "schema" / "scene.schema.json").read_text(encoding="utf-8"))
+    scene: dict[str, Any] = json.loads(
+        (ROOT / "tests" / "data" / "scene-v1.json").read_text(encoding="utf-8")
+    )
+    del scene["palette"][0]["emission"]
+    assert list(Draft202012Validator(schema).iter_errors(scene))
+
+
+def test_edits_delete_requires_exactly_one_of_at_or_region() -> None:
+    schema = json.loads((ROOT / "schema" / "edits.schema.json").read_text(encoding="utf-8"))
+    edits: dict[str, Any] = json.loads(
+        (ROOT / "tests" / "data" / "edits-v1.json").read_text(encoding="utf-8")
+    )
+    delete = edits["edits"][1]
+    del delete["region"]
+    delete["at"] = [2, 3, 4]
+    Draft202012Validator(schema).validate(edits)
+    delete["region"] = [[2, 3, 4], [4, 5, 6]]
+    assert list(Draft202012Validator(schema).iter_errors(edits))
+    del delete["at"]
+    del delete["region"]
+    assert list(Draft202012Validator(schema).iter_errors(edits))
+
+
 def test_scene_sample_chunk_binary_contract() -> None:
     scene: dict[str, Any] = json.loads(
         (ROOT / "tests" / "data" / "scene-v1.json").read_text(encoding="utf-8")
