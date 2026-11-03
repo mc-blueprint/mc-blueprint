@@ -136,7 +136,7 @@ def plan_detail(params, style, config, root, body, detail, contract, projected_c
         origin_u = middle - (bounds.size.x - 1) // 2
         if face in ("south", "west"):
             origin_u += bounds.size.x - 1
-        y = level * height - bounds.min.y
+        y = (level + 1) * height - bounds.max.y
         if kind in ("cornice", "roof_edge"):
             y = min((level + 1) * height, params.get("height", floors * height)) - bounds.max.y
         position = [origin_u, y, fixed] if axis == 0 else [fixed, y, origin_u]
@@ -157,6 +157,8 @@ def plan_detail(params, style, config, root, body, detail, contract, projected_c
             kept = []
             for point in points:
                 world = transform.apply(point)
+                if op.get("role") == "frame" and world.y == level * height + 1:
+                    continue
                 if any(box.contains(world) for box in circulation):
                     continue
                 if any(box.min[axis] <= world[axis] <= box.max[axis]
@@ -212,6 +214,7 @@ def plan_detail(params, style, config, root, body, detail, contract, projected_c
             place("roof_edge", face, start, end, fixed, floors - 1, run_index + 1)
     placed, decorations = _facade_selection(
         placed, params, style, config, root, body, projected_contract, raw_modules, target,
+        circulation,
     )
     used_palettes = {op["palette"] for wrapper in placed for op in wrapper["operations"]
                      if "palette" in op}
@@ -220,7 +223,8 @@ def plan_detail(params, style, config, root, body, detail, contract, projected_c
                          if name in used_palettes}
 
 
-def _facade_selection(placed, params, style, config, root, body, contract, modules, target):
+def _facade_selection(placed, params, style, config, root, body, contract, modules, target,
+                      circulation=()):
     """階境の帯を先に確保し、非開口面積の予算内で部品の装飾部位を選ぶ。"""
     plan = plan_from_metadata(
         {"element": root, "params": params, **contract},
@@ -239,6 +243,7 @@ def _facade_selection(placed, params, style, config, root, body, contract, modul
     rotation = Transform.rotation(params["angle"], Vec3(0, 0, 0))
     reverse = Transform.rotation(-params["angle"], Vec3(0, 0, 0))
     occupied = {point for run in (*plan.columns, *plan.beams) for point in run.cells}
+    circulation = [rotation.bounds(box) for box in circulation]
     footprint = set()
     if "radius" in params:
         r = params["radius"]
@@ -265,6 +270,13 @@ def _facade_selection(placed, params, style, config, root, body, contract, modul
                 points = {p for p in points if (
                     reverse.apply(p).x, reverse.apply(p).z) not in footprint}
             points.difference_update(occupied)
+            points = {p for p in points if not any(box.contains(p) for box in circulation)}
+            area = sum(not cell.opening for cell in facade.cells)
+            budget = min(max(1, math.floor(area * target + 0.5) // 2),
+                         math.floor(area * style["decoration"]["density"][1]))
+            ordered = sorted(points, key=lambda p: (p.x, p.y, p.z))
+            if len(ordered) > budget:
+                points = {ordered[i * len(ordered) // budget] for i in range(budget)}
             if not points:
                 continue
             block = copy.deepcopy(trim)
@@ -309,9 +321,27 @@ def _facade_selection(placed, params, style, config, root, body, contract, modul
         if keep:
             base.append({**wrapper, "operations": keep})
 
+    exterior = {}
+    for wrapper in base + bands:
+        transform = Transform.rotation(wrapper.get("rotation", 0), Vec3(0, 0, 0)).then(
+            Transform.translation(Vec3.from_seq(wrapper["offset"])))
+        face = rotation.apply_direction(transform.apply_direction(wrapper.get("face", "north")))
+        for op in wrapper["operations"]:
+            for local in build_operation(op, "detail").cells():
+                point = rotation.apply(transform.apply(local))
+                exterior[point] = face, op["role"]
+    depths = {}
+    for point, (face, role) in exterior.items():
+        if role != "roof":
+            axis = 0 if face in ("north", "south") else 2
+            depths.setdefault((face, point[axis], point.y), []).append(point)
+
     for facade in plan.facades:
         area = sum(not cell.opening for cell in facade.cells)
         upper = math.floor(area * style["decoration"]["density"][1])
+        if area and math.ceil(area * style["decoration"]["density"][0]) > upper:
+            raise BlueprintError(f"Detail: {facade.element}: 装飾の収容不足 "
+                                 f"(非開口面積={area}、密度範囲={style['decoration']['density']})")
         desired = min(upper, math.floor(area * target + 0.5))
         options = candidates[facade.element]
         opposite = {"south": "north", "west": "east"}.get(facade.face, facade.face)
@@ -320,18 +350,75 @@ def _facade_selection(placed, params, style, config, root, body, contract, modul
         seed_face = opposite if shared else facade.face
         ranking = random.Random(derive_seed(config["seed"], "detail", f"{root}:{seed_face}"))
         ranking.shuffle(options)
+        layer = math.floor(config["decoration"]["depth"] * style["depth_layers"]["frame"] + 0.5)
+        if layer:
+            for number, cell in enumerate(facade.cells):
+                if cell.opening:
+                    continue
+                point = cell.pos + Vec3(*NORMALS[facade.face]) * layer
+                if any(box.contains(point) for box in circulation):
+                    continue
+                if footprint and (reverse.apply(point).x, reverse.apply(point).z) in footprint:
+                    continue
+                local = reverse.apply(point)
+                wrapper = {"type": "translate", "offset": [0, 0, 0],
+                           "id": f"{facade.element}.detail.bay#{number}",
+                           "element": facade.element, "face": reverse.apply_direction(facade.face),
+                           "source": "style.modules.bay", "onConflict": "skip"}
+                op = {"type": "set", "position": local.to_list(), "role": "frame",
+                      "block": {"role": "frame", "shape": "full", "state": {}}}
+                options.append((wrapper, op, 0, None, [(local, point)]))
+
+        axis = 0 if facade.face in ("north", "south") else 2
+        normal = Vec3(*NORMALS[facade.face])
+        surfaces = {cell.pos: 0 for cell in facade.cells if not cell.opening}
+        projection = {(cell.pos[axis], cell.pos.y): cell.pos for cell in facade.cells
+                      if not cell.opening}
+        windows = {}
+        window_at = {}
+        for cell in facade.cells:
+            if not cell.opening:
+                windows.setdefault((cell.u // 4, cell.v // 4), []).append(cell.pos)
+                window_at[cell.pos] = cell.u // 4, cell.v // 4
+        for pos in surfaces:
+            surfaces[pos] = max([0, *(sum((p[i] - pos[i]) * normal[i] for i in (0, 2))
+                                     for p in depths.get((facade.face, pos[axis], pos.y), ()))])
+
+        def relief(points, surfaces, projection=projection, axis=axis, normal=normal,
+                   windows=windows, window_at=window_at):
+            changed = {}
+            for _, point in points:
+                if point in occupied:
+                    continue
+                pos = projection.get((point[axis], point.y))
+                if pos is not None:
+                    depth = max(surfaces[pos], sum((point[i] - pos[i]) * normal[i] for i in (0, 2)))
+                    if depth != surfaces[pos]:
+                        changed[pos] = max(changed.get(pos, depth), depth)
+            affected = {window_at[pos] for pos in changed}
+            gain = sum(len({changed.get(p, surfaces[p]) for p in windows[key]}) > 1
+                       for key in affected) - sum(
+                len({surfaces[p] for p in windows[key]}) > 1 for key in affected)
+            return gain, changed
+
         while options:
             used = selected[facade.element]
             valid = [(index, len({point for _, point in candidate[4]} - occupied))
                      for index, candidate in enumerate(options)]
-            valid = [(i, count) for i, count in valid if count and len(used) + count <= upper]
+            valid = [(i, count, relief(options[i][4], surfaces)[0])
+                     for i, count in valid if count and len(used) + count <= upper]
+            valid = [item for item in valid if item[2] >= 0]
             if not valid:
                 break
-            index, count = min(valid, key=lambda item: abs(desired - len(used) - item[1]))
-            if abs(desired - len(used) - count) >= abs(desired - len(used)):
+            index, count, gain = min(valid, key=lambda item: (
+                -item[2], abs(desired - len(used) - item[1])))
+            if (abs(desired - len(used) - count) >= abs(desired - len(used))
+                    and gain <= 0):
                 break
             wrapper, op, part, column, points = options.pop(index)
-            ident = f"{wrapper['id']}.ornament#{part}.{column}"
+            _, changes = relief(points, surfaces)
+            surfaces.update(changes)
+            ident = f"{wrapper['id']}.ornament#{part}.{column}.{facade.element}"
             children = [{"type": "set", "position": local.to_list(),
                          **{k: op[k] for k in ("block", "palette", "role") if k in op}}
                         for local, point in points if point not in occupied]
