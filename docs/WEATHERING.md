@@ -1,6 +1,6 @@
 # Weather（劣化・植生）
 
-mcblueprint.weather.apply_weather は GeneratedRegion の生成直後の RegionVolume を読み、ブロック更新を一括で core へ反映する後処理です。generator・CLIとの接続は行わず、呼出側が各領域に適用します。分割生成には mcblueprint.weather.required_halo(config["weathering"]) を generate_regions の reference_radius に渡し、Weatherが読む範囲を確保してください。
+mcblueprint.weather.apply_weather は GeneratedRegion の生成直後の RegionVolume を読み、ブロック更新を一括で core へ反映する後処理です。generator・CLIとの接続は行わず、呼出側が各領域に適用します。分割生成には mcblueprint.weather.required_halo(config["weathering"]) を generate_regions の reference_radius に渡し、Weatherが読む範囲を確保してください。reference_radius指定時のhaloはその値になり、指定がない場合は limits.halo を使います。劣化・支持判定はhaloを含むsnapshotで行い、変更の確定はcoreだけです。全体boundsの外側は既知の空気として露出に数え、bounds内でhaloが不足する参照は露出とみなしません。
 
     apply_weather(
         region,
@@ -12,7 +12,7 @@ mcblueprint.weather.apply_weather は GeneratedRegion の生成直後の RegionV
     )
 
 ground_height は元地形または基準面のY座標です。一定の整数、または (x, z) からY座標を返すMappingを渡します。領域は参照に必要なhaloを含めて生成し、Weather後もcore外は変更しません。
-max_memory_mb はWeatherの作業領域に使う上限（既定2048 MiB）です。領域配列・距離場・候補保持の概算が上限を超える場合は処理を開始せずエラーになります。
+max_memory_mb はWeatherの作業領域に使う上限（既定2048 MiB）です。Generateは生成とWeatherのセル当たり作業量の大きい方でcore寸法を縮小します。Weather単体も領域配列・距離場・候補保持の概算が上限を超える場合は処理を開始せずエラーになります。
 
 ## 処理規則
 

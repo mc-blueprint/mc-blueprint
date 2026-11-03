@@ -9,7 +9,7 @@ from mcblueprint.generator import (
     GenerationLimits,
     generate_regions,
 )
-from mcblueprint.loader import load_blueprint_dict
+from mcblueprint.loader import load_blueprint, load_blueprint_dict
 from mcblueprint.model.block import BlockState
 from mcblueprint.model.vec import AABB, Vec3
 from mcblueprint.volume import CellAttributes, RegionVolume
@@ -216,7 +216,7 @@ def _weather_blueprint():
 def _weathered_cells(core_size: int, reverse: bool, settings: dict):
     blueprint = _weather_blueprint()
     cells = {}
-    limits = GenerationLimits((core_size, None, core_size), halo=16)
+    limits = GenerationLimits((core_size, core_size, core_size), halo=16)
     for region in generate_regions(
         blueprint, limits=limits, reference_radius=required_halo(settings), reverse=reverse,
     ):
@@ -246,9 +246,61 @@ def test_weather_is_invariant_across_core_sizes_and_traversal_order():
     expected = _weathered_cells(64, False, settings)
 
     assert required_halo(settings) == 18
-    for size in (16, 32, 64):
+    for size in (3, 16, 32, 64):
         for reverse in (False, True):
             assert _weathered_cells(size, reverse, settings) == expected
+
+
+def test_weather_treats_world_bounds_as_exposed_air():
+    bounds = AABB(Vec3(0, 0, 0), Vec3(2, 2, 2))
+    volume = RegionVolume(bounds)
+    pos = Vec3(1, 1, 0)
+    volume.set(pos, BlockState.of("cobblestone"))
+    region = GeneratedRegion(bounds, volume, bounds)
+
+    apply_weather(region, load_block_data("1.21.11"), seed=8,
+                  config={"age": 0, "moss": {"amount": 1, "north_facing": 1}},
+                  ground_height=0)
+
+    assert volume.get(pos).id == "minecraft:mossy_cobblestone"
+
+
+def test_weather_does_not_treat_missing_in_bounds_reference_as_air():
+    bounds = AABB(Vec3(0, 0, 0), Vec3(2, 2, 2))
+    world_bounds = AABB(Vec3(0, 0, -1), Vec3(2, 2, 2))
+    volume = RegionVolume(bounds)
+    pos = Vec3(1, 1, 0)
+    volume.set(pos, BlockState.of("cobblestone"))
+    volume.set(Vec3(1, 1, 1), BlockState.of("stone"))
+    region = GeneratedRegion(bounds, volume, world_bounds)
+
+    apply_weather(region, load_block_data("1.21.11"), seed=8,
+                  config={"age": 0, "moss": {"amount": 1, "north_facing": 1}},
+                  ground_height=0)
+
+    assert volume.get(pos).id == "minecraft:cobblestone"
+
+
+def test_fixed_house_weather_matches_core_sizes_with_missing_and_vegetation():
+    blueprint = load_blueprint("examples/house.json")
+    settings = {"age": 1, "missing_blocks": 0.5, "vegetation": 1}
+    expected = None
+    for size in (3, 16, 64):
+        cells = {}
+        limits = GenerationLimits((size, size, size), halo=1)
+        for region in generate_regions(
+            blueprint, limits=limits, reference_radius=required_halo(settings),
+        ):
+            apply_weather(region, load_block_data(blueprint.minecraft_version),
+                          seed=blueprint.seed, config=settings, ground_height=0)
+            cells.update({
+                pos: (state, region.volume.attributes(pos))
+                for pos, state in region.volume if region.core.contains(pos)
+            })
+        if expected is None:
+            expected = cells
+        else:
+            assert cells == expected
 
 
 def _weather_sample_rates(kind: str, settings: dict, count: int = 256):
