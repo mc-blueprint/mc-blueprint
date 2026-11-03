@@ -3,6 +3,8 @@
 `mcblueprint view` は同梱のviewerを `127.0.0.1` の空きポートで配信する。
 Node.jsは利用時には不要。Minecraftのアセットは利用者の端末で展開し、配布物には含めない。
 
+ヘッドレスChromiumによる3視点PNGと初回setupは [RENDER.md](RENDER.md) を参照。
+
 ```bash
 mcblueprint view tower.yaml
 mcblueprint view blueprints/house.json -o output/view
