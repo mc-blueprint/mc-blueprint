@@ -49,3 +49,29 @@ Windows 11 / Python 3.14.4 / mc-blueprint 0.1.0 での代表値（3回の中央�
 | 反復 `repeat-64` | 512 / 191×2×2 | 0.0071 | 0.0023 | 0.0045 | 0.0826 | 0.0243 |
 
 この測定では疎配置の検証がOperation数とともに増え、広い空気領域は実セル数が多いため生成・描画が主な負荷になった。3 CLIの合計には検証・生成の繰り返しが含まれ、単一パスはそれらを一度ずつ行う。表はこの実行環境での説明用の観測値であり、将来の変更を判定する固定性能基準ではない。
+
+## 生成コア初期基準（Issue #144）
+
+`scripts/generate_benchmark_profiles.py` は既存Operationだけで五負荷の合成Blueprintを作る。`profile-*` fixtureは既存の段階別baselineに混ぜず、完全生成の独立系列として測る。
+
+```powershell
+python scripts/benchmark.py --generate-profiles
+python scripts/benchmark.py --profile-benchmark
+```
+
+`benchmarks/generation-profiles.json` にfixtureごとの寸法、seed、定義版、SHA-256、viewerの対応sceneと入力差を記録する。5種のmediumは64×48×64、城のhugeは256×128×256。固定seedと同じ定義版から同一JSONを再生成する。
+
+各試行は新しいPython子プロセスを起動し、JSON読込、検証、モデル構築、生成、support検査、`.schem` 出力までの壁時計時間を親側で測る。ピークRSSは子プロセス全体の最大Working Set（Windows）またはOSの最大RSSで、`tracemalloc`とは別に取得する。`benchmarks/generation-baseline.json` は3回分の生値と中央値、実セル数、出力サイズ、OS・CPU・物理メモリ・GPU・Python版を保存する。失敗・取得不能の値は理由付きで記録する。基準測定は閾値による合否判定ではなく、この端末での実測証跡である。
+
+| 負荷 | 寸法 | 生成時間中央値 | プロセスピークRSS中央値 |
+| --- | ---: | ---: | ---: |
+| 城 medium | 64×48×64 | 1.277秒 | 74.0 MiB |
+| 街並み medium | 64×48×64 | 1.121秒 | 69.8 MiB |
+| 地形 medium | 64×48×64 | 2.139秒 | 75.8 MiB |
+| 地下 medium | 64×48×64 | 1.533秒 | 75.8 MiB |
+| 植生 medium | 64×48×64 | 1.022秒 | 69.0 MiB |
+| 城 huge | 256×128×256 | 17.651秒 | 278.0 MiB |
+
+時間は新規Pythonプロセスの起動を含む3回の中央値。各試行の生値はJSON記録を参照する。測定端末はWindows 11（10.0.26200）、AMD Ryzen 7 5700X 8-Core Processor、物理メモリ68,640,256,000 bytes、NVIDIA GeForce RTX 4070 SUPER、Python 3.12.15。
+
+viewer側の参照は `mc-blueprint-viewer` の `7b2e0f4:docs/performance.md`。負荷対応は城→castle、街並み→town、地形→terrain、地下→underground、植生→vegetation。viewerはfixture-v1のscene JSONを読み込み・描画するのに対し、ここでは既存OperationのBlueprintを検証・生成してschemへ出力するため入力データも処理範囲も異なる。viewerの初回表示・fpsと本測定のend-to-end生成時間、またviewerのプロセスRSS集計と本測定のPython子プロセスピークRSSは直接比較しない。

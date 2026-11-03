@@ -31,11 +31,68 @@ def test_benchmark_fixtures_cover_fixed_workloads_and_validate() -> None:
         assert not validate(read_blueprint_json(path))
 
 
+def test_generation_profiles_are_fixed_valid_and_deterministic() -> None:
+    root = Path(__file__).parents[1]
+    record_path = root / "benchmarks" / "generation-profiles.json"
+    record_before = record_path.read_bytes()
+    record = json.loads(record_before)
+    profiles = record["profiles"]
+    assert {profile["kind"] for profile in profiles} == {
+        "castle",
+        "town",
+        "terrain",
+        "underground",
+        "vegetation",
+    }
+    assert all(profile["dimensions"] == [64, 48, 64] for profile in profiles[:-1])
+    assert profiles[-1]["kind"] == "castle"
+    assert profiles[-1]["dimensions"] == [256, 128, 256]
+    before = {
+        profile["name"]: (root / "benchmarks" / "fixtures" / f"{profile['name']}.json").read_bytes()
+        for profile in profiles
+    }
+    for profile in profiles:
+        path = root / "benchmarks" / "fixtures" / f"{profile['name']}.json"
+        raw = read_blueprint_json(path)
+        blueprint = benchmark.load_blueprint_dict(raw)
+        assert not validate(raw)
+        assert benchmark._bounds(blueprint).size.to_list() == profile["dimensions"]
+        assert hashlib.sha256(path.read_bytes()).hexdigest() == profile["input_sha256"]
+
+    generator_spec = importlib.util.spec_from_file_location(
+        "benchmark_profiles",
+        root / "scripts" / "generate_benchmark_profiles.py",
+    )
+    assert generator_spec is not None and generator_spec.loader is not None
+    generator = importlib.util.module_from_spec(generator_spec)
+    generator_spec.loader.exec_module(generator)
+    generator.generate_profiles()
+
+    assert record_path.read_bytes() == record_before
+    assert {
+        profile["name"]: (root / "benchmarks" / "fixtures" / f"{profile['name']}.json").read_bytes()
+        for profile in profiles
+    } == before
+
+
 def test_benchmark_stage_reports_elapsed_time_and_python_peak() -> None:
     result = _worker("repeat-8", "bounds_expansion", repetitions=1)
     assert result["seconds_median"] >= 0
     assert result["python_peak_bytes"] > 0
     assert len(result["samples_seconds"]) == 1
+
+
+def test_process_peak_rss_includes_python_external_allocation() -> None:
+    baseline = benchmark._process_peak_rss()
+    assert baseline is not None
+    allocation = bytearray(128 * 1024 * 1024)
+    allocation[::4096] = b"x" * (len(allocation) // 4096)
+
+    peak = benchmark._process_peak_rss()
+
+    assert peak is not None
+    assert peak >= baseline + 24 * 1024 * 1024
+    assert allocation[0] == ord("x")
 
 
 def test_benchmark_median_uses_midpoint_for_even_sample_count(monkeypatch) -> None:

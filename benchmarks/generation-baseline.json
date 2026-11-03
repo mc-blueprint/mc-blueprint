@@ -1,0 +1,303 @@
+{
+  "schema_version": 1,
+  "definition_version": "generation-profile-v1",
+  "environment": {
+    "os": "Windows-11-10.0.26200-SP0",
+    "cpu": "AMD Ryzen 7 5700X 8-Core Processor",
+    "cpu_reason": null,
+    "logical_cpu_count": 16,
+    "memory_total_bytes": 68640256000,
+    "memory_reason": null,
+    "gpu": "NVIDIA GeForce RTX 4070 SUPER",
+    "gpu_reason": null,
+    "python": "3.12.15 (main, Oct 21 2026, 17:48:33) [MSC v.1944 64 bit (AMD64)]",
+    "python_version": "3.12.15"
+  },
+  "time_scope": "独立子プロセスの起動から読込・検証・モデル構築・生成・support検査・schem出力完了まで。",
+  "memory_metric": "独立子プロセス全体のPeakWorkingSetSize（Windows）またはOSの最大RSS。tracemallocは使用しない。",
+  "viewer_reference_note": "viewer参照は負荷種別の対応だけを示す。scene形式・時間境界・RSS集計方法が異なるため数値は直接比較しない。",
+  "results": [
+    {
+      "name": "profile-castle-medium",
+      "kind": "castle",
+      "scale": "medium",
+      "dimensions": [
+        64,
+        48,
+        64
+      ],
+      "seed": 1101,
+      "definition_version": "generation-profile-v1",
+      "input_sha256": "40b137ec59f613f7002bc148653ea6a9b75691fc6491fe2d328d4022470d8f16",
+      "viewer_reference": {
+        "scene": "castle",
+        "difference": "viewerの固定sceneはfixture-v1のscene JSON。これは既存Operationによる生成入力であり、同一データではない。"
+      },
+      "repetitions": 3,
+      "samples": [
+        {
+          "seconds": 1.4603520999662578,
+          "process_peak_rss_bytes": 77643776,
+          "cells": 46082,
+          "output_bytes": 1046,
+          "error_reason": null,
+          "rss_reason": null
+        },
+        {
+          "seconds": 1.2766406000009738,
+          "process_peak_rss_bytes": 77807616,
+          "cells": 46082,
+          "output_bytes": 1046,
+          "error_reason": null,
+          "rss_reason": null
+        },
+        {
+          "seconds": 1.204442200018093,
+          "process_peak_rss_bytes": 77398016,
+          "cells": 46082,
+          "output_bytes": 1046,
+          "error_reason": null,
+          "rss_reason": null
+        }
+      ],
+      "seconds_median": 1.2766406000009738,
+      "process_peak_rss_bytes_median": 77643776,
+      "process_peak_rss_mib_median": 74.046875
+    },
+    {
+      "name": "profile-town-medium",
+      "kind": "town",
+      "scale": "medium",
+      "dimensions": [
+        64,
+        48,
+        64
+      ],
+      "seed": 1102,
+      "definition_version": "generation-profile-v1",
+      "input_sha256": "8be332cc36747ff246f289e3ddeb6139d42b0394b61666196f5e05f2116d48cf",
+      "viewer_reference": {
+        "scene": "town",
+        "difference": "viewerの固定sceneはfixture-v1のscene JSON。これは既存Operationによる生成入力であり、同一データではない。"
+      },
+      "repetitions": 3,
+      "samples": [
+        {
+          "seconds": 1.094903899997007,
+          "process_peak_rss_bytes": 73244672,
+          "cells": 12898,
+          "output_bytes": 1091,
+          "error_reason": null,
+          "rss_reason": null
+        },
+        {
+          "seconds": 1.1257013999857008,
+          "process_peak_rss_bytes": 73236480,
+          "cells": 12898,
+          "output_bytes": 1091,
+          "error_reason": null,
+          "rss_reason": null
+        },
+        {
+          "seconds": 1.1213697000057437,
+          "process_peak_rss_bytes": 72953856,
+          "cells": 12898,
+          "output_bytes": 1091,
+          "error_reason": null,
+          "rss_reason": null
+        }
+      ],
+      "seconds_median": 1.1213697000057437,
+      "process_peak_rss_bytes_median": 73236480,
+      "process_peak_rss_mib_median": 69.84375
+    },
+    {
+      "name": "profile-terrain-medium",
+      "kind": "terrain",
+      "scale": "medium",
+      "dimensions": [
+        64,
+        48,
+        64
+      ],
+      "seed": 1103,
+      "definition_version": "generation-profile-v1",
+      "input_sha256": "f6e44395a849395742eeb83cabac01746ea1e41eebb40d3ed9285e7e294defe0",
+      "viewer_reference": {
+        "scene": "terrain",
+        "difference": "viewerの固定sceneはfixture-v1のscene JSON。これは既存Operationによる生成入力であり、同一データではない。"
+      },
+      "repetitions": 3,
+      "samples": [
+        {
+          "seconds": 2.057779200025834,
+          "process_peak_rss_bytes": 79167488,
+          "cells": 60145,
+          "output_bytes": 2250,
+          "error_reason": null,
+          "rss_reason": null
+        },
+        {
+          "seconds": 2.1393373999744654,
+          "process_peak_rss_bytes": 79527936,
+          "cells": 60145,
+          "output_bytes": 2250,
+          "error_reason": null,
+          "rss_reason": null
+        },
+        {
+          "seconds": 2.238163300033193,
+          "process_peak_rss_bytes": 79609856,
+          "cells": 60145,
+          "output_bytes": 2250,
+          "error_reason": null,
+          "rss_reason": null
+        }
+      ],
+      "seconds_median": 2.1393373999744654,
+      "process_peak_rss_bytes_median": 79527936,
+      "process_peak_rss_mib_median": 75.84375
+    },
+    {
+      "name": "profile-underground-medium",
+      "kind": "underground",
+      "scale": "medium",
+      "dimensions": [
+        64,
+        48,
+        64
+      ],
+      "seed": 1104,
+      "definition_version": "generation-profile-v1",
+      "input_sha256": "9b3fcf36f424ecc7f00e1bd0a6b396f3fcc963dfa0113754a9f3a567e106c8e6",
+      "viewer_reference": {
+        "scene": "underground",
+        "difference": "viewerの固定sceneはfixture-v1のscene JSON。これは既存Operationによる生成入力であり、同一データではない。"
+      },
+      "repetitions": 3,
+      "samples": [
+        {
+          "seconds": 1.5861915000132285,
+          "process_peak_rss_bytes": 79388672,
+          "cells": 77825,
+          "output_bytes": 551,
+          "error_reason": null,
+          "rss_reason": null
+        },
+        {
+          "seconds": 1.483104299986735,
+          "process_peak_rss_bytes": 79466496,
+          "cells": 77825,
+          "output_bytes": 551,
+          "error_reason": null,
+          "rss_reason": null
+        },
+        {
+          "seconds": 1.5325776999816298,
+          "process_peak_rss_bytes": 80588800,
+          "cells": 77825,
+          "output_bytes": 551,
+          "error_reason": null,
+          "rss_reason": null
+        }
+      ],
+      "seconds_median": 1.5325776999816298,
+      "process_peak_rss_bytes_median": 79466496,
+      "process_peak_rss_mib_median": 75.78515625
+    },
+    {
+      "name": "profile-vegetation-medium",
+      "kind": "vegetation",
+      "scale": "medium",
+      "dimensions": [
+        64,
+        48,
+        64
+      ],
+      "seed": 1105,
+      "definition_version": "generation-profile-v1",
+      "input_sha256": "38ec9acafdd35a009ea38645f34b4860f6e588fe123696d17e841853b3ab3c0d",
+      "viewer_reference": {
+        "scene": "vegetation",
+        "difference": "viewerの固定sceneはfixture-v1のscene JSON。これは既存Operationによる生成入力であり、同一データではない。"
+      },
+      "repetitions": 3,
+      "samples": [
+        {
+          "seconds": 1.0218580000218935,
+          "process_peak_rss_bytes": 72376320,
+          "cells": 1781,
+          "output_bytes": 945,
+          "error_reason": null,
+          "rss_reason": null
+        },
+        {
+          "seconds": 1.1188963999738917,
+          "process_peak_rss_bytes": 71761920,
+          "cells": 1781,
+          "output_bytes": 945,
+          "error_reason": null,
+          "rss_reason": null
+        },
+        {
+          "seconds": 1.002235899970401,
+          "process_peak_rss_bytes": 72867840,
+          "cells": 1781,
+          "output_bytes": 945,
+          "error_reason": null,
+          "rss_reason": null
+        }
+      ],
+      "seconds_median": 1.0218580000218935,
+      "process_peak_rss_bytes_median": 72376320,
+      "process_peak_rss_mib_median": 69.0234375
+    },
+    {
+      "name": "profile-castle-huge",
+      "kind": "castle",
+      "scale": "huge",
+      "dimensions": [
+        256,
+        128,
+        256
+      ],
+      "seed": 1101,
+      "definition_version": "generation-profile-v1",
+      "input_sha256": "933127800cd14918d0d4c60239502987c175225e84de9fec060c70400f7fe735",
+      "viewer_reference": {
+        "scene": "castle",
+        "difference": "viewerの固定sceneはfixture-v1のscene JSON。これは既存Operationによる生成入力であり、同一データではない。"
+      },
+      "repetitions": 3,
+      "samples": [
+        {
+          "seconds": 17.651101299969014,
+          "process_peak_rss_bytes": 291328000,
+          "cells": 737282,
+          "output_bytes": 17294,
+          "error_reason": null,
+          "rss_reason": null
+        },
+        {
+          "seconds": 18.404094900004566,
+          "process_peak_rss_bytes": 291733504,
+          "cells": 737282,
+          "output_bytes": 17294,
+          "error_reason": null,
+          "rss_reason": null
+        },
+        {
+          "seconds": 17.189681000018027,
+          "process_peak_rss_bytes": 291483648,
+          "cells": 737282,
+          "output_bytes": 17294,
+          "error_reason": null,
+          "rss_reason": null
+        }
+      ],
+      "seconds_median": 17.651101299969014,
+      "process_peak_rss_bytes_median": 291483648,
+      "process_peak_rss_mib_median": 277.98046875
+    }
+  ]
+}

@@ -1,0 +1,7203 @@
+{
+  "formatVersion": 1,
+  "minecraftVersion": "1.21.11",
+  "name": "profile-terrain-medium",
+  "operations": [
+    {
+      "type": "fill",
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        3,
+        16,
+        3
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        0,
+        17,
+        0
+      ],
+      "to": [
+        3,
+        17,
+        3
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        4,
+        0,
+        0
+      ],
+      "to": [
+        7,
+        19,
+        3
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        4,
+        20,
+        0
+      ],
+      "to": [
+        7,
+        20,
+        3
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        8,
+        0,
+        0
+      ],
+      "to": [
+        11,
+        18,
+        3
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        8,
+        19,
+        0
+      ],
+      "to": [
+        11,
+        19,
+        3
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        12,
+        0,
+        0
+      ],
+      "to": [
+        15,
+        8,
+        3
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        12,
+        9,
+        0
+      ],
+      "to": [
+        15,
+        9,
+        3
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        16,
+        0,
+        0
+      ],
+      "to": [
+        19,
+        10,
+        3
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        16,
+        11,
+        0
+      ],
+      "to": [
+        19,
+        11,
+        3
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        20,
+        0,
+        0
+      ],
+      "to": [
+        23,
+        6,
+        3
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        20,
+        7,
+        0
+      ],
+      "to": [
+        23,
+        7,
+        3
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        24,
+        0,
+        0
+      ],
+      "to": [
+        27,
+        9,
+        3
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        24,
+        10,
+        0
+      ],
+      "to": [
+        27,
+        10,
+        3
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        28,
+        0,
+        0
+      ],
+      "to": [
+        31,
+        8,
+        3
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        28,
+        9,
+        0
+      ],
+      "to": [
+        31,
+        9,
+        3
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        32,
+        0,
+        0
+      ],
+      "to": [
+        35,
+        16,
+        3
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        32,
+        17,
+        0
+      ],
+      "to": [
+        35,
+        17,
+        3
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        36,
+        0,
+        0
+      ],
+      "to": [
+        39,
+        20,
+        3
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        36,
+        21,
+        0
+      ],
+      "to": [
+        39,
+        21,
+        3
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        40,
+        0,
+        0
+      ],
+      "to": [
+        43,
+        17,
+        3
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        40,
+        18,
+        0
+      ],
+      "to": [
+        43,
+        18,
+        3
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        44,
+        0,
+        0
+      ],
+      "to": [
+        47,
+        15,
+        3
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        44,
+        16,
+        0
+      ],
+      "to": [
+        47,
+        16,
+        3
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        48,
+        0,
+        0
+      ],
+      "to": [
+        51,
+        8,
+        3
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        48,
+        9,
+        0
+      ],
+      "to": [
+        51,
+        9,
+        3
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        52,
+        0,
+        0
+      ],
+      "to": [
+        55,
+        12,
+        3
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        52,
+        13,
+        0
+      ],
+      "to": [
+        55,
+        13,
+        3
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        56,
+        0,
+        0
+      ],
+      "to": [
+        59,
+        7,
+        3
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        56,
+        8,
+        0
+      ],
+      "to": [
+        59,
+        8,
+        3
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        60,
+        0,
+        0
+      ],
+      "to": [
+        63,
+        18,
+        3
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        60,
+        19,
+        0
+      ],
+      "to": [
+        63,
+        19,
+        3
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        0,
+        0,
+        4
+      ],
+      "to": [
+        3,
+        8,
+        7
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        0,
+        9,
+        4
+      ],
+      "to": [
+        3,
+        9,
+        7
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        4,
+        0,
+        4
+      ],
+      "to": [
+        7,
+        14,
+        7
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        4,
+        15,
+        4
+      ],
+      "to": [
+        7,
+        15,
+        7
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        8,
+        0,
+        4
+      ],
+      "to": [
+        11,
+        18,
+        7
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        8,
+        19,
+        4
+      ],
+      "to": [
+        11,
+        19,
+        7
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        12,
+        0,
+        4
+      ],
+      "to": [
+        15,
+        18,
+        7
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        12,
+        19,
+        4
+      ],
+      "to": [
+        15,
+        19,
+        7
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        16,
+        0,
+        4
+      ],
+      "to": [
+        19,
+        20,
+        7
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        16,
+        21,
+        4
+      ],
+      "to": [
+        19,
+        21,
+        7
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        20,
+        0,
+        4
+      ],
+      "to": [
+        23,
+        8,
+        7
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        20,
+        9,
+        4
+      ],
+      "to": [
+        23,
+        9,
+        7
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        24,
+        0,
+        4
+      ],
+      "to": [
+        27,
+        5,
+        7
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        24,
+        6,
+        4
+      ],
+      "to": [
+        27,
+        6,
+        7
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        28,
+        0,
+        4
+      ],
+      "to": [
+        31,
+        15,
+        7
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        28,
+        16,
+        4
+      ],
+      "to": [
+        31,
+        16,
+        7
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        32,
+        0,
+        4
+      ],
+      "to": [
+        35,
+        17,
+        7
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        32,
+        18,
+        4
+      ],
+      "to": [
+        35,
+        18,
+        7
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        36,
+        0,
+        4
+      ],
+      "to": [
+        39,
+        19,
+        7
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        36,
+        20,
+        4
+      ],
+      "to": [
+        39,
+        20,
+        7
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        40,
+        0,
+        4
+      ],
+      "to": [
+        43,
+        6,
+        7
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        40,
+        7,
+        4
+      ],
+      "to": [
+        43,
+        7,
+        7
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        44,
+        0,
+        4
+      ],
+      "to": [
+        47,
+        19,
+        7
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        44,
+        20,
+        4
+      ],
+      "to": [
+        47,
+        20,
+        7
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        48,
+        0,
+        4
+      ],
+      "to": [
+        51,
+        4,
+        7
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        48,
+        5,
+        4
+      ],
+      "to": [
+        51,
+        5,
+        7
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        52,
+        0,
+        4
+      ],
+      "to": [
+        55,
+        10,
+        7
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        52,
+        11,
+        4
+      ],
+      "to": [
+        55,
+        11,
+        7
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        56,
+        0,
+        4
+      ],
+      "to": [
+        59,
+        15,
+        7
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        56,
+        16,
+        4
+      ],
+      "to": [
+        59,
+        16,
+        7
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        60,
+        0,
+        4
+      ],
+      "to": [
+        63,
+        19,
+        7
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        60,
+        20,
+        4
+      ],
+      "to": [
+        63,
+        20,
+        7
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        0,
+        0,
+        8
+      ],
+      "to": [
+        3,
+        4,
+        11
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        0,
+        5,
+        8
+      ],
+      "to": [
+        3,
+        5,
+        11
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        4,
+        0,
+        8
+      ],
+      "to": [
+        7,
+        10,
+        11
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        4,
+        11,
+        8
+      ],
+      "to": [
+        7,
+        11,
+        11
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        8,
+        0,
+        8
+      ],
+      "to": [
+        11,
+        5,
+        11
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        8,
+        6,
+        8
+      ],
+      "to": [
+        11,
+        6,
+        11
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        12,
+        0,
+        8
+      ],
+      "to": [
+        15,
+        9,
+        11
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        12,
+        10,
+        8
+      ],
+      "to": [
+        15,
+        10,
+        11
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        16,
+        0,
+        8
+      ],
+      "to": [
+        19,
+        7,
+        11
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        16,
+        8,
+        8
+      ],
+      "to": [
+        19,
+        8,
+        11
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        20,
+        0,
+        8
+      ],
+      "to": [
+        23,
+        17,
+        11
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        20,
+        18,
+        8
+      ],
+      "to": [
+        23,
+        18,
+        11
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        24,
+        0,
+        8
+      ],
+      "to": [
+        27,
+        13,
+        11
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        24,
+        14,
+        8
+      ],
+      "to": [
+        27,
+        14,
+        11
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        28,
+        0,
+        8
+      ],
+      "to": [
+        31,
+        14,
+        11
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        28,
+        15,
+        8
+      ],
+      "to": [
+        31,
+        15,
+        11
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        32,
+        0,
+        8
+      ],
+      "to": [
+        35,
+        11,
+        11
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        32,
+        12,
+        8
+      ],
+      "to": [
+        35,
+        12,
+        11
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        36,
+        0,
+        8
+      ],
+      "to": [
+        39,
+        11,
+        11
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        36,
+        12,
+        8
+      ],
+      "to": [
+        39,
+        12,
+        11
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        40,
+        0,
+        8
+      ],
+      "to": [
+        43,
+        12,
+        11
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        40,
+        13,
+        8
+      ],
+      "to": [
+        43,
+        13,
+        11
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        44,
+        0,
+        8
+      ],
+      "to": [
+        47,
+        12,
+        11
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        44,
+        13,
+        8
+      ],
+      "to": [
+        47,
+        13,
+        11
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        48,
+        0,
+        8
+      ],
+      "to": [
+        51,
+        10,
+        11
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        48,
+        11,
+        8
+      ],
+      "to": [
+        51,
+        11,
+        11
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        52,
+        0,
+        8
+      ],
+      "to": [
+        55,
+        16,
+        11
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        52,
+        17,
+        8
+      ],
+      "to": [
+        55,
+        17,
+        11
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        56,
+        0,
+        8
+      ],
+      "to": [
+        59,
+        4,
+        11
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        56,
+        5,
+        8
+      ],
+      "to": [
+        59,
+        5,
+        11
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        60,
+        0,
+        8
+      ],
+      "to": [
+        63,
+        9,
+        11
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        60,
+        10,
+        8
+      ],
+      "to": [
+        63,
+        10,
+        11
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        0,
+        0,
+        12
+      ],
+      "to": [
+        3,
+        13,
+        15
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        0,
+        14,
+        12
+      ],
+      "to": [
+        3,
+        14,
+        15
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        4,
+        0,
+        12
+      ],
+      "to": [
+        7,
+        18,
+        15
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        4,
+        19,
+        12
+      ],
+      "to": [
+        7,
+        19,
+        15
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        8,
+        0,
+        12
+      ],
+      "to": [
+        11,
+        7,
+        15
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        8,
+        8,
+        12
+      ],
+      "to": [
+        11,
+        8,
+        15
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        12,
+        0,
+        12
+      ],
+      "to": [
+        15,
+        12,
+        15
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        12,
+        13,
+        12
+      ],
+      "to": [
+        15,
+        13,
+        15
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        16,
+        0,
+        12
+      ],
+      "to": [
+        19,
+        13,
+        15
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        16,
+        14,
+        12
+      ],
+      "to": [
+        19,
+        14,
+        15
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        20,
+        0,
+        12
+      ],
+      "to": [
+        23,
+        19,
+        15
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        20,
+        20,
+        12
+      ],
+      "to": [
+        23,
+        20,
+        15
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        24,
+        0,
+        12
+      ],
+      "to": [
+        27,
+        13,
+        15
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        24,
+        14,
+        12
+      ],
+      "to": [
+        27,
+        14,
+        15
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        28,
+        0,
+        12
+      ],
+      "to": [
+        31,
+        19,
+        15
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        28,
+        20,
+        12
+      ],
+      "to": [
+        31,
+        20,
+        15
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        32,
+        0,
+        12
+      ],
+      "to": [
+        35,
+        10,
+        15
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        32,
+        11,
+        12
+      ],
+      "to": [
+        35,
+        11,
+        15
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        36,
+        0,
+        12
+      ],
+      "to": [
+        39,
+        10,
+        15
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        36,
+        11,
+        12
+      ],
+      "to": [
+        39,
+        11,
+        15
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        40,
+        0,
+        12
+      ],
+      "to": [
+        43,
+        13,
+        15
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        40,
+        14,
+        12
+      ],
+      "to": [
+        43,
+        14,
+        15
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        44,
+        0,
+        12
+      ],
+      "to": [
+        47,
+        21,
+        15
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        44,
+        22,
+        12
+      ],
+      "to": [
+        47,
+        22,
+        15
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        48,
+        0,
+        12
+      ],
+      "to": [
+        51,
+        11,
+        15
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        48,
+        12,
+        12
+      ],
+      "to": [
+        51,
+        12,
+        15
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        52,
+        0,
+        12
+      ],
+      "to": [
+        55,
+        10,
+        15
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        52,
+        11,
+        12
+      ],
+      "to": [
+        55,
+        11,
+        15
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        56,
+        0,
+        12
+      ],
+      "to": [
+        59,
+        5,
+        15
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        56,
+        6,
+        12
+      ],
+      "to": [
+        59,
+        6,
+        15
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        60,
+        0,
+        12
+      ],
+      "to": [
+        63,
+        6,
+        15
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        60,
+        7,
+        12
+      ],
+      "to": [
+        63,
+        7,
+        15
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        0,
+        0,
+        16
+      ],
+      "to": [
+        3,
+        15,
+        19
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        0,
+        16,
+        16
+      ],
+      "to": [
+        3,
+        16,
+        19
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        4,
+        0,
+        16
+      ],
+      "to": [
+        7,
+        6,
+        19
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        4,
+        7,
+        16
+      ],
+      "to": [
+        7,
+        7,
+        19
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        8,
+        0,
+        16
+      ],
+      "to": [
+        11,
+        19,
+        19
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        8,
+        20,
+        16
+      ],
+      "to": [
+        11,
+        20,
+        19
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        12,
+        0,
+        16
+      ],
+      "to": [
+        15,
+        18,
+        19
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        12,
+        19,
+        16
+      ],
+      "to": [
+        15,
+        19,
+        19
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        16,
+        0,
+        16
+      ],
+      "to": [
+        19,
+        11,
+        19
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        16,
+        12,
+        16
+      ],
+      "to": [
+        19,
+        12,
+        19
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        20,
+        0,
+        16
+      ],
+      "to": [
+        23,
+        12,
+        19
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        20,
+        13,
+        16
+      ],
+      "to": [
+        23,
+        13,
+        19
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        24,
+        0,
+        16
+      ],
+      "to": [
+        27,
+        6,
+        19
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        24,
+        7,
+        16
+      ],
+      "to": [
+        27,
+        7,
+        19
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        28,
+        0,
+        16
+      ],
+      "to": [
+        31,
+        7,
+        19
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        28,
+        8,
+        16
+      ],
+      "to": [
+        31,
+        8,
+        19
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        32,
+        0,
+        16
+      ],
+      "to": [
+        35,
+        21,
+        19
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        32,
+        22,
+        16
+      ],
+      "to": [
+        35,
+        22,
+        19
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        36,
+        0,
+        16
+      ],
+      "to": [
+        39,
+        8,
+        19
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        36,
+        9,
+        16
+      ],
+      "to": [
+        39,
+        9,
+        19
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        40,
+        0,
+        16
+      ],
+      "to": [
+        43,
+        13,
+        19
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        40,
+        14,
+        16
+      ],
+      "to": [
+        43,
+        14,
+        19
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        44,
+        0,
+        16
+      ],
+      "to": [
+        47,
+        9,
+        19
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        44,
+        10,
+        16
+      ],
+      "to": [
+        47,
+        10,
+        19
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        48,
+        0,
+        16
+      ],
+      "to": [
+        51,
+        10,
+        19
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        48,
+        11,
+        16
+      ],
+      "to": [
+        51,
+        11,
+        19
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        52,
+        0,
+        16
+      ],
+      "to": [
+        55,
+        9,
+        19
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        52,
+        10,
+        16
+      ],
+      "to": [
+        55,
+        10,
+        19
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        56,
+        0,
+        16
+      ],
+      "to": [
+        59,
+        20,
+        19
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        56,
+        21,
+        16
+      ],
+      "to": [
+        59,
+        21,
+        19
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        60,
+        0,
+        16
+      ],
+      "to": [
+        63,
+        9,
+        19
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        60,
+        10,
+        16
+      ],
+      "to": [
+        63,
+        10,
+        19
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        0,
+        0,
+        20
+      ],
+      "to": [
+        3,
+        10,
+        23
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        0,
+        11,
+        20
+      ],
+      "to": [
+        3,
+        11,
+        23
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        4,
+        0,
+        20
+      ],
+      "to": [
+        7,
+        12,
+        23
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        4,
+        13,
+        20
+      ],
+      "to": [
+        7,
+        13,
+        23
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        8,
+        0,
+        20
+      ],
+      "to": [
+        11,
+        17,
+        23
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        8,
+        18,
+        20
+      ],
+      "to": [
+        11,
+        18,
+        23
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        12,
+        0,
+        20
+      ],
+      "to": [
+        15,
+        18,
+        23
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        12,
+        19,
+        20
+      ],
+      "to": [
+        15,
+        19,
+        23
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        16,
+        0,
+        20
+      ],
+      "to": [
+        19,
+        21,
+        23
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        16,
+        22,
+        20
+      ],
+      "to": [
+        19,
+        22,
+        23
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        20,
+        0,
+        20
+      ],
+      "to": [
+        23,
+        18,
+        23
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        20,
+        19,
+        20
+      ],
+      "to": [
+        23,
+        19,
+        23
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        24,
+        0,
+        20
+      ],
+      "to": [
+        27,
+        21,
+        23
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        24,
+        22,
+        20
+      ],
+      "to": [
+        27,
+        22,
+        23
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        28,
+        0,
+        20
+      ],
+      "to": [
+        31,
+        14,
+        23
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        28,
+        15,
+        20
+      ],
+      "to": [
+        31,
+        15,
+        23
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        32,
+        0,
+        20
+      ],
+      "to": [
+        35,
+        13,
+        23
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        32,
+        14,
+        20
+      ],
+      "to": [
+        35,
+        14,
+        23
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        36,
+        0,
+        20
+      ],
+      "to": [
+        39,
+        11,
+        23
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        36,
+        12,
+        20
+      ],
+      "to": [
+        39,
+        12,
+        23
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        40,
+        0,
+        20
+      ],
+      "to": [
+        43,
+        11,
+        23
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        40,
+        12,
+        20
+      ],
+      "to": [
+        43,
+        12,
+        23
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        44,
+        0,
+        20
+      ],
+      "to": [
+        47,
+        11,
+        23
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        44,
+        12,
+        20
+      ],
+      "to": [
+        47,
+        12,
+        23
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        48,
+        0,
+        20
+      ],
+      "to": [
+        51,
+        16,
+        23
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        48,
+        17,
+        20
+      ],
+      "to": [
+        51,
+        17,
+        23
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        52,
+        0,
+        20
+      ],
+      "to": [
+        55,
+        20,
+        23
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        52,
+        21,
+        20
+      ],
+      "to": [
+        55,
+        21,
+        23
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        56,
+        0,
+        20
+      ],
+      "to": [
+        59,
+        18,
+        23
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        56,
+        19,
+        20
+      ],
+      "to": [
+        59,
+        19,
+        23
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        60,
+        0,
+        20
+      ],
+      "to": [
+        63,
+        14,
+        23
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        60,
+        15,
+        20
+      ],
+      "to": [
+        63,
+        15,
+        23
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        0,
+        0,
+        24
+      ],
+      "to": [
+        3,
+        21,
+        27
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        0,
+        22,
+        24
+      ],
+      "to": [
+        3,
+        22,
+        27
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        4,
+        0,
+        24
+      ],
+      "to": [
+        7,
+        12,
+        27
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        4,
+        13,
+        24
+      ],
+      "to": [
+        7,
+        13,
+        27
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        8,
+        0,
+        24
+      ],
+      "to": [
+        11,
+        20,
+        27
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        8,
+        21,
+        24
+      ],
+      "to": [
+        11,
+        21,
+        27
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        12,
+        0,
+        24
+      ],
+      "to": [
+        15,
+        13,
+        27
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        12,
+        14,
+        24
+      ],
+      "to": [
+        15,
+        14,
+        27
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        16,
+        0,
+        24
+      ],
+      "to": [
+        19,
+        8,
+        27
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        16,
+        9,
+        24
+      ],
+      "to": [
+        19,
+        9,
+        27
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        20,
+        0,
+        24
+      ],
+      "to": [
+        23,
+        12,
+        27
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        20,
+        13,
+        24
+      ],
+      "to": [
+        23,
+        13,
+        27
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        24,
+        0,
+        24
+      ],
+      "to": [
+        27,
+        5,
+        27
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        24,
+        6,
+        24
+      ],
+      "to": [
+        27,
+        6,
+        27
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        28,
+        0,
+        24
+      ],
+      "to": [
+        31,
+        5,
+        27
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        28,
+        6,
+        24
+      ],
+      "to": [
+        31,
+        6,
+        27
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        32,
+        0,
+        24
+      ],
+      "to": [
+        35,
+        13,
+        27
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        32,
+        14,
+        24
+      ],
+      "to": [
+        35,
+        14,
+        27
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        36,
+        0,
+        24
+      ],
+      "to": [
+        39,
+        11,
+        27
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        36,
+        12,
+        24
+      ],
+      "to": [
+        39,
+        12,
+        27
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        40,
+        0,
+        24
+      ],
+      "to": [
+        43,
+        7,
+        27
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        40,
+        8,
+        24
+      ],
+      "to": [
+        43,
+        8,
+        27
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        44,
+        0,
+        24
+      ],
+      "to": [
+        47,
+        16,
+        27
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        44,
+        17,
+        24
+      ],
+      "to": [
+        47,
+        17,
+        27
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        48,
+        0,
+        24
+      ],
+      "to": [
+        51,
+        15,
+        27
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        48,
+        16,
+        24
+      ],
+      "to": [
+        51,
+        16,
+        27
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        52,
+        0,
+        24
+      ],
+      "to": [
+        55,
+        10,
+        27
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        52,
+        11,
+        24
+      ],
+      "to": [
+        55,
+        11,
+        27
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        56,
+        0,
+        24
+      ],
+      "to": [
+        59,
+        10,
+        27
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        56,
+        11,
+        24
+      ],
+      "to": [
+        59,
+        11,
+        27
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        60,
+        0,
+        24
+      ],
+      "to": [
+        63,
+        20,
+        27
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        60,
+        21,
+        24
+      ],
+      "to": [
+        63,
+        21,
+        27
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        0,
+        0,
+        28
+      ],
+      "to": [
+        3,
+        17,
+        31
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        0,
+        18,
+        28
+      ],
+      "to": [
+        3,
+        18,
+        31
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        4,
+        0,
+        28
+      ],
+      "to": [
+        7,
+        16,
+        31
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        4,
+        17,
+        28
+      ],
+      "to": [
+        7,
+        17,
+        31
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        8,
+        0,
+        28
+      ],
+      "to": [
+        11,
+        13,
+        31
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        8,
+        14,
+        28
+      ],
+      "to": [
+        11,
+        14,
+        31
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        12,
+        0,
+        28
+      ],
+      "to": [
+        15,
+        19,
+        31
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        12,
+        20,
+        28
+      ],
+      "to": [
+        15,
+        20,
+        31
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        16,
+        0,
+        28
+      ],
+      "to": [
+        19,
+        16,
+        31
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        16,
+        17,
+        28
+      ],
+      "to": [
+        19,
+        17,
+        31
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        20,
+        0,
+        28
+      ],
+      "to": [
+        23,
+        6,
+        31
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        20,
+        7,
+        28
+      ],
+      "to": [
+        23,
+        7,
+        31
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        24,
+        0,
+        28
+      ],
+      "to": [
+        27,
+        6,
+        31
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        24,
+        7,
+        28
+      ],
+      "to": [
+        27,
+        7,
+        31
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        28,
+        0,
+        28
+      ],
+      "to": [
+        31,
+        15,
+        31
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        28,
+        16,
+        28
+      ],
+      "to": [
+        31,
+        16,
+        31
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        32,
+        0,
+        28
+      ],
+      "to": [
+        35,
+        15,
+        31
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        32,
+        16,
+        28
+      ],
+      "to": [
+        35,
+        16,
+        31
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        36,
+        0,
+        28
+      ],
+      "to": [
+        39,
+        6,
+        31
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        36,
+        7,
+        28
+      ],
+      "to": [
+        39,
+        7,
+        31
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        40,
+        0,
+        28
+      ],
+      "to": [
+        43,
+        12,
+        31
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        40,
+        13,
+        28
+      ],
+      "to": [
+        43,
+        13,
+        31
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        44,
+        0,
+        28
+      ],
+      "to": [
+        47,
+        21,
+        31
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        44,
+        22,
+        28
+      ],
+      "to": [
+        47,
+        22,
+        31
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        48,
+        0,
+        28
+      ],
+      "to": [
+        51,
+        14,
+        31
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        48,
+        15,
+        28
+      ],
+      "to": [
+        51,
+        15,
+        31
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        52,
+        0,
+        28
+      ],
+      "to": [
+        55,
+        21,
+        31
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        52,
+        22,
+        28
+      ],
+      "to": [
+        55,
+        22,
+        31
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        56,
+        0,
+        28
+      ],
+      "to": [
+        59,
+        12,
+        31
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        56,
+        13,
+        28
+      ],
+      "to": [
+        59,
+        13,
+        31
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        60,
+        0,
+        28
+      ],
+      "to": [
+        63,
+        13,
+        31
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        60,
+        14,
+        28
+      ],
+      "to": [
+        63,
+        14,
+        31
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        0,
+        0,
+        32
+      ],
+      "to": [
+        3,
+        17,
+        35
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        0,
+        18,
+        32
+      ],
+      "to": [
+        3,
+        18,
+        35
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        4,
+        0,
+        32
+      ],
+      "to": [
+        7,
+        13,
+        35
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        4,
+        14,
+        32
+      ],
+      "to": [
+        7,
+        14,
+        35
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        8,
+        0,
+        32
+      ],
+      "to": [
+        11,
+        18,
+        35
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        8,
+        19,
+        32
+      ],
+      "to": [
+        11,
+        19,
+        35
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        12,
+        0,
+        32
+      ],
+      "to": [
+        15,
+        6,
+        35
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        12,
+        7,
+        32
+      ],
+      "to": [
+        15,
+        7,
+        35
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        16,
+        0,
+        32
+      ],
+      "to": [
+        19,
+        5,
+        35
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        16,
+        6,
+        32
+      ],
+      "to": [
+        19,
+        6,
+        35
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        20,
+        0,
+        32
+      ],
+      "to": [
+        23,
+        16,
+        35
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        20,
+        17,
+        32
+      ],
+      "to": [
+        23,
+        17,
+        35
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        24,
+        0,
+        32
+      ],
+      "to": [
+        27,
+        18,
+        35
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        24,
+        19,
+        32
+      ],
+      "to": [
+        27,
+        19,
+        35
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        28,
+        0,
+        32
+      ],
+      "to": [
+        31,
+        10,
+        35
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        28,
+        11,
+        32
+      ],
+      "to": [
+        31,
+        11,
+        35
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        32,
+        0,
+        32
+      ],
+      "to": [
+        35,
+        14,
+        35
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        32,
+        15,
+        32
+      ],
+      "to": [
+        35,
+        15,
+        35
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        36,
+        0,
+        32
+      ],
+      "to": [
+        39,
+        9,
+        35
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        36,
+        10,
+        32
+      ],
+      "to": [
+        39,
+        10,
+        35
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        40,
+        0,
+        32
+      ],
+      "to": [
+        43,
+        19,
+        35
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        40,
+        20,
+        32
+      ],
+      "to": [
+        43,
+        20,
+        35
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        44,
+        0,
+        32
+      ],
+      "to": [
+        47,
+        13,
+        35
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        44,
+        14,
+        32
+      ],
+      "to": [
+        47,
+        14,
+        35
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        48,
+        0,
+        32
+      ],
+      "to": [
+        51,
+        8,
+        35
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        48,
+        9,
+        32
+      ],
+      "to": [
+        51,
+        9,
+        35
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        52,
+        0,
+        32
+      ],
+      "to": [
+        55,
+        13,
+        35
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        52,
+        14,
+        32
+      ],
+      "to": [
+        55,
+        14,
+        35
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        56,
+        0,
+        32
+      ],
+      "to": [
+        59,
+        11,
+        35
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        56,
+        12,
+        32
+      ],
+      "to": [
+        59,
+        12,
+        35
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        60,
+        0,
+        32
+      ],
+      "to": [
+        63,
+        11,
+        35
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        60,
+        12,
+        32
+      ],
+      "to": [
+        63,
+        12,
+        35
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        0,
+        0,
+        36
+      ],
+      "to": [
+        3,
+        8,
+        39
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        0,
+        9,
+        36
+      ],
+      "to": [
+        3,
+        9,
+        39
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        4,
+        0,
+        36
+      ],
+      "to": [
+        7,
+        20,
+        39
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        4,
+        21,
+        36
+      ],
+      "to": [
+        7,
+        21,
+        39
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        8,
+        0,
+        36
+      ],
+      "to": [
+        11,
+        4,
+        39
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        8,
+        5,
+        36
+      ],
+      "to": [
+        11,
+        5,
+        39
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        12,
+        0,
+        36
+      ],
+      "to": [
+        15,
+        16,
+        39
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        12,
+        17,
+        36
+      ],
+      "to": [
+        15,
+        17,
+        39
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        16,
+        0,
+        36
+      ],
+      "to": [
+        19,
+        7,
+        39
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        16,
+        8,
+        36
+      ],
+      "to": [
+        19,
+        8,
+        39
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        20,
+        0,
+        36
+      ],
+      "to": [
+        23,
+        11,
+        39
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        20,
+        12,
+        36
+      ],
+      "to": [
+        23,
+        12,
+        39
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        24,
+        0,
+        36
+      ],
+      "to": [
+        27,
+        13,
+        39
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        24,
+        14,
+        36
+      ],
+      "to": [
+        27,
+        14,
+        39
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        28,
+        0,
+        36
+      ],
+      "to": [
+        31,
+        9,
+        39
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        28,
+        10,
+        36
+      ],
+      "to": [
+        31,
+        10,
+        39
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        32,
+        0,
+        36
+      ],
+      "to": [
+        35,
+        21,
+        39
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        32,
+        22,
+        36
+      ],
+      "to": [
+        35,
+        22,
+        39
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        36,
+        0,
+        36
+      ],
+      "to": [
+        39,
+        6,
+        39
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        36,
+        7,
+        36
+      ],
+      "to": [
+        39,
+        7,
+        39
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        40,
+        0,
+        36
+      ],
+      "to": [
+        43,
+        8,
+        39
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        40,
+        9,
+        36
+      ],
+      "to": [
+        43,
+        9,
+        39
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        44,
+        0,
+        36
+      ],
+      "to": [
+        47,
+        19,
+        39
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        44,
+        20,
+        36
+      ],
+      "to": [
+        47,
+        20,
+        39
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        48,
+        0,
+        36
+      ],
+      "to": [
+        51,
+        7,
+        39
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        48,
+        8,
+        36
+      ],
+      "to": [
+        51,
+        8,
+        39
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        52,
+        0,
+        36
+      ],
+      "to": [
+        55,
+        21,
+        39
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        52,
+        22,
+        36
+      ],
+      "to": [
+        55,
+        22,
+        39
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        56,
+        0,
+        36
+      ],
+      "to": [
+        59,
+        21,
+        39
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        56,
+        22,
+        36
+      ],
+      "to": [
+        59,
+        22,
+        39
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        60,
+        0,
+        36
+      ],
+      "to": [
+        63,
+        7,
+        39
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        60,
+        8,
+        36
+      ],
+      "to": [
+        63,
+        8,
+        39
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        0,
+        0,
+        40
+      ],
+      "to": [
+        3,
+        7,
+        43
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        0,
+        8,
+        40
+      ],
+      "to": [
+        3,
+        8,
+        43
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        4,
+        0,
+        40
+      ],
+      "to": [
+        7,
+        5,
+        43
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        4,
+        6,
+        40
+      ],
+      "to": [
+        7,
+        6,
+        43
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        8,
+        0,
+        40
+      ],
+      "to": [
+        11,
+        8,
+        43
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        8,
+        9,
+        40
+      ],
+      "to": [
+        11,
+        9,
+        43
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        12,
+        0,
+        40
+      ],
+      "to": [
+        15,
+        9,
+        43
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        12,
+        10,
+        40
+      ],
+      "to": [
+        15,
+        10,
+        43
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        16,
+        0,
+        40
+      ],
+      "to": [
+        19,
+        18,
+        43
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        16,
+        19,
+        40
+      ],
+      "to": [
+        19,
+        19,
+        43
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        20,
+        0,
+        40
+      ],
+      "to": [
+        23,
+        13,
+        43
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        20,
+        14,
+        40
+      ],
+      "to": [
+        23,
+        14,
+        43
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        24,
+        0,
+        40
+      ],
+      "to": [
+        27,
+        14,
+        43
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        24,
+        15,
+        40
+      ],
+      "to": [
+        27,
+        15,
+        43
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        28,
+        0,
+        40
+      ],
+      "to": [
+        31,
+        17,
+        43
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        28,
+        18,
+        40
+      ],
+      "to": [
+        31,
+        18,
+        43
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        32,
+        0,
+        40
+      ],
+      "to": [
+        35,
+        8,
+        43
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        32,
+        9,
+        40
+      ],
+      "to": [
+        35,
+        9,
+        43
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        36,
+        0,
+        40
+      ],
+      "to": [
+        39,
+        4,
+        43
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        36,
+        5,
+        40
+      ],
+      "to": [
+        39,
+        5,
+        43
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        40,
+        0,
+        40
+      ],
+      "to": [
+        43,
+        21,
+        43
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        40,
+        22,
+        40
+      ],
+      "to": [
+        43,
+        22,
+        43
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        44,
+        0,
+        40
+      ],
+      "to": [
+        47,
+        4,
+        43
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        44,
+        5,
+        40
+      ],
+      "to": [
+        47,
+        5,
+        43
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        48,
+        0,
+        40
+      ],
+      "to": [
+        51,
+        21,
+        43
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        48,
+        22,
+        40
+      ],
+      "to": [
+        51,
+        22,
+        43
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        52,
+        0,
+        40
+      ],
+      "to": [
+        55,
+        15,
+        43
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        52,
+        16,
+        40
+      ],
+      "to": [
+        55,
+        16,
+        43
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        56,
+        0,
+        40
+      ],
+      "to": [
+        59,
+        11,
+        43
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        56,
+        12,
+        40
+      ],
+      "to": [
+        59,
+        12,
+        43
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        60,
+        0,
+        40
+      ],
+      "to": [
+        63,
+        8,
+        43
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        60,
+        9,
+        40
+      ],
+      "to": [
+        63,
+        9,
+        43
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        0,
+        0,
+        44
+      ],
+      "to": [
+        3,
+        20,
+        47
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        0,
+        21,
+        44
+      ],
+      "to": [
+        3,
+        21,
+        47
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        4,
+        0,
+        44
+      ],
+      "to": [
+        7,
+        11,
+        47
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        4,
+        12,
+        44
+      ],
+      "to": [
+        7,
+        12,
+        47
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        8,
+        0,
+        44
+      ],
+      "to": [
+        11,
+        7,
+        47
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        8,
+        8,
+        44
+      ],
+      "to": [
+        11,
+        8,
+        47
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        12,
+        0,
+        44
+      ],
+      "to": [
+        15,
+        21,
+        47
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        12,
+        22,
+        44
+      ],
+      "to": [
+        15,
+        22,
+        47
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        16,
+        0,
+        44
+      ],
+      "to": [
+        19,
+        10,
+        47
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        16,
+        11,
+        44
+      ],
+      "to": [
+        19,
+        11,
+        47
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        20,
+        0,
+        44
+      ],
+      "to": [
+        23,
+        18,
+        47
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        20,
+        19,
+        44
+      ],
+      "to": [
+        23,
+        19,
+        47
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        24,
+        0,
+        44
+      ],
+      "to": [
+        27,
+        11,
+        47
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        24,
+        12,
+        44
+      ],
+      "to": [
+        27,
+        12,
+        47
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        28,
+        0,
+        44
+      ],
+      "to": [
+        31,
+        12,
+        47
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        28,
+        13,
+        44
+      ],
+      "to": [
+        31,
+        13,
+        47
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        32,
+        0,
+        44
+      ],
+      "to": [
+        35,
+        11,
+        47
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        32,
+        12,
+        44
+      ],
+      "to": [
+        35,
+        12,
+        47
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        36,
+        0,
+        44
+      ],
+      "to": [
+        39,
+        5,
+        47
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        36,
+        6,
+        44
+      ],
+      "to": [
+        39,
+        6,
+        47
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        40,
+        0,
+        44
+      ],
+      "to": [
+        43,
+        5,
+        47
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        40,
+        6,
+        44
+      ],
+      "to": [
+        43,
+        6,
+        47
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        44,
+        0,
+        44
+      ],
+      "to": [
+        47,
+        9,
+        47
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        44,
+        10,
+        44
+      ],
+      "to": [
+        47,
+        10,
+        47
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        48,
+        0,
+        44
+      ],
+      "to": [
+        51,
+        6,
+        47
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        48,
+        7,
+        44
+      ],
+      "to": [
+        51,
+        7,
+        47
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        52,
+        0,
+        44
+      ],
+      "to": [
+        55,
+        21,
+        47
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        52,
+        22,
+        44
+      ],
+      "to": [
+        55,
+        22,
+        47
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        56,
+        0,
+        44
+      ],
+      "to": [
+        59,
+        8,
+        47
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        56,
+        9,
+        44
+      ],
+      "to": [
+        59,
+        9,
+        47
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        60,
+        0,
+        44
+      ],
+      "to": [
+        63,
+        10,
+        47
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        60,
+        11,
+        44
+      ],
+      "to": [
+        63,
+        11,
+        47
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        0,
+        0,
+        48
+      ],
+      "to": [
+        3,
+        18,
+        51
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        0,
+        19,
+        48
+      ],
+      "to": [
+        3,
+        19,
+        51
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        4,
+        0,
+        48
+      ],
+      "to": [
+        7,
+        18,
+        51
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        4,
+        19,
+        48
+      ],
+      "to": [
+        7,
+        19,
+        51
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        8,
+        0,
+        48
+      ],
+      "to": [
+        11,
+        6,
+        51
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        8,
+        7,
+        48
+      ],
+      "to": [
+        11,
+        7,
+        51
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        12,
+        0,
+        48
+      ],
+      "to": [
+        15,
+        6,
+        51
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        12,
+        7,
+        48
+      ],
+      "to": [
+        15,
+        7,
+        51
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        16,
+        0,
+        48
+      ],
+      "to": [
+        19,
+        20,
+        51
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        16,
+        21,
+        48
+      ],
+      "to": [
+        19,
+        21,
+        51
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        20,
+        0,
+        48
+      ],
+      "to": [
+        23,
+        10,
+        51
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        20,
+        11,
+        48
+      ],
+      "to": [
+        23,
+        11,
+        51
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        24,
+        0,
+        48
+      ],
+      "to": [
+        27,
+        10,
+        51
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        24,
+        11,
+        48
+      ],
+      "to": [
+        27,
+        11,
+        51
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        28,
+        0,
+        48
+      ],
+      "to": [
+        31,
+        16,
+        51
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        28,
+        17,
+        48
+      ],
+      "to": [
+        31,
+        17,
+        51
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        32,
+        0,
+        48
+      ],
+      "to": [
+        35,
+        13,
+        51
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        32,
+        14,
+        48
+      ],
+      "to": [
+        35,
+        14,
+        51
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        36,
+        0,
+        48
+      ],
+      "to": [
+        39,
+        10,
+        51
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        36,
+        11,
+        48
+      ],
+      "to": [
+        39,
+        11,
+        51
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        40,
+        0,
+        48
+      ],
+      "to": [
+        43,
+        16,
+        51
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        40,
+        17,
+        48
+      ],
+      "to": [
+        43,
+        17,
+        51
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        44,
+        0,
+        48
+      ],
+      "to": [
+        47,
+        9,
+        51
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        44,
+        10,
+        48
+      ],
+      "to": [
+        47,
+        10,
+        51
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        48,
+        0,
+        48
+      ],
+      "to": [
+        51,
+        11,
+        51
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        48,
+        12,
+        48
+      ],
+      "to": [
+        51,
+        12,
+        51
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        52,
+        0,
+        48
+      ],
+      "to": [
+        55,
+        16,
+        51
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        52,
+        17,
+        48
+      ],
+      "to": [
+        55,
+        17,
+        51
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        56,
+        0,
+        48
+      ],
+      "to": [
+        59,
+        4,
+        51
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        56,
+        5,
+        48
+      ],
+      "to": [
+        59,
+        5,
+        51
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        60,
+        0,
+        48
+      ],
+      "to": [
+        63,
+        8,
+        51
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        60,
+        9,
+        48
+      ],
+      "to": [
+        63,
+        9,
+        51
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        0,
+        0,
+        52
+      ],
+      "to": [
+        3,
+        14,
+        55
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        0,
+        15,
+        52
+      ],
+      "to": [
+        3,
+        15,
+        55
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        4,
+        0,
+        52
+      ],
+      "to": [
+        7,
+        21,
+        55
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        4,
+        22,
+        52
+      ],
+      "to": [
+        7,
+        22,
+        55
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        8,
+        0,
+        52
+      ],
+      "to": [
+        11,
+        19,
+        55
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        8,
+        20,
+        52
+      ],
+      "to": [
+        11,
+        20,
+        55
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        12,
+        0,
+        52
+      ],
+      "to": [
+        15,
+        10,
+        55
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        12,
+        11,
+        52
+      ],
+      "to": [
+        15,
+        11,
+        55
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        16,
+        0,
+        52
+      ],
+      "to": [
+        19,
+        14,
+        55
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        16,
+        15,
+        52
+      ],
+      "to": [
+        19,
+        15,
+        55
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        20,
+        0,
+        52
+      ],
+      "to": [
+        23,
+        19,
+        55
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        20,
+        20,
+        52
+      ],
+      "to": [
+        23,
+        20,
+        55
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        24,
+        0,
+        52
+      ],
+      "to": [
+        27,
+        13,
+        55
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        24,
+        14,
+        52
+      ],
+      "to": [
+        27,
+        14,
+        55
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        28,
+        0,
+        52
+      ],
+      "to": [
+        31,
+        8,
+        55
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        28,
+        9,
+        52
+      ],
+      "to": [
+        31,
+        9,
+        55
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        32,
+        0,
+        52
+      ],
+      "to": [
+        35,
+        17,
+        55
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        32,
+        18,
+        52
+      ],
+      "to": [
+        35,
+        18,
+        55
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        36,
+        0,
+        52
+      ],
+      "to": [
+        39,
+        5,
+        55
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        36,
+        6,
+        52
+      ],
+      "to": [
+        39,
+        6,
+        55
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        40,
+        0,
+        52
+      ],
+      "to": [
+        43,
+        5,
+        55
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        40,
+        6,
+        52
+      ],
+      "to": [
+        43,
+        6,
+        55
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        44,
+        0,
+        52
+      ],
+      "to": [
+        47,
+        21,
+        55
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        44,
+        22,
+        52
+      ],
+      "to": [
+        47,
+        22,
+        55
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        48,
+        0,
+        52
+      ],
+      "to": [
+        51,
+        12,
+        55
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        48,
+        13,
+        52
+      ],
+      "to": [
+        51,
+        13,
+        55
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        52,
+        0,
+        52
+      ],
+      "to": [
+        55,
+        11,
+        55
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        52,
+        12,
+        52
+      ],
+      "to": [
+        55,
+        12,
+        55
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        56,
+        0,
+        52
+      ],
+      "to": [
+        59,
+        20,
+        55
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        56,
+        21,
+        52
+      ],
+      "to": [
+        59,
+        21,
+        55
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        60,
+        0,
+        52
+      ],
+      "to": [
+        63,
+        14,
+        55
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        60,
+        15,
+        52
+      ],
+      "to": [
+        63,
+        15,
+        55
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        0,
+        0,
+        56
+      ],
+      "to": [
+        3,
+        14,
+        59
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        0,
+        15,
+        56
+      ],
+      "to": [
+        3,
+        15,
+        59
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        4,
+        0,
+        56
+      ],
+      "to": [
+        7,
+        18,
+        59
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        4,
+        19,
+        56
+      ],
+      "to": [
+        7,
+        19,
+        59
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        8,
+        0,
+        56
+      ],
+      "to": [
+        11,
+        20,
+        59
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        8,
+        21,
+        56
+      ],
+      "to": [
+        11,
+        21,
+        59
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        12,
+        0,
+        56
+      ],
+      "to": [
+        15,
+        13,
+        59
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        12,
+        14,
+        56
+      ],
+      "to": [
+        15,
+        14,
+        59
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        16,
+        0,
+        56
+      ],
+      "to": [
+        19,
+        17,
+        59
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        16,
+        18,
+        56
+      ],
+      "to": [
+        19,
+        18,
+        59
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        20,
+        0,
+        56
+      ],
+      "to": [
+        23,
+        21,
+        59
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        20,
+        22,
+        56
+      ],
+      "to": [
+        23,
+        22,
+        59
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        24,
+        0,
+        56
+      ],
+      "to": [
+        27,
+        10,
+        59
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        24,
+        11,
+        56
+      ],
+      "to": [
+        27,
+        11,
+        59
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        28,
+        0,
+        56
+      ],
+      "to": [
+        31,
+        14,
+        59
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        28,
+        15,
+        56
+      ],
+      "to": [
+        31,
+        15,
+        59
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        32,
+        0,
+        56
+      ],
+      "to": [
+        35,
+        4,
+        59
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        32,
+        5,
+        56
+      ],
+      "to": [
+        35,
+        5,
+        59
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        36,
+        0,
+        56
+      ],
+      "to": [
+        39,
+        17,
+        59
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        36,
+        18,
+        56
+      ],
+      "to": [
+        39,
+        18,
+        59
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        40,
+        0,
+        56
+      ],
+      "to": [
+        43,
+        12,
+        59
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        40,
+        13,
+        56
+      ],
+      "to": [
+        43,
+        13,
+        59
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        44,
+        0,
+        56
+      ],
+      "to": [
+        47,
+        4,
+        59
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        44,
+        5,
+        56
+      ],
+      "to": [
+        47,
+        5,
+        59
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        48,
+        0,
+        56
+      ],
+      "to": [
+        51,
+        8,
+        59
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        48,
+        9,
+        56
+      ],
+      "to": [
+        51,
+        9,
+        59
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        52,
+        0,
+        56
+      ],
+      "to": [
+        55,
+        10,
+        59
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        52,
+        11,
+        56
+      ],
+      "to": [
+        55,
+        11,
+        59
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        56,
+        0,
+        56
+      ],
+      "to": [
+        59,
+        9,
+        59
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        56,
+        10,
+        56
+      ],
+      "to": [
+        59,
+        10,
+        59
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        60,
+        0,
+        56
+      ],
+      "to": [
+        63,
+        14,
+        59
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        60,
+        15,
+        56
+      ],
+      "to": [
+        63,
+        15,
+        59
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        0,
+        0,
+        60
+      ],
+      "to": [
+        3,
+        20,
+        63
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        0,
+        21,
+        60
+      ],
+      "to": [
+        3,
+        21,
+        63
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        4,
+        0,
+        60
+      ],
+      "to": [
+        7,
+        5,
+        63
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        4,
+        6,
+        60
+      ],
+      "to": [
+        7,
+        6,
+        63
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        8,
+        0,
+        60
+      ],
+      "to": [
+        11,
+        10,
+        63
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        8,
+        11,
+        60
+      ],
+      "to": [
+        11,
+        11,
+        63
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        12,
+        0,
+        60
+      ],
+      "to": [
+        15,
+        7,
+        63
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        12,
+        8,
+        60
+      ],
+      "to": [
+        15,
+        8,
+        63
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        16,
+        0,
+        60
+      ],
+      "to": [
+        19,
+        15,
+        63
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        16,
+        16,
+        60
+      ],
+      "to": [
+        19,
+        16,
+        63
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        20,
+        0,
+        60
+      ],
+      "to": [
+        23,
+        11,
+        63
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        20,
+        12,
+        60
+      ],
+      "to": [
+        23,
+        12,
+        63
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        24,
+        0,
+        60
+      ],
+      "to": [
+        27,
+        21,
+        63
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        24,
+        22,
+        60
+      ],
+      "to": [
+        27,
+        22,
+        63
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        28,
+        0,
+        60
+      ],
+      "to": [
+        31,
+        12,
+        63
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        28,
+        13,
+        60
+      ],
+      "to": [
+        31,
+        13,
+        63
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        32,
+        0,
+        60
+      ],
+      "to": [
+        35,
+        20,
+        63
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        32,
+        21,
+        60
+      ],
+      "to": [
+        35,
+        21,
+        63
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        36,
+        0,
+        60
+      ],
+      "to": [
+        39,
+        19,
+        63
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        36,
+        20,
+        60
+      ],
+      "to": [
+        39,
+        20,
+        63
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        40,
+        0,
+        60
+      ],
+      "to": [
+        43,
+        10,
+        63
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        40,
+        11,
+        60
+      ],
+      "to": [
+        43,
+        11,
+        63
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        44,
+        0,
+        60
+      ],
+      "to": [
+        47,
+        11,
+        63
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        44,
+        12,
+        60
+      ],
+      "to": [
+        47,
+        12,
+        63
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        48,
+        0,
+        60
+      ],
+      "to": [
+        51,
+        18,
+        63
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        48,
+        19,
+        60
+      ],
+      "to": [
+        51,
+        19,
+        63
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        52,
+        0,
+        60
+      ],
+      "to": [
+        55,
+        9,
+        63
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        52,
+        10,
+        60
+      ],
+      "to": [
+        55,
+        10,
+        63
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        56,
+        0,
+        60
+      ],
+      "to": [
+        59,
+        13,
+        63
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        56,
+        14,
+        60
+      ],
+      "to": [
+        59,
+        14,
+        63
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        60,
+        0,
+        60
+      ],
+      "to": [
+        63,
+        16,
+        63
+      ],
+      "block": "minecraft:dirt"
+    },
+    {
+      "type": "fill",
+      "from": [
+        60,
+        17,
+        60
+      ],
+      "to": [
+        63,
+        17,
+        63
+      ],
+      "block": "minecraft:grass_block"
+    },
+    {
+      "type": "fill",
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        0,
+        0,
+        0
+      ],
+      "block": "minecraft:stone_bricks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        63,
+        47,
+        63
+      ],
+      "to": [
+        63,
+        47,
+        63
+      ],
+      "block": "minecraft:stone_bricks"
+    }
+  ]
+}

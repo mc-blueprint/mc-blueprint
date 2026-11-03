@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "definition_version": "generation-profile-v1",
+  "profiles": [
+    {
+      "name": "profile-castle-medium",
+      "kind": "castle",
+      "scale": "medium",
+      "dimensions": [
+        64,
+        48,
+        64
+      ],
+      "seed": 1101,
+      "definition_version": "generation-profile-v1",
+      "input_sha256": "40b137ec59f613f7002bc148653ea6a9b75691fc6491fe2d328d4022470d8f16",
+      "viewer_reference": {
+        "scene": "castle",
+        "difference": "viewerの固定sceneはfixture-v1のscene JSON。これは既存Operationによる生成入力であり、同一データではない。"
+      }
+    },
+    {
+      "name": "profile-town-medium",
+      "kind": "town",
+      "scale": "medium",
+      "dimensions": [
+        64,
+        48,
+        64
+      ],
+      "seed": 1102,
+      "definition_version": "generation-profile-v1",
+      "input_sha256": "8be332cc36747ff246f289e3ddeb6139d42b0394b61666196f5e05f2116d48cf",
+      "viewer_reference": {
+        "scene": "town",
+        "difference": "viewerの固定sceneはfixture-v1のscene JSON。これは既存Operationによる生成入力であり、同一データではない。"
+      }
+    },
+    {
+      "name": "profile-terrain-medium",
+      "kind": "terrain",
+      "scale": "medium",
+      "dimensions": [
+        64,
+        48,
+        64
+      ],
+      "seed": 1103,
+      "definition_version": "generation-profile-v1",
+      "input_sha256": "f6e44395a849395742eeb83cabac01746ea1e41eebb40d3ed9285e7e294defe0",
+      "viewer_reference": {
+        "scene": "terrain",
+        "difference": "viewerの固定sceneはfixture-v1のscene JSON。これは既存Operationによる生成入力であり、同一データではない。"
+      }
+    },
+    {
+      "name": "profile-underground-medium",
+      "kind": "underground",
+      "scale": "medium",
+      "dimensions": [
+        64,
+        48,
+        64
+      ],
+      "seed": 1104,
+      "definition_version": "generation-profile-v1",
+      "input_sha256": "9b3fcf36f424ecc7f00e1bd0a6b396f3fcc963dfa0113754a9f3a567e106c8e6",
+      "viewer_reference": {
+        "scene": "underground",
+        "difference": "viewerの固定sceneはfixture-v1のscene JSON。これは既存Operationによる生成入力であり、同一データではない。"
+      }
+    },
+    {
+      "name": "profile-vegetation-medium",
+      "kind": "vegetation",
+      "scale": "medium",
+      "dimensions": [
+        64,
+        48,
+        64
+      ],
+      "seed": 1105,
+      "definition_version": "generation-profile-v1",
+      "input_sha256": "38ec9acafdd35a009ea38645f34b4860f6e588fe123696d17e841853b3ab3c0d",
+      "viewer_reference": {
+        "scene": "vegetation",
+        "difference": "viewerの固定sceneはfixture-v1のscene JSON。これは既存Operationによる生成入力であり、同一データではない。"
+      }
+    },
+    {
+      "name": "profile-castle-huge",
+      "kind": "castle",
+      "scale": "huge",
+      "dimensions": [
+        256,
+        128,
+        256
+      ],
+      "seed": 1101,
+      "definition_version": "generation-profile-v1",
+      "input_sha256": "933127800cd14918d0d4c60239502987c175225e84de9fec060c70400f7fe735",
+      "viewer_reference": {
+        "scene": "castle",
+        "difference": "viewerの固定sceneはfixture-v1のscene JSON。これは既存Operationによる生成入力であり、同一データではない。"
+      }
+    }
+  ]
+}
