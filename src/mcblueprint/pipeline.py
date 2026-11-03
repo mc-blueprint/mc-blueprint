@@ -8,6 +8,7 @@ import shutil
 import tempfile
 from collections import OrderedDict
 from collections.abc import Callable, Iterator
+from contextlib import ExitStack
 from dataclasses import dataclass
 from hashlib import sha256
 from pathlib import Path
@@ -418,8 +419,12 @@ def make(
     resumeは同じ入力・合成設定・engine・データに限る。sourceは常に必要。
     stage_hookは段開始の計測用。成功0、評価不合格3を返し、それ以外は
     PipelineError（検証1、I/O・資源不足2）を送出する。3D表示は実行しない。
+    入力と出力stemを非待機で排他し、競合はPipelineError(code=2)とする。
     """
+    from mcblueprint.output_lock import lock_paths
+
     source = Path(source).resolve()
+    locks = ExitStack()
     stage = "Resolve"
     staged_out = None
     staged_scene = None
@@ -430,17 +435,18 @@ def make(
         resolved = resolve_buildspec(source, project_dir=project_dir, user_config=user_config,
                                      overrides=overrides)
         config = resolved.config
-        expected = {"environment": _environment(), "input": {
-            "path": str(source), "basePath": str(source.parent),
-            "sha256": sha256(source.read_bytes()).hexdigest(),
-            "resolvedHash": _hash(resolved.buildspec),
-        }}
         fmt = config["output"]["format"]
         out = Path(output) if output is not None else Path(config["output"]["directory"])
         if out.suffix != EXPORTERS[fmt].extension:
             out = out / (source.stem + EXPORTERS[fmt].extension)
         if out.resolve() == source:
             raise PipelineError(stage, "入力と出力は別のパスにしてください", 2)
+        locks.enter_context(lock_paths(source, out))
+        expected = {"environment": _environment(), "input": {
+            "path": str(source), "basePath": str(source.parent),
+            "sha256": sha256(source.read_bytes()).hexdigest(),
+            "resolvedHash": _hash(resolved.buildspec),
+        }}
         context = {"resolved": {"buildspec": resolved.buildspec,
                                 "config": config, "origins": resolved.origins}}
         resumed = -1
@@ -653,6 +659,7 @@ def make(
         code = 2 if isinstance(cause, OSError | MemoryError) or resource or stage == "Export" else 1
         raise PipelineError(stage, str(exc).replace("\n", " "), code) from exc
     finally:
+        locks.close()
         if staged_out is not None:
             staged_out.unlink(missing_ok=True)
         if staged_scene is not None:
