@@ -380,7 +380,16 @@ def materialize(
                     (role, option[0], other, item[0]) in failed_pairs
                     for other, item in selected.items() if other != role
                 ))
-                width = max(1, math.ceil(len(options) * settings["variation"]))
+                ranked = []
+                for option in options:
+                    violations = _violations({**selected, role: option},
+                                             settings["contrast"], settings["saturation"])
+                    ranked.append(((len(violations), sum(e["violation"] for e in violations)),
+                                   option))
+                ranked.sort(key=lambda item: item[0])
+                options = [option for _, option in ranked]
+                width = min(max(1, math.ceil(len(options) * settings["variation"])),
+                            sum(score == ranked[0][0] for score, _ in ranked))
                 index = rng.randrange(width)
             selected[role] = options[index]
         errors = _violations(selected, settings["contrast"], settings["saturation"])

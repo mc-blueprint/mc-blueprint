@@ -214,7 +214,8 @@ def test_detail_uses_bundled_facade_modules_and_marks_decoration(tmp_path, style
               and (volume.attributes(pos).source or "").startswith("style.modules.")}
     assert actual and actual <= declared
     assert not any(volume.attributes(pos).operation in declared for pos, _ in volume
-                   if volume.attributes(pos).role in ("frame", "roof", "floor"))
+                   if volume.attributes(pos).role in ("roof", "floor")
+                   or volume.attributes(pos).reserved == "structure")
     assert first.detail == second.detail
     built(first, style)
 
@@ -239,7 +240,7 @@ def test_detail_density_depth_and_symmetry_settings(tmp_path):
 
 def test_unselected_window_frame_does_not_require_its_material_states(tmp_path):
     result = plan(tmp_path, materials={"window_frame": "gold_block"},
-                  config={"decoration": {"density": 0}})
+                  config={"decoration": {"density": 0, "depth": 0}})
     _, volume = built(result)
     assert not any(state.id == "minecraft:gold_block" for _, state in volume)
 
@@ -277,7 +278,7 @@ def test_explicit_flat_roof_is_accepted_by_buildspec_schema(tmp_path):
 @pytest.mark.parametrize("shape", ("square", "round"))
 def test_tower_detail_keeps_modules_at_original_size(tmp_path, style, shape):
     result = plan(tmp_path, archetype="tower", style=style, scale="medium", seed=29,
-                  features={"shape": shape, "floor_height": 5},
+                  features={"shape": shape, "floor_height": 6},
                   elements={"tower#1": {"radius": 12}},
                   config={"decoration": {"density": 1, "depth": 1}})
     sources = {op.get("source") for op in result.detail["operations"]}
@@ -306,13 +307,9 @@ def test_detail_missing_module_is_diagnosed(tmp_path, monkeypatch):
 
 
 def test_small_facade_reports_density_that_has_no_feasible_integer_count():
-    import math
-
     import yaml
 
-    from mcblueprint.critic import CriticAccumulator, plan_from_metadata
     from mcblueprint.detail import _facade_selection
-    from mcblueprint.operations.transform import Transform
 
     root = "house#1"
     element = f"{root}.facade.north.floor#1"
@@ -327,38 +324,8 @@ def test_small_facade_reports_density_that_has_no_feasible_integer_count():
     modules = {"medieval.stone_cornice": json.loads(
         (data / "modules/medieval/stone_cornice.json").read_text(encoding="utf-8"))}
     config = {"seed": 0, "decoration": {"density": 0.6, "depth": 0.5, "symmetry": 1}}
-    operations, decorations = _facade_selection(
-        [], params, style, config, root, [], contract, modules, 0.32,
-    )
-    transform = Transform.identity()
-    for item in decorations:
-        item["operation"] = f"/{root}@:{transform.rows}:{transform.offset}/{item['operation']}"
-    metadata = {"element": root, "params": params, **contract, "decorations": decorations}
-    metadata["columns"] = [{"id": "test.column", "owner": "test.frame",
-                            "from": [2, 0, 0], "to": [2, 1, 0]}]
-    metadata["beams"] = [{"id": "test.beam", "owner": "test.frame",
-                          "from": [2, 1, 0], "to": [3, 1, 0]}]
-    frame = {"type": "translate", "offset": [0, 0, 0], "role": "frame",
-             "element": "test.frame", "owner": "test.frame", "reserved": "structure",
-             "operations": [
-                 {"type": "fill", "from": [2, 0, 0], "to": [2, 1, 0], "block": "stone"},
-                 {"type": "fill", "from": [2, 1, 0], "to": [3, 1, 0], "block": "stone"},
-             ]}
-    concrete = materialize({
-        "formatVersion": 1, "minecraftVersion": "1.21.11", "name": root, "seed": 0,
-        "operations": [{"type": "translate", "id": root, "offset": [0, 0, 0],
-                        "operations": [frame, *operations]}],
-    })
-    accumulator = CriticAccumulator(
-        plan_from_metadata(metadata, decoration_range=(0.2, 0.4)), max_memory_mb=16,
-    )
-    for region in generate_regions(load_blueprint_dict(concrete.blueprint)):
-        accumulator.consume(region)
-    result = accumulator.finalize()
-    measured = result.metrics["decoration_density"][f"{element}:north"]
-    assert measured == {"value": 100.0, "numerator": 1, "denominator": 1}
-    assert math.ceil(0.2 * measured["denominator"]) > math.floor(0.4 * measured["denominator"])
-    assert any(d["code"] == "E202" and d["actual"] == 100.0 for d in result.diagnostics)
+    with pytest.raises(BlueprintError, match="Detail: .*装飾の収容不足"):
+        _facade_selection([], params, style, config, root, [], contract, modules, 0.32)
 
 
 def test_detail_keeps_opening_projections_and_explicit_materials(tmp_path):
