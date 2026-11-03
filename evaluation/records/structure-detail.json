@@ -4,7 +4,7 @@
   "method": "structure-detail-v1",
   "script": {
     "path": "scripts/evaluate_structure.py",
-    "sha256": "379e29868120995e40f5310a49a84de89e399a1c42088c41c7acda2457b29b40"
+    "sha256": "2f50fcf13604f4d9e5c8dbce4b68a8a4a6b402fd64e5e098370df346495d33e8"
   },
   "benchmark_helpers": {
     "path": "scripts/benchmark.py",
@@ -27,12 +27,12 @@
     "python_version": "3.12.15"
   },
   "provenance": {
-    "commit": "fc8fbf9fea3bf05506ec42b841bf678fb0dd001e",
+    "commit": "9a4352b0ae81eb0b9d6b0a1d5e9867f1df9ce0e4",
     "engine_sha256": "237c402b0211cd9e601144abb6300059ff6ede4f5ec79c93de0ad134901e84d7",
     "lock_sha256": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48",
     "default_config_sha256": "17f5c240ead94ebb8c410f045b3344f07d07ec9c29a8a769645f853b5ea28d64"
   },
-  "measured_at": "2026-11-03T19:46:58.678572+00:00",
+  "measured_at": "2026-11-03T20:55:30.945699+00:00",
   "time_scope": "子プロセス起動からmake完了・worker JSON出力まで。build比較は除外。",
   "memory_metric": "独立子プロセスのmake直後のOS最大RSS/PeakWorkingSetSize。",
   "stage_sample_definition": "段開始時の累積時間と現在RSS。段単独ピークではない。",
@@ -56,41 +56,41 @@
         "sha256": "cb0c67dbee9a083b80c20e4cdb5d2fe249685cede48be1c722a77e7cc8d1547a"
       },
       "code": 0,
-      "make_runtime_seconds": 1.2079939000541344,
-      "process_peak_rss_bytes": 83996672,
+      "make_runtime_seconds": 1.1909441000316292,
+      "process_peak_rss_bytes": 83480576,
       "stage_hook_samples": [
         {
           "stage": "Resolve",
-          "elapsed_seconds": 0.0015722999814897776,
-          "rss_at_stage_start_bytes": 51224576
+          "elapsed_seconds": 0.0009476999985054135,
+          "rss_at_stage_start_bytes": 51851264
         },
         {
           "stage": "Site/Massing/Detail",
-          "elapsed_seconds": 0.047798900050111115,
-          "rss_at_stage_start_bytes": 51781632
+          "elapsed_seconds": 0.04674589994829148,
+          "rss_at_stage_start_bytes": 52219904
         },
         {
           "stage": "Materialize",
-          "elapsed_seconds": 0.15646399999968708,
-          "rss_at_stage_start_bytes": 52994048
+          "elapsed_seconds": 0.15395169996190816,
+          "rss_at_stage_start_bytes": 51826688
         },
         {
           "stage": "Generate",
-          "elapsed_seconds": 0.5923729999922216,
-          "rss_at_stage_start_bytes": 79495168
+          "elapsed_seconds": 0.5855778999393806,
+          "rss_at_stage_start_bytes": 78020608
         },
         {
           "stage": "Critic",
-          "elapsed_seconds": 1.1284281000262126,
-          "rss_at_stage_start_bytes": 80814080
+          "elapsed_seconds": 1.1130506999325007,
+          "rss_at_stage_start_bytes": 80289792
         },
         {
           "stage": "Export",
-          "elapsed_seconds": 1.1359740999760106,
-          "rss_at_stage_start_bytes": 80814080
+          "elapsed_seconds": 1.1206489999312907,
+          "rss_at_stage_start_bytes": 80289792
         }
       ],
-      "seconds": 1.978841400006786,
+      "seconds": 1.9407826999668032,
       "engine_environment": {
         "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
         "engine": "0.1.0",
@@ -994,41 +994,41 @@
         "sha256": "b8784023efc3867850a115134a72c1cadc7a2733772595ce79bc2bf0b9c242d1"
       },
       "code": 0,
-      "make_runtime_seconds": 1.2751675000181422,
-      "process_peak_rss_bytes": 84058112,
+      "make_runtime_seconds": 1.1947575999656692,
+      "process_peak_rss_bytes": 83615744,
       "stage_hook_samples": [
         {
           "stage": "Resolve",
-          "elapsed_seconds": 0.0009525000350549817,
-          "rss_at_stage_start_bytes": 52576256
+          "elapsed_seconds": 0.0009483000030741096,
+          "rss_at_stage_start_bytes": 51654656
         },
         {
           "stage": "Site/Massing/Detail",
-          "elapsed_seconds": 0.04706849996000528,
-          "rss_at_stage_start_bytes": 52887552
+          "elapsed_seconds": 0.04625030001625419,
+          "rss_at_stage_start_bytes": 52039680
         },
         {
           "stage": "Materialize",
-          "elapsed_seconds": 0.17783599998801947,
-          "rss_at_stage_start_bytes": 51662848
+          "elapsed_seconds": 0.15327269991394132,
+          "rss_at_stage_start_bytes": 52011008
         },
         {
           "stage": "Generate",
-          "elapsed_seconds": 0.6281456999713555,
-          "rss_at_stage_start_bytes": 79110144
+          "elapsed_seconds": 0.5875757000176236,
+          "rss_at_stage_start_bytes": 78204928
         },
         {
           "stage": "Critic",
-          "elapsed_seconds": 1.1945726999547333,
-          "rss_at_stage_start_bytes": 80867328
+          "elapsed_seconds": 1.1139966999180615,
+          "rss_at_stage_start_bytes": 80424960
         },
         {
           "stage": "Export",
-          "elapsed_seconds": 1.2021050000330433,
-          "rss_at_stage_start_bytes": 80875520
+          "elapsed_seconds": 1.1217884999932721,
+          "rss_at_stage_start_bytes": 80429056
         }
       ],
-      "seconds": 2.066784800030291,
+      "seconds": 1.981307200039737,
       "engine_environment": {
         "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
         "engine": "0.1.0",
@@ -1932,41 +1932,41 @@
         "sha256": "c5855684a5f0e4e8d809808105e53ec5bdf8d38f3b869d048d9319ea3db58ab3"
       },
       "code": 0,
-      "make_runtime_seconds": 1.2412098000058904,
-      "process_peak_rss_bytes": 83083264,
+      "make_runtime_seconds": 1.2230175000149757,
+      "process_peak_rss_bytes": 84697088,
       "stage_hook_samples": [
         {
           "stage": "Resolve",
-          "elapsed_seconds": 0.0009803000139072537,
-          "rss_at_stage_start_bytes": 52604928
+          "elapsed_seconds": 0.0009537000441923738,
+          "rss_at_stage_start_bytes": 51466240
         },
         {
           "stage": "Site/Massing/Detail",
-          "elapsed_seconds": 0.04902190004941076,
-          "rss_at_stage_start_bytes": 51023872
+          "elapsed_seconds": 0.04665460006799549,
+          "rss_at_stage_start_bytes": 51748864
         },
         {
           "stage": "Materialize",
-          "elapsed_seconds": 0.16484750004019588,
-          "rss_at_stage_start_bytes": 51548160
+          "elapsed_seconds": 0.155581200029701,
+          "rss_at_stage_start_bytes": 52142080
         },
         {
           "stage": "Generate",
-          "elapsed_seconds": 0.6159864000510424,
-          "rss_at_stage_start_bytes": 77758464
+          "elapsed_seconds": 0.6060969000682235,
+          "rss_at_stage_start_bytes": 80183296
         },
         {
           "stage": "Critic",
-          "elapsed_seconds": 1.1597353999968618,
-          "rss_at_stage_start_bytes": 79892480
+          "elapsed_seconds": 1.1386213999940082,
+          "rss_at_stage_start_bytes": 81510400
         },
         {
           "stage": "Export",
-          "elapsed_seconds": 1.1675078000407666,
-          "rss_at_stage_start_bytes": 79896576
+          "elapsed_seconds": 1.1469032000750303,
+          "rss_at_stage_start_bytes": 81514496
         }
       ],
-      "seconds": 2.022317000082694,
+      "seconds": 1.9858255999861285,
       "engine_environment": {
         "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
         "engine": "0.1.0",
@@ -2870,41 +2870,41 @@
         "sha256": "4eeded49b37c742f5758fbcc0417450b5ce19369fef7bbc694fa7720cd0682a9"
       },
       "code": 0,
-      "make_runtime_seconds": 1.2404515999369323,
-      "process_peak_rss_bytes": 84832256,
+      "make_runtime_seconds": 1.1966636000433937,
+      "process_peak_rss_bytes": 83390464,
       "stage_hook_samples": [
         {
           "stage": "Resolve",
-          "elapsed_seconds": 0.0010239999974146485,
-          "rss_at_stage_start_bytes": 50905088
+          "elapsed_seconds": 0.000950800022110343,
+          "rss_at_stage_start_bytes": 51847168
         },
         {
           "stage": "Site/Massing/Detail",
-          "elapsed_seconds": 0.04648379993159324,
-          "rss_at_stage_start_bytes": 51499008
+          "elapsed_seconds": 0.04694220004603267,
+          "rss_at_stage_start_bytes": 52199424
         },
         {
           "stage": "Materialize",
-          "elapsed_seconds": 0.15427019994240254,
-          "rss_at_stage_start_bytes": 52158464
+          "elapsed_seconds": 0.15407509997021407,
+          "rss_at_stage_start_bytes": 51769344
         },
         {
           "stage": "Generate",
-          "elapsed_seconds": 0.6186763999285176,
-          "rss_at_stage_start_bytes": 80396288
+          "elapsed_seconds": 0.5856443999800831,
+          "rss_at_stage_start_bytes": 78004224
         },
         {
           "stage": "Critic",
-          "elapsed_seconds": 1.1578839999856427,
-          "rss_at_stage_start_bytes": 81645568
+          "elapsed_seconds": 1.1143745000008494,
+          "rss_at_stage_start_bytes": 80207872
         },
         {
           "stage": "Export",
-          "elapsed_seconds": 1.165577600011602,
-          "rss_at_stage_start_bytes": 81649664
+          "elapsed_seconds": 1.1220577000640333,
+          "rss_at_stage_start_bytes": 80211968
         }
       ],
-      "seconds": 2.02656000002753,
+      "seconds": 1.9599165000254288,
       "engine_environment": {
         "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
         "engine": "0.1.0",
@@ -3808,41 +3808,41 @@
         "sha256": "73412c7599e63914e410a66bddcd2f553727017588cc499f128d2c90560361bf"
       },
       "code": 0,
-      "make_runtime_seconds": 1.2215595000889152,
-      "process_peak_rss_bytes": 83771392,
+      "make_runtime_seconds": 1.1955839999718592,
+      "process_peak_rss_bytes": 83980288,
       "stage_hook_samples": [
         {
           "stage": "Resolve",
-          "elapsed_seconds": 0.0010122000239789486,
-          "rss_at_stage_start_bytes": 51634176
+          "elapsed_seconds": 0.001132899895310402,
+          "rss_at_stage_start_bytes": 51671040
         },
         {
           "stage": "Site/Massing/Detail",
-          "elapsed_seconds": 0.04600850003771484,
-          "rss_at_stage_start_bytes": 51941376
+          "elapsed_seconds": 0.04719889990519732,
+          "rss_at_stage_start_bytes": 52015104
         },
         {
           "stage": "Materialize",
-          "elapsed_seconds": 0.15522940002847463,
-          "rss_at_stage_start_bytes": 51417088
+          "elapsed_seconds": 0.1538787999888882,
+          "rss_at_stage_start_bytes": 52682752
         },
         {
           "stage": "Generate",
-          "elapsed_seconds": 0.6039853000547737,
-          "rss_at_stage_start_bytes": 79048704
+          "elapsed_seconds": 0.586865899967961,
+          "rss_at_stage_start_bytes": 79560704
         },
         {
           "stage": "Critic",
-          "elapsed_seconds": 1.1373991000000387,
-          "rss_at_stage_start_bytes": 80584704
+          "elapsed_seconds": 1.1156224999576807,
+          "rss_at_stage_start_bytes": 80789504
         },
         {
           "stage": "Export",
-          "elapsed_seconds": 1.145529100089334,
-          "rss_at_stage_start_bytes": 80584704
+          "elapsed_seconds": 1.1231701999204233,
+          "rss_at_stage_start_bytes": 80789504
         }
       ],
-      "seconds": 2.009234099998139,
+      "seconds": 1.955932200071402,
       "engine_environment": {
         "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
         "engine": "0.1.0",
@@ -4746,41 +4746,41 @@
         "sha256": "f0da68d7c5e871098d049f00eb2b4ee741b1656847f47a49f6a29274f533baea"
       },
       "code": 0,
-      "make_runtime_seconds": 1.2324585999595001,
-      "process_peak_rss_bytes": 83382272,
+      "make_runtime_seconds": 1.1983727000188082,
+      "process_peak_rss_bytes": 83881984,
       "stage_hook_samples": [
         {
           "stage": "Resolve",
-          "elapsed_seconds": 0.0009534999262541533,
-          "rss_at_stage_start_bytes": 50982912
+          "elapsed_seconds": 0.0009451999794691801,
+          "rss_at_stage_start_bytes": 51724288
         },
         {
           "stage": "Site/Massing/Detail",
-          "elapsed_seconds": 0.047220999957062304,
-          "rss_at_stage_start_bytes": 51593216
+          "elapsed_seconds": 0.046428399975411594,
+          "rss_at_stage_start_bytes": 51933184
         },
         {
           "stage": "Materialize",
-          "elapsed_seconds": 0.15874089999124408,
-          "rss_at_stage_start_bytes": 51953664
+          "elapsed_seconds": 0.15373899997211993,
+          "rss_at_stage_start_bytes": 52961280
         },
         {
           "stage": "Generate",
-          "elapsed_seconds": 0.6024992000311613,
-          "rss_at_stage_start_bytes": 78192640
+          "elapsed_seconds": 0.587724499986507,
+          "rss_at_stage_start_bytes": 79040512
         },
         {
           "stage": "Critic",
-          "elapsed_seconds": 1.1483479000162333,
-          "rss_at_stage_start_bytes": 80199680
+          "elapsed_seconds": 1.1153885999228805,
+          "rss_at_stage_start_bytes": 80695296
         },
         {
           "stage": "Export",
-          "elapsed_seconds": 1.1564725999487564,
-          "rss_at_stage_start_bytes": 80199680
+          "elapsed_seconds": 1.1226627000141889,
+          "rss_at_stage_start_bytes": 80695296
         }
       ],
-      "seconds": 2.017521800007671,
+      "seconds": 1.958718099980615,
       "engine_environment": {
         "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
         "engine": "0.1.0",
@@ -5684,41 +5684,41 @@
         "sha256": "cb2c9b8fa285d288f762bf0613fbc3c0e1bbd4a363e29db731da6a616ffc6c38"
       },
       "code": 0,
-      "make_runtime_seconds": 1.220708700013347,
-      "process_peak_rss_bytes": 84705280,
+      "make_runtime_seconds": 1.2319805000443012,
+      "process_peak_rss_bytes": 84033536,
       "stage_hook_samples": [
         {
           "stage": "Resolve",
-          "elapsed_seconds": 0.0009568000677973032,
-          "rss_at_stage_start_bytes": 51712000
+          "elapsed_seconds": 0.000961500103585422,
+          "rss_at_stage_start_bytes": 51773440
         },
         {
           "stage": "Site/Massing/Detail",
-          "elapsed_seconds": 0.0476149000460282,
-          "rss_at_stage_start_bytes": 51113984
+          "elapsed_seconds": 0.04625460004899651,
+          "rss_at_stage_start_bytes": 52121600
         },
         {
           "stage": "Materialize",
-          "elapsed_seconds": 0.15848370001185685,
-          "rss_at_stage_start_bytes": 51503104
+          "elapsed_seconds": 0.177356900065206,
+          "rss_at_stage_start_bytes": 53018624
         },
         {
           "stage": "Generate",
-          "elapsed_seconds": 0.6019225000636652,
-          "rss_at_stage_start_bytes": 80302080
+          "elapsed_seconds": 0.6218577000545338,
+          "rss_at_stage_start_bytes": 79220736
         },
         {
           "stage": "Critic",
-          "elapsed_seconds": 1.135705400025472,
-          "rss_at_stage_start_bytes": 81514496
+          "elapsed_seconds": 1.1506235001143068,
+          "rss_at_stage_start_bytes": 80850944
         },
         {
           "stage": "Export",
-          "elapsed_seconds": 1.1437185000395402,
-          "rss_at_stage_start_bytes": 81514496
+          "elapsed_seconds": 1.158230600063689,
+          "rss_at_stage_start_bytes": 80850944
         }
       ],
-      "seconds": 2.047950500040315,
+      "seconds": 1.9912481000646949,
       "engine_environment": {
         "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
         "engine": "0.1.0",
@@ -6622,41 +6622,41 @@
         "sha256": "e140f9c7c6bfdc511bf41ac0758144396b65677884132f42245b9326c65afe2c"
       },
       "code": 0,
-      "make_runtime_seconds": 1.222752800094895,
-      "process_peak_rss_bytes": 83636224,
+      "make_runtime_seconds": 1.2003449000185356,
+      "process_peak_rss_bytes": 83398656,
       "stage_hook_samples": [
         {
           "stage": "Resolve",
-          "elapsed_seconds": 0.0010258000111207366,
-          "rss_at_stage_start_bytes": 51765248
+          "elapsed_seconds": 0.0009734999621286988,
+          "rss_at_stage_start_bytes": 50892800
         },
         {
           "stage": "Site/Massing/Detail",
-          "elapsed_seconds": 0.046355700003914535,
-          "rss_at_stage_start_bytes": 52166656
+          "elapsed_seconds": 0.04778309992980212,
+          "rss_at_stage_start_bytes": 51486720
         },
         {
           "stage": "Materialize",
-          "elapsed_seconds": 0.1606190000893548,
-          "rss_at_stage_start_bytes": 52011008
+          "elapsed_seconds": 0.1565602000337094,
+          "rss_at_stage_start_bytes": 51900416
         },
         {
           "stage": "Generate",
-          "elapsed_seconds": 0.6015247000614181,
-          "rss_at_stage_start_bytes": 78327808
+          "elapsed_seconds": 0.5918098000111058,
+          "rss_at_stage_start_bytes": 78229504
         },
         {
           "stage": "Critic",
-          "elapsed_seconds": 1.1384479000698775,
-          "rss_at_stage_start_bytes": 80445440
+          "elapsed_seconds": 1.117753200000152,
+          "rss_at_stage_start_bytes": 80207872
         },
         {
           "stage": "Export",
-          "elapsed_seconds": 1.14630100002978,
-          "rss_at_stage_start_bytes": 80445440
+          "elapsed_seconds": 1.1255751999560744,
+          "rss_at_stage_start_bytes": 80207872
         }
       ],
-      "seconds": 2.018272800021805,
+      "seconds": 1.958175199921243,
       "engine_environment": {
         "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
         "engine": "0.1.0",
@@ -7560,41 +7560,41 @@
         "sha256": "350b0969681551f114a68681e9a0e89af38e55956b4672bfcb22402da4f729f4"
       },
       "code": 0,
-      "make_runtime_seconds": 1.3144346000626683,
-      "process_peak_rss_bytes": 85602304,
+      "make_runtime_seconds": 1.264125799993053,
+      "process_peak_rss_bytes": 85712896,
       "stage_hook_samples": [
         {
           "stage": "Resolve",
-          "elapsed_seconds": 0.0009565000655129552,
-          "rss_at_stage_start_bytes": 52301824
+          "elapsed_seconds": 0.0009463999886065722,
+          "rss_at_stage_start_bytes": 51896320
         },
         {
           "stage": "Site/Massing/Detail",
-          "elapsed_seconds": 0.04623019997961819,
-          "rss_at_stage_start_bytes": 52424704
+          "elapsed_seconds": 0.04667820001486689,
+          "rss_at_stage_start_bytes": 52162560
         },
         {
           "stage": "Materialize",
-          "elapsed_seconds": 0.21553899999707937,
-          "rss_at_stage_start_bytes": 54697984
+          "elapsed_seconds": 0.21952550008427352,
+          "rss_at_stage_start_bytes": 53145600
         },
         {
           "stage": "Generate",
-          "elapsed_seconds": 0.7170149000594392,
-          "rss_at_stage_start_bytes": 78589952
+          "elapsed_seconds": 0.6773302999790758,
+          "rss_at_stage_start_bytes": 78663680
         },
         {
           "stage": "Critic",
-          "elapsed_seconds": 1.1633504000492394,
-          "rss_at_stage_start_bytes": 80809984
+          "elapsed_seconds": 1.11611130007077,
+          "rss_at_stage_start_bytes": 80916480
         },
         {
           "stage": "Export",
-          "elapsed_seconds": 1.1864234000677243,
-          "rss_at_stage_start_bytes": 80883712
+          "elapsed_seconds": 1.1398705000756308,
+          "rss_at_stage_start_bytes": 80994304
         }
       ],
-      "seconds": 2.0901722999988124,
+      "seconds": 2.034112000023015,
       "engine_environment": {
         "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
         "engine": "0.1.0",
@@ -8989,41 +8989,41 @@
         "sha256": "88f302c19597551b3e26edbd1568175f66093b56e503417e71b4bf4c0b95be3c"
       },
       "code": 0,
-      "make_runtime_seconds": 1.2900658999569714,
-      "process_peak_rss_bytes": 85573632,
+      "make_runtime_seconds": 1.2721709000179544,
+      "process_peak_rss_bytes": 85630976,
       "stage_hook_samples": [
         {
           "stage": "Resolve",
-          "elapsed_seconds": 0.0009449999779462814,
-          "rss_at_stage_start_bytes": 52396032
+          "elapsed_seconds": 0.0009386999299749732,
+          "rss_at_stage_start_bytes": 52129792
         },
         {
           "stage": "Site/Massing/Detail",
-          "elapsed_seconds": 0.04660869995132089,
-          "rss_at_stage_start_bytes": 50995200
+          "elapsed_seconds": 0.04661089996807277,
+          "rss_at_stage_start_bytes": 52461568
         },
         {
           "stage": "Materialize",
-          "elapsed_seconds": 0.21972839999943972,
-          "rss_at_stage_start_bytes": 53141504
+          "elapsed_seconds": 0.21673320000991225,
+          "rss_at_stage_start_bytes": 54104064
         },
         {
           "stage": "Generate",
-          "elapsed_seconds": 0.6894776999251917,
-          "rss_at_stage_start_bytes": 78401536
+          "elapsed_seconds": 0.6705608000047505,
+          "rss_at_stage_start_bytes": 78671872
         },
         {
           "stage": "Critic",
-          "elapsed_seconds": 1.1380514999618754,
-          "rss_at_stage_start_bytes": 80769024
+          "elapsed_seconds": 1.125614000018686,
+          "rss_at_stage_start_bytes": 80838656
         },
         {
           "stage": "Export",
-          "elapsed_seconds": 1.1622985999565572,
-          "rss_at_stage_start_bytes": 80842752
+          "elapsed_seconds": 1.1492638000054285,
+          "rss_at_stage_start_bytes": 80924672
         }
       ],
-      "seconds": 2.0818171000573784,
+      "seconds": 2.0311899000080302,
       "engine_environment": {
         "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
         "engine": "0.1.0",
@@ -10418,41 +10418,41 @@
         "sha256": "d825ab6d5142729c1ba242199de94d43d905ce7b3d4cba6e1fede59dd64e636a"
       },
       "code": 0,
-      "make_runtime_seconds": 1.3030849000206217,
-      "process_peak_rss_bytes": 86880256,
+      "make_runtime_seconds": 1.269731199950911,
+      "process_peak_rss_bytes": 85708800,
       "stage_hook_samples": [
         {
           "stage": "Resolve",
-          "elapsed_seconds": 0.0010804999619722366,
-          "rss_at_stage_start_bytes": 50462720
+          "elapsed_seconds": 0.0009485000045970082,
+          "rss_at_stage_start_bytes": 50917376
         },
         {
           "stage": "Site/Massing/Detail",
-          "elapsed_seconds": 0.04973770002834499,
-          "rss_at_stage_start_bytes": 51109888
+          "elapsed_seconds": 0.04784269991796464,
+          "rss_at_stage_start_bytes": 51363840
         },
         {
           "stage": "Materialize",
-          "elapsed_seconds": 0.22377429995685816,
-          "rss_at_stage_start_bytes": 54218752
+          "elapsed_seconds": 0.22235499997623265,
+          "rss_at_stage_start_bytes": 54861824
         },
         {
           "stage": "Generate",
-          "elapsed_seconds": 0.6981842999812216,
-          "rss_at_stage_start_bytes": 80461824
+          "elapsed_seconds": 0.6783720999956131,
+          "rss_at_stage_start_bytes": 78553088
         },
         {
           "stage": "Critic",
-          "elapsed_seconds": 1.1515713999979198,
-          "rss_at_stage_start_bytes": 82087936
+          "elapsed_seconds": 1.1224202999146655,
+          "rss_at_stage_start_bytes": 80904192
         },
         {
           "stage": "Export",
-          "elapsed_seconds": 1.1746711999876425,
-          "rss_at_stage_start_bytes": 82165760
+          "elapsed_seconds": 1.1452793999342248,
+          "rss_at_stage_start_bytes": 80982016
         }
       ],
-      "seconds": 2.1121007000328973,
+      "seconds": 2.0372409999836236,
       "engine_environment": {
         "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
         "engine": "0.1.0",
@@ -11847,41 +11847,41 @@
         "sha256": "d186c4d6159fce108d360ff5191ccd05e459121a886a2e789c26197ea959c368"
       },
       "code": 0,
-      "make_runtime_seconds": 1.3207168000517413,
-      "process_peak_rss_bytes": 85811200,
+      "make_runtime_seconds": 1.2573755999328569,
+      "process_peak_rss_bytes": 85745664,
       "stage_hook_samples": [
         {
           "stage": "Resolve",
-          "elapsed_seconds": 0.0009585000807419419,
-          "rss_at_stage_start_bytes": 51695616
+          "elapsed_seconds": 0.0009728999575600028,
+          "rss_at_stage_start_bytes": 51896320
         },
         {
           "stage": "Site/Massing/Detail",
-          "elapsed_seconds": 0.04894070001319051,
-          "rss_at_stage_start_bytes": 50724864
+          "elapsed_seconds": 0.046754200011491776,
+          "rss_at_stage_start_bytes": 52224000
         },
         {
           "stage": "Materialize",
-          "elapsed_seconds": 0.2294620000757277,
-          "rss_at_stage_start_bytes": 52977664
+          "elapsed_seconds": 0.2189711999380961,
+          "rss_at_stage_start_bytes": 54493184
         },
         {
           "stage": "Generate",
-          "elapsed_seconds": 0.7086186000378802,
-          "rss_at_stage_start_bytes": 79269888
+          "elapsed_seconds": 0.6738510000286624,
+          "rss_at_stage_start_bytes": 78483456
         },
         {
           "stage": "Critic",
-          "elapsed_seconds": 1.1686452000867575,
-          "rss_at_stage_start_bytes": 81006592
+          "elapsed_seconds": 1.1104187000310048,
+          "rss_at_stage_start_bytes": 80945152
         },
         {
           "stage": "Export",
-          "elapsed_seconds": 1.1923069000476971,
-          "rss_at_stage_start_bytes": 81088512
+          "elapsed_seconds": 1.1340983000118285,
+          "rss_at_stage_start_bytes": 81031168
         }
       ],
-      "seconds": 2.1689370999811217,
+      "seconds": 2.0125816999934614,
       "engine_environment": {
         "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
         "engine": "0.1.0",
@@ -13276,41 +13276,41 @@
         "sha256": "aef508c3081529da4a8b08a3f9ee52660fdd9b403ba04061902b2745d8ca0446"
       },
       "code": 0,
-      "make_runtime_seconds": 1.285004600067623,
-      "process_peak_rss_bytes": 85311488,
+      "make_runtime_seconds": 1.265404999954626,
+      "process_peak_rss_bytes": 85962752,
       "stage_hook_samples": [
         {
           "stage": "Resolve",
-          "elapsed_seconds": 0.0009611001005396247,
-          "rss_at_stage_start_bytes": 51019776
+          "elapsed_seconds": 0.0010176999494433403,
+          "rss_at_stage_start_bytes": 51224576
         },
         {
           "stage": "Site/Massing/Detail",
-          "elapsed_seconds": 0.048428500071167946,
-          "rss_at_stage_start_bytes": 51470336
+          "elapsed_seconds": 0.04757269995752722,
+          "rss_at_stage_start_bytes": 51646464
         },
         {
           "stage": "Materialize",
-          "elapsed_seconds": 0.22607920004520565,
-          "rss_at_stage_start_bytes": 52027392
+          "elapsed_seconds": 0.21714199997950345,
+          "rss_at_stage_start_bytes": 53342208
         },
         {
           "stage": "Generate",
-          "elapsed_seconds": 0.6937811000971124,
-          "rss_at_stage_start_bytes": 78270464
+          "elapsed_seconds": 0.6768336999230087,
+          "rss_at_stage_start_bytes": 78655488
         },
         {
           "stage": "Critic",
-          "elapsed_seconds": 1.1350455000065267,
-          "rss_at_stage_start_bytes": 80527360
+          "elapsed_seconds": 1.1201149999396876,
+          "rss_at_stage_start_bytes": 81174528
         },
         {
           "stage": "Export",
-          "elapsed_seconds": 1.1587151000276208,
-          "rss_at_stage_start_bytes": 80609280
+          "elapsed_seconds": 1.1429862999357283,
+          "rss_at_stage_start_bytes": 81268736
         }
       ],
-      "seconds": 2.118578699999489,
+      "seconds": 2.043800099985674,
       "engine_environment": {
         "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
         "engine": "0.1.0",
@@ -14705,41 +14705,41 @@
         "sha256": "7a5fc18134e5a43c9dd5aa2140290aa5f7fb77864f4cf8d2a6d4560b9f235dde"
       },
       "code": 0,
-      "make_runtime_seconds": 1.3326003000838682,
-      "process_peak_rss_bytes": 85266432,
+      "make_runtime_seconds": 1.2617364000761881,
+      "process_peak_rss_bytes": 86810624,
       "stage_hook_samples": [
         {
           "stage": "Resolve",
-          "elapsed_seconds": 0.0010370000964030623,
-          "rss_at_stage_start_bytes": 51105792
+          "elapsed_seconds": 0.0009625999955460429,
+          "rss_at_stage_start_bytes": 51142656
         },
         {
           "stage": "Site/Massing/Detail",
-          "elapsed_seconds": 0.051360800047405064,
-          "rss_at_stage_start_bytes": 51519488
+          "elapsed_seconds": 0.04702060006093234,
+          "rss_at_stage_start_bytes": 51765248
         },
         {
           "stage": "Materialize",
-          "elapsed_seconds": 0.2393117001047358,
-          "rss_at_stage_start_bytes": 52961280
+          "elapsed_seconds": 0.2188315000385046,
+          "rss_at_stage_start_bytes": 54194176
         },
         {
           "stage": "Generate",
-          "elapsed_seconds": 0.7174312000861391,
-          "rss_at_stage_start_bytes": 78348288
+          "elapsed_seconds": 0.6733959000557661,
+          "rss_at_stage_start_bytes": 80359424
         },
         {
           "stage": "Critic",
-          "elapsed_seconds": 1.1740227000555024,
-          "rss_at_stage_start_bytes": 80486400
+          "elapsed_seconds": 1.1135423000669107,
+          "rss_at_stage_start_bytes": 82018304
         },
         {
           "stage": "Export",
-          "elapsed_seconds": 1.1977822000626475,
-          "rss_at_stage_start_bytes": 80605184
+          "elapsed_seconds": 1.1371082999976352,
+          "rss_at_stage_start_bytes": 82108416
         }
       ],
-      "seconds": 2.2045118999667466,
+      "seconds": 2.0396766000194475,
       "engine_environment": {
         "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
         "engine": "0.1.0",
@@ -16134,41 +16134,41 @@
         "sha256": "a9782a8f8720d5ef20f1a3485bacbdf467971681c2bedc4b5481a09269cf85f8"
       },
       "code": 0,
-      "make_runtime_seconds": 1.317024299991317,
-      "process_peak_rss_bytes": 87281664,
+      "make_runtime_seconds": 1.2542056000092998,
+      "process_peak_rss_bytes": 85897216,
       "stage_hook_samples": [
         {
           "stage": "Resolve",
-          "elapsed_seconds": 0.0010479999473318458,
-          "rss_at_stage_start_bytes": 51826688
+          "elapsed_seconds": 0.0012605000520125031,
+          "rss_at_stage_start_bytes": 51757056
         },
         {
           "stage": "Site/Massing/Detail",
-          "elapsed_seconds": 0.04982519999612123,
-          "rss_at_stage_start_bytes": 50831360
+          "elapsed_seconds": 0.04616720008198172,
+          "rss_at_stage_start_bytes": 52117504
         },
         {
           "stage": "Materialize",
-          "elapsed_seconds": 0.22759439994115382,
-          "rss_at_stage_start_bytes": 54497280
+          "elapsed_seconds": 0.21770160004962236,
+          "rss_at_stage_start_bytes": 52375552
         },
         {
           "stage": "Generate",
-          "elapsed_seconds": 0.7020938999485224,
-          "rss_at_stage_start_bytes": 80973824
+          "elapsed_seconds": 0.67015550006181,
+          "rss_at_stage_start_bytes": 78680064
         },
         {
           "stage": "Critic",
-          "elapsed_seconds": 1.163815199979581,
-          "rss_at_stage_start_bytes": 82489344
+          "elapsed_seconds": 1.1056132999947295,
+          "rss_at_stage_start_bytes": 81108992
         },
         {
           "stage": "Export",
-          "elapsed_seconds": 1.1884958998998627,
-          "rss_at_stage_start_bytes": 82554880
+          "elapsed_seconds": 1.128826200030744,
+          "rss_at_stage_start_bytes": 81186816
         }
       ],
-      "seconds": 2.138371800072491,
+      "seconds": 2.0105706999311224,
       "engine_environment": {
         "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
         "engine": "0.1.0",
@@ -17563,41 +17563,41 @@
         "sha256": "9349c79e1bccecf5a88286af897e1813cc1b0f05ce12990a1d2228d6ec34902f"
       },
       "code": 0,
-      "make_runtime_seconds": 1.3162814000388607,
-      "process_peak_rss_bytes": 86183936,
+      "make_runtime_seconds": 1.270541200065054,
+      "process_peak_rss_bytes": 86724608,
       "stage_hook_samples": [
         {
           "stage": "Resolve",
-          "elapsed_seconds": 0.0011747999815270305,
-          "rss_at_stage_start_bytes": 52596736
+          "elapsed_seconds": 0.0010209999745711684,
+          "rss_at_stage_start_bytes": 52015104
         },
         {
           "stage": "Site/Massing/Detail",
-          "elapsed_seconds": 0.04708859999664128,
-          "rss_at_stage_start_bytes": 51310592
+          "elapsed_seconds": 0.04633180005475879,
+          "rss_at_stage_start_bytes": 52334592
         },
         {
           "stage": "Materialize",
-          "elapsed_seconds": 0.22353030007798225,
-          "rss_at_stage_start_bytes": 53223424
+          "elapsed_seconds": 0.21875940007157624,
+          "rss_at_stage_start_bytes": 53936128
         },
         {
           "stage": "Generate",
-          "elapsed_seconds": 0.7074186999816447,
-          "rss_at_stage_start_bytes": 79474688
+          "elapsed_seconds": 0.6825872000772506,
+          "rss_at_stage_start_bytes": 80035840
         },
         {
           "stage": "Critic",
-          "elapsed_seconds": 1.167300199973397,
-          "rss_at_stage_start_bytes": 81403904
+          "elapsed_seconds": 1.126184800057672,
+          "rss_at_stage_start_bytes": 81932288
         },
         {
           "stage": "Export",
-          "elapsed_seconds": 1.1912170000141487,
-          "rss_at_stage_start_bytes": 81469440
+          "elapsed_seconds": 1.1491519999690354,
+          "rss_at_stage_start_bytes": 82001920
         }
       ],
-      "seconds": 2.158801899990067,
+      "seconds": 2.0496112999971956,
       "engine_environment": {
         "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
         "engine": "0.1.0",

@@ -4,7 +4,7 @@
   "method": "structure-detail-v1",
   "script": {
     "path": "scripts/evaluate_structure.py",
-    "sha256": "379e29868120995e40f5310a49a84de89e399a1c42088c41c7acda2457b29b40"
+    "sha256": "2f50fcf13604f4d9e5c8dbce4b68a8a4a6b402fd64e5e098370df346495d33e8"
   },
   "benchmark_helpers": {
     "path": "scripts/benchmark.py",
@@ -27,12 +27,12 @@
     "python_version": "3.12.15"
   },
   "provenance": {
-    "commit": "fc8fbf9fea3bf05506ec42b841bf678fb0dd001e",
+    "commit": "9a4352b0ae81eb0b9d6b0a1d5e9867f1df9ce0e4",
     "engine_sha256": "237c402b0211cd9e601144abb6300059ff6ede4f5ec79c93de0ad134901e84d7",
     "lock_sha256": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48",
     "default_config_sha256": "17f5c240ead94ebb8c410f045b3344f07d07ec9c29a8a769645f853b5ea28d64"
   },
-  "measured_at": "2026-11-03T19:49:28.286861+00:00",
+  "measured_at": "2026-11-03T20:58:30.034837+00:00",
   "time_scope": "子プロセス起動からmake完了・worker JSON出力まで。build比較は除外。",
   "memory_metric": "独立子プロセスのmake直後のOS最大RSS/PeakWorkingSetSize。",
   "stage_sample_definition": "段開始時の累積時間と現在RSS。段単独ピークではない。",
@@ -43,7 +43,7 @@
   ],
   "partition_script": {
     "path": "scripts/evaluate_structure_partition.py",
-    "sha256": "f8b3faef9fb1d4cff9aa96e94e4d3268af4399eb3d40b51dbd56ad3671439e4a"
+    "sha256": "ad0f024921a1fbc0b3414a281115d9acfe855a5232e390180f1922b697a1e750"
   },
   "reason": "固定課題は各辺16未満なので16/32/64だけではcore境界を跨がない。",
   "core": 7,
