@@ -5,11 +5,14 @@ from __future__ import annotations
 import json
 import re
 import tempfile
+from collections.abc import Iterable
 from hashlib import sha256
 from pathlib import Path
 
 from mcblueprint.errors import BlueprintError
 from mcblueprint.exporters import EXPORTERS
+from mcblueprint.exporters._spool import RegionSpool
+from mcblueprint.generator import GeneratedRegion
 from mcblueprint.model.block import BlockState
 from mcblueprint.model.blueprint import Blueprint
 from mcblueprint.model.vec import AABB, Vec3
@@ -17,11 +20,47 @@ from mcblueprint.operations.box_like import iter_box
 from mcblueprint.volume import BlockVolume
 
 
+def export_generated_regions(
+    regions: Iterable[GeneratedRegion], blueprint: Blueprint, out_path: Path,
+    *, bounds: AABB | None = None, format: str = "schem",
+) -> Path:
+    """完成core列を消費・退避し、全volumeを復元せず単一ファイルへ出力する。
+
+    regionsはhaloを含んでもよいが、coreは重複なくboundsを被覆すること。
+    boundsの既定はblueprint.bounds()。未配置セルはairとして保持し、属性は
+    出力しない。呼出側も消費済みvolumeを保持しないこと。形式・coreの不正は
+    BlueprintError、生成側の例外はそのまま伝播する。I/O失敗はBlueprintError。
+    成功時だけ既存ファイルを置換し、通常の例外・中断では一時物を除去する。
+    強制終了時に残る .出力名-spool-* は未完成品であり、再開には使用しない。
+    """
+    if format not in EXPORTERS:
+        raise BlueprintError(f"未対応の出力形式: {format}")
+    bounds = blueprint.bounds() if bounds is None else bounds
+    out_path = Path(out_path)
+    try:
+        out_path.parent.mkdir(parents=True, exist_ok=True)
+        with tempfile.TemporaryDirectory(
+            prefix=f".{out_path.name}-spool-", dir=out_path.parent,
+        ) as tmp:
+            spool = RegionSpool(Path(tmp) / "cells", bounds)
+            spool.write(regions)
+            EXPORTERS[format]().export_rows(
+                spool.rows(), bounds, blueprint, out_path, palette=spool.palette,
+            )
+    except OSError as exc:
+        raise BlueprintError(f"領域生成の出力に失敗しました: {exc}") from exc
+    return out_path
+
+
 class _RegionVolume(BlockVolume):
     def __init__(self, source: BlockVolume, bounds: AABB) -> None:
         super().__init__()
         self.source = source
         self.region = bounds
+
+    @property
+    def palette(self) -> list[BlockState]:
+        return self.source.palette
 
     def bounds(self) -> AABB:
         return self.region
