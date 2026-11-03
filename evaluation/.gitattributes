@@ -1,0 +1,3 @@
+/cases/structure-detail.json text eol=lf
+/cases/structure-detail/*.yaml text eol=lf
+/records/structure-detail*.json text eol=lf

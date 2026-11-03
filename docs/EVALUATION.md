@@ -114,3 +114,117 @@ Operation IDの文字列から装飾を推定せず、この表に含まれる�
 この記録はCの住宅・塔を対象とする。街並み・地形・地下の計画品質はH、ブラインド人間比較・小型モデル・トークン総量比較はIの評価範囲であり、今回実施していない。Minecraftの実画面確認も未実施である。
 
 性能目標との照合は [PERFORMANCE.md](PERFORMANCE.md) と [make-baseline.json](../benchmarks/make-baseline.json) を参照する。NFR2のmedium 10秒目標に対し住宅29.682秒・塔21.374秒、large 120秒目標に対し住宅183.595秒・塔155.736秒で、いずれも未達だった。NFR3の巨大入力ピークRSS 2GB目標に対し、最大観測値はmake住宅largeの193.3MiBで目標内。NFR1の内蔵GPU・8GB想定端末では未測定であり、この端末の結果から性能を推定しない。
+
+## 構造と装飾の固定課題（Issue #180）
+
+D用の[事前固定条件](../evaluation/cases/structure-detail.json)と
+[実測記録](../evaluation/records/structure-detail.json)を追加した。Cの記録とbaselineは更新しない。
+起点は `b416651`、設計参照は `.github-private` の `b2f7ab6`（D35〜D41）。
+実行前に住宅・塔のBuildSpecを全4版×schem/litematicの16入力として保存し、
+seed 42、柱連続率1.0、平坦率0.35以下、面ごとの局所FAILなし、構造エラーなし、
+Cの床・入口・階到達・窓の必須条件維持を固定した。入力や閾値を結果に合わせて変更していない。
+
+16組すべてで `column_continuity=1.0`、`beam_continuity=1.0`、`flat_ratio=0.0`、
+構造・外壁欠損なし、Cの必須条件維持を確認した。makeの終了コードも全組0で、
+警告E305は残す。emitしたBlueprintをCLIのbuildで同形式へ出力し、世界座標と
+ブロックの全状態（向き・上下などを含む）の一致を確認した。圧縮ファイルのbyte一致は要求しない。
+
+記録には入力・ケース定義・engine・lock・データ・測定スクリプトの版とhash、seed、
+指標の分子・分母、面・役割ごとの密度と材質占有率、各面の平坦率と投影窓の深度範囲を残した。
+runの全体指標に加え、既存CriticAccumulatorへ同じBlueprintのWeather後coreを流し直して
+面別の投影窓を保存し、全体指標との一致を記録テストで確認する。
+所要時間とOS最大RSSは各組の専用子プロセスでmake直後に測り、build比較と面別の再集計を含めない。
+段開始時のRSSは瞬間値であり、段単独のピークではない。
+
+住宅と塔の両方でseed 42の再現・73との差、core 16/32/64と逆順、
+Resolve/Site/Massing/Detail/Blueprintからのresumeについて、配置・指標・構造化診断の一致を確認した。
+90度回転も品質合格し、期待柱の先頭セルをairにした負例ではE101と連続率低下を検出した。
+旧examples 9件は検証・生成に成功し、Cの生成セル数を維持している。
+
+固定課題は住宅9×13×11、塔11×15×11で計画範囲もcore 16に収まり、16/32/64では境界を跨がない。
+同じ固定入力（1.21.11／schem）をcore 7で複数領域へ分ける追加確認を
+[境界接続記録](../evaluation/records/structure-detail-partition.json)へ分離し、正順・逆順の
+core一覧と配置・指標・構造化診断の一致を確認する。
+住宅は8core、塔は12coreを実際に消費した。逆順の塔ではWARN診断の列挙順が変わるが、
+内容・合否は一致する。元の診断配列も保存し、順序一致と内容一致を別項目にしている。
+
+### 追加様式・塔形状の未達
+
+1.21.11／schemで3様式×住宅／round塔／square塔の9ケースも生成・測定した。固定課題の成功と区別し、
+終了コード3の6ケースを `regression_checks.styles_and_shapes` に保存している。
+固定入力からstyleと塔のshapeだけを切り替え、住宅の明示的なgable屋根などは維持した。
+
+| 対象 | medieval | japanese | modern |
+| --- | --- | --- | --- |
+| 住宅 | 合格 | 合格 | E201・E202 |
+| round塔 | 合格 | E201・E202・palette_relation | E201・E202 |
+| square塔 | E201 | E201・E202 | E201・E202 |
+
+いずれも柱連続率は1.0。E201は局所平坦率超過、E202は様式の装飾密度範囲からの逸脱。
+未達の指標・面・実値は同記録を参照する。#180の担当範囲は証跡であり、srcやpatternsの修正は行わない。
+追加ケースの未達を固定課題の入力・閾値変更で隠したり、Dの全様式品質が合格したと扱ったりしない。
+
+密度超過については、既存Detailが上階corniceを先に全点確保し、その後の任意部品選択だけに
+面積×様式上限の予算を適用していることを確認した。例えばmodern住宅の上階は6/26=23.08で上限20を超え、
+japaneseのround塔上階は4/12=33.33で上限30を超える。小面積でcornice単独が予算を超える場合の問題である。
+E201では局所平坦率0.5が0.35を超え、japaneseのround塔は配色関係も実値0.14477が最低0.16を下回る。
+これらの生成規則・配色の修正は担当元へ引き継ぐ。
+
+### Cと同条件の性能比較
+
+[D性能記録](../evaluation/records/structure-detail-performance.json)は、Cの
+`benchmarks/make-baseline.json` と同じ住宅・塔のtiny/medium/large、1.21.11、schem、seed 42を
+各3回、独立子プロセスで測ったもの。size・要素寸法の作り方、OS最大RSSと端末情報の取得は
+既存 `scripts/benchmark.py` の手順を再利用する。CPU・メモリ総量・Python版はCと同じ。
+C入力はWindowsのCRLF、D入力はLFなので `input_identical_to_c`（byte一致）はfalseである。
+保存したD入力をCRLFで直列化すると全6条件のCの入力hashに一致することをテストで照合する。
+
+時間は秒、RSSはMiB。いずれも3回の中央値で、差はD−C。個々の試行と段開始時の瞬間値はJSONに残す。
+
+| 対象 | C時間 | D時間 | 時間差 | DピークRSS | RSS差 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 住宅 tiny | 1.247 | 2.036 | +0.789 | 79.6 | +4.7 |
+| 塔 tiny | 1.248 | 1.971 | +0.723 | 80.8 | +4.1 |
+| 住宅 medium | 29.682 | 68.904 | +39.222 | 193.9 | +11.2 |
+| 塔 medium | 21.374 | 144.405 | +123.031 | 194.3 | +32.5 |
+| 住宅 large | 183.595 | 290.553 | +106.958 | 203.0 | +9.8 |
+| 塔 large | 155.736 | 1019.377 | +863.641 | 265.7 | +88.2 |
+
+mediumの10秒・largeの120秒というNFR2の時間目標は4条件すべて未達。
+性能用tinyは全試行の終了コード0、medium/largeは全試行3（品質FAIL）で、
+後者も成果物を書き出すまで測定している。測定の完了と品質合格を区別する。
+
+時間差とRSS差は各条件の中央値の差であり、負荷を統制した因果比較ではない。
+C以後に追加されたscene出力・構造・装飾・Criticもmake時間に含み、workerのimport量も異なる。
+依存版の同一性は未確認である。
+並行作業のCPU・メモリ競合は制御していない。CのNFR2未達をD固定品質の合格で上書きしない。
+今回の建物のRSSから、未測定の巨大地形を含むNFR3全体やNFR1想定端末の達成を推定しない。
+Minecraft実画面、人間評価、jar取得、モデル呼出し・トークン比較は実施していない。
+
+### 再実行
+
+Python 3.12のタスク専用venvへ `pip install -e ".[dev]" hatchling` を行った上で実行する。
+コマンドは環境の `run_logged.py` などを介して記録する。
+
+```text
+python scripts/evaluate_structure.py --matrix --performance
+python scripts/evaluate_structure_partition.py
+ruff check .
+pytest
+mcblueprint check --strict
+python -m pip wheel --no-build-isolation --no-deps --wheel-dir output/issue-180/wheel .
+git diff --check
+```
+
+`--freeze` は入力と閾値を最初に固定する専用操作で、既存計画があれば上書きを拒否する。
+通常の再実行では指定しない。16入力のhashが一致しなければmatrixは停止する。
+品質FAIL（終了コード3）は成果物・指標を保存し、構造・I/Oエラーを品質合格へ読み替えない。
+作成wheelは別のクリーンvenvへ導入し、ソースの探索パスに頼らず4版blockdataとスキーマのlock hash、
+3様式とBlueprintスキーマの存在を確認し、wheel内patternsの絶対パスを指定してcheck --strictを実行する。
+クリーンな作業ディレクトリでパスなしのcheckは探索対象がなく失敗するため、同梱先を明示する。
+
+本記録時のローカル検証はruff成功、pytestは2371成功・1skip（任意のtiktoken未導入）。
+性能記録の1テストを測定完了後に分離し、残る全件と合わせて実行した。
+リポジトリのstrict検証は22ファイル、クリーンwheelのpatterns指定は19ファイルで、どちらもエラー・警告0。
+wheelビルド、4版blockdataとスキーマのlock hash照合、3様式・Blueprintスキーマの存在確認、
+変更26ファイルのUTF-8 BOMなし／LF確認、測定方式・計画hashの照合、git diff --checkにも成功した。
