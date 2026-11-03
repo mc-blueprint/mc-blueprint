@@ -10,8 +10,7 @@ output/*
 !output/.gitkeep
 preview/
 
-# Minecraft data generator output (scripts/generate_block_data.py)
-generated/
+# Minecraft assets（再配布しない）
 *.jar
 
 # Python

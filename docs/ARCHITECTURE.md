@@ -71,9 +71,9 @@ src/mcblueprint/
 ├─ schema/
 │  └─ blueprint.schema.json   パッケージ同梱の JSON Schema（リポジトリの schema/ と同一）
 └─ data/
-   ├─ versions.json     { "<minecraftVersion>": { "dataVersion": <int> } }
+   ├─ lock.json         同梱データの出所・版・commit・SHA-256
    ├─ colors.json       プレビュー用の近似色
-   └─ blocks/<minecraftVersion>.json
+   └─ blockdata/        blockdata-<minecraftVersion>.json と固定版スキーマ
 ```
 
 依存の向き: `cli` → `loader` / `validator` / `generator` / `exporters` → `operations` / `volume` / `model` / `blockdata`。下位モジュールは上位を import しない。
@@ -380,26 +380,11 @@ Litematica 用の `.litematic`。ルート Compound は無名、gzip 圧縮。1 
 
 ## 10. ブロックデータ（`blockdata.py`, `data/`）
 
-- `data/blocks/<version>.json`:
-
-```json
-{
-  "minecraft:oak_stairs": {
-    "properties": {
-      "facing": ["north", "south", "west", "east"],
-      "half": ["top", "bottom"],
-      "shape": ["straight", "inner_left", "inner_right", "outer_left", "outer_right"],
-      "waterlogged": ["true", "false"]
-    },
-    "default": { "facing": "north", "half": "bottom", "shape": "straight", "waterlogged": "false" }
-  }
-}
-```
-
-- `data/versions.json`: `{ "1.21.11": { "dataVersion": <int> }, "26.3": { ... } }`
-- 生成は `scripts/generate_block_data.py` で Mojang 公式データジェネレータ（`java -DbundlerMainClass=net.minecraft.data.Main -jar server.jar --reports`）の `reports/blocks.json` と `server.jar` 内 `version.json` の `world_version` から行う。生成結果をコミットし、利用者には Java を要求しない。
-- API: `supported_versions() -> list[str]`, `load_block_data(version) -> dict`, `data_version(version) -> int`, `version_for_data_version(int) -> str | None`, `nearest_version(int) -> str`（DataVersion がちょうど一致しないファイルの読み込み先）。読み込みは `functools.cache` で 1 回だけ行う。
-- 同梱バージョンは `versions.json` の順（数値順）で並び、新しいバージョンは古いバージョンのブロックをすべて含むことをテストで保証する（[VERSIONS.md](VERSIONS.md)）。
+- `data/blockdata/blockdata-<version>.json` は mc-blueprint-blockdata の GitHub Release 資産をバイト列のまま同梱する。blockdata v1 の `blocks` にIDごとの `properties`・`default`、トップレベルに `minecraftVersion`・`dataVersion` を持つ。色・材質などの追加属性も含むが、ブロック検証は従来の情報だけを使う。
+- `data/lock.json` の `blockdata` に repository・version・commit・各ファイルの `sha256` を記録する。生成は提供元で行い、利用者に Java を要求しない。
+- スキーマの正本は提供元の `src/mcblockdata/blockdata.schema.json`。固定commitのコピーを `data/blockdata/blockdata.schema.json` に1部だけ置き、lockで固定する。テストでは既存の jsonschema を使い、スキーマ・出所・SHA-256をオフラインで検証する。
+- API: `supported_versions() -> list[str]`, `load_block_data(version) -> BlockData`, `data_version(version) -> int`, `version_for_data_version(int) -> str | None`, `nearest_version(int) -> str`（DataVersion がちょうど一致しないファイルの読み込み先）。`BlockInfo` は従来どおりID・許可プロパティ・既定値を返す。読み込みは `functools.cache` で 1 回だけ行う。
+- 版一覧はlockのファイル一覧と各JSONの `minecraftVersion`・`dataVersion` から導き、DataVersionの昇順にする。新しいバージョンが古いバージョンのブロックをすべて含むことをテストで保証する（[VERSIONS.md](VERSIONS.md)）。
 
 ## 11. CLI（`cli.py`）
 
@@ -477,7 +462,7 @@ mcblueprint import <file.schem|.litematic> [-o FILE] [--name NAME] [--minecraft-
 1. `read_schematic()` が `.schem`（Sponge v1 / v2 / v3）または `.litematic`（単一リージョン）を読み、`BlockVolume`・貼り付けオフセット・`DataVersion` を得る。air は未設定として扱う。
 2. `greedy_boxes()` が同一ブロック状態のセルを x → z → y の順に貪欲にまとめ、直方体の列にする。
 3. `to_blueprint()` が `fill`（1 セルなら `set`）の Blueprint JSON を作る。座標は「ローカル座標 + オフセット」、`origin` は `[0, 0, 0]` なので、build すると元と同じ位置に貼り付く。プロパティはブロックデータのデフォルトと同じものを省いて短くする。
-4. `minecraftVersion` は `DataVersion` から `versions.json` を逆引きする。一致するものがなければ `blockdata.nearest_version()`（その DataVersion より新しくない最も近い同梱バージョン。どれより古ければ最も古いもの）を使い、その旨と `--minecraft-version` の案内を表示する。`DataVersion` 自体がないファイルは `--minecraft-version` を要求する。
+4. `minecraftVersion` は `DataVersion` から同梱blockdataの版一覧を逆引きする。一致するものがなければ `blockdata.nearest_version()`（その DataVersion より新しくない最も近い同梱バージョン。どれより古ければ最も古いもの）を使い、その旨と `--minecraft-version` の案内を表示する。`DataVersion` 自体がないファイルは `--minecraft-version` を要求する。
 5. 書き出し後に validate し、MOD ブロックなど未知の ID があれば表示して終了コード `1`（ファイルは書き出す）。
 
 出力は既定で `blueprints/<stem>.json`。高レベル Operation への復元（`wall` や `cylinder` として認識する）は行わない。
