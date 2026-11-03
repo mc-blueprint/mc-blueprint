@@ -184,10 +184,14 @@ Gemini CLI、Cursor、ローカル LLM などでも、次を守れば同じ Core
 
 新規の住宅・塔は `mcblueprint archetypes` で対応語彙を確認し、
 `mcblueprint spec-template house --minecraft-version <版>` または `tower` の出力を YAML に保存して編集します。
-`mcblueprint make <spec.yaml> --emit blueprint` で生成・最小評価・単一出力まで実行できます。
+`mcblueprint make <spec.yaml> --emit blueprint` で生成・実測評価・単一出力まで実行できます。
 診断に示された BuildSpec 項目だけを直し、失敗時はコードと要素IDを含む診断を確認します。
 評価不合格の終了コード3でも成果物と failed 状態の run 記録が出ます。
-`not-implemented` は修正目標にせず報告してください。3回試行、同じ診断コードが連続2回改善しない、
+柱・梁の欠損（E101）は終了コード1で公開を止めます。通常生成の欠損はエンジン不具合として報告し、
+推測で設定を変えません。WARNのみは0、引数・入出力・資源不足は2です。
+診断の `repairPaths` に従い、E201は奥行き・密度、E202は装飾密度、E203は欠け・該当override、
+E305（WARN）は壁材の混合を調整します。指標と診断の契約は [EVALUATION.md](EVALUATION.md#makeの実測品質診断) を参照してください。
+3回試行、同じ診断コードが連続2回改善しない、
 または `unsupported` だけが残ったときは停止します。画像は必要な場合だけ
 `mcblueprint preview <emitされたBlueprint.json> --views isometric` で確認します。Operation の詳細は
 `mcblueprint help operations`、BuildSpec の手順は `mcblueprint help buildspec` を参照します。
@@ -195,4 +199,4 @@ Gemini CLI、Cursor、ローカル LLM などでも、次を守れば同じ Core
 
 Skill 本体の長さは tiktoken 0.9.0 の `o200k_base` で **測定後に記録**します。
 これは固定版 tokenizer による代理指標で、Claude の実トークン数ではありません。tiktoken 0.9.0 / o200k_base:
-Codex 800 tokens、Claude Code 800 tokens.
+Codex 927 tokens、Claude Code 927 tokens（各2000以内）。

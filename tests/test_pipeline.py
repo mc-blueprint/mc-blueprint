@@ -4,6 +4,7 @@ import base64
 import gzip
 import hashlib
 import json
+from dataclasses import replace
 from pathlib import Path
 
 import numpy as np
@@ -15,6 +16,7 @@ from mcblueprint.cli import main
 from mcblueprint.errors import BlueprintError
 from mcblueprint.importers import read_schematic
 from mcblueprint.model import BlockState, Vec3
+from mcblueprint.volume import CellAttributes
 
 FIXTURES = Path(__file__).parent / "data/buildspec"
 VERSIONS = ("1.21.11", "26.1.2", "26.2", "26.3")
@@ -70,7 +72,8 @@ def test_fixed_cases_make_matrix(tmp_path, capsys, version, format, archetype):
     spec = spec_file(tmp_path, archetype, version)
     path = tmp_path / f"result.{format}"
     code = main(["make", str(spec), "--format", format, "-o", str(path)])
-    assert code == 0, capsys.readouterr().out
+    # Detail装飾が未接続の基準計画は、実測した平坦率で品質不合格になる。
+    assert code == 3, capsys.readouterr().out
     assert cells(path)
     expected = {tuple(pos): state for pos, state in cells(path).items()}
     scene_path = path.with_name(f"{path.stem}.scene.json.gz")
@@ -80,7 +83,12 @@ def test_fixed_cases_make_matrix(tmp_path, capsys, version, format, archetype):
     assert scene_meta["sceneSha256"] == hashlib.sha256(scene_bytes).hexdigest()
     assert scene_meta["inputSha256"] == hashlib.sha256(spec.read_bytes()).hexdigest()
     record = json.loads(path.with_suffix(path.suffix + ".run.json").read_text(encoding="utf-8"))
-    assert record["status"] == "passed"
+    assert record["status"] == "failed"
+    assert record["metrics"]["column_continuity"]["value"] == 1
+    assert record["metrics"]["beam_continuity"]["value"] == 1
+    assert record["metrics"]["decoration_density"]["status"] == "n/a"
+    assert any(d["code"] == "E201" for d in record["structuredDiagnostics"])
+    assert not any(d["code"] in ("E101", "E203") for d in record["structuredDiagnostics"])
     assert record["preview"] == "not-run"
     routes = [line for line in record["diagnostics"] if "walkability=" in line]
     assert len(routes) == (2 if archetype == "house" else 4)
@@ -103,6 +111,7 @@ def test_emit_build_and_every_resume_generate_once(tmp_path, monkeypatch, archet
     first = pipeline.make(source, output=tmp_path / "first.schem", emit=["blueprint"])
     expected = cells(first.output)
     expected_scene = (tmp_path / "first.scene.json.gz").read_bytes()
+    expected_metrics = json.loads(first.record.read_text(encoding="utf-8"))["metrics"]
     assert any("mossy_stone_bricks" in state for state in expected.values())
     concrete = tmp_path / "first.blueprint.json"
     assert main(["validate", str(concrete)]) == 0
@@ -117,6 +126,7 @@ def test_emit_build_and_every_resume_generate_once(tmp_path, monkeypatch, archet
         assert cells(result.output) == expected
         assert (tmp_path / f"{stage}.scene.json.gz").read_bytes() == expected_scene
         assert result.code == first.code
+        assert json.loads(result.record.read_text(encoding="utf-8"))["metrics"] == expected_metrics
     materialized = json.loads(concrete.read_text(encoding="utf-8"))
     assert materialized["metadata"]["planning"]["element"] == f"{archetype}#1"
     assert materialized["seed"] == 42
@@ -180,6 +190,8 @@ def test_seed_variation_fixed_ids_and_region_invariance(tmp_path):
     assert (tmp_path / "first.scene.json.gz").read_bytes() == (
         tmp_path / "split.scene.json.gz"
     ).read_bytes()
+    assert json.loads(first.record.read_text(encoding="utf-8"))["metrics"] == json.loads(
+        split.record.read_text(encoding="utf-8"))["metrics"]
     fixed = {"wall_main": "minecraft:stone_bricks", "frame": "minecraft:oak_log",
              "roof": "minecraft:oak_planks", "floor": "minecraft:oak_planks"}
     source = spec_file(tmp_path, materials=fixed,
@@ -198,7 +210,7 @@ def test_core_16_32_64_produce_identical_cells(tmp_path):
             source, output=tmp_path / f"core-{core}.schem",
             overrides=[f"limits.region=[{core},{core},{core}]", "limits.halo=0"],
         )
-        assert result.code == 0
+        assert result.code == 3
         outputs.append(cells(result.output))
     assert outputs[0] == outputs[1] == outputs[2]
 
@@ -239,8 +251,9 @@ def test_evaluation_failed_keeps_artifacts_and_diagnostics(tmp_path, capsys):
     assert "FAIL palette_relation" in capsys.readouterr().out
     record = json.loads(output.with_suffix(".schem.run.json").read_text(encoding="utf-8"))
     assert record["status"] == "failed"
-    assert all("not-implemented" in line for line in record["diagnostics"]
-               if any(metric in line for metric in ("flat_ratio", "column_continuity")))
+    assert all("not-implemented" not in line for line in record["diagnostics"])
+    assert record["metrics"]["flat_ratio"]["denominator"] > 0
+    assert record["metrics"]["column_continuity"]["value"] == 1
 
 
 def test_spool_traversal_limits_and_status(tmp_path):
@@ -350,6 +363,155 @@ def test_critic_distinguishes_blocked_and_unsupported(tmp_path, monkeypatch, blo
     assert result.code == 3
     assert any(f"walkability={status}" in line for line in result.diagnostics)
     assert result.output.exists()
+
+
+@pytest.mark.parametrize("fixed", (False, True))
+def test_measured_success_and_warning_only(tmp_path, monkeypatch, fixed):
+    source = spec_file(tmp_path)
+    convert = pipeline.plan_from_metadata
+    generate = pipeline.generated_blueprint_regions
+    selected = []
+
+    def planned(*args, **kwargs):
+        plan = convert(*args, **kwargs)
+        facade = plan.facades[0]
+        cells = tuple(c for c in facade.cells if c.v == 0 and not c.opening and c.u < 4)
+        selected.extend(cells)
+        return replace(plan, facades=(replace(facade, cells=cells),),
+                       fixed_roles=frozenset({"wall_main"}) if fixed else frozenset())
+
+    def sculpted(*args, **kwargs):
+        for region in generate(*args, **kwargs):
+            for cell in selected:
+                if region.core.contains(cell.pos):
+                    attr = region.volume.attributes(cell.pos)
+                    if attr.reserved is None:
+                        region.volume.set(cell.pos, BlockState.of("stone"), attr)
+                pos = cell.pos + Vec3(0, 0, -1)
+                if cell.u % 2 == 0 and region.core.contains(pos):
+                    region.volume.set(pos, BlockState.of("stone"), CellAttributes(
+                        role="wall_main", face="north", element="house#1.facade.north.floor#1"))
+            yield region
+
+    monkeypatch.setattr(pipeline, "plan_from_metadata", planned)
+    monkeypatch.setattr(pipeline, "generated_blueprint_regions", sculpted)
+    result = pipeline.make(source, output=tmp_path / "passed.schem")
+    assert result.code == 0
+    record = json.loads(result.record.read_text(encoding="utf-8"))
+    assert record["status"] == "passed"
+    assert record["metrics"]["flat_ratio"]["value"] == 0
+    assert any(d["code"] == "E305" for d in record["structuredDiagnostics"]) is not fixed
+    assert all(d["severity"] in ("ok", "warn") for d in record["structuredDiagnostics"])
+
+
+@pytest.mark.parametrize("failure", ("structure", "attributes", "memory", "measurement", "plan"))
+def test_critic_failure_preserves_existing_artifacts(tmp_path, monkeypatch, failure):
+    source = spec_file(tmp_path)
+    output = tmp_path / "keep.schem"
+    targets = (output, output.with_suffix(".schem.run.json"),
+               tmp_path / "keep.scene.json.gz", tmp_path / "keep.scene.json.gz.meta.json")
+    for target in targets:
+        target.write_bytes(b"existing")
+    original = pipeline.generated_blueprint_regions
+
+    def broken(blueprint, **kwargs):
+        point = Vec3.from_seq(blueprint.metadata["planning"]["columns"][0]["from"])
+        for region in original(blueprint, **kwargs):
+            if region.core.contains(point):
+                attr = region.volume.attributes(point)
+                if failure == "structure":
+                    region.volume.set(point, BlockState.of("air"), attr)
+                elif failure == "attributes":
+                    # 予約ownerを保ったまま、frame属性だけを破壊する。
+                    region.volume.set(point, region.volume.get(point), replace(attr, role=None))
+            yield region
+
+    if failure in ("structure", "attributes"):
+        monkeypatch.setattr(pipeline, "generated_blueprint_regions", broken)
+    elif failure == "plan":
+        def absent(*args, **kwargs):
+            raise BlueprintError("Critic計画に期待柱がありません")
+        monkeypatch.setattr(pipeline, "plan_from_metadata", absent)
+    else:
+        def fail(self, region):
+            if failure == "memory":
+                raise MemoryError("Criticメモリ不足")
+            raise ValueError("計測失敗")
+        monkeypatch.setattr(pipeline.CriticAccumulator, "consume", fail)
+    with pytest.raises(pipeline.PipelineError) as exc:
+        pipeline.make(source, output=output)
+    assert exc.value.code == (2 if failure == "memory" else 1)
+    if failure in ("structure", "attributes"):
+        assert "E101" in str(exc.value)
+    assert all(target.read_bytes() == b"existing" for target in targets)
+    assert not list(tmp_path.glob(".keep.schem-*"))
+
+
+@pytest.mark.parametrize("archetype,shape", (("house", None), ("tower", "round"),
+                                            ("tower", "square")))
+@pytest.mark.parametrize("angle", (0, 90))
+def test_plan_conversion_invariants(tmp_path, archetype, shape, angle):
+    values = {"elements": {f"{archetype}#1": {"angle": angle}}}
+    if shape:
+        values["features"] = {"shape": shape, "floors": 3, "floor_height": 4}
+    source = spec_file(tmp_path, archetype, **values)
+    result = pipeline.make(source, output=tmp_path / "shape.schem")
+    record = json.loads(result.record.read_text(encoding="utf-8"))
+    assert record["metrics"]["column_continuity"]["value"] == 1
+    assert record["metrics"]["beam_continuity"]["value"] == 1
+    assert record["metrics"]["facade_surface_missing"]["value"] == 0
+    assert record["metrics"]["flat_ratio"]["denominator"] > 0
+
+
+def test_structured_repair_paths_resolve(tmp_path):
+    from mcblueprint.buildspec import resolve_buildspec
+
+    source = spec_file(tmp_path, materials={
+        "wall_main": "minecraft:oak_planks", "roof": "minecraft:oak_planks",
+        "frame": "minecraft:oak_planks", "floor": "minecraft:oak_planks",
+    })
+    result = pipeline.make(source, output=tmp_path / "paths.schem")
+    record = json.loads(result.record.read_text(encoding="utf-8"))
+    fields = {"code", "metric", "severity", "element", "source", "actual", "expected",
+              "repairPaths"}
+    for diagnostic in record["structuredDiagnostics"]:
+        assert fields <= diagnostic.keys()
+        assert pipeline._diagnostic_line(diagnostic) in record["diagnostics"]
+        for path in diagnostic["repairPaths"]:
+            assert path.startswith("config.")
+            key = path.removeprefix("config.")
+            value = record["config"]
+            for part in key.split("."):
+                value = value[part]
+            override = f"{key}={yaml.safe_dump(value).splitlines()[0]}"
+            resolve_buildspec(source, overrides=[override])
+
+
+def test_missing_facade_attributes_are_quality_failure(tmp_path, monkeypatch):
+    source = spec_file(tmp_path)
+    generate = pipeline.generated_blueprint_regions
+    removed = []
+
+    def broken(*args, **kwargs):
+        for region in generate(*args, **kwargs):
+            if not removed:
+                for pos, state in region.volume:
+                    attr = region.volume.attributes(pos)
+                    if (region.core.contains(pos) and attr.face == "north"
+                            and attr.role == "wall_main" and attr.reserved is None):
+                        region.volume.set(pos, state, CellAttributes())
+                        removed.append(pos)
+                        break
+            yield region
+
+    monkeypatch.setattr(pipeline, "generated_blueprint_regions", broken)
+    result = pipeline.make(source, output=tmp_path / "missing.schem")
+    assert removed and result.code == 3
+    record = json.loads(result.record.read_text(encoding="utf-8"))
+    assert record["status"] == "failed"
+    missing = [d for d in record["structuredDiagnostics"] if d["code"] == "E203"]
+    assert missing and missing[0]["face"] == "north"
+    assert missing[0]["repairPaths"] == ["config.weathering.missing_blocks"]
 
 
 def test_templates_and_help_match_resolve(tmp_path, capsys):
