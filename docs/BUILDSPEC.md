@@ -1,6 +1,6 @@
 # BuildSpec v1
 
-BuildSpecは生成条件を記述するYAMLです。`minecraftVersion` は必須です。省略値はhouse、medieval、small、seed `0`、site `{terrain: none, biome: plains}`、interior `minimal` です。
+BuildSpecは生成条件を記述するYAMLです。`minecraftVersion` は必須です。省略値はhouse、medieval、small、seed `0`、site `{terrain: none, biome: plains}`、interior `minimal` です。トップレベルのseedを省略した場合は、設定層のseedを使ってから既定値 `0` を適用します。
 
 ```yaml
 minecraftVersion: "26.3"
