@@ -5,6 +5,7 @@ import gzip
 import hashlib
 import json
 import multiprocessing
+from contextlib import contextmanager
 from dataclasses import replace
 from pathlib import Path
 
@@ -138,6 +139,111 @@ def _hold_generation_paths(source, output, ready, release):
         ready.set()
         if not release.wait(30):
             raise TimeoutError("ロック検証の解放待ちがタイムアウトしました")
+
+
+def _update_generation_input(source, ready, result):
+    from mcblueprint.output_lock import lock_paths
+
+    if not ready.wait(30):
+        raise TimeoutError("入力更新の開始待ちがタイムアウトしました")
+    try:
+        with lock_paths(Path(source)):
+            data = yaml.safe_load(Path(source).read_bytes())
+            data["seed"] = 42
+            Path(source).write_text(yaml.safe_dump(data), encoding="utf-8", newline="\n")
+        result.put("updated")
+    except BlockingIOError:
+        result.put("conflict")
+
+
+def test_make_keeps_input_generation_across_process_update(tmp_path, monkeypatch):
+    source = spec_file(tmp_path, seed=0)
+    ctx = multiprocessing.get_context("spawn")
+    ready, result = ctx.Event(), ctx.Queue()
+    process = ctx.Process(target=_update_generation_input, args=(str(source), ready, result))
+    resolve = pipeline.resolve_buildspec
+    outcomes = []
+
+    def resolve_then_update(*args, **kwargs):
+        resolved = resolve(*args, **kwargs)
+        ready.set()
+        outcomes.append(result.get(timeout=10))
+        return resolved
+
+    monkeypatch.setattr(pipeline, "resolve_buildspec", resolve_then_update)
+    process.start()
+    try:
+        made = pipeline.make(source, output=tmp_path / "result.schem")
+        record = json.loads(made.record.read_bytes())
+        meta = json.loads((tmp_path / "result.scene.json.gz.meta.json").read_bytes())
+        scene = json.loads(gzip.decompress((tmp_path / "result.scene.json.gz").read_bytes()))
+        assert record["seed"] == yaml.safe_load(source.read_bytes())["seed"]
+        digest = hashlib.sha256(source.read_bytes()).hexdigest()
+        assert record["input"]["sha256"] == meta["inputSha256"] == digest
+        assert scene["source"]["sha256"] == digest
+        assert outcomes == ["conflict"]
+    finally:
+        ready.set()
+        process.join(10)
+        if process.is_alive():
+            process.terminate()
+            process.join(10)
+        result.close()
+        result.join_thread()
+    assert process.exitcode == 0
+
+
+@pytest.mark.parametrize(("options", "expected"), [
+    (["palette.materials.wall_main=minecraft:stone", "palette.materials={}"], {}),
+    (["palette.materials.wall_main=minecraft:stone",
+      "palette.materials={roof: minecraft:oak_planks}"], {"roof": "minecraft:oak_planks"}),
+    (["palette.materials={}", "palette.materials.wall_main=minecraft:stone"],
+     {"wall_main": "minecraft:stone"}),
+])
+def test_make_records_parent_cli_override_without_removed_child(tmp_path, options, expected):
+    source = spec_file(tmp_path)
+    made = pipeline.make(source, output=tmp_path / "result.schem", overrides=options)
+    meta = json.loads((tmp_path / "result.scene.json.gz.meta.json").read_bytes())
+    assert made.code in (0, 3)
+    assert meta["cliOverrides"] == {"palette.materials": expected}
+
+
+@pytest.mark.parametrize("timing", ["relock", "publish"])
+def test_make_rejects_changed_input_without_replacing_outputs(tmp_path, monkeypatch, timing):
+    from mcblueprint import output_lock
+
+    source = spec_file(tmp_path, seed=0)
+    target = tmp_path / "result.schem"
+    outputs = [target, target.with_suffix(".schem.run.json"),
+               tmp_path / "result.scene.json.gz", tmp_path / "result.scene.json.gz.meta.json"]
+    for path in outputs:
+        path.write_bytes(b"existing")
+    lock_paths = output_lock.lock_paths
+
+    def update():
+        data = yaml.safe_load(source.read_bytes())
+        data["seed"] = 42
+        source.write_text(yaml.safe_dump(data), encoding="utf-8", newline="\n")
+
+    @contextmanager
+    def update_before_lock(*paths):
+        if timing == "relock" and len(paths) == 2:
+            with lock_paths(source):
+                update()
+        with lock_paths(*paths):
+            yield
+
+    def hook(stage):
+        if timing == "publish" and stage == "Export":
+            update()
+
+    monkeypatch.setattr(output_lock, "lock_paths", update_before_lock)
+    with pytest.raises(pipeline.PipelineError, match="入力が変更") as exc:
+        pipeline.make(source, output=target, stage_hook=hook)
+    assert exc.value.code == 2
+    assert all(path.read_bytes() == b"existing" for path in outputs)
+    with lock_paths(source, target):
+        pass
 
 
 @pytest.mark.parametrize("entry", ["python", "cli"])
