@@ -14,10 +14,10 @@
 
 ## 建築を依頼されたとき（ツールキットの利用）
 
-- 建築は必ず Blueprint JSON（`blueprints/<name>.json`）で作成する。`.schem` や `.litematic` を直接生成・編集しない。
-- `minecraft-blueprint` skill（Codex: `.agents/skills/`、Claude Code: `.claude/skills/`）に従い、Blueprint 作成 → `mcblueprint validate` → エラー修正 → `mcblueprint build` の順で進める。手順の全体は `docs/AI_GUIDE.md`。
+- 新しい住宅・塔は `minecraft-blueprint` skill（Codex: `.agents/skills/`、Claude Code: `.claude/skills/`）に従い、BuildSpec を作成して `mcblueprint make` で生成・評価する。手順の全体は `docs/AI_GUIDE.md` を参照する。
+- 細部の修正や `mcblueprint archetypes` に無い建物（make が未対応のもの）は、従来どおり Blueprint JSON（`blueprints/<name>.json`）を作成・編集し、`mcblueprint validate` → エラー修正 → `mcblueprint build` の順で扱う。
+- `.schem` や `.litematic` を直接生成・編集しない。Blueprint はブロック配置を宣言するデータであり、コマンドやスクリプトを埋め込まない。
 - 検証エラーが残った状態で build しない。
-- Blueprint はブロック配置を宣言するデータであり、コマンドやスクリプトを埋め込まない。
 - 仕様は `docs/FORMAT.md` と `docs/OPERATIONS.md` を正とする。
 
 ## 開発を依頼されたとき（ツールキット自体の変更）
