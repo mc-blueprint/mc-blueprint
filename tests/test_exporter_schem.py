@@ -3,12 +3,13 @@ from pathlib import Path
 from typing import Any
 
 import nbtlib
+import numpy as np
 import pytest
 
 from mcblueprint import blockdata
 from mcblueprint.errors import BlueprintError
 from mcblueprint.exporters import EXPORTERS, SchemExporter
-from mcblueprint.exporters.schem import encode_varint
+from mcblueprint.exporters.schem import _encode_varints, encode_varint
 from mcblueprint.generator import generate
 from mcblueprint.loader import load_blueprint_dict
 from mcblueprint.model import BlockState, Vec3
@@ -47,6 +48,14 @@ def decode_varints(data: list[int]) -> list[int]:
 
 
 class TestVarint:
+    def test_array_encoding_preserves_scalar_bytes(self) -> None:
+        values = np.array([
+            0, 127, 128, 16383, 16384, (1 << 21) - 1, 1 << 21,
+            (1 << 28) - 1, 1 << 28, (1 << 32) - 1, 1, 0,
+        ], dtype=np.uint32)
+        expected = bytes(byte for value in values for byte in encode_varint(int(value)))
+        assert _encode_varints(values) == expected
+
     @pytest.mark.parametrize(
         ("value", "expected"),
         [

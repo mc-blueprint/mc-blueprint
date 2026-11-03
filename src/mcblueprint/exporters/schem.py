@@ -5,14 +5,15 @@ from __future__ import annotations
 from collections.abc import Iterable
 from pathlib import Path
 
+import numpy as np
 from nbtlib import ByteArray, Compound, File, Int, IntArray, Short
 
 from mcblueprint import blockdata
 from mcblueprint.errors import BlueprintError
-from mcblueprint.exporters.base import Exporter
+from mcblueprint.exporters.base import Exporter, indexed_rows, remap_rows, save_atomic
 from mcblueprint.model.block import BlockState
 from mcblueprint.model.blueprint import Blueprint
-from mcblueprint.model.vec import Vec3
+from mcblueprint.model.vec import AABB
 from mcblueprint.volume import BlockVolume
 
 AIR = BlockState.parse("minecraft:air")
@@ -35,6 +36,26 @@ def to_signed_byte(byte: int) -> int:
     return byte - 256 if byte > 127 else byte
 
 
+def _encode_varints(values: np.ndarray) -> bytes:
+    """添字の1行を、セル順を保つ可変長byte列へ変換する。"""
+    maximum = int(values.max())
+    if maximum < 128:
+        return values.astype(np.uint8).tobytes()
+    width = (maximum.bit_length() + 6) // 7
+    lengths = np.ones(len(values), dtype=np.intp)
+    for part in range(1, width):
+        lengths += values >= (1 << (7 * part))
+    starts = np.cumsum(lengths) - lengths
+    packed = np.empty(int(lengths.sum()), dtype=np.uint8)
+    for part in range(width):
+        mask = lengths > part
+        packed[starts[mask] + part] = (
+            ((values[mask] >> (7 * part)) & 0x7F)
+            | np.where(lengths[mask] > part + 1, 0x80, 0)
+        )
+    return packed.tobytes()
+
+
 class SchemExporter(Exporter):
     format = "schem"
     extension = ".schem"
@@ -43,6 +64,15 @@ class SchemExporter(Exporter):
         bounds = volume.bounds()
         if bounds is None:
             raise BlueprintError("Nothing to export: no blocks were generated")
+        palette = [None, *volume.palette]
+        self.export_rows(indexed_rows(volume, bounds, palette), bounds, blueprint, out_path,
+                         palette=palette)
+
+    def export_rows(
+        self, rows: Iterable[np.ndarray], bounds: AABB,
+        blueprint: Blueprint, out_path: Path, *, palette: list[BlockState | None],
+    ) -> None:
+        """boundsを覆うY/Z/X順の添字行とpaletteを出力する。Noneはair。"""
         size = bounds.size
         if max(size.x, size.y, size.z) > MAX_SHORT:
             raise BlueprintError(f"Structure too large for .schem: {size.x} x {size.y} x {size.z}")
@@ -51,7 +81,8 @@ class SchemExporter(Exporter):
         palette_index: dict[str, int] = {}
         palette_of: dict[BlockState, int] = {}
 
-        def index_for(state: BlockState) -> int:
+        def index_for(state: BlockState | None) -> int:
+            state = AIR if state is None else state
             index = palette_of.get(state)
             if index is None:
                 exported = state if blueprint.terrain is not None else blocks.complete(state)
@@ -61,11 +92,8 @@ class SchemExporter(Exporter):
             return index
 
         data = bytearray()
-        for y in range(bounds.min.y, bounds.max.y + 1):
-            for z in range(bounds.min.z, bounds.max.z + 1):
-                for x in range(bounds.min.x, bounds.max.x + 1):
-                    state = volume.get(Vec3(x, y, z))
-                    data.extend(encode_varint(index_for(AIR if state is None else state)))
+        for row in remap_rows(rows, palette, index_for):
+            data.extend(_encode_varints(row))
 
         offset = bounds.min - blueprint.origin
         root = Compound(
@@ -78,7 +106,7 @@ class SchemExporter(Exporter):
                 "Offset": IntArray([offset.x, offset.y, offset.z]),
                 "Palette": Compound({key: Int(i) for key, i in palette_index.items()}),
                 "PaletteMax": Int(len(palette_index)),
-                "BlockData": ByteArray([to_signed_byte(b) for b in data]),
+                "BlockData": ByteArray(np.frombuffer(data, dtype=np.int8)),
                 "Metadata": Compound(
                     {
                         "WEOffsetX": Int(offset.x),
@@ -88,6 +116,4 @@ class SchemExporter(Exporter):
                 ),
             }
         )
-        out_path = Path(out_path)
-        out_path.parent.mkdir(parents=True, exist_ok=True)
-        File(root, gzipped=True, root_name="Schematic").save(str(out_path))
+        save_atomic(File(root, gzipped=True, root_name="Schematic"), out_path)

@@ -4,16 +4,18 @@ from __future__ import annotations
 
 import math
 import time
+from collections.abc import Iterable, Sequence
 from pathlib import Path
 
+import numpy as np
 from nbtlib import Compound, File, Int, List, Long, LongArray, String
 
 from mcblueprint import blockdata
 from mcblueprint.errors import BlueprintError
-from mcblueprint.exporters.base import Exporter
+from mcblueprint.exporters.base import Exporter, indexed_rows, remap_rows, save_atomic
 from mcblueprint.model.block import BlockState
 from mcblueprint.model.blueprint import Blueprint
-from mcblueprint.model.vec import Vec3
+from mcblueprint.model.vec import AABB, Vec3
 from mcblueprint.volume import BlockVolume
 
 AIR = BlockState.parse("minecraft:air")
@@ -21,23 +23,23 @@ LITEMATIC_VERSION = 6
 REGION_NAME = "Main"
 
 
-def pack_bit_array(values: list[int], bits: int) -> list[int]:
-    """Litematica bit packing: entries straddle long boundaries; returns signed longs."""
+def pack_bit_array(values: Sequence[int] | np.ndarray, bits: int) -> np.ndarray:
+    """境界をまたぐLitematicaのpackingを行い、符号付き64bit配列を返す。"""
     total_bits = len(values) * bits
-    longs = [0] * math.ceil(total_bits / 64)
-    for index, value in enumerate(values):
-        start = index * bits
-        word, offset = divmod(start, 64)
-        longs[word] |= (value << offset) & 0xFFFFFFFFFFFFFFFF
-        end_word = (start + bits - 1) // 64
-        if end_word != word:
-            longs[end_word] |= value >> (64 - offset)
-    return [w - (1 << 64) if w >= (1 << 63) else w for w in longs]
+    longs = np.zeros(math.ceil(total_bits / 64), dtype=np.uint64)
+    for start in range(0, len(values), 65536):
+        chunk = np.asarray(values[start:start + 65536], dtype=np.uint64)
+        positions = np.arange(start, start + len(chunk), dtype=np.uint64) * bits
+        words, offsets = positions // 64, positions % 64
+        np.bitwise_or.at(longs, words, chunk << offsets)
+        crossing = offsets + bits > 64
+        np.bitwise_or.at(longs, words[crossing] + 1, chunk[crossing] >> (64 - offsets[crossing]))
+    return longs.view(np.int64)
 
 
 def unpack_bit_array(longs: list[int], bits: int, count: int) -> list[int]:
     """Inverse of :func:`pack_bit_array` (used by tests and future importers)."""
-    words = [w & 0xFFFFFFFFFFFFFFFF for w in longs]
+    words = [int(w) & 0xFFFFFFFFFFFFFFFF for w in longs]
     mask = (1 << bits) - 1
     values = []
     for index in range(count):
@@ -74,14 +76,25 @@ class LitematicExporter(Exporter):
         bounds = volume.bounds()
         if bounds is None:
             raise BlueprintError("Nothing to export: no blocks were generated")
+        palette = [None, *volume.palette]
+        self.export_rows(indexed_rows(volume, bounds, palette), bounds, blueprint, out_path,
+                         palette=palette)
+
+    def export_rows(
+        self, rows: Iterable[np.ndarray], bounds: AABB,
+        blueprint: Blueprint, out_path: Path, *, palette: list[BlockState | None],
+    ) -> None:
+        """boundsを覆うY/Z/X順の添字行とpaletteを出力する。Noneはair。"""
         size = bounds.size
         blocks = blockdata.load_block_data(blueprint.minecraft_version)
 
         # palette index 0 is always air (Litematica treats it as the empty state)
+        input_palette = palette
         palette: list[BlockState] = [AIR]
         palette_of: dict[BlockState, int] = {AIR: 0}
 
-        def index_for(state: BlockState) -> int:
+        def index_for(state: BlockState | None) -> int:
+            state = AIR if state is None else state
             index = palette_of.get(state)
             if index is None:
                 index = len(palette)
@@ -89,19 +102,13 @@ class LitematicExporter(Exporter):
                 palette_of[state] = index
             return index
 
-        indices: list[int] = []
+        indices = np.empty(bounds.volume, dtype=np.uint32)
         non_air = 0
-        for y in range(bounds.min.y, bounds.max.y + 1):
-            for z in range(bounds.min.z, bounds.max.z + 1):
-                for x in range(bounds.min.x, bounds.max.x + 1):
-                    state = volume.get(Vec3(x, y, z))
-                    if state is None:
-                        indices.append(0)
-                        continue
-                    index = index_for(state)
-                    indices.append(index)
-                    if index != 0:
-                        non_air += 1
+        cursor = 0
+        for row in remap_rows(rows, input_palette, index_for):
+            indices[cursor:cursor + len(row)] = row
+            cursor += len(row)
+            non_air += int(np.count_nonzero(row))
 
         bits = bits_for(len(palette))
         now = Long(int(time.time() * 1000))
@@ -137,6 +144,4 @@ class LitematicExporter(Exporter):
                 "Regions": Compound({REGION_NAME: region}),
             }
         )
-        out_path = Path(out_path)
-        out_path.parent.mkdir(parents=True, exist_ok=True)
-        File(root, gzipped=True, root_name="").save(str(out_path))
+        save_atomic(File(root, gzipped=True, root_name=""), out_path)

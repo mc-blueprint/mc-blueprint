@@ -57,6 +57,11 @@ class TestBitArray:
         assert longs[0] == -1  # all 64 bits set
         assert unpack_bit_array(longs, 3, 22) == values
 
+    @pytest.mark.parametrize("bits", [3, 7, 13, 31])
+    def test_packing_chunk_boundary(self, bits: int) -> None:
+        values = [(i * 7919) % (1 << bits) for i in range(65551)]
+        assert unpack_bit_array(pack_bit_array(values, bits), bits, len(values)) == values
+
     def test_bits_for(self) -> None:
         assert bits_for(1) == 2
         assert bits_for(4) == 2
