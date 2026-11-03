@@ -94,7 +94,7 @@ Blueprint の `origin` で指定した座標がプレイヤーの位置に重な
 直径 15、高さ 30 の中世風の石の塔を作って。4 階建てで、各階に窓を付けて。
 ```
 
-エージェントは同梱の `minecraft-blueprint` Skill に従って `blueprints/` に Blueprint JSON を書き、`mcblueprint validate` でエラーを直し、`mcblueprint build` で `output/` に `.schem` を生成します。詳細は [docs/AI_GUIDE.md](docs/AI_GUIDE.md) を参照してください。
+エージェントは新しい住宅・塔を同梱の `minecraft-blueprint` Skill に従って BuildSpec から生成し、診断に沿って調整します。Blueprint の細部修正には従来の直接編集手順を使います。詳細は [docs/AI_GUIDE.md](docs/AI_GUIDE.md) を参照してください。
 
 様式をそろえたいときは、`designs/` のデザインプリセット名を依頼に含めます（`medieval` / `japanese` / `modern` を同梱。自分のプリセットも追加できます）。
 
