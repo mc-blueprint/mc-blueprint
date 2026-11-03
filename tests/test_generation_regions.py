@@ -165,6 +165,17 @@ def test_memory_shrinks_core_and_fails_when_halo_cannot_fit():
         next(generate_regions(bp, limits=replace(limits, halo=64)))
 
 
+def test_weather_memory_estimate_shrinks_automatic_core():
+    bp = blueprint([{"type": "fill", "from": [0, 0, 0], "to": [30, 30, 30],
+                     "block": "stone"}])
+    limits = GenerationLimits((31, 31, 31), halo=0, max_memory_mb=4)
+
+    region = next(generate_regions(bp, limits=limits))
+
+    assert region.core.size.x < 31
+    assert region.volume.region.volume * 384 <= 4 * 1024 * 1024
+
+
 def test_stream_releases_regions_and_does_not_construct_whole_volume(monkeypatch):
     def forbidden(*args, **kwargs):
         raise AssertionError("全体volumeを作成した")
