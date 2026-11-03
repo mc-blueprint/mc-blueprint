@@ -189,24 +189,40 @@ def test_structure_detail_records_keep_local_counts_and_failures() -> None:
     assert record["quality_passed"] == all(r["quality_passed"] for r in record["results"])
 
 
-def test_structure_detail_records_do_not_contain_absolute_paths() -> None:
+def test_structure_detail_records_do_not_contain_absolute_paths(monkeypatch) -> None:
     for path in ("evaluation/records/structure-detail.json",
                  "evaluation/records/structure-detail-partition.json"):
         text = (ROOT / path).read_text(encoding="utf-8")
         assert not re.search(r"(?<![A-Za-z0-9])[A-Za-z]:[/\\]", text), path
         record = json.loads(text)
 
-        def check(value, record_path=path):
+        def check(value, record_path=path, key=None):
             if isinstance(value, str):
-                assert not value.startswith("/"), (record_path, value)
+                assert not re.search(r"(?<![A-Za-z0-9])[A-Za-z]:[/\\]", value), (record_path, value)
+                if key in ("path", "basePath", "base_path"):
+                    assert not value.startswith("/"), (record_path, value)
             elif isinstance(value, list):
                 for item in value:
-                    check(item)
+                    check(item, record_path, key)
             elif isinstance(value, dict):
-                for item in value.values():
-                    check(item)
+                for name, item in value.items():
+                    check(item, record_path, name)
 
         check(record)
+
+    monkeypatch.syspath_prepend(str(ROOT / "scripts"))
+    evaluation = runpy.run_path(str(ROOT / "scripts/evaluate_structure.py"))
+    source = ROOT / "tests/data/buildspec/single-house.yaml"
+    operation = "/house#1@wall/house#1.facade.south"
+    value = {"diagnostics": [{"code": "E203", "message": f"Missing {source}",
+                              "operation": operation}],
+             "url": "https://example.test/house#1", "input": {"path": str(source)}}
+    normalized = evaluation["repository_relative"](value, [source])
+    assert normalized["diagnostics"][0]["message"] == (
+        "Missing tests/data/buildspec/single-house.yaml")
+    assert normalized["diagnostics"][0]["operation"] == operation
+    assert normalized["url"] == value["url"]
+    assert normalized["input"]["path"] == "tests/data/buildspec/single-house.yaml"
 
 
 def test_structure_detail_regressions_cover_connections() -> None:
