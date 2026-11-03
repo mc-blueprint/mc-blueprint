@@ -2,6 +2,7 @@
 
 import copy
 import json
+from dataclasses import replace
 from pathlib import Path
 
 import pytest
@@ -80,11 +81,11 @@ def test_tower_fixed_case_all_versions(tmp_path, version, style, shape):
         assert check_route(volume, start, end, version).status == "reachable"
         assert volume.attributes(end).reserved == "circulation"
         assert volume.get(end - Vec3(0, 1, 0)) is not None
-    # 各階の開口が外壁を貫き、内部から外を見られる。
+    # 各階の開口が外壁を貫き、機能ガラスは内側へ1セル後退する。
     offset = Vec3.from_seq(result.site["offset"])
     for y in (2, 6, 10):
-        assert volume.get(offset + Vec3(4, y, 0)).id == "minecraft:glass"
-        assert volume.get(offset + Vec3(3, y, 0)).id == "minecraft:air"
+        assert volume.get(offset + Vec3(4, y, 0)).id == "minecraft:air"
+        assert volume.get(offset + Vec3(3, y, 0)).id == "minecraft:glass"
     assert any(volume.attributes(p).reserved == "structure" for p, _ in volume)
 
 
@@ -473,3 +474,136 @@ def test_height_edit_keeps_floor_count_and_headroom(tmp_path):
     assert all(check_route(volume, Vec3.from_seq(result.massing["entrance"]),
                            Vec3.from_seq(p), "1.21.11").status == "reachable"
                for p in result.massing["arrivals"])
+
+
+@pytest.mark.parametrize("angle", (0, 90, 180, 270))
+def test_round_facade_plan_covers_entire_actual_contour(tmp_path, angle):
+    from mcblueprint.critic import evaluate, plan_from_metadata
+    from mcblueprint.generator import GeneratedRegion
+    from mcblueprint.operations.transform import Transform
+
+    result = plan(tmp_path, archetype="tower", elements={"tower#1": {
+        "radius": 5, "angle": angle}}, features={"shape": "round"})
+    metadata = result.blueprint["metadata"]["planning"]
+    critic = plan_from_metadata(metadata, massing=result.massing, offset=result.site["offset"])
+    transform = Transform.rotation(angle, Vec3(0, 0, 0)).then(
+        Transform.translation(Vec3.from_seq(result.site["offset"])))
+    expected = {transform.apply(Vec3(p.x, y, p.z))
+                for p in disc_offsets(5, "hollow", "y")
+                for y in range(1, metadata["params"]["height"] + 1)}
+    covered = {c.pos for facade in critic.facades for c in facade.cells}
+    assert expected <= covered
+    bp, volume = built(result)
+    candidates = {c.pos for f in critic.facades for c in f.cells if not c.opening
+                  and volume.attributes(c.pos).role == "wall_main"
+                  and volume.attributes(c.pos).reserved is None}
+    assert candidates
+    removed = max(candidates, key=lambda p: (p.x, p.y, p.z))
+    volume.set(removed, BlockState.of("air"), volume.attributes(removed))
+    measured = evaluate(critic, [GeneratedRegion(bp.bounds(), volume)])
+    assert any(d["code"] == "E203" and any(v["position"] == removed.to_list()
+               for v in d["violations"]) for d in measured.diagnostics)
+
+
+@pytest.mark.parametrize("entry", json.loads(Path(
+    "evaluation/cases/structure-detail.json").read_bytes())["inputs"],
+    ids=lambda e: f"{e['case']}-{e['version']}-{e['format']}")
+def test_fixed_record_audit_detects_contour_and_hidden_wall_loss(tmp_path, entry):
+    from mcblueprint.critic import evaluate, plan_from_metadata
+    from mcblueprint.generator import GeneratedRegion
+    from mcblueprint.operations.transform import Transform
+
+    result = plan_buildspec(resolve_buildspec(
+        Path(entry["input"]["path"]), project_dir=tmp_path, user_config=tmp_path / "missing"))
+    bp, volume = built(result)
+    metadata = result.blueprint["metadata"]["planning"]
+    critic = plan_from_metadata(metadata, massing=result.massing, offset=result.site["offset"])
+    covered = {c.pos for f in critic.facades for c in f.cells}
+    if entry["case"] == "standalone-tower":
+        offset = Vec3.from_seq(result.site["offset"])
+        expected = {offset + Vec3(p.x, y, p.z)
+                    for p in disc_offsets(metadata["params"]["radius"], "hollow", "y")
+                    for y in range(1, metadata["params"]["height"] + 1)}
+        assert expected <= covered
+    else:
+        params = metadata["params"]
+        offset = Vec3.from_seq(result.site["offset"])
+        expected = {offset + Vec3(x, y, z)
+                    for x in range(params["width"]) for z in range(params["depth"])
+                    if x in (0, params["width"] - 1) or z in (0, params["depth"] - 1)
+                    for y in range(1, params["floors"] * params["floor_height"] + 1)}
+        assert expected <= covered
+
+    baseline = evaluate(critic, [GeneratedRegion(bp.bounds(), volume)])
+    assert baseline.metrics["facade_surface_missing"]["value"] == 0
+    normals = {"north": Vec3(0, 0, -1), "south": Vec3(0, 0, 1),
+               "east": Vec3(1, 0, 0), "west": Vec3(-1, 0, 0)}
+    cell = next(c for f in critic.facades for c in f.cells if not c.opening
+                and volume.attributes(c.pos).role == "wall_main"
+                and volume.attributes(c.pos).reserved is None
+                and volume.get(c.pos + normals[f.face]) is not None
+                and volume.attributes(c.pos + normals[f.face]).role in ("trim", "window_frame"))
+    volume.set(cell.pos, BlockState.of("air"), volume.attributes(cell.pos))
+    damaged = evaluate(critic, [GeneratedRegion(bp.bounds(), volume)])
+    assert any(d["code"] == "E203" for d in damaged.diagnostics)
+
+    # 記録と同じ壁を回し、生成し直した装飾の差を混ぜず投影だけを監査する。
+    for angle in (90, 180, 270):
+        rotation = Transform.rotation(angle, Vec3(0, 0, 0))
+        rotated = copy.deepcopy(metadata)
+        rotated["params"]["angle"] = angle
+        for item in rotated["decorations"]:
+            item["face"] = rotation.apply_direction(item["face"])
+        for item in (*rotated["columns"], *rotated["beams"], *rotated["facades"]):
+            box = rotation.bounds(AABB.of(Vec3.from_seq(item["from"]),
+                                          Vec3.from_seq(item["to"])))
+            item.update({"from": box.min.to_list(), "to": box.max.to_list()})
+            if "origin" in item:
+                for name in ("origin", "normal", "uAxis"):
+                    item[name] = rotation.apply(Vec3.from_seq(item[name])).to_list()
+        rotated_plan = plan_from_metadata(rotated, offset=rotation.apply(
+            Vec3.from_seq(result.site["offset"])).to_list())
+        rotated_volume = BlockVolume()
+        for pos, state in volume:
+            attr = volume.attributes(pos)
+            rotated_volume.set(rotation.apply(pos), state, replace(
+                attr, face=rotation.apply_direction(attr.face) if attr.face else None))
+        measured = evaluate(rotated_plan, [GeneratedRegion(
+            rotation.bounds(bp.bounds()), rotated_volume)])
+        assert measured.metrics["flat_ratio"] == damaged.metrics["flat_ratio"]
+        assert measured.metrics["facade_surface_missing"] == damaged.metrics[
+            "facade_surface_missing"]
+
+
+def test_depth_zero_keeps_density_failure_for_existing_facades(tmp_path):
+    from mcblueprint.critic import evaluate, plan_from_metadata
+    from mcblueprint.generator import GeneratedRegion
+
+    result = plan(tmp_path, config={"decoration": {"depth": 0}})
+    assert not result.detail["decorations"]
+    bp, volume = built(result)
+    critic = plan_from_metadata(result.blueprint["metadata"]["planning"],
+                                massing=result.massing, offset=result.site["offset"],
+                                decoration_range=(0.2, 0.4))
+    measured = evaluate(critic, [GeneratedRegion(bp.bounds(), volume)])
+    assert all(d["value"] == 0 for d in measured.metrics["decoration_density"].values())
+    assert any(d["code"] == "E202" for d in measured.diagnostics)
+
+
+def test_round_contour_steps_alone_are_flat(tmp_path):
+    from mcblueprint.critic import evaluate, plan_from_metadata
+    from mcblueprint.generator import GeneratedRegion
+    from mcblueprint.volume import CellAttributes
+
+    result = plan(tmp_path, archetype="tower", elements={"tower#1": {"radius": 5}},
+                  config={"decoration": {"depth": 0}})
+    metadata = result.blueprint["metadata"]["planning"]
+    critic = plan_from_metadata(metadata, massing=result.massing, offset=result.site["offset"])
+    volume = BlockVolume()
+    offset = Vec3.from_seq(result.site["offset"])
+    for p in disc_offsets(5, "hollow", "y"):
+        for y in range(1, metadata["params"]["height"] + 1):
+            volume.set(offset + Vec3(p.x, y, p.z), BlockState.of("stone"),
+                       CellAttributes(role="wall_main", element="tower#1.wall"))
+    measured = evaluate(critic, [GeneratedRegion(volume.bounds(), volume)])
+    assert measured.metrics["flat_ratio"]["value"] == 1

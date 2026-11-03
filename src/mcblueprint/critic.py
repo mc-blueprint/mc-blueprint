@@ -93,6 +93,8 @@ def _convert_plan(planning, massing, offset, decoration_range, fixed_roles):
 
     shapes = {}
     params = planning.get("params", {})
+    rotation = Transform.rotation(params.get("angle", 0), Vec3(0, 0, 0))
+    reverse = Transform.rotation(-params.get("angle", 0), Vec3(0, 0, 0))
     transform = Transform.rotation(params.get("angle", 0), Vec3(0, 0, 0)).then(
         Transform.translation(Vec3.from_seq(offset))
     )
@@ -127,12 +129,13 @@ def _convert_plan(planning, massing, offset, decoration_range, fixed_roles):
         normal = Vec3.from_seq(item["normal"])
         origin = Vec3.from_seq(item["origin"])
         axis = Vec3.from_seq(item["uAxis"])
-        face = max(
+        local_normal = reverse.apply(normal)
+        face = rotation.apply_direction(max(
             _NORMAL,
             key=lambda name: sum(
-                a * b for a, b in zip(_NORMAL[name], normal.to_list(), strict=True)
+                a * b for a, b in zip(_NORMAL[name], local_normal.to_list(), strict=True)
             ),
-        )
+        ))
         direction = Vec3.from_seq(_NORMAL[face])
         bounds = box(item)
         points = list(iter_box(bounds))
@@ -147,11 +150,11 @@ def _convert_plan(planning, massing, offset, decoration_range, fixed_roles):
             points = [
                 p for p in points if (p - origin).x * normal.x + (p - origin).z * normal.z == 0
             ]
-        # 同じ投影rayには輪郭の最外セルを一つだけ残す。
+        # roundの輪郭セルは同じrayに並ぶ段差も被覆対象に残す。
         rays = {}
         for pos in points:
             u = pos.x if direction.z else pos.z
-            key = u, pos.y
+            key = pos if contour is not None else (u, pos.y)
             depth = pos.x * direction.x + pos.z * direction.z
             if key not in rays or depth > rays[key][0]:
                 rays[key] = depth, pos
@@ -172,7 +175,8 @@ def _convert_plan(planning, massing, offset, decoration_range, fixed_roles):
                 else:
                     opening |= box(entry).contains(pos)
             # roundの階段状輪郭はそれぞれを深度0に正規化する。
-            local_u = pos.x - bounds.min.x if direction.z else pos.z - bounds.min.z
+            local_u = ((pos.x - origin.x) * (1 if axis.x > 0 else -1) if direction.z
+                       else (pos.z - origin.z) * (1 if axis.z > 0 else -1))
             projected.append(FacadeCell(pos, local_u, v, depth, opening, segment=len(facades)))
         facades.append(Facade(item["id"], face, tuple(projected), building=planning.get("element")))
     decorations = {
@@ -233,6 +237,8 @@ class CriticAccumulator:
         ]
         self.facade_blocks: dict[tuple[str, str, str], Counter] = {}
         self.facade_seen: set[tuple[int, int]] = set()
+        self.surface_present: set[tuple[int, int]] = set()
+        self.missing_sources = {}
         self.decorated = Counter()
         self.decorated_seen: set[Vec3] = set()
         self.surfaces = {}
@@ -265,7 +271,15 @@ class CriticAccumulator:
         for fi, facade in enumerate(self.plan.facades):
             for ci, cell in enumerate(facade.cells):
                 if not cell.opening and region.core.contains(cell.pos):
-                    self.facade_seen.add((fi, ci))
+                    key = fi, ci
+                    if key in self.facade_seen:
+                        continue
+                    self.facade_seen.add(key)
+                    state, attr = _state(region, cell.pos)
+                    if not _present(state) and (attr.source or attr.operation):
+                        self.missing_sources[key] = {
+                            "source": attr.source, "operation": attr.operation,
+                        }
         for pos, state in region.volume:
             if not region.core.contains(pos) or not _present(state):
                 continue
@@ -310,6 +324,8 @@ class CriticAccumulator:
                         if distance != nearest:
                             continue
                     key = fi, ci
+                    if pos == cell.pos:
+                        self.surface_present.add(key)
                     previous = self.surfaces.get(key)
                     if previous is None or depth > previous:
                         self.surfaces[key] = depth
@@ -340,16 +356,17 @@ class CriticAccumulator:
                     continue
                 key = fi, ci
                 self.facade_area[(facade.element, facade.face)] += 1
-                if key not in self.surfaces:
+                if key not in self.surface_present:
                     self.missing_surface.append(
                         {
                             "element": facade.element,
                             "face": facade.face,
                             "position": cell.pos.to_list(),
                             "reason": "missing" if key in self.facade_seen else "unobserved",
+                            **self.missing_sources.get(key, {}),
                         }
                     )
-                else:
+                if key in self.surfaces:
                     window = (facade.element, facade.face, cell.segment, cell.u // 4, cell.v // 4)
                     self.flat_windows.setdefault(window, []).append(self.surfaces[key] - cell.depth)
 
@@ -394,6 +411,10 @@ class CriticAccumulator:
             key = violation["element"], violation["face"]
             missing_by_face.setdefault(key, []).append(violation)
         for (element, face), violations in missing_by_face.items():
+            overrides = sorted({
+                f"overrides[{v['source'].removeprefix('overrides.')}]"
+                for v in violations if (v.get("source") or "").startswith("overrides.")
+            })
             self.diagnostics.append(
                 {
                     "code": "E203",
@@ -403,7 +424,7 @@ class CriticAccumulator:
                     "face": face,
                     "actual": len(violations),
                     "expected": 0,
-                    "repairPaths": ["config.weathering.missing_blocks"],
+                    "repairPaths": [*overrides, "config.weathering.missing_blocks"],
                     "violations": violations,
                 }
             )
@@ -413,8 +434,6 @@ class CriticAccumulator:
         )
         densities = {}
         for key, area in self.facade_area.items():
-            if key not in self.plan.decoration_operations.values():
-                continue
             density = self.decorated[key] * 100 / area
             densities[f"{key[0]}:{key[1]}"] = {
                 "value": density,

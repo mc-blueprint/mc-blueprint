@@ -113,10 +113,7 @@ def _plan_contract(root, body, detail, transform, params, layout):
         directions = {"north": Vec3(0, 0, -1), "south": Vec3(0, 0, 1),
                       "west": Vec3(-1, 0, 0), "east": Vec3(1, 0, 0)}
         face = rotation.apply(directions[op["face"]])
-        origin = bounds.min
-        if face.x < 0 or face.z < 0:
-            origin = Vec3(bounds.max.x if face.x < 0 else bounds.min.x, bounds.min.y,
-                          bounds.max.z if face.z < 0 else bounds.min.z)
+        origin = transform.apply(build_operation(op, root).bounds().min)
         axis = rotation.apply(Vec3.from_seq(
             [1, 0, 0] if op["face"] in ("north", "south") else [0, 0, 1]
         ))
@@ -143,7 +140,12 @@ def _plan_contract(root, body, detail, transform, params, layout):
         for index, start in enumerate(points):
             end = points[(index + 1) % len(points)]
             dx, dz = end[0] - start[0], end[1] - start[1]
+            arc = []
             if params["shape"] == "round":
+                start_angle = math.atan2(start[1], start[0])
+                sweep = (math.atan2(end[1], end[0]) - start_angle) % math.tau
+                arc = [p for p in disc_offsets(params["radius"], "hollow", "y")
+                       if (math.atan2(p.z, p.x) - start_angle) % math.tau <= sweep]
                 nx, nz = start[0] + end[0], start[1] + end[1]
                 scale = max(1, math.gcd(abs(nx), abs(nz)))
                 normal = Vec3(nx // scale, 0, nz // scale)
@@ -156,6 +158,10 @@ def _plan_contract(root, body, detail, transform, params, layout):
                 hi = Vec3(end[0], min((level + 1) * params["floor_height"],
                                       params["height"]), end[1])
                 local_box = AABB.of(lo, hi)
+                if arc:
+                    local_box = AABB.from_points([
+                        Vec3(p.x, y, p.z) for p in arc for y in (lo.y, hi.y)
+                    ])
                 box = transform.bounds(local_box)
                 openings = []
                 for opening, opening_box in opening_boxes:
@@ -499,12 +505,14 @@ def plan_buildspec(resolved: ResolveResult) -> PlanningResult:
         }
     transform = transform.then(Transform.translation(offset))
     contract = _plan_contract(root, body, detail, transform, params, layout)
+    reverse = Transform.rotation(-params["angle"], Vec3(0, 0, 0))
     for item in decorations:
         item["operation"] = f"/{root}@:{transform.rows}:{transform.offset}/{item['operation']}"
         facade = next(f for f in contract["facades"] if f["id"] == item["element"])
-        item["face"] = max(NORMALS, key=lambda face: sum(
-            a * b for a, b in zip(NORMALS[face], facade["normal"], strict=True)
-        ))
+        normal = reverse.apply(Vec3.from_seq(facade["normal"]))
+        item["face"] = transform.apply_direction(max(NORMALS, key=lambda face: sum(
+            a * b for a, b in zip(NORMALS[face], normal.to_list(), strict=True)
+        )))
     contract["decorations"] = decorations
     entrance = transform.apply(entrance)
     arrivals = [transform.apply(p) for p in arrivals]
