@@ -16,10 +16,28 @@ from mcblueprint.exporters._spool import RegionSpool
 from mcblueprint.generator import GeneratedRegion
 from mcblueprint.model import AABB, BlockState, Vec3
 from mcblueprint.model.blueprint import Blueprint
-from mcblueprint.scene import capture_sources, write_scene
+from mcblueprint.scene import _source_descriptor, capture_sources, write_scene
 from mcblueprint.volume import CellAttributes, RegionVolume
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+@pytest.mark.parametrize("element", ["tower#1", "tower#1.body#1", "tower#10.body#1",
+                                     "site#1", None])
+@pytest.mark.parametrize("spec", [True, False])
+def test_only_real_root_and_descendants_offer_params(element, spec):
+    attr = CellAttributes(element=element, source="archetype.body", operation="body/0")
+    context = {"massing": {"element": "tower#1", "params": {"height": 14}}} if spec else {}
+    descriptor = _source_descriptor(attr, context)
+    editable = spec and element in ("tower#1", "tower#1.body#1")
+    if element:
+        assert descriptor["element"] == ("tower#1" if editable else element)
+    else:
+        assert "element" not in descriptor
+    assert descriptor.get("params") == (["height"] if editable else None)
+    assert descriptor["spec"] == "archetype.body"
+    assert descriptor["label"] == "archetype.body"
+    assert descriptor["path"] == "body/0"
 
 
 @dataclass(frozen=True)

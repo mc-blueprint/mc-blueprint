@@ -368,7 +368,9 @@ def prepare_input(path: str | Path, *, output: str | Path | None = None,
         if scene_path == path:
             scene_path = out.with_name(out.stem + ".view.scene.json.gz")
         with lock_paths(path, out, scene_path):
-            atomic_write(scene_path, original)
+            for entry in scene["sources"]:
+                entry.pop("params", None)
+            atomic_write(scene_path, gzip.compress(_json(scene), mtime=0))
     else:
         if path.suffix.lower() == ".json":
             data = json.loads(original)
