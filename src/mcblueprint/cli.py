@@ -66,6 +66,7 @@ from mcblueprint.operations.base import Operation
 from mcblueprint.operations.building import BuildingOperation
 from mcblueprint.operations.nested import NestedOperation
 from mcblueprint.pattern_checking import check_patterns
+from mcblueprint.pipeline import GENERATION, generated_blueprint_regions
 from mcblueprint.preview import (
     DEFAULT_VIEWS,
     VIEWS,
@@ -852,7 +853,15 @@ def _run_preview(args: argparse.Namespace, out: TextIO) -> int:
     blueprint = _load_validated(args, out)
     if blueprint is None:
         return EXIT_VALIDATION_ERROR
-    volume = generate(blueprint, seed=args.seed)
+    generation = (blueprint.metadata or {}).get("generation", {})
+    if isinstance(generation, dict) and generation.get("mode") == GENERATION:
+        volume = BlockVolume()
+        for generated_region in generated_blueprint_regions(blueprint, seed=args.seed):
+            for pos, state in generated_region.volume:
+                if generated_region.core.contains(pos):
+                    volume.set(pos, state, generated_region.volume.attributes(pos))
+    else:
+        volume = generate(blueprint, seed=args.seed)
     bounds = volume.bounds()
     if bounds is None:
         raise BlueprintError("Nothing to preview: no blocks were generated")
