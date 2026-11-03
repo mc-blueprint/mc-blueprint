@@ -1,0 +1,14 @@
+{
+  "formatVersion": 1,
+  "name": "medieval.bay_recessed",
+  "description": "幅 5・高さ 5 の石造ベイ。壁面は Z=0、柱と窓を北向きに配置し、窓面を 1 ブロック後退させる",
+  "operations": [
+    {"type": "pillar", "position": [0, 0, 0], "height": 5, "block": "minecraft:stone_bricks"},
+    {"type": "pillar", "position": [4, 0, 0], "height": 5, "block": "minecraft:stone_bricks"},
+    {"type": "fill", "from": [1, 0, 0], "to": [3, 4, 0], "block": "minecraft:stone_bricks"},
+    {"type": "fill", "from": [2, 1, 0], "to": [2, 3, 0], "block": "minecraft:air"},
+    {"type": "fill", "from": [2, 1, 1], "to": [2, 3, 1], "block": "minecraft:glass_pane"}
+  ],
+  "anchors": {"left": [0, 0, 0], "right": [4, 0, 0], "wall": [2, 0, 0]},
+  "metadata": {"dimensions": [5, 5, 2], "defaultFacing": "north", "connectionFaces": ["south"], "provenance": "独自作成（MIT）"}
+}

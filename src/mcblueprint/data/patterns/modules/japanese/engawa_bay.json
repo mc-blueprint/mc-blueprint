@@ -1,0 +1,12 @@
+{
+  "formatVersion": 1,
+  "name": "japanese.engawa_bay",
+  "description": "幅 5・高さ 5 の縁側ベイ。北向きの開口前に床縁側を設ける",
+  "operations": [
+    {"type": "pillar", "position": [0, 0, 0], "height": 5, "block": "minecraft:stripped_oak_log[axis=y]"},
+    {"type": "pillar", "position": [4, 0, 0], "height": 5, "block": "minecraft:stripped_oak_log[axis=y]"},
+    {"type": "fill", "from": [1, 1, 1], "to": [3, 1, 2], "block": "minecraft:oak_slab[type=bottom]"}
+  ],
+  "anchors": {"left": [0, 0, 0], "right": [4, 0, 0], "engawa": [2, 1, 2]},
+  "metadata": {"dimensions": [5, 5, 3], "defaultFacing": "north", "connectionFaces": ["south"], "provenance": "独自作成（MIT）"}
+}

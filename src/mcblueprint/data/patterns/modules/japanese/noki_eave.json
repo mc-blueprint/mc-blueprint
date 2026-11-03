@@ -1,0 +1,11 @@
+{
+  "formatVersion": 1,
+  "name": "japanese.noki_eave",
+  "description": "幅 5 の木造軒庇。壁上から北へ張り出す",
+  "operations": [
+    {"type": "fill", "from": [0, 0, 0], "to": [4, 0, 0], "block": "minecraft:oak_planks"},
+    {"type": "fill", "from": [0, 1, 0], "to": [4, 1, 1], "block": "minecraft:oak_stairs[facing=south]"}
+  ],
+  "anchors": {"wall": [2, 0, 0], "outer": [2, 1, 1]},
+  "metadata": {"dimensions": [5, 2, 2], "defaultFacing": "north", "connectionFaces": ["south"], "provenance": "独自作成（MIT）"}
+}

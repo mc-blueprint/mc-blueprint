@@ -8,6 +8,18 @@ sources:
       - medieval.window
       - medieval.arched_gate
       - medieval.lantern_post
+      - medieval.bay_recessed
+      - medieval.entry_portico
+      - medieval.stone_cornice
+      - medieval.gable_eave
+      - japanese.engawa_bay
+      - japanese.genkan_entry
+      - japanese.noki_eave
+      - japanese.kawara_eave
+      - modern.glazed_bay
+      - modern.recessed_entry
+      - modern.flat_cornice
+      - modern.parapet_eave
   - id: mc-blueprint-patterns-original
     source: https://github.com/mc-blueprint/mc-blueprint-patterns
     license: MIT

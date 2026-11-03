@@ -4,8 +4,27 @@ grid:
   bay: [4, 4]
   story_height: [4, 4]
 roofs: [gable, hip]
-modules: {}
+modules:
+  bay:
+    - japanese.engawa_bay
+  window:
+    - japanese.engawa_bay
+  entrance:
+    - japanese.genkan_entry
+  cornice:
+    - japanese.noki_eave
+  roof_edge:
+    - japanese.kawara_eave
+depth_layers:
+  frame: 1
+  opening: 1
+  cornice: 2
+decoration:
+  density: [0.1, 0.3]
+  band_course: false
+  cornice: true
 roles:
+  wall_main: [plaster, wood]
   wall_secondary: plaster
   frame: wood
   window_frame: wood
