@@ -363,6 +363,9 @@ def build_parser() -> argparse.ArgumentParser:
     source.add_argument("--input", type=Path)
     edits_parser.add_argument("--scene", type=Path, required=True)
     edits_parser.add_argument("-o", "--output", type=Path)
+    edits_parser.add_argument("--seed", type=int, help="scene生成時と同じseedを指定する")
+    edits_parser.add_argument("--set", action="append", default=[], metavar="KEY=VALUE",
+                              help="scene生成時と同じ設定の上書きを指定する")
     return parser
 
 
@@ -492,10 +495,14 @@ def _run_view(args: argparse.Namespace, out: TextIO) -> int:
 def _run_apply_edits(args: argparse.Namespace, out: TextIO) -> int:
     from mcblueprint.viewer_input import apply_input_edits
 
+    overrides = args.set.copy()
+    if args.seed is not None:
+        overrides.append(f"seed={args.seed}")
     notes = []
     try:
         path = apply_input_edits(args.edits, args.spec or args.input, args.scene,
-                                 output=args.output, spec=args.spec is not None, notes=notes)
+                                 output=args.output, spec=args.spec is not None, notes=notes,
+                                 overrides=overrides)
     except (OSError, ValueError) as exc:
         raise BlueprintError(f"apply-edits: {exc}") from exc
     print(f"Wrote {path.as_posix()}", file=out)

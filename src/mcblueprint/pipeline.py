@@ -117,6 +117,17 @@ def _hash(value) -> str:
     return sha256(_json(value)).hexdigest()
 
 
+def _cli_overrides(resolved: ResolveResult) -> dict:
+    result = {}
+    for path, origin in resolved.origins.items():
+        if origin == "cli":
+            value = resolved.config
+            for key in path.split("."):
+                value = value[key]
+            result[path] = value
+    return result
+
+
 def _atomic_json(path: Path, value) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.NamedTemporaryFile(dir=path.parent, prefix=f".{path.name}-", delete=False) as f:
@@ -611,6 +622,7 @@ def make(
                 "inputSha256": expected["input"]["sha256"],
                 "resolvedHash": expected["input"]["resolvedHash"],
                 "configHash": _hash(config),
+                "cliOverrides": _cli_overrides(resolved),
                 "environment": expected["environment"],
                 "sceneSha256": scene_hash,
             })

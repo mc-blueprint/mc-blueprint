@@ -47,6 +47,19 @@ mcblueprint apply-edits output/tower.edits.json --spec tower.yaml --scene output
 mcblueprint apply-edits output/house.edits.json --input blueprints/house.json --scene output/house.scene.json.gz
 ```
 
+生成時にCLI指定を使った場合は、同じ指定を再現する。
+
+```bash
+mcblueprint make tower.yaml --seed 42 --set weathering.age=0
+mcblueprint apply-edits output/tower.edits.json --spec tower.yaml --scene output/tower.scene.json.gz --seed 42 --set weathering.age=0
+```
+
+`--set KEY=VALUE` は複数指定でき、`--seed` はmakeと同様に `--set seed=...` より優先する。
+`make --format litematic` の指定は `--set output.format=litematic` で再現する。
+指定の順序やYAML表記ではなく、設定合成後のキーと値をsidecarの `cliOverrides` と照合する。
+省略・変更・追加は相違キーを示して終了コード2で拒否し、sidecarの値を自動採用しない。
+CLI指定の記録がない古いsidecarはsceneの再生成が必要。`--set`・`--seed` は `--spec` 専用。
+
 `--spec` は `-o updated.yaml` を省略すると原本を原子的に更新する。
 `--input` は `-o` を省略すると入力の隣の `<名前>.edited.json` に保存する。
 派生Blueprintでは編集を末尾の明示Operationへ変換する。paramとnoteは受け付けない。
