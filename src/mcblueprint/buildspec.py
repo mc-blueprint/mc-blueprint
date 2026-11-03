@@ -31,6 +31,8 @@ def _mapping(loader: _UniqueLoader, node: yaml.MappingNode, deep: bool = False) 
     result = {}
     for key_node, value_node in node.value:
         key = loader.construct_object(key_node, deep=deep)
+        if not isinstance(key, str):
+            raise BlueprintError(f"YAMLマッピングのキーは文字列である必要があります: {key!r}")
         if key in result:
             raise BlueprintError(f"重複したYAMLキー: {key}")
         result[key] = loader.construct_object(value_node, deep=deep)
@@ -179,6 +181,7 @@ def resolve_buildspec(
     spec = None
     if source is not None:
         raw = _read_buildspec(source) if isinstance(source, str | Path) else source
+        explicit_seed = "seed" in raw
         spec = _normalize(raw)
         if isinstance(source, str | Path):
             base_dir = Path(source).resolve().parent
@@ -189,14 +192,10 @@ def resolve_buildspec(
             spec["site"]["terrain"] = str((base_dir / terrain).resolve())
         spec_config = spec.get("config", {})
         config_seed = spec_config.get("seed")
-        if config_seed is not None and config_seed != spec["seed"]:
+        if explicit_seed and config_seed is not None and config_seed != spec["seed"]:
             raise BlueprintError("BuildSpec.seed と BuildSpec.config.seed が異なります")
-        configured = spec_config.get("palette", {}).get("materials", {})
-        for role, material in spec.get("materials", {}).items():
-            if role in configured and configured[role] != material:
-                raise BlueprintError(
-                    f"BuildSpec materials.{role} と config.palette.materials.{role} が競合します"
-                )
+        if not explicit_seed:
+            spec.pop("seed")
     resolved = resolve_config(
         buildspec=spec,
         project_dir=project_dir,
@@ -205,6 +204,7 @@ def resolve_buildspec(
     )
     origins = resolved.origins.copy()
     if spec is not None:
+        spec["seed"] = resolved.values["seed"]
         spec["config"] = resolved.values
         location = str(Path(source).resolve()) if isinstance(source, str | Path) else "<memory>"
         origins = {

@@ -17,7 +17,7 @@ from mcblueprint.errors import BlueprintError
 
 DEFAULTS: dict[str, Any] = {
     "formatVersion": 1,
-    "seed": None,
+    "seed": 0,
     "randomness": 0.3,
     "weathering": {
         "age": 0.2,
@@ -121,6 +121,8 @@ def _merge(
 ) -> None:
     for key, value in incoming.items():
         path = f"{prefix}.{key}" if prefix else key
+        if path == "seed" and value is None:
+            continue
         if isinstance(value, dict) and isinstance(target.get(key), dict):
             _merge(target[key], value, source, origins, path)
         else:
@@ -186,7 +188,14 @@ def resolve_config(
     if buildspec:
         spec_config = copy.deepcopy(buildspec.get("config", {}))
         if "materials" in buildspec:
-            spec_config.setdefault("palette", {})["materials"] = buildspec["materials"]
+            materials = spec_config.setdefault("palette", {}).setdefault("materials", {})
+            for role, material in buildspec["materials"].items():
+                if role in materials and materials[role] != material:
+                    raise BlueprintError(
+                        f"BuildSpec materials.{role} と "
+                        f"config.palette.materials.{role} が競合します"
+                    )
+                materials[role] = material
         if "seed" in buildspec and buildspec["seed"] is not None:
             spec_config["seed"] = buildspec["seed"]
         layers.append(("buildspec", spec_config))

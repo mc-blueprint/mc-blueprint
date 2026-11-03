@@ -6,7 +6,7 @@
 
 組込み既定値 → BuildSpec の `style` が参照する同梱様式の役割別材質候補 → 利用者設定（`%APPDATA%/mc-blueprint/config.yaml`。未設定時は `~/.config/mc-blueprint/config.yaml`）→ cwd の `mc-blueprint.yaml` → BuildSpec の `config`・`materials`・`seed` → CLI `--set`。未知の様式は利用可能な同梱様式名を示してエラーになります。
 
-辞書は再帰的に合成し、配列とスカラー値は上位層で置換します。Python API `resolve_config` は `ResolvedConfig(values, origins)` を返し、各設定葉の出所も提供します。
+辞書は再帰的に合成し、配列とスカラー値は上位層で置換します。BuildSpecの `materials` と `config.palette.materials` は役割ごとに合成し、同じ役割が異なる材質を指定するとエラーになります。seedは明示値を合成した後に省略時の `0` を適用します。水の `radius` と地面からの `height` は整数です。Python API `resolve_config` は `ResolvedConfig(values, origins)` を返し、各設定葉の出所も提供します。
 
 ```console
 mcblueprint config show --set weathering.age=0.4

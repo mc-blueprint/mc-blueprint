@@ -166,13 +166,79 @@ def test_resolve_api_is_shared_and_detects_same_layer_conflict(tmp_path: Path) -
     result = resolve_buildspec(source, project_dir=tmp_path, user_config=tmp_path / "none.yaml")
     assert result.buildspec["features"] == {"floors": 2}
     assert result.config == result.buildspec["config"]
-    assert result.origins["seed"].startswith("buildspec:")
+    assert result.origins["seed"] == "builtin"
     with pytest.raises(BlueprintError, match="BuildSpec.seed"):
         resolve_buildspec(
             _spec(seed=1, config={"seed": 2}),
             project_dir=tmp_path,
             user_config=tmp_path / "none.yaml",
         )
+
+
+def test_resolve_buildspec_merges_material_roles_from_buildspec_and_config(tmp_path: Path) -> None:
+    result = resolve_buildspec(
+        _spec(
+            materials={"wall_main": "stone"},
+            config={"palette": {"materials": {"roof": "minecraft:dark_oak_planks"}}},
+        ),
+        project_dir=tmp_path,
+        user_config=tmp_path / "none.yaml",
+    )
+    assert result.config["palette"]["materials"]["wall_main"] == "stone"
+    assert result.config["palette"]["materials"]["roof"] == "minecraft:dark_oak_planks"
+    with pytest.raises(BlueprintError, match="materials.roof"):
+        resolve_buildspec(
+            _spec(
+                materials={"roof": "stone"},
+                config={"palette": {"materials": {"roof": "wood"}}},
+            ),
+            project_dir=tmp_path,
+            user_config=tmp_path / "none.yaml",
+        )
+
+
+def test_resolve_buildspec_uses_config_seed_when_top_level_seed_is_omitted(tmp_path: Path) -> None:
+    result = resolve_buildspec(
+        _spec(config={"seed": 7}), project_dir=tmp_path, user_config=tmp_path / "none.yaml"
+    )
+    assert result.config["seed"] == 7
+
+
+def test_null_buildspec_seed_does_not_override_lower_layer(tmp_path: Path) -> None:
+    user = tmp_path / "user.yaml"
+    user.write_text("seed: 7\n", encoding="utf-8")
+    result = resolve_buildspec(
+        _spec(config={"seed": None}), project_dir=tmp_path, user_config=user
+    )
+    assert result.config["seed"] == 7
+    assert result.buildspec["seed"] == 7
+
+
+@pytest.mark.parametrize(
+    "yaml_text",
+    [
+        "minecraftVersion: '26.3'\n? [a, b]\n: value\n",
+        "minecraftVersion: '26.3'\nfeatures:\n  ? [1]\n  : true\n",
+        "minecraftVersion: '26.3'\nfeatures:\n  1: true\n",
+    ],
+)
+def test_buildspec_non_string_mapping_key_is_diagnostic(tmp_path: Path, yaml_text: str) -> None:
+    source = tmp_path / "spec.yaml"
+    source.write_text(yaml_text, encoding="utf-8")
+    with pytest.raises(BlueprintError):
+        load_buildspec(source)
+
+
+@pytest.mark.parametrize(
+    "path,value",
+    [
+        ("weathering.moss.water_proximity.radius", 2.5),
+        ("weathering.moss.ground_proximity.height", 2.5),
+    ],
+)
+def test_distance_settings_require_integers(path: str, value: float) -> None:
+    with pytest.raises(BlueprintError):
+        resolve_config(overrides=[f"{path}={value}"])
 
 
 @pytest.mark.parametrize("version", ["1.21.11", "26.1.2", "26.2", "26.3"])
