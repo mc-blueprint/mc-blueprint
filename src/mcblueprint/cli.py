@@ -321,6 +321,10 @@ def build_parser() -> argparse.ArgumentParser:
     traversal_parser.add_argument("--end", type=int, nargs=3, metavar=("X", "Y", "Z"),
                                   help="終了する立位の足元セル（--startと同時指定）")
     traversal_parser.add_argument("--json", action="store_true", help="機械可読の検査結果")
+    config_parser = subparsers.add_parser("config", help="設定を表示する")
+    config_subparsers = config_parser.add_subparsers(dest="config_command", required=True)
+    config_show = config_subparsers.add_parser("show", help="合成済み設定と値の出所を表示")
+    config_show.add_argument("--set", action="append", default=[], metavar="KEY=VALUE")
     return parser
 
 
@@ -374,6 +378,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         "check": _run_check,
         "components": _run_components,
         "design": _run_design,
+        "config": _run_config,
     }
     try:
         paths = components.default_search_paths(getattr(args, "blueprint", None))
@@ -385,6 +390,19 @@ def main(argv: Sequence[str] | None = None) -> int:
     except BlueprintError as exc:
         print(f"Error: {exc}", file=sys.stderr)
         return EXIT_USAGE_ERROR
+
+
+def _run_config(args: argparse.Namespace, out: TextIO) -> int:
+    from mcblueprint.buildspec import resolve_buildspec
+
+    result = resolve_buildspec(overrides=args.set)
+    print(
+        json.dumps(
+            {"config": result.config, "sources": result.origins}, ensure_ascii=False, indent=2
+        ),
+        file=out,
+    )
+    return EXIT_OK
 
 
 def _run_validate(args: argparse.Namespace, out: TextIO) -> int:
