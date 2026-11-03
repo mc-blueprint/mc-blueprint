@@ -241,7 +241,7 @@ git diff --check
 wheelビルド、4版blockdataとスキーマのlock hash照合、3様式・Blueprintスキーマの存在確認、
 変更26ファイルのUTF-8 BOMなし／LF確認、測定方式・計画hashの照合、git diff --checkにも成功した。
 
-## makeの性能修正と結果の不変性（Issue #210）
+## makeの性能修正の初回検証（Issue #210、3261ea9）
 
 #209適用済みの `3261ea9` を修正前として、Dの固定16入力を変更せずに再実行した。
 [make-performance-210.json](../evaluation/records/make-performance-210.json) の
@@ -270,3 +270,21 @@ NFR2の達成、未測定入力の品質、人間の外観評価、実画面確�
 ローカル検証はPython 3.12.15でruff成功、pytest全件2474成功・1skip
 （任意のtiktoken未導入）、check --strictは22ファイルでエラー・警告0、wheelビルド成功。
 git diff --checkと変更ファイルのUTF-8 BOMなし／LFも確認した。
+
+## 最新developに対する性能修正の不変性（Issue #210、fc8fbf9）
+
+#214・#215のmerge後は、基準を `fc8fbf9` 単体へ切り替えた。
+[最新記録](../evaluation/records/make-performance-210-develop-fc8fbf9.json) の
+`fixed-before` は全Git blobを照合したdevelopコード、`fixed-after` は統合実装の実行である。
+固定16件で配置・指標・構造化診断・sceneのhash一致を確認した。
+性能用4件も各3回の全12試行でdevelop単体と一致し、計20入力の不変性を確認した。
+性能用の全試行は終了コード0だった。
+sceneの入力絶対パスも揃えており、実装の読み込み先は各workerの実パスで検証する。
+
+develop側の外壁輪郭、被覆と最外深度の分離、回転に依存しない評価窓、開口後退、
+収容不足の修正先を保持する。Criticの実装はfc8fbf9と同一で、#210は既存結果を再利用して
+重複計算を省く。性能と再実行手順は [PERFORMANCE.md](PERFORMANCE.md) を参照する。
+
+merge後のローカル検証はruff成功、pytest全件2550成功・1skip（任意のtiktoken未導入）・317警告、
+strict検証22ファイルでエラー・警告0、wheelビルド成功。
+pytestの警告には、開口後退が予約領域と重なる場合に後退量を0とする#215の診断が含まれる。
