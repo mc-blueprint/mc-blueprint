@@ -31,4 +31,5 @@ roles:
   floor: mineral
   foundation: stone
   roof: mineral
+  trim: stone
   path: wood

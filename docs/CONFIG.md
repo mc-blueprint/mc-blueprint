@@ -8,6 +8,8 @@
 
 辞書は再帰的に合成し、配列とスカラー値は上位層で置換します。BuildSpecの `materials` と `config.palette.materials` は役割ごとに合成し、同じ役割が異なる材質を指定するとエラーになります。seedは明示値を合成した後に省略時の `0` を適用します。水の `radius` と地面からの `height` は整数です。Python API `resolve_config` は `ResolvedConfig(values, origins)` を返し、各設定葉の出所も提供します。
 
+`decoration.density` と `decoration.depth` は0〜1の強度、`decoration.symmetry` は対称配置を共有する割合です。Detailは様式の密度範囲を `min + density × (max − min)` で選択し、固定モジュールがベイの寸法に合わない場合は基本壁と開口を維持します。
+
 ```console
 mcblueprint config show --set weathering.age=0.4
 ```

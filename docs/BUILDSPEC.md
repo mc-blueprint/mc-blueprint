@@ -14,7 +14,7 @@ materials:
     material: stone
 ```
 
-houseのfeatureは`floors`（1〜2）、`floor_height`（4以上）、`roof`（gable/hip）です。towerは`shape`（round/square）、`floors`（正整数）、`floor_height`（4以上）、`battlement`（真偽値）です。アーキタイプごとに語彙を閉じ、未知キーは近い候補とともに拒否します。整数項目で真偽値は受理しません。
+houseのfeatureは`floors`（1〜2）、`floor_height`（4以上）、`roof`（gable/hip/flat）です。towerは`shape`（round/square）、`floors`（正整数）、`floor_height`（4以上）、`battlement`（真偽値）です。アーキタイプごとに語彙を閉じ、未知キーは近い候補とともに拒否します。整数項目で真偽値は受理しません。
 
 scaleの外形上限はtiny `[16,16,16]`、small `[32,32,32]`、medium `[64,48,64]`、large `[128,96,128]`、huge `[256,128,256]` です。`size: [x,y,z]` は軒などを含む外形上限としてscaleより優先します。各寸法は1〜256の整数です。階数と階高の指定がsizeの高さを超える場合は拒否します。
 
@@ -73,9 +73,7 @@ Weather・最小評価・出力を接続します。従来の `generate` は共�
   （`bay` は様式の下限）です。塔の半径は4以上で、直進階段と着地余白が収まる寸法です。
 - `size` は中央配置する敷地と外形の上限です。屋根の軒、塔の張出し・胸壁、階段の頭上空間も
   検査し、不足時はMassing段のエラーにします。指定寸法・階数を縮めて成功にはしません。
-- 住宅は既存building/room/roofを再利用します。medieval・japaneseは既定のgable、明示のhipに
-  対応し、modernは既定のflatを一枚の屋根として計画します。`features.roof` の明示値は従来どおり
-  gable/hipです。塔は既存towerの外殻・床・開口・屋上床を再利用し、`battlement: false` なら
+- 住宅は既存building/room/roofを再利用します。medieval・japaneseは既定のgable、modernは既定のflatを一枚の屋根として計画します。`features.roof` はgable/hip/flatを受け付けます。塔は既存towerの外殻・床・開口・屋上床を再利用し、`battlement: false` なら
   胸壁を省略します。BuildSpecの階数をtower Operationの階間隔へ換算します。
 - 塔の上下階の直進階段は左右に分け、上階階段の土台で下階の頭上を塞がないようにします。
   既存螺旋階段の出力は変更しません。入口と全階・屋上の到着点をMassingに記録します。
