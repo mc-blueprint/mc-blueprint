@@ -132,6 +132,19 @@ def test_seed_variation_fixed_ids_and_region_invariance(tmp_path):
     assert cells(a.output) == cells(b.output)
 
 
+def test_core_16_32_64_produce_identical_cells(tmp_path):
+    source = spec_file(tmp_path)
+    outputs = []
+    for core in (16, 32, 64):
+        result = pipeline.make(
+            source, output=tmp_path / f"core-{core}.schem",
+            overrides=[f"limits.region=[{core},{core},{core}]", "limits.halo=0"],
+        )
+        assert result.code == 0
+        outputs.append(cells(result.output))
+    assert outputs[0] == outputs[1] == outputs[2]
+
+
 def test_cli_error_codes_and_existing_output(tmp_path, capsys):
     missing = tmp_path / "missing.yaml"
     assert main(["make", str(missing)]) == 2

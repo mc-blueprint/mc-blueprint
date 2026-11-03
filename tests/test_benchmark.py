@@ -146,6 +146,66 @@ def test_benchmark_baseline_matches_fixtures_and_stage_contract() -> None:
             assert stage["python_peak_bytes"] > 0
 
 
+def test_issue_153_generation_records_cover_fixed_workloads_and_integrations() -> None:
+    root = Path(__file__).parents[1]
+    old_record = json.loads((root / "benchmarks" / "generation-baseline.json").read_text(
+        encoding="utf-8"
+    ))
+    core = json.loads((root / "benchmarks" / "generation-core-baseline.json").read_text(
+        encoding="utf-8"
+    ))
+    make = json.loads((root / "benchmarks" / "make-baseline.json").read_text(encoding="utf-8"))
+    evaluation = json.loads((root / "evaluation/records/generation-core.json").read_text(
+        encoding="utf-8"
+    ))
+
+    assert len(old_record["results"]) == 6
+    assert len(core["results"]) == 6
+    assert all(
+        core["provenance"].get(key)
+        for key in ("commit", "engine_sha256", "lock_sha256", "default_config_sha256")
+    )
+    for result in core["results"]:
+        assert result["repetitions"] == 3
+        assert len(result["samples"]) == 3
+        assert all(sample["process_peak_rss_bytes"] for sample in result["samples"])
+    assert len(make["results"]) == 6
+    for result in make["results"]:
+        assert result["repetitions"] == 3
+        assert len(result["samples"]) == 3
+        assert result["process_peak_rss_bytes_median"] > 0
+        assert all(
+            len(sample["input_sha256"]) == 64
+            and len(sample["config_sha256"]) == 64
+            and sample["seconds"] >= sample["make_runtime_seconds"]
+            for sample in result["samples"]
+        )
+        assert all(
+            stage["rss_at_stage_start_bytes"] > 0
+            for run in result["samples"]
+            for stage in run["stage_hook_samples"]
+        )
+    assert len(evaluation["results"]) == 16
+    assert all(result["placement_identical"] for result in evaluation["results"])
+    assert all(
+        requirement["result"] == "success"
+        for result in evaluation["results"]
+        for route in ("buildspec_requirements", "blueprint_requirements")
+        for requirement in result[route]
+    )
+    regressions = evaluation["regression_checks"]
+    assert regressions["seed_reproducible"]
+    assert regressions["seed_variation_changes_placement"]
+    assert regressions["core_sizes_16_32_64_identical"]
+    assert all(regressions["resume_each_stage_identical"].values())
+    assert all(item["validation"] == "success" for item in regressions["legacy_examples"])
+    assert len(regressions["legacy_benchmark_fixtures"]) == 12
+    assert all(
+        item["validation"] == "success" and item["generated_cells"] > 0
+        for item in regressions["legacy_benchmark_fixtures"]
+    )
+
+
 def test_benchmark_records_cli_regeneration_and_single_pass() -> None:
     for stage in ("cli_validate", "cli_preview", "cli_build", "single_pass"):
         result = _worker("terrain-8", stage, repetitions=1)

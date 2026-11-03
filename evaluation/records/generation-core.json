@@ -1,0 +1,3403 @@
+{
+  "schema_version": 1,
+  "record_type": "generation-core-evaluation",
+  "source_case_sha256": "8636cafff3ab5c5d16cfa03d14e7ab0463b2d019da20660db6091dd9f8cdc952",
+  "provenance": {
+    "commit": "e495e293a1fdddcd70b7d0d9f27b5a160b47dff2",
+    "engine_sha256": "67a3afd65010db5f473f502d0851e8f5d7e1dbc25abe464798f338203ad7ed61",
+    "lock_sha256": "66b47f170d902f75de7d97796420a17319988bb32f7dc34a0fc420c07bfa02ca",
+    "default_config_sha256": "4ff6ca047fd800afe93d20abd51d6bf6e56cc4dd2d09365b63c448909eeb9063"
+  },
+  "regression_checks": {
+    "seed_reproducible": true,
+    "seed_variation_changes_placement": true,
+    "core_sizes_16_32_64_identical": true,
+    "resume_each_stage_identical": {
+      "resolve": true,
+      "site": true,
+      "massing": true,
+      "detail": true,
+      "blueprint": true
+    },
+    "legacy_examples": [
+      {
+        "path": "examples/bridge.json",
+        "sha256": "7d5b4d1488dd7527fd01d48727e6ba4fbc6313bad6e0814d438cabeed73147ec",
+        "validation": "success",
+        "generated_cells": 1184
+      },
+      {
+        "path": "examples/castle_gate.json",
+        "sha256": "585ac9465674208eb2fa3f3c4b03c35a94a98703af083405df304dd00f242f30",
+        "validation": "success",
+        "generated_cells": 2894
+      },
+      {
+        "path": "examples/cottage.json",
+        "sha256": "1f833075b67b7670a53a2bd5f332bd674a51837e3f6110a93c10473f136260ee",
+        "validation": "success",
+        "generated_cells": 774
+      },
+      {
+        "path": "examples/farm.json",
+        "sha256": "1ec04e88dfbd595fd7a98a7803e9aad0dfed4f742b8d6d72e609ee54c30756e4",
+        "validation": "success",
+        "generated_cells": 759
+      },
+      {
+        "path": "examples/gatehouse.json",
+        "sha256": "ebb00f40c5a542b267aa4096545ca46baff7f0b772b4bbe27aa00767a72d95df",
+        "validation": "success",
+        "generated_cells": 498
+      },
+      {
+        "path": "examples/house.json",
+        "sha256": "2c618fd8dc82826b3ee891b26f1c7661da62995014ec3aa9dbe75a445f336899",
+        "validation": "success",
+        "generated_cells": 471
+      },
+      {
+        "path": "examples/tower.json",
+        "sha256": "f3096af1c84736fea8c7e2eb3c8b4da57d7663cf25746082682117200b8af098",
+        "validation": "success",
+        "generated_cells": 3503
+      },
+      {
+        "path": "examples/tower_manual.json",
+        "sha256": "6ca22fca666d925cecd8135a09b57f828707ccfef67a1cc1b1eab1fd6a7001d1",
+        "validation": "success",
+        "generated_cells": 1771
+      },
+      {
+        "path": "examples/village_path.json",
+        "sha256": "c933225529e92d64a8d51c5356d9ff2652da887a8466239909a52faa5e7a3318",
+        "validation": "success",
+        "generated_cells": 1833
+      }
+    ],
+    "legacy_benchmark_fixtures": [
+      {
+        "path": "benchmarks/fixtures/air-16.json",
+        "sha256": "4b36e9ea5fa3380c38b78d6d8380b917caeec76bb3f9034200d797fe2f371f2e",
+        "validation": "success",
+        "generated_cells": 4096
+      },
+      {
+        "path": "benchmarks/fixtures/air-24.json",
+        "sha256": "3ce9c501a3905ed803a321fdfeedac08393ffa52106e197a44a76ee7df0c8d25",
+        "validation": "success",
+        "generated_cells": 13824
+      },
+      {
+        "path": "benchmarks/fixtures/air-8.json",
+        "sha256": "b4fe3d6af9f03df7fc22bd44eb7ed3aca12fed904cc24f42736ed15df72dcc77",
+        "validation": "success",
+        "generated_cells": 512
+      },
+      {
+        "path": "benchmarks/fixtures/repeat-32.json",
+        "sha256": "b7e2319aa5c75db707eaac5556f3b24579aa014c29310a1a1f3e05de8a923f91",
+        "validation": "success",
+        "generated_cells": 256
+      },
+      {
+        "path": "benchmarks/fixtures/repeat-64.json",
+        "sha256": "07adfe697b47d2bd22a351ea1cae976b5962be0634625af8a467056cc83dbfa5",
+        "validation": "success",
+        "generated_cells": 512
+      },
+      {
+        "path": "benchmarks/fixtures/repeat-8.json",
+        "sha256": "b0c8fdf71b3febc215d04a567921b6e764cedc8caa831eda1871a910def050f9",
+        "validation": "success",
+        "generated_cells": 64
+      },
+      {
+        "path": "benchmarks/fixtures/sparse-16.json",
+        "sha256": "10befb18a9b5b2a4e2f8d62d12c576f084248522ef5c0b840908657a45236ace",
+        "validation": "success",
+        "generated_cells": 16
+      },
+      {
+        "path": "benchmarks/fixtures/sparse-256.json",
+        "sha256": "8205b3a6fc1e01d29ed8854b28c9d3906a54f7cd57ed0a2b1b0cec7a498f39cb",
+        "validation": "success",
+        "generated_cells": 256
+      },
+      {
+        "path": "benchmarks/fixtures/sparse-64.json",
+        "sha256": "1f24e66ae829f18875dec2024ac87aeb356a2b349b003e9f6ed652c0165f09e4",
+        "validation": "success",
+        "generated_cells": 64
+      },
+      {
+        "path": "benchmarks/fixtures/terrain-16.json",
+        "sha256": "6121a774716275044d48bde9b4b4f968213cda5a7a3ec13389f2e7969bcd6dc2",
+        "validation": "success",
+        "generated_cells": 1024
+      },
+      {
+        "path": "benchmarks/fixtures/terrain-24.json",
+        "sha256": "536b07e8c830642100d8cced9d4b16a1c0fc48879588f616e1957d99dd3c509e",
+        "validation": "success",
+        "generated_cells": 4608
+      },
+      {
+        "path": "benchmarks/fixtures/terrain-8.json",
+        "sha256": "ffcf4c140bf5e5952e66f1f5075d34a0896e1756821b6f7fc46a2113aa5a501d",
+        "validation": "success",
+        "generated_cells": 256
+      }
+    ]
+  },
+  "results": [
+    {
+      "case": "single-house",
+      "minecraft_version": "1.21.11",
+      "buildspec_sha256": "210dc987008274a8dfe560851745a49b97687b9b756c6b1047d119854ba70afb",
+      "blueprint_sha256": "9c3de7a162829bc27aa7735e28921b48061009e1ce146910717a2d6e6c92dffb",
+      "format": "schem",
+      "buildspec_status": "success",
+      "blueprint_build_status": "success",
+      "placement_identical": true,
+      "buildspec_requirements": [
+        {
+          "requirement": "外から入口を識別でき、内部へ通り抜けられる",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "内部に床があり、主要な部屋を外壁で囲む",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "屋根が主要な居住空間を覆う",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        }
+      ],
+      "blueprint_requirements": [
+        {
+          "requirement": "外から入口を識別でき、内部へ通り抜けられる",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "内部に床があり、主要な部屋を外壁で囲む",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "屋根が主要な居住空間を覆う",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case": "single-house",
+      "minecraft_version": "1.21.11",
+      "buildspec_sha256": "97632cc81cd63c0e89f66bec10948a45ce911e20af44e66ff1b5ff72ace621a0",
+      "blueprint_sha256": "dda9cc74a7434dbc81fb7f23e7e102d52b1e212d0d5030ad35ac02016cf4e091",
+      "format": "litematic",
+      "buildspec_status": "success",
+      "blueprint_build_status": "success",
+      "placement_identical": true,
+      "buildspec_requirements": [
+        {
+          "requirement": "外から入口を識別でき、内部へ通り抜けられる",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "内部に床があり、主要な部屋を外壁で囲む",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "屋根が主要な居住空間を覆う",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        }
+      ],
+      "blueprint_requirements": [
+        {
+          "requirement": "外から入口を識別でき、内部へ通り抜けられる",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "内部に床があり、主要な部屋を外壁で囲む",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "屋根が主要な居住空間を覆う",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case": "single-house",
+      "minecraft_version": "26.1.2",
+      "buildspec_sha256": "d189282189f3b9d8e7912e0ec0be4ce40be44db239f077be9acddbf9931a55bb",
+      "blueprint_sha256": "4645f3d5fef69d7c288221ba56cd1ca5b42bb8eb9b3a0439446081241ca6b6aa",
+      "format": "schem",
+      "buildspec_status": "success",
+      "blueprint_build_status": "success",
+      "placement_identical": true,
+      "buildspec_requirements": [
+        {
+          "requirement": "外から入口を識別でき、内部へ通り抜けられる",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "内部に床があり、主要な部屋を外壁で囲む",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "屋根が主要な居住空間を覆う",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        }
+      ],
+      "blueprint_requirements": [
+        {
+          "requirement": "外から入口を識別でき、内部へ通り抜けられる",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "内部に床があり、主要な部屋を外壁で囲む",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "屋根が主要な居住空間を覆う",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case": "single-house",
+      "minecraft_version": "26.1.2",
+      "buildspec_sha256": "4f2549b5189928072909c13ba520d50a51d55140b8a0d7f28005b0e765836e8f",
+      "blueprint_sha256": "c2d86136dfb935d536f11121f176c54a55803ab0b716bd1b1f0edca588eb6234",
+      "format": "litematic",
+      "buildspec_status": "success",
+      "blueprint_build_status": "success",
+      "placement_identical": true,
+      "buildspec_requirements": [
+        {
+          "requirement": "外から入口を識別でき、内部へ通り抜けられる",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "内部に床があり、主要な部屋を外壁で囲む",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "屋根が主要な居住空間を覆う",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        }
+      ],
+      "blueprint_requirements": [
+        {
+          "requirement": "外から入口を識別でき、内部へ通り抜けられる",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "内部に床があり、主要な部屋を外壁で囲む",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "屋根が主要な居住空間を覆う",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case": "single-house",
+      "minecraft_version": "26.2",
+      "buildspec_sha256": "25498a2eb1c4b0a147d9dbcf44f12990f94bd354ae5f65c527c1ad7183da8621",
+      "blueprint_sha256": "6b8fe26d037d254111cbe744f20110967c2fb3e6696eefa369186eee8459dd78",
+      "format": "schem",
+      "buildspec_status": "success",
+      "blueprint_build_status": "success",
+      "placement_identical": true,
+      "buildspec_requirements": [
+        {
+          "requirement": "外から入口を識別でき、内部へ通り抜けられる",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "内部に床があり、主要な部屋を外壁で囲む",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "屋根が主要な居住空間を覆う",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        }
+      ],
+      "blueprint_requirements": [
+        {
+          "requirement": "外から入口を識別でき、内部へ通り抜けられる",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "内部に床があり、主要な部屋を外壁で囲む",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "屋根が主要な居住空間を覆う",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case": "single-house",
+      "minecraft_version": "26.2",
+      "buildspec_sha256": "1c83e3d4212e7d142aade838164a19a8296e7a6515578b17f62d2c788ce8922a",
+      "blueprint_sha256": "34e153816e6838cfd19dd2805a7e4eaee3c29d756a1069737e3754eb6d6ef99b",
+      "format": "litematic",
+      "buildspec_status": "success",
+      "blueprint_build_status": "success",
+      "placement_identical": true,
+      "buildspec_requirements": [
+        {
+          "requirement": "外から入口を識別でき、内部へ通り抜けられる",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "内部に床があり、主要な部屋を外壁で囲む",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "屋根が主要な居住空間を覆う",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        }
+      ],
+      "blueprint_requirements": [
+        {
+          "requirement": "外から入口を識別でき、内部へ通り抜けられる",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "内部に床があり、主要な部屋を外壁で囲む",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "屋根が主要な居住空間を覆う",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case": "single-house",
+      "minecraft_version": "26.3",
+      "buildspec_sha256": "91833c98c860bc2558a19473db86ab468e68db3f34f9a6722eb00e172e050f00",
+      "blueprint_sha256": "1d459a803cd675832bee565f4fbcf7dc7baaf83db7271b0d629fa44602ba9bb8",
+      "format": "schem",
+      "buildspec_status": "success",
+      "blueprint_build_status": "success",
+      "placement_identical": true,
+      "buildspec_requirements": [
+        {
+          "requirement": "外から入口を識別でき、内部へ通り抜けられる",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "内部に床があり、主要な部屋を外壁で囲む",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "屋根が主要な居住空間を覆う",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        }
+      ],
+      "blueprint_requirements": [
+        {
+          "requirement": "外から入口を識別でき、内部へ通り抜けられる",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "内部に床があり、主要な部屋を外壁で囲む",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "屋根が主要な居住空間を覆う",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case": "single-house",
+      "minecraft_version": "26.3",
+      "buildspec_sha256": "28d8e574db4a6b0b6795da2ac1eb58883bc29e82fad137c39763ee3e753a5438",
+      "blueprint_sha256": "1def39b4a9f5c69b83be76600862d211e2fe16e9deb08ec49e21c644df01d07d",
+      "format": "litematic",
+      "buildspec_status": "success",
+      "blueprint_build_status": "success",
+      "placement_identical": true,
+      "buildspec_requirements": [
+        {
+          "requirement": "外から入口を識別でき、内部へ通り抜けられる",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "内部に床があり、主要な部屋を外壁で囲む",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "屋根が主要な居住空間を覆う",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        }
+      ],
+      "blueprint_requirements": [
+        {
+          "requirement": "外から入口を識別でき、内部へ通り抜けられる",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "内部に床があり、主要な部屋を外壁で囲む",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "屋根が主要な居住空間を覆う",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 2,
+            "door_present": true,
+            "floor_block_cells": 233,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.6111111111111112,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              9,
+              13,
+              11
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case": "standalone-tower",
+      "minecraft_version": "1.21.11",
+      "buildspec_sha256": "ee00931d66b344bdb960692f22476396042d3338d5f2c8696412eea58db17f21",
+      "blueprint_sha256": "633f978697fe44a5b8d85fd3b2dc9a800071919861c9a8f2b1206ca760c22868",
+      "format": "schem",
+      "buildspec_status": "success",
+      "blueprint_build_status": "success",
+      "placement_identical": true,
+      "buildspec_requirements": [
+        {
+          "requirement": "地上階から上部まで連続する移動経路がある",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "各階に利用可能な床面がある",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "開口部が外壁を貫通し、内部から外を見られる",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        }
+      ],
+      "blueprint_requirements": [
+        {
+          "requirement": "地上階から上部まで連続する移動経路がある",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "各階に利用可能な床面がある",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "開口部が外壁を貫通し、内部から外を見られる",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case": "standalone-tower",
+      "minecraft_version": "1.21.11",
+      "buildspec_sha256": "fef13cbd58b639a74fe2109c527bfa06d137234a9eb5ed5688167501cda24b89",
+      "blueprint_sha256": "99dcf98fba2193599b81b1163f1d2c36f6ac4eba525374ac267ad120b81bdb34",
+      "format": "litematic",
+      "buildspec_status": "success",
+      "blueprint_build_status": "success",
+      "placement_identical": true,
+      "buildspec_requirements": [
+        {
+          "requirement": "地上階から上部まで連続する移動経路がある",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "各階に利用可能な床面がある",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "開口部が外壁を貫通し、内部から外を見られる",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        }
+      ],
+      "blueprint_requirements": [
+        {
+          "requirement": "地上階から上部まで連続する移動経路がある",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "各階に利用可能な床面がある",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "開口部が外壁を貫通し、内部から外を見られる",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case": "standalone-tower",
+      "minecraft_version": "26.1.2",
+      "buildspec_sha256": "7c88c3a7002a2f8c754c9a99f4b6db1d7ac307e4880d3e1eb3d7ce878dd92b5d",
+      "blueprint_sha256": "85d374005a5697b66221110001a8ebfd0c8637172f8b9cec157e719676df5e0c",
+      "format": "schem",
+      "buildspec_status": "success",
+      "blueprint_build_status": "success",
+      "placement_identical": true,
+      "buildspec_requirements": [
+        {
+          "requirement": "地上階から上部まで連続する移動経路がある",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "各階に利用可能な床面がある",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "開口部が外壁を貫通し、内部から外を見られる",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        }
+      ],
+      "blueprint_requirements": [
+        {
+          "requirement": "地上階から上部まで連続する移動経路がある",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "各階に利用可能な床面がある",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "開口部が外壁を貫通し、内部から外を見られる",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case": "standalone-tower",
+      "minecraft_version": "26.1.2",
+      "buildspec_sha256": "911c2a9ff6cc268491916172b7e5c308853a0c59b5a27482bb06149eb3a11973",
+      "blueprint_sha256": "4d8669f5fe8313fab82a9b8cdb15a88fc97d5b32994394e4bdeaffb06db0b816",
+      "format": "litematic",
+      "buildspec_status": "success",
+      "blueprint_build_status": "success",
+      "placement_identical": true,
+      "buildspec_requirements": [
+        {
+          "requirement": "地上階から上部まで連続する移動経路がある",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "各階に利用可能な床面がある",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "開口部が外壁を貫通し、内部から外を見られる",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        }
+      ],
+      "blueprint_requirements": [
+        {
+          "requirement": "地上階から上部まで連続する移動経路がある",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "各階に利用可能な床面がある",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "開口部が外壁を貫通し、内部から外を見られる",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case": "standalone-tower",
+      "minecraft_version": "26.2",
+      "buildspec_sha256": "3ae81ec33f1cf1360884bead1081a934b29e118858e0d8d8f19289ce09628e15",
+      "blueprint_sha256": "eca05320d3b2ef56b57523963bda29285ef504af4f8d6f09cbaede358f933ca1",
+      "format": "schem",
+      "buildspec_status": "success",
+      "blueprint_build_status": "success",
+      "placement_identical": true,
+      "buildspec_requirements": [
+        {
+          "requirement": "地上階から上部まで連続する移動経路がある",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "各階に利用可能な床面がある",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "開口部が外壁を貫通し、内部から外を見られる",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        }
+      ],
+      "blueprint_requirements": [
+        {
+          "requirement": "地上階から上部まで連続する移動経路がある",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "各階に利用可能な床面がある",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "開口部が外壁を貫通し、内部から外を見られる",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case": "standalone-tower",
+      "minecraft_version": "26.2",
+      "buildspec_sha256": "f94ece01dec3d262a7d7dd85351537c4c9c292d4a43675336699d00f089a8403",
+      "blueprint_sha256": "f86f394dd2053d41f4dae983123e71d08594242559fb53f1a84c60135425e6af",
+      "format": "litematic",
+      "buildspec_status": "success",
+      "blueprint_build_status": "success",
+      "placement_identical": true,
+      "buildspec_requirements": [
+        {
+          "requirement": "地上階から上部まで連続する移動経路がある",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "各階に利用可能な床面がある",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "開口部が外壁を貫通し、内部から外を見られる",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        }
+      ],
+      "blueprint_requirements": [
+        {
+          "requirement": "地上階から上部まで連続する移動経路がある",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "各階に利用可能な床面がある",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "開口部が外壁を貫通し、内部から外を見られる",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case": "standalone-tower",
+      "minecraft_version": "26.3",
+      "buildspec_sha256": "872701e7ebc571b1b72a34d363820e094601e0b43bed29ff3f135334c3db594f",
+      "blueprint_sha256": "a6dedda6412ced8275789177b0d5a2bcf1f6ec69ee0a41de50eef8d0629401ef",
+      "format": "schem",
+      "buildspec_status": "success",
+      "blueprint_build_status": "success",
+      "placement_identical": true,
+      "buildspec_requirements": [
+        {
+          "requirement": "地上階から上部まで連続する移動経路がある",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "各階に利用可能な床面がある",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "開口部が外壁を貫通し、内部から外を見られる",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        }
+      ],
+      "blueprint_requirements": [
+        {
+          "requirement": "地上階から上部まで連続する移動経路がある",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "各階に利用可能な床面がある",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "開口部が外壁を貫通し、内部から外を見られる",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "case": "standalone-tower",
+      "minecraft_version": "26.3",
+      "buildspec_sha256": "f12ca56d2a4102b8d89f5c9b68e4825e016d378fdbf789c54128737f67d65fbd",
+      "blueprint_sha256": "037292e8873edc4df246ad261c17dddb22017978da957f892c8e0819b8e9bb79",
+      "format": "litematic",
+      "buildspec_status": "success",
+      "blueprint_build_status": "success",
+      "placement_identical": true,
+      "buildspec_requirements": [
+        {
+          "requirement": "地上階から上部まで連続する移動経路がある",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "各階に利用可能な床面がある",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "開口部が外壁を貫通し、内部から外を見られる",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        }
+      ],
+      "blueprint_requirements": [
+        {
+          "requirement": "地上階から上部まで連続する移動経路がある",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "各階に利用可能な床面がある",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        },
+        {
+          "requirement": "開口部が外壁を貫通し、内部から外を見られる",
+          "result": "success",
+          "evidence": {
+            "reachable_routes": 4,
+            "door_present": true,
+            "floor_block_cells": 260,
+            "floor_levels": [
+              0,
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+              10,
+              11,
+              12
+            ],
+            "wall_coverage_ratio": 0.5,
+            "roof_over_room": true,
+            "window_glass_present": true,
+            "wall_opening_candidate": false,
+            "dimensions": [
+              11,
+              15,
+              11
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
