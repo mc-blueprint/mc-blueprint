@@ -168,20 +168,15 @@ def apply_edits_file(scene_path: Path, edits_path: Path, source_path: Path,
             raise _fail("scene生成後に入力が変更されています")
         if scene.get("source", {}).get("sha256") != meta.get("inputSha256"):
             raise _fail("sceneとsidecarの入力世代が一致しません")
-        from mcblueprint.pipeline import _cli_overrides, _environment, _hash
+        from mcblueprint.pipeline import _check_cli_overrides, _environment, _hash
 
         if meta.get("environment") != _environment():
             raise _fail("scene生成後にengineまたはdataが変更されています")
         if config is not None:
-            if "cliOverrides" not in meta:
-                raise _fail("sidecarにCLI指定の記録がありません。sceneを再生成してください")
-            expected = meta["cliOverrides"]
-            actual = _cli_overrides(resolved)
-            differences = [path for path in sorted(expected.keys() | actual.keys())
-                           if path not in expected or path not in actual
-                           or expected[path] != actual[path]]
-            if differences:
-                raise _fail(f"scene生成時のCLI指定と一致しません: {', '.join(differences)}")
+            try:
+                _check_cli_overrides(meta, resolved)
+            except BlueprintError as exc:
+                raise _fail(str(exc)) from exc
         if config is not None and (
                 _hash(resolved.buildspec) != meta.get("resolvedHash")
                 or _hash(config) != meta.get("configHash")):
