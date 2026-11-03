@@ -543,3 +543,18 @@ mcblueprint diff <a.json> <b.json> [--json] [--max-dimension N]
 ## 明示通行検査（`traversal.py`）
 
 `traverse` は最終生成volumeと明示したbuilding/足元座標を対象にする。通常validateの成功条件は変更しない。限定移動モデル、既知形状と未対応形状、CLI/APIの契約は [TRAVERSAL.md](TRAVERSAL.md) を正とする。
+## BuildSpecの実行パイプライン（pipeline.py）
+
+`pipeline.make` はResolve→Site/Massing/Detail→Materialize→Generate/Weather→Critic→Exportを
+接続する。計画APIは三段を一度に実行し、Generateは一度だけ領域イテレータを消費する。
+Weatherの必要haloを渡し、更新したcoreを既存 `RegionSpool` に保存する。
+支持検査は小さいcoreだけを列挙し、隣接参照と全階の経路探索にはspoolの行キャッシュを使う。
+全体BlockVolumeは作らず、探索の境界・メモリを制限する。
+Exporterにはspoolから再読込したcoreを渡し、既存の原子的完成ファイル置換を再利用する。
+
+段階JSONとhash付きsidecarは入力・合成設定・engine・データlockと結び付ける。
+旧cacheの互換処理は持たない。emitしたBlueprintの `metadata.generation` は座標依存混色と
+Weatherの設定を保持し、CLIのbuildだけがこのmetadataを見て領域経路へ分岐する。
+旧Blueprintの共有Random経路は維持する。run記録・診断・CLI契約は
+[BUILDSPEC.md](BUILDSPEC.md#make-と最小評価) を参照。
+scene・サーバー・3D表示はFの責務で、makeは表示未実行を明示する。

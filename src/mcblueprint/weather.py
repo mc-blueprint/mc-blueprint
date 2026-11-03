@@ -15,6 +15,7 @@ from mcblueprint.generator import GeneratedRegion
 from mcblueprint.model.block import BlockState
 from mcblueprint.model.vec import Vec3
 from mcblueprint.operations.base import derive_seed
+from mcblueprint.support import DIRT_LIKE
 
 _NEIGHBORS = (
     (Vec3(1, 0, 0), "east"), (Vec3(-1, 0, 0), "west"),
@@ -151,7 +152,8 @@ def apply_weather(
                         if not bounds.contains(support):
                             continue
                         plant_ids = (("minecraft:short_grass", "minecraft:fern")
-                                     if face == "bottom" else
+                                     if face == "bottom" and
+                                     support_state.id.removeprefix("minecraft:") in DIRT_LIKE else
                                      ("minecraft:vine", "minecraft:oak_leaves")
                                      if face in ("north", "south", "east", "west") else ())
                         candidates = []

@@ -1,0 +1,446 @@
+"""BuildSpecの生成、検査、段階保存と検証付き再開。"""
+
+from __future__ import annotations
+
+import json
+import tempfile
+from collections import OrderedDict
+from collections.abc import Callable, Iterator
+from dataclasses import dataclass
+from hashlib import sha256
+from pathlib import Path
+
+import numpy as np
+
+from mcblueprint import __version__, blockdata
+from mcblueprint.buildspec import ResolveResult, resolve_buildspec
+from mcblueprint.errors import BlueprintError
+from mcblueprint.exporters import EXPORTERS
+from mcblueprint.exporters._spool import RegionSpool
+from mcblueprint.generator import GeneratedRegion, GenerationLimits, generate_regions
+from mcblueprint.model import AABB, Vec3
+from mcblueprint.operations.box_like import iter_box
+from mcblueprint.planning import plan_buildspec
+from mcblueprint.region_export import export_generated_regions
+from mcblueprint.support import check_support
+from mcblueprint.traversal import check_route
+from mcblueprint.validator import validate_and_load
+from mcblueprint.volume import RegionVolume
+from mcblueprint.weather import apply_weather, required_halo
+
+STAGES = ("resolve", "site", "massing", "detail", "blueprint")
+GENERATION = "buildspec-v1"
+
+
+class PipelineError(BlueprintError):
+    """段階とCLI終了コードを持つ失敗。完成出力は公開しない。"""
+
+    def __init__(self, stage: str, message: str, code: int = 1):
+        self.stage, self.code = stage, code
+        super().__init__(f"{stage}: {' '.join(message.splitlines())}")
+
+
+@dataclass(frozen=True)
+class MakeResult:
+    """出力先・実行記録と合否。code=3でも成果物は保存済み。"""
+
+    output: Path
+    record: Path
+    code: int
+    diagnostics: tuple[str, ...]
+
+
+def _json(value) -> bytes:
+    return (json.dumps(value, ensure_ascii=False, sort_keys=True, indent=2) + "\n").encode("utf-8")
+
+
+def _hash(value) -> str:
+    return sha256(_json(value)).hexdigest()
+
+
+def _atomic_json(path: Path, value) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.NamedTemporaryFile(dir=path.parent, prefix=f".{path.name}-", delete=False) as f:
+        temporary = Path(f.name)
+    try:
+        temporary.write_bytes(_json(value))
+        temporary.replace(path)
+    finally:
+        temporary.unlink(missing_ok=True)
+
+
+def _environment() -> dict:
+    root = Path(__file__).parent
+    return {
+        "engine": __version__,
+        "engineHash": _hash({p.relative_to(root).as_posix(): sha256(p.read_bytes()).hexdigest()
+                             for p in sorted(root.rglob("*.py"))}),
+        "lockHash": sha256((root / "data/lock.json").read_bytes()).hexdigest(),
+        "dataHash": _hash({p.relative_to(root).as_posix(): sha256(p.read_bytes()).hexdigest()
+                           for folder in ("blockdata", "patterns")
+                           for p in sorted((root / "data" / folder).rglob("*")) if p.is_file()}),
+    }
+
+
+def _read_checkpoint(
+    path: Path, expected: dict, seen: set[Path] | None = None,
+) -> tuple[dict, dict]:
+    seen = set() if seen is None else seen
+    path = path.resolve()
+    if path in seen:
+        raise PipelineError("Resume", "前段の参照が循環しています")
+    seen.add(path)
+    try:
+        data = json.loads(path.read_text(encoding="utf-8"))
+        sidecar_path = path.with_suffix(path.suffix + ".meta.json")
+        sidecar = json.loads(sidecar_path.read_text(encoding="utf-8"))
+        if (sidecar["formatVersion"] != 1 or sidecar["stage"] not in STAGES
+                or sidecar["environment"] != expected["environment"]
+                or sidecar["input"] != expected["input"]
+                or sidecar["sha256"] != _hash(data)
+                or sidecar["contextHash"] != _hash(sidecar["context"])):
+            raise PipelineError("Resume", "入力・engine・データ・中間出力のhashが一致しません")
+        previous = sidecar["previous"]
+        index = STAGES.index(sidecar["stage"])
+        context = sidecar["context"]
+        resolved = context["resolved"]
+        if (_hash(resolved["buildspec"]) != expected["input"]["resolvedHash"]
+                or resolved["config"] != resolved["buildspec"]["config"]):
+            raise PipelineError("Resume", "再開用contextと合成入力が一致しません")
+        if index:
+            for key in ("site", "massing", "detail", "plannedBlueprint", "palette"):
+                if not isinstance(context[key], dict):
+                    raise PipelineError("Resume", "保存済み計画が不正です")
+        if index == 4:
+            if not isinstance(context["materialDiagnostics"], list):
+                raise PipelineError("Resume", "保存済み材質診断が不正です")
+        else:
+            value = resolved if index == 0 else context[sidecar["stage"]]
+            if data != {"formatVersion": 1, "stage": sidecar["stage"], **value}:
+                raise PipelineError("Resume", "段階JSONと再開用contextが一致しません")
+        if index:
+            previous_path = path.parent / previous["file"]
+            _, parent = _read_checkpoint(previous_path, expected, seen)
+            if (parent["stage"] != STAGES[index - 1]
+                    or previous["sha256"] != parent["sha256"]
+                    or previous["contextHash"] != parent["contextHash"]):
+                raise PipelineError("Resume", "前段のhashまたは段が一致しません")
+        elif previous is not None:
+            raise PipelineError("Resume", "Resolveに前段はありません")
+        return data, sidecar
+    except (KeyError, TypeError, ValueError, UnicodeError) as exc:
+        raise PipelineError("Resume", f"中間出力またはsidecarが不正です: {path}") from exc
+
+
+def generated_blueprint_regions(
+    blueprint, *, seed=None, on_diagnostic: Callable[[dict], None] | None = None,
+) -> Iterator[GeneratedRegion]:
+    """make由来Blueprintの混色とWeatherを再現する。旧Blueprintには使用しない。
+
+    metadata.generationはmakeが保存した合成設定・基準面・実装方式を持つ。
+    編集後も呼出し元でvalidate_and_loadを行う。各volumeは次の反復前に解放する。
+    """
+    metadata = (blueprint.metadata or {}).get("generation", {})
+    if not isinstance(metadata, dict) or metadata.get("mode") != GENERATION:
+        raise BlueprintError("未対応の生成metadataです")
+    from mcblueprint.config import load_schema, validate_schema
+
+    config = metadata.get("config", {})
+    validate_schema(config, load_schema("config.schema.json"), "metadata.generation.config")
+    if (not {"limits", "weathering", "randomness"} <= config.keys()
+            or type(metadata.get("groundHeight")) is not int):
+        raise BlueprintError("生成metadataに合成設定・基準面が必要です")
+    if not {"region", "halo", "max_memory_mb"} <= config["limits"].keys():
+        raise BlueprintError("metadata.generation.config.limitsに合成済み上限が必要です")
+    limits = GenerationLimits(**{**config["limits"], "region": tuple(config["limits"]["region"])})
+    blocks = blockdata.load_block_data(blueprint.minecraft_version)
+    for region in generate_regions(blueprint, limits=limits, seed=seed,
+                                   reference_radius=required_halo(config["weathering"])):
+        diagnostics = apply_weather(
+            region, blocks, config=config["weathering"],
+            seed=blueprint.seed if seed is None else seed,
+            randomness=config["randomness"], ground_height=metadata["groundHeight"],
+            max_memory_mb=limits.max_memory_mb,
+        )
+        if on_diagnostic:
+            for diagnostic in diagnostics:
+                on_diagnostic(diagnostic)
+        yield region
+
+
+class _SpoolWindow:
+    """完成spoolの行キャッシュ。全体volumeを復元せず隣接セルを参照する。"""
+
+    def __init__(self, spool: RegionSpool, stream, max_rows: int):
+        self.spool, self.stream = spool, stream
+        self.rows: OrderedDict[tuple[int, int], np.ndarray] = OrderedDict()
+        self.max_rows = max_rows
+        self.core = spool.bounds
+
+    def bounds(self):
+        return self.spool.bounds
+
+    def get(self, pos):
+        if not self.spool.bounds.contains(pos):
+            return None
+        key = pos.y, pos.z
+        row = self.rows.get(key)
+        if row is None:
+            self.spool._seek(self.stream, pos.y, pos.z, self.spool.bounds.min.x)
+            raw = self.stream.read(self.spool.bounds.size.x * 4)
+            if len(raw) != self.spool.bounds.size.x * 4:
+                raise BlueprintError("評価spoolの行が欠落しています")
+            row = np.frombuffer(raw, dtype="<u4")
+            self.rows[key] = row
+            if len(self.rows) > self.max_rows:
+                self.rows.popitem(last=False)
+        else:
+            self.rows.move_to_end(key)
+        return self.spool.palette[row[pos.x - self.spool.bounds.min.x]]
+
+    def __iter__(self):
+        for pos in iter_box(self.core):
+            state = self.get(pos)
+            if state is not None:
+                yield pos, state
+
+
+def _cores(bounds: AABB, limits: dict) -> Iterator[AABB]:
+    width = min(32, limits["region"][0])
+    depth = min(32, limits["region"][2])
+    height = min(16, limits["region"][1] or 16)
+    for y in range(bounds.min.y, bounds.max.y + 1, height):
+        for z in range(bounds.min.z, bounds.max.z + 1, depth):
+            for x in range(bounds.min.x, bounds.max.x + 1, width):
+                low = Vec3(x, y, z)
+                yield AABB(low, Vec3.min(bounds.max, low + Vec3(width - 1, height - 1, depth - 1)))
+
+
+def _spool_regions(window: _SpoolWindow, limits: dict) -> Iterator[GeneratedRegion]:
+    # 出力再読込にはhaloも属性も不要。生成時と独立した小さい窓を使う。
+    for core in _cores(window.bounds(), limits):
+        volume = RegionVolume(core)
+        for pos in iter_box(core):
+            state = window.get(pos)
+            if state is not None:
+                volume.set(pos, state)
+        yield GeneratedRegion(core, volume)
+
+
+def _support(window, limits):
+    support_count = 0
+    first = None
+    for core in _cores(window.bounds(), limits):
+        window.core = core
+        warnings = check_support(window)
+        support_count += len(warnings)
+        if warnings and first is None:
+            first = warnings[0].format().replace("\n", " ")
+    return support_count, first
+
+
+def export_generated_blueprint(
+    blueprint, path: Path, *, format: str, seed: int | None = None, strict: bool = False,
+) -> tuple[int, str | None]:
+    """emitしたBlueprintを生成・支持検査・出力する。strictの支持違反では保存しない。
+
+    戻り値は支持違反数と最初の診断。全体volumeを復元せずmakeと同じ配置を出す。
+    """
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with tempfile.TemporaryDirectory(prefix=f".{path.name}-build-", dir=path.parent) as tmp:
+            spool = RegionSpool(Path(tmp) / "cells", blueprint.bounds())
+            spool.write(generated_blueprint_regions(blueprint, seed=seed))
+            limits = blueprint.metadata["generation"]["config"]["limits"]
+            with spool.path.open("rb") as stream:
+                window = _SpoolWindow(spool, stream, 32)
+                count, first = _support(window, limits)
+                if not strict or not count:
+                    export_generated_regions(_spool_regions(window, limits), blueprint, path,
+                                             format=format)
+                return count, first
+    except OSError as exc:
+        raise BlueprintError(f"Blueprintの出力に失敗しました: {exc}") from exc
+
+
+def _evaluate(window, blueprint, context, source, max_nodes):
+    root = context["massing"]["element"]
+    lines = []
+    support_count, first = _support(window, context["resolved"]["config"]["limits"])
+    failed = bool(support_count)
+    lines.append(f"{'FAIL' if support_count else 'OK'} support={support_count} {source} {root}"
+                 + (f" {first}" if first else ""))
+    points = context["massing"]
+    start = Vec3.from_seq(points["entrance"])
+    for point in points["arrivals"]:
+        end = Vec3.from_seq(point)
+        route = check_route(window, start, end, blueprint.minecraft_version, max_nodes=max_nodes)
+        failed |= route.status != "reachable"
+        reason = route.issues[0].reason if route.issues else ""
+        lines.append(f"{'OK' if route.status == 'reachable' else 'FAIL'} walkability="
+                     f"{route.status} {source} {root} {end.to_list()} {reason}".rstrip())
+        start = end
+    for diagnostic in context.get("materialDiagnostics", []):
+        failed = True
+        lines.append(f"FAIL {diagnostic['code']} {source} {root} "
+                     + json.dumps(diagnostic, ensure_ascii=False, sort_keys=True))
+    if not context.get("materialDiagnostics"):
+        lines.append(f"OK palette_relation {source} {root}")
+    for metric in ("column_continuity", "flat_ratio", "decoration_density", "facade_mix"):
+        lines.append(f"INFO {metric}=not-implemented {source} {root}")
+    return failed, lines
+
+
+def make(
+    source: str | Path, *, output: str | Path | None = None,
+    emit: list[str] | None = None, resume: str | Path | None = None,
+    overrides: list[str] | None = None, project_dir: Path | None = None,
+    user_config: Path | None = None, stage_hook: Callable[[str], None] | None = None,
+) -> MakeResult:
+    """BuildSpecを一度生成し、完成coreから評価・単一出力する。
+
+    emitはSTAGESの段名。要求した段までの前段とsidecarも出力隣へ保存する。
+    resumeは同じ入力・合成設定・engine・データに限る。sourceは常に必要。
+    stage_hookは段開始の計測用。成功0、評価不合格3を返し、それ以外は
+    PipelineError（検証1、I/O・資源不足2）を送出する。3D表示は実行しない。
+    """
+    source = Path(source).resolve()
+    stage = "Resolve"
+    try:
+        if stage_hook:
+            stage_hook(stage)
+        resolved = resolve_buildspec(source, project_dir=project_dir, user_config=user_config,
+                                     overrides=overrides)
+        config = resolved.config
+        expected = {"environment": _environment(), "input": {
+            "path": str(source), "basePath": str(source.parent),
+            "sha256": sha256(source.read_bytes()).hexdigest(),
+            "resolvedHash": _hash(resolved.buildspec),
+        }}
+        fmt = config["output"]["format"]
+        out = Path(output) if output is not None else Path(config["output"]["directory"])
+        if out.suffix != EXPORTERS[fmt].extension:
+            out = out / (source.stem + EXPORTERS[fmt].extension)
+        if out.resolve() == source:
+            raise PipelineError(stage, "入力と出力は別のパスにしてください", 2)
+        context = {"resolved": {"buildspec": resolved.buildspec,
+                                "config": config, "origins": resolved.origins}}
+        resumed = -1
+        resumed_data = None
+        if resume is not None:
+            stage = "Resume"
+            resumed_data, sidecar = _read_checkpoint(Path(resume), expected)
+            resumed = STAGES.index(sidecar["stage"])
+            context = sidecar["context"]
+        requested = config["output"]["emit"] if emit is None else emit
+        if set(requested) - set(STAGES):
+            raise PipelineError("Emit", "未知の段です", 2)
+        emit_last = max((STAGES.index(s) for s in requested), default=-1)
+        previous = None
+
+        def checkpoint(name, value):
+            nonlocal previous
+            if STAGES.index(name) > emit_last:
+                return
+            if name != "blueprint":
+                value = {"formatVersion": 1, "stage": name, **value}
+            path = out.with_name(f"{out.stem}.{name}.json")
+            if path.resolve() == source:
+                raise PipelineError("Emit", "中間出力が入力と同じパスです", 2)
+            saved = context.copy()
+            if name == "resolve":
+                saved = {"resolved": context["resolved"]}
+            elif name != "blueprint":
+                saved.pop("materialDiagnostics", None)
+                saved.pop("maxAreaRatios", None)
+            meta = {"formatVersion": 1, "stage": name, **expected,
+                    "sha256": _hash(value), "previous": previous,
+                    "context": saved, "contextHash": _hash(saved)}
+            _atomic_json(path, value)
+            _atomic_json(path.with_suffix(".json.meta.json"), meta)
+            previous = {"file": path.name, "sha256": meta["sha256"],
+                        "contextHash": meta["contextHash"]}
+
+        checkpoint("resolve", context["resolved"])
+        spec = resolved.buildspec
+        if resumed < 1:
+            stage = "Site/Massing/Detail"
+            if stage_hook:
+                stage_hook(stage)
+            plan = plan_buildspec(ResolveResult(**context["resolved"]))
+            context.update(site=plan.site, massing=plan.massing, detail=plan.detail,
+                           plannedBlueprint=plan.blueprint, palette=plan.palette)
+        for name in ("site", "massing", "detail"):
+            checkpoint(name, context[name])
+        if resumed < 4:
+            from mcblueprint.materialize import materialize
+
+            stage = "Materialize"
+            if stage_hook:
+                stage_hook(stage)
+            material = materialize(context["plannedBlueprint"], style=spec["style"],
+                                   biome=spec["site"]["biome"], palette=context["palette"])
+            concrete = material.blueprint
+            context["materialDiagnostics"] = list(material.diagnostics)
+            context["maxAreaRatios"] = material.max_area_ratios
+            concrete.setdefault("metadata", {})["generation"] = {
+                "mode": GENERATION, "config": config,
+                "groundHeight": context["site"]["floorY"],
+            }
+        else:
+            concrete = resumed_data
+        checkpoint("blueprint", concrete)
+        stage = "Generate"
+        blueprint, errors = validate_and_load(concrete, base_dir=source.parent)
+        if errors:
+            raise PipelineError("Validate", " ".join(e.format() for e in errors))
+        bounds = blueprint.bounds()
+        budget = config["limits"]["max_memory_mb"] * 1024 * 1024
+        if stage_hook:
+            stage_hook(stage)
+        out.parent.mkdir(parents=True, exist_ok=True)
+        with tempfile.TemporaryDirectory(prefix=f".{out.name}-pipeline-", dir=out.parent) as tmp:
+            spool = RegionSpool(Path(tmp) / "cells", bounds)
+            weather_counts: dict[str, int] = {}
+
+            def weather_diagnostic(diagnostic):
+                code = diagnostic["code"]
+                weather_counts[code] = weather_counts.get(code, 0) + 1
+
+            spool.write(generated_blueprint_regions(blueprint, on_diagnostic=weather_diagnostic))
+            stage = "Critic"
+            if stage_hook:
+                stage_hook(stage)
+            with spool.path.open("rb") as stream:
+                max_rows = max(1, min(128, int(budget // (bounds.size.x * 4 + 256) // 8)))
+                window = _SpoolWindow(spool, stream, max_rows)
+                failed, lines = _evaluate(window, blueprint, context, source,
+                                          max_nodes=max(1, int(budget // 2048)))
+                for code, count in sorted(weather_counts.items()):
+                    lines.append(f"WARN {code} count={count} {source} "
+                                 + context["massing"]["element"])
+                stage = "Export"
+                if stage_hook:
+                    stage_hook(stage)
+                export_generated_regions(_spool_regions(window, config["limits"]), blueprint,
+                                         out, format=fmt)
+        lines.append("INFO preview=not-run (3D表示はFで接続)")
+        status = "failed" if failed else "passed"
+        lines.append(f"STATUS {status}")
+        record = out.with_suffix(out.suffix + ".run.json")
+        _atomic_json(record, {"formatVersion": 1, **expected, "status": status,
+                              "preview": "not-run", "seed": blueprint.seed,
+                              "config": config, "sources": resolved.origins,
+                              "output": str(out), "diagnostics": lines})
+        return MakeResult(out, record, 3 if failed else 0, tuple(lines))
+    except PipelineError:
+        raise
+    except (BlueprintError, OSError, UnicodeError, ValueError, MemoryError) as exc:
+        cause = exc
+        while cause.__cause__ is not None:
+            cause = cause.__cause__
+        resource = stage in ("Generate", "Critic") and any(
+            word in str(exc) for word in ("メモリ", "max_memory_mb")
+        )
+        code = 2 if isinstance(cause, OSError | MemoryError) or resource or stage == "Export" else 1
+        raise PipelineError(stage, str(exc).replace("\n", " "), code) from exc

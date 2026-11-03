@@ -62,8 +62,8 @@ for region in generate_regions(blueprint):
 ```
 
 Materializeの `roles`・`diagnostics`・`max_area_ratios` は呼出し元で保持してください。
-配色関係の診断を計画の成功だけで合格扱いにしません。CLIの `make`・段階保存／再開・
-Weatherとの接続は後続Issueの範囲です。従来の `generate` は共有Randomによる抽選を
+配色関係の診断を計画の成功だけで合格扱いにしません。CLIの `make` は計画・材質・領域生成・
+Weather・最小評価・出力を接続します。従来の `generate` は共有Randomによる抽選を
 維持するため、混色時に `generate_regions` と同じ配置になる契約ではありません。
 
 ### 寸法・構造・様式
@@ -122,3 +122,71 @@ skipすることはありません。scene/editsの対象要素照合やCLIと�
 
 固定課題の入力は `tests/data/buildspec/single-house.yaml` と `standalone-tower.yaml` です。
 要求文と必須条件は `evaluation/cases/fixed-cases.json` のまま記載し、課題の意味を変更しません。
+
+## make と最小評価
+
+```console
+mcblueprint archetypes
+mcblueprint spec-template house --minecraft-version 26.3
+mcblueprint make house.yaml --emit blueprint
+mcblueprint make tower.yaml --format litematic --seed 73 -o output/tower.litematic
+mcblueprint make house.yaml --set weathering.age=0.4
+mcblueprint help operations
+```
+
+`spec-template` は版を明示する約30行のコメント付きYAMLを標準出力へ返します。
+`help buildspec|operations|materials|resume` は仕様の参照先を返します。
+`make` は合成済みの `output.format`・`output.directory`・`output.emit` を使い、
+CLIの `--format`・`--seed`・`--set KEY=VALUE` を最上位の設定として適用します。
+`-o` はファイルまたはディレクトリです。既定は `output/<spec名>.schem` です。
+
+各coreを一度だけ生成し、`required_halo()` を参照半径にしてWeatherを適用します。
+完成coreを一時spoolへ保存してから支持検査をcoreだけ集計し、入口→各階→屋上の順に
+既存traversalで確認します。全体のBlockVolumeを復元せず、行キャッシュで領域を跨いで読みます。
+探索状態にも `limits.max_memory_mb` から上限を設定し、超過は資源不足として失敗します。
+元地形snapshotの施工は現行 `generate_regions` が未対応のため、`make` でも拒否します。
+snapshotは上記の計画APIと従来の `generate` で施工してください。
+
+診断は1件1行で入力パス・要素IDを含みます。supportとwalkability、Materializeの
+`palette_relation` を評価し、traversalの `blocked` と `unsupported` を区別します。
+柱連続率・平坦率・装飾密度・外壁混色率の正式集計は `not-implemented` と表示し、合格に数えません。
+Weatherの遷移診断はコードごとの件数をWARNとして返します。
+
+終了コードは合格 `0`、入力・構造予約の違反 `1`、引数・I/O・資源不足 `2`、生成後の評価不合格 `3`。
+`3` でも成果物を保存します。隣の `<出力名>.run.json` に合否・診断・合成設定・出所・seed・
+入力hash・engine版/hash・データlock/hashを記録します。出力は既存の原子的Exporterを使い、
+完成まで既存ファイルを置き換えません。3D表示・ブラウザ起動は行わず、`preview=not-run` を返します。
+
+## 中間出力と再開
+
+```console
+mcblueprint make house.yaml --emit blueprint -o output/house.schem
+mcblueprint make house.yaml --resume output/house.detail.json -o output/resumed.schem
+mcblueprint validate output/house.blueprint.json
+mcblueprint build output/house.blueprint.json -o output/rebuilt.schem
+```
+
+`--emit resolve|site|massing|detail|blueprint` は複数指定できます。要求した最も後の段までの
+前段も出力隣へ `<出力stem>.<段>.json` として保存します。各ファイルの
+`.json.meta.json` sidecarは形式版1、段名、入力・基点パス、入力hash、合成設定hash、
+engine版/hash、lock/hash、前段hash、再開用contextとそのhashを持ちます。
+JSONとsidecarはそれぞれ一時ファイルから置換します。中断で片方だけ更新された組はhash検査で拒否します。
+計画APIはSite/Massing/Detailを一度に返すため、この三段のsidecarにはその計画結果を保持します。
+Resolveは計画前に、計画各段はMaterialize前に保存するので、後段失敗の調査にも利用できます。
+
+`--resume` でも元のBuildSpecが必要です。Resolveで現在の合成設定を一度確認し、入力・設定・
+前段の連鎖・engine・データに差があれば拒否します。Site以降は保存済み計画を使い、
+Blueprintからの再開ではMaterializeも省略します。Generateは常に一度だけ実行します。
+旧cacheの移行や同じ出力先を共有する実行の排他は提供しません。
+
+emitしたBlueprintは具体ブロック／既存Paletteと `metadata.generation` を持ちます。
+このmetadataは `mode: buildspec-v1`、合成設定 `config`、基準面 `groundHeight` を保持します。
+`build` はこれがある場合に限り領域生成とWeatherを使い、makeと同じ配置を再現します。
+metadataがない従来Blueprintの乱数・生成方式は維持します。出力形式内の時刻や圧縮ヘッダーの
+バイト一致は保証しません。emit後のOperation編集は `validate`・`build` で扱い、
+入力hashが変わった中間ファイルからのresumeはできません。make由来Blueprintのbuildは単一出力のみです。
+
+公開APIは `mcblueprint.pipeline.make(source, *, output, emit, resume, overrides, ...)`。
+`MakeResult` は出力・run記録・終了コード・診断を返し、失敗は段と終了コードを持つ
+`PipelineError` を送出します。`stage_hook(stage)` は段開始のローカル計測用で、
+Generateには領域ごとのWeatherと退避時間を含みます。Critic・Exportは別に通知します。
