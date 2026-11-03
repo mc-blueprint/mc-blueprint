@@ -1,18 +1,22 @@
+import base64
 import gzip
 import hashlib
 import json
 
 import nbtlib
+import numpy as np
 import pytest
 import yaml
 
 from mcblueprint import blockdata
+from mcblueprint.buildspec import resolve_buildspec
 from mcblueprint.cli import main
 from mcblueprint.errors import BlueprintError
 from mcblueprint.exporters import EXPORTERS
 from mcblueprint.generator import generate
 from mcblueprint.importers import read_schematic
 from mcblueprint.pipeline import make
+from mcblueprint.planning import plan_buildspec
 from mcblueprint.viewer_input import (
     EditConflict,
     _scene_blueprint,
@@ -35,6 +39,56 @@ def edits(prepared, values):
     return {"formatVersion": 1, "scene": prepared.scene_hash, "edits": values}
 
 
+@pytest.mark.parametrize("archetype", ["house", "tower"])
+def test_selected_child_edits_root_params(tmp_path, archetype):
+    source = tmp_path / f"{archetype}.yaml"
+    source.write_text(yaml.safe_dump({
+        "minecraftVersion": "1.21.11", "archetype": archetype, "scale": "small",
+        "seed": 42, "config": {"weathering": {"age": 0}},
+    }), encoding="utf-8")
+    massing = plan_buildspec(resolve_buildspec(source)).massing
+    root = massing["element"]
+    result = make(source, output=tmp_path / "made.schem")
+    _, scene = read_scene(result.output.with_name("made.scene.json.gz"))
+    used = set()
+    for chunk in scene["chunks"]:
+        blocks = np.frombuffer(base64.b64decode(chunk["blocks"]), dtype="<u2")
+        ids = np.frombuffer(base64.b64decode(chunk["sources"]), dtype="<u4")
+        used.update(map(int, ids[blocks != 0]))
+    selected = [entry for entry in scene["sources"] if entry["id"] in used]
+    assert selected
+    for entry in selected:
+        if entry.get("element", "").startswith(root):
+            assert entry["element"] == root
+            assert entry["params"] == sorted(massing["params"])
+            assert entry.get("spec") and entry.get("path")
+    assert any("facade" in entry.get("path", "") or "body" in entry.get("path", "")
+               for entry in selected)
+    assert any("frame" in entry.get("path", "") for entry in selected)
+    top = "roof" if archetype == "house" else "body"
+    assert any(top in entry.get("path", "") for entry in selected)
+
+    prepared = prepare_input(source, output=tmp_path / "view")
+    before = prepared.scene["size"]
+    param, value = ("width", 19) if archetype == "house" else ("height", 14)
+    descriptor = next(entry for entry in prepared.scene["sources"]
+                      if top in entry.get("path", ""))
+    assert param in descriptor["params"]
+    prepared.save_edits(edits(prepared, [
+        {"id": "param", "kind": "param", "element": descriptor["element"],
+         "param": param, "value": value},
+    ]))
+    assert prepared.regenerate()["code"] in (0, 3)
+    assert prepared.scene["size"] != before
+    assert yaml.safe_load(source.read_bytes())["elements"][root][param] == value
+    prepared.check_generation()
+    with pytest.raises(BlueprintError, match="許可"):
+        prepared.save_edits(edits(prepared, [
+            {"id": "bad", "kind": "param", "element": root + ".body#1",
+             "param": param, "value": value},
+        ]))
+
+
 def test_four_inputs_and_no_scene_provenance_open(tmp_path):
     source = tmp_path / "test.json"
     data = blueprint(source)
@@ -50,11 +104,13 @@ def test_four_inputs_and_no_scene_provenance_open(tmp_path):
     assert imported.scene["source"]["kind"] == "schematic"
     scene = prepared.scene | {"source": {"kind": "spec", "path": "Z:/must-not-open.yaml",
                                          "sha256": "0" * 64}}
+    scene["sources"] = [{"id": 1, "element": "tower#1", "params": ["height"]}]
     scene_path = tmp_path / "detached.scene.json.gz"
     original = gzip.compress(json.dumps(scene).encode())
     scene_path.write_bytes(original)
     detached = prepare_input(scene_path, output=tmp_path / "scene")
     assert not detached.spec
+    assert all("params" not in entry for entry in detached.scene["sources"])
     detached.save_edits(edits(detached, [{"id": "del", "kind": "delete", "at": [0, 0, 0]}]))
     detached.regenerate()
     assert scene_path.read_bytes() == original
@@ -189,6 +245,7 @@ def test_generated_blueprint_preserves_weather(tmp_path):
                       encoding="utf-8")
     result = make(source, output=tmp_path / "made.schem", emit=["blueprint"])
     prepared = prepare_input(tmp_path / "made.blueprint.json", output=tmp_path / "view")
+    assert all("params" not in entry for entry in prepared.scene["sources"])
     derived = _scene_blueprint(prepared.scene, "derived")
     blocks = blockdata.load_block_data("1.21.11")
     actual = {p: blocks.complete(s).to_string() for p, s in generate(_validated(derived, tmp_path))
