@@ -216,8 +216,8 @@ def _version_lock(path: Path) -> Iterator[None]:
         if os.name == "nt":
             import msvcrt
 
-            stream.seek(0)
-            if not stream.read(1):
+            stream.seek(0, os.SEEK_END)
+            if stream.tell() == 0:
                 stream.write(b"0")
                 stream.flush()
             stream.seek(0)

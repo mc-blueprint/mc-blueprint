@@ -518,7 +518,9 @@ def _run_config(args: argparse.Namespace, out: TextIO) -> int:
 
 
 def _run_make(args: argparse.Namespace, out: TextIO) -> int:
-    from mcblueprint.pipeline import PipelineError, make
+    from mcblueprint.buildspec import resolve_buildspec
+    from mcblueprint.output_lock import lock_paths
+    from mcblueprint.pipeline import PipelineError, make, preview_make
 
     overrides = args.set.copy()
     if args.format is not None:
@@ -526,15 +528,32 @@ def _run_make(args: argparse.Namespace, out: TextIO) -> int:
     if args.seed is not None:
         overrides.append(f"seed={args.seed}")
     try:
-        result = make(args.spec, output=args.output, emit=args.emit, resume=args.resume,
-                      overrides=overrides)
+        resolved = resolve_buildspec(args.spec, overrides=overrides)
+        fmt = resolved.config["output"]["format"]
+        target = Path(args.output or resolved.config["output"]["directory"])
+        if target.suffix != EXPORTERS[fmt].extension:
+            target /= Path(args.spec).stem + EXPORTERS[fmt].extension
+        with lock_paths(Path(args.spec), target):
+            result = make(args.spec, output=args.output, emit=args.emit, resume=args.resume,
+                          overrides=overrides)
     except PipelineError as exc:
         print(f"FAIL {exc} {args.spec}", file=out)
         return exc.code
+    except (OSError, BlueprintError) as exc:
+        print(f"FAIL Resolve: {exc} {args.spec}", file=out)
+        cause = exc
+        while cause.__cause__ is not None:
+            cause = cause.__cause__
+        return 2 if isinstance(cause, OSError) else 1
     for line in result.diagnostics:
         print(line, file=out)
     print(f"Wrote {result.output.as_posix()}", file=out)
     print(f"Run {result.record.as_posix()}", file=out)
+    try:
+        preview_make(result, Path(args.spec), overrides=overrides, out=out)
+    except PipelineError as exc:
+        print(f"FAIL {exc} {args.spec}", file=out)
+        return exc.code
     return result.code
 
 

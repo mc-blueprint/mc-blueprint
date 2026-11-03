@@ -8,7 +8,7 @@ import json
 import subprocess
 from pathlib import Path
 
-VIEWER_COMMIT = "7b2e0f44bc53780499fb500d1fd6c1d5b52039c1"
+VIEWER_COMMIT = "5d9c62e006c167356a88f8147f2f5d7ee47051a6"
 
 
 def sha256(path: Path) -> str:
