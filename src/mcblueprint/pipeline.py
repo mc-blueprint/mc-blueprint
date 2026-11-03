@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import json
+import os
+import shutil
 import tempfile
 from collections import OrderedDict
 from collections.abc import Callable, Iterator
@@ -306,6 +308,7 @@ def make(
     """
     source = Path(source).resolve()
     stage = "Resolve"
+    staged_out = None
     try:
         if stage_hook:
             stage_hook(stage)
@@ -399,8 +402,12 @@ def make(
         if stage_hook:
             stage_hook(stage)
         out.parent.mkdir(parents=True, exist_ok=True)
+        with tempfile.NamedTemporaryFile(dir=out.parent, prefix=f".{out.name}-", delete=False) as f:
+            staged_out = Path(f.name)
+        staged_out.unlink()
         with tempfile.TemporaryDirectory(prefix=f".{out.name}-pipeline-", dir=out.parent) as tmp:
-            spool = RegionSpool(Path(tmp) / "cells", bounds)
+            temporary_dir = Path(tmp)
+            spool = RegionSpool(temporary_dir / "cells", bounds)
             weather_counts: dict[str, int] = {}
 
             def weather_diagnostic(diagnostic):
@@ -423,15 +430,34 @@ def make(
                 if stage_hook:
                     stage_hook(stage)
                 export_generated_regions(_spool_regions(window, config["limits"]), blueprint,
-                                         out, format=fmt)
+                                         staged_out, format=fmt)
         lines.append("INFO preview=not-run (3D表示はFで接続)")
         status = "failed" if failed else "passed"
         lines.append(f"STATUS {status}")
         record = out.with_suffix(out.suffix + ".run.json")
-        _atomic_json(record, {"formatVersion": 1, **expected, "status": status,
-                              "preview": "not-run", "seed": blueprint.seed,
-                              "config": config, "sources": resolved.origins,
-                              "output": str(out), "diagnostics": lines})
+        with tempfile.TemporaryDirectory(prefix=f".{out.name}-publish-", dir=out.parent) as tmp:
+            temporary_dir = Path(tmp)
+            staged_record = temporary_dir / record.name
+            _atomic_json(staged_record, {"formatVersion": 1, **expected, "status": status,
+                                         "preview": "not-run", "seed": blueprint.seed,
+                                         "config": config, "sources": resolved.origins,
+                                         "output": str(out), "diagnostics": lines})
+            backups = {}
+            for target in (out, record):
+                backup = temporary_dir / f"{target.name}.backup"
+                if target.exists():
+                    shutil.copy2(target, backup)
+                    backups[target] = backup
+            try:
+                os.replace(staged_out, out)
+                os.replace(staged_record, record)
+            except OSError:
+                for target in (out, record):
+                    if target in backups:
+                        os.replace(backups[target], target)
+                    else:
+                        target.unlink(missing_ok=True)
+                raise
         return MakeResult(out, record, 3 if failed else 0, tuple(lines))
     except PipelineError:
         raise
@@ -444,3 +470,6 @@ def make(
         )
         code = 2 if isinstance(cause, OSError | MemoryError) or resource or stage == "Export" else 1
         raise PipelineError(stage, str(exc).replace("\n", " "), code) from exc
+    finally:
+        if staged_out is not None:
+            staged_out.unlink(missing_ok=True)
