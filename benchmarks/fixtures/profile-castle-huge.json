@@ -1,0 +1,161 @@
+{
+  "formatVersion": 1,
+  "minecraftVersion": "1.21.11",
+  "name": "profile-castle-huge",
+  "operations": [
+    {
+      "type": "fill",
+      "from": [
+        0,
+        1,
+        0
+      ],
+      "to": [
+        255,
+        36,
+        15
+      ],
+      "block": "minecraft:stone_bricks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        0,
+        1,
+        240
+      ],
+      "to": [
+        255,
+        36,
+        255
+      ],
+      "block": "minecraft:stone_bricks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        0,
+        1,
+        16
+      ],
+      "to": [
+        15,
+        36,
+        239
+      ],
+      "block": "minecraft:stone_bricks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        240,
+        1,
+        16
+      ],
+      "to": [
+        255,
+        36,
+        239
+      ],
+      "block": "minecraft:stone_bricks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        0,
+        1,
+        0
+      ],
+      "to": [
+        31,
+        44,
+        31
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "type": "fill",
+      "from": [
+        224,
+        1,
+        0
+      ],
+      "to": [
+        255,
+        44,
+        31
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "type": "fill",
+      "from": [
+        0,
+        1,
+        224
+      ],
+      "to": [
+        31,
+        44,
+        255
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "type": "fill",
+      "from": [
+        224,
+        1,
+        224
+      ],
+      "to": [
+        255,
+        44,
+        255
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "type": "fill",
+      "from": [
+        96,
+        1,
+        96
+      ],
+      "to": [
+        159,
+        28,
+        159
+      ],
+      "block": "minecraft:stone_bricks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        0,
+        0,
+        0
+      ],
+      "block": "minecraft:stone_bricks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        255,
+        127,
+        255
+      ],
+      "to": [
+        255,
+        127,
+        255
+      ],
+      "block": "minecraft:stone_bricks"
+    }
+  ]
+}

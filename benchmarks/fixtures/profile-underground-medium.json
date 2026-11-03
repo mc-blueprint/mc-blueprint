@@ -1,0 +1,91 @@
+{
+  "formatVersion": 1,
+  "minecraftVersion": "1.21.11",
+  "name": "profile-underground-medium",
+  "operations": [
+    {
+      "type": "fill",
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        63,
+        18,
+        63
+      ],
+      "block": "minecraft:stone"
+    },
+    {
+      "type": "fill",
+      "from": [
+        1,
+        2,
+        30
+      ],
+      "to": [
+        62,
+        5,
+        34
+      ],
+      "block": "minecraft:air"
+    },
+    {
+      "type": "fill",
+      "from": [
+        30,
+        2,
+        1
+      ],
+      "to": [
+        34,
+        5,
+        62
+      ],
+      "block": "minecraft:air"
+    },
+    {
+      "type": "fill",
+      "from": [
+        1,
+        2,
+        32
+      ],
+      "to": [
+        62,
+        2,
+        32
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        0,
+        0,
+        0
+      ],
+      "block": "minecraft:stone_bricks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        63,
+        47,
+        63
+      ],
+      "to": [
+        63,
+        47,
+        63
+      ],
+      "block": "minecraft:stone_bricks"
+    }
+  ]
+}

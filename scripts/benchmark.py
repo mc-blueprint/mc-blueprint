@@ -4,6 +4,8 @@ from __future__ import annotations
 
 import argparse
 import contextlib
+import ctypes
+import ctypes.wintypes
 import hashlib
 import io
 import json
@@ -45,6 +47,8 @@ def _cases() -> list[dict[str, Any]]:
     kinds = ("sparse", "terrain", "air", "repeat")
     for path in sorted(FIXTURES.glob("*.json")):
         name = path.stem
+        if name.startswith("profile-"):
+            continue
         kind = next((kind for kind in kinds if name.startswith(kind + "-")), "unknown")
         cases.append(
             {
@@ -289,19 +293,260 @@ def _worker(name: str, stage: str, repetitions: int) -> dict[str, Any]:
     }
 
 
+def _process_peak_rss() -> int | None:
+    """Return this process's peak working set in bytes, or None when unavailable."""
+    if sys.platform == "win32":
+
+        class ProcessMemoryCounters(ctypes.Structure):
+            _fields_ = [
+                ("cb", ctypes.wintypes.DWORD),
+                ("PageFaultCount", ctypes.wintypes.DWORD),
+                ("PeakWorkingSetSize", ctypes.c_size_t),
+                ("WorkingSetSize", ctypes.c_size_t),
+                ("QuotaPeakPagedPoolUsage", ctypes.c_size_t),
+                ("QuotaPagedPoolUsage", ctypes.c_size_t),
+                ("QuotaPeakNonPagedPoolUsage", ctypes.c_size_t),
+                ("QuotaNonPagedPoolUsage", ctypes.c_size_t),
+                ("PagefileUsage", ctypes.c_size_t),
+                ("PeakPagefileUsage", ctypes.c_size_t),
+            ]
+
+        counters = ProcessMemoryCounters()
+        counters.cb = ctypes.sizeof(counters)
+        kernel32 = ctypes.WinDLL("kernel32", use_last_error=True)
+        psapi = ctypes.WinDLL("psapi", use_last_error=True)
+        kernel32.GetCurrentProcess.restype = ctypes.wintypes.HANDLE
+        psapi.GetProcessMemoryInfo.argtypes = (
+            ctypes.wintypes.HANDLE,
+            ctypes.POINTER(ProcessMemoryCounters),
+            ctypes.wintypes.DWORD,
+        )
+        psapi.GetProcessMemoryInfo.restype = ctypes.wintypes.BOOL
+        if psapi.GetProcessMemoryInfo(
+            kernel32.GetCurrentProcess(), ctypes.byref(counters), counters.cb
+        ):
+            return int(counters.PeakWorkingSetSize)
+        return None
+    if sys.platform == "linux":
+        try:
+            return int(Path("/proc/self/status").read_text().split("VmHWM:")[1].split()[0]) * 1024
+        except (OSError, IndexError, ValueError):
+            return None
+    try:
+        import resource
+
+        peak = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+        return int(peak if sys.platform == "darwin" else peak * 1024)
+    except (ImportError, OSError, ValueError):
+        return None
+
+
+def _full_worker(name: str) -> dict[str, Any]:
+    """Run the complete generation path once in a process dedicated to this fixture."""
+    path = FIXTURES / f"{name}.json"
+    if not path.is_file():
+        raise ValueError(f"Unknown benchmark fixture: {name}")
+    raw = read_blueprint_json(path)
+    errors = validate(raw)
+    if errors:
+        raise ValueError(f"Benchmark fixture is invalid: {errors}")
+    blueprint = load_blueprint_dict(raw)
+    volume = generate(blueprint)
+    check_support(volume)
+    output = FIXTURES.parent / ".tmp" / f"{name}-full.schem"
+    output.parent.mkdir(parents=True, exist_ok=True)
+    SchemExporter().export(volume, blueprint, output)
+    result = {
+        "process_peak_rss_bytes": _process_peak_rss(),
+        "cells": len(volume),
+        "output_bytes": output.stat().st_size,
+    }
+    output.unlink(missing_ok=True)
+    return result
+
+
+def _profile_environment() -> dict[str, Any]:
+    memory = None
+    gpu = None
+    gpu_reason = None
+    cpu = platform.processor() or None
+    cpu_reason = None if cpu else "platform.processor()がCPU名を返しませんでした。"
+    if sys.platform == "win32":
+
+        class MemoryStatus(ctypes.Structure):
+            _fields_ = [
+                ("dwLength", ctypes.wintypes.DWORD),
+                ("dwMemoryLoad", ctypes.wintypes.DWORD),
+                ("ullTotalPhys", ctypes.c_ulonglong),
+                ("ullAvailPhys", ctypes.c_ulonglong),
+                ("ullTotalPageFile", ctypes.c_ulonglong),
+                ("ullAvailPageFile", ctypes.c_ulonglong),
+                ("ullTotalVirtual", ctypes.c_ulonglong),
+                ("ullAvailVirtual", ctypes.c_ulonglong),
+                ("ullAvailExtendedVirtual", ctypes.c_ulonglong),
+            ]
+
+        status = MemoryStatus()
+        status.dwLength = ctypes.sizeof(status)
+        if ctypes.windll.kernel32.GlobalMemoryStatusEx(ctypes.byref(status)):
+            memory = int(status.ullTotalPhys)
+        try:
+            device_result = subprocess.run(
+                [
+                    "powershell",
+                    "-NoProfile",
+                    "-Command",
+                    "@(Get-CimInstance Win32_Processor | Select-Object -ExpandProperty Name; "
+                    "Get-CimInstance Win32_VideoController | Select-Object -ExpandProperty Name) "
+                    "-join '|'",
+                ],
+                capture_output=True,
+                text=True,
+                check=True,
+            )
+            devices = device_result.stdout.strip().split("|", maxsplit=1)
+            cpu = devices[0].strip() or cpu
+            gpu = devices[1].strip() if len(devices) > 1 else None
+            cpu_reason = None if cpu else "Win32_ProcessorからCPU名を取得できませんでした。"
+            if gpu is None:
+                gpu_reason = "Win32_VideoControllerからGPU名を取得できませんでした。"
+        except (OSError, subprocess.CalledProcessError) as exc:
+            gpu_reason = f"GPU名取得に失敗しました: {type(exc).__name__}"
+            cpu_reason = f"CPU名取得に失敗しました: {type(exc).__name__}"
+    else:
+        gpu_reason = "このOS向けのGPU名取得を実装していません。"
+    return {
+        "os": platform.platform(),
+        "cpu": cpu,
+        "cpu_reason": cpu_reason,
+        "logical_cpu_count": os.cpu_count(),
+        "memory_total_bytes": memory,
+        "memory_reason": None
+        if memory is not None
+        else "OSから物理メモリ総量を取得できませんでした。",
+        "gpu": gpu,
+        "gpu_reason": gpu_reason,
+        "python": sys.version,
+        "python_version": platform.python_version(),
+    }
+
+
+def _run_profile_benchmark(output: Path) -> int:
+    from generate_benchmark_profiles import RECORD
+
+    definition = json.loads(RECORD.read_text(encoding="utf-8"))
+    results = []
+    for profile in definition["profiles"]:
+        fixture = FIXTURES / f"{profile['name']}.json"
+        actual_hash = hashlib.sha256(fixture.read_bytes()).hexdigest()
+        if actual_hash != profile["input_sha256"]:
+            raise ValueError(f"Fixture hash mismatch: {profile['name']}")
+        samples = []
+        for index in range(3):
+            command = [
+                sys.executable,
+                str(Path(__file__).resolve()),
+                "--full-worker",
+                profile["name"],
+            ]
+            env = os.environ.copy()
+            env["PYTHONPATH"] = str(ROOT / "src")
+            started = time.perf_counter()
+            response = subprocess.run(command, capture_output=True, text=True, env=env)
+            elapsed = time.perf_counter() - started
+            try:
+                worker = json.loads(response.stdout) if response.returncode == 0 else {}
+                reason = None if response.returncode == 0 else response.stderr[-2000:]
+            except json.JSONDecodeError:
+                worker = {}
+                reason = f"worker出力を解析できませんでした: {response.stderr[-2000:]}"
+            samples.append(
+                {
+                    "seconds": elapsed,
+                    "process_peak_rss_bytes": worker.get("process_peak_rss_bytes"),
+                    "cells": worker.get("cells"),
+                    "output_bytes": worker.get("output_bytes"),
+                    "error_reason": reason,
+                    "rss_reason": None
+                    if worker.get("process_peak_rss_bytes") is not None
+                    else (reason or "workerからRSS値を取得できませんでした。"),
+                }
+            )
+            print(f"{profile['name']} {index + 1}/3: {elapsed:.3f}s", file=sys.stderr, flush=True)
+        rss_values = [
+            sample["process_peak_rss_bytes"]
+            for sample in samples
+            if sample["process_peak_rss_bytes"] is not None
+        ]
+        results.append(
+            {
+                **profile,
+                "repetitions": 3,
+                "samples": samples,
+                "seconds_median": statistics.median(sample["seconds"] for sample in samples),
+                "process_peak_rss_bytes_median": statistics.median(rss_values)
+                if rss_values
+                else None,
+                "process_peak_rss_mib_median": statistics.median(rss_values) / (1024 * 1024)
+                if rss_values
+                else None,
+            }
+        )
+    output.parent.mkdir(parents=True, exist_ok=True)
+    record = {
+        "schema_version": 1,
+        "definition_version": definition["definition_version"],
+        "environment": _profile_environment(),
+        "time_scope": (
+            "独立子プロセスの起動から読込・検証・モデル構築・生成・support検査・"
+            "schem出力完了まで。"
+        ),
+        "memory_metric": (
+            "独立子プロセス全体のPeakWorkingSetSize（Windows）またはOSの最大RSS。"
+            "tracemallocは使用しない。"
+        ),
+        "viewer_reference_note": (
+            "viewer参照は負荷種別の対応だけを示す。scene形式・時間境界・"
+            "RSS集計方法が異なるため数値は直接比較しない。"
+        ),
+        "results": results,
+    }
+    output.write_text(
+        json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n"
+    )
+    print(output)
+    return 0
+
+
 def run() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path, default=RECORD)
     parser.add_argument("--repetitions", type=int, default=3)
     parser.add_argument("--generate-fixtures", action="store_true")
     parser.add_argument("--worker", nargs=3, metavar=("CASE", "STAGE", "REPETITIONS"))
+    parser.add_argument("--full-worker", metavar="CASE")
+    parser.add_argument("--profile-benchmark", action="store_true")
+    parser.add_argument(
+        "--profile-output", type=Path, default=ROOT / "benchmarks" / "generation-baseline.json"
+    )
+    parser.add_argument("--generate-profiles", action="store_true")
     args = parser.parse_args()
     if args.generate_fixtures:
         _generate_fixtures()
         return 0
+    if args.generate_profiles:
+        from generate_benchmark_profiles import generate_profiles
+
+        generate_profiles()
+        return 0
     if args.worker:
         print(json.dumps(_worker(args.worker[0], args.worker[1], int(args.worker[2]))))
         return 0
+    if args.full_worker:
+        print(json.dumps(_full_worker(args.full_worker)))
+        return 0
+    if args.profile_benchmark:
+        return _run_profile_benchmark(args.profile_output)
     if args.repetitions < 1:
         parser.error("--repetitions は1以上を指定してください")
 

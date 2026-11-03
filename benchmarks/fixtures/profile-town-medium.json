@@ -1,0 +1,1379 @@
+{
+  "formatVersion": 1,
+  "minecraftVersion": "1.21.11",
+  "name": "profile-town-medium",
+  "operations": [
+    {
+      "type": "fill",
+      "from": [
+        3,
+        1,
+        3
+      ],
+      "to": [
+        13,
+        1,
+        14
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "type": "fill",
+      "from": [
+        3,
+        2,
+        3
+      ],
+      "to": [
+        13,
+        16,
+        3
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        3,
+        2,
+        14
+      ],
+      "to": [
+        13,
+        16,
+        14
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        3,
+        2,
+        4
+      ],
+      "to": [
+        3,
+        16,
+        13
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        13,
+        2,
+        4
+      ],
+      "to": [
+        13,
+        16,
+        13
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        3,
+        17,
+        3
+      ],
+      "to": [
+        13,
+        17,
+        14
+      ],
+      "block": "minecraft:spruce_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        19,
+        1,
+        3
+      ],
+      "to": [
+        29,
+        1,
+        13
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "type": "fill",
+      "from": [
+        19,
+        2,
+        3
+      ],
+      "to": [
+        29,
+        13,
+        3
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        19,
+        2,
+        13
+      ],
+      "to": [
+        29,
+        13,
+        13
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        19,
+        2,
+        4
+      ],
+      "to": [
+        19,
+        13,
+        12
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        29,
+        2,
+        4
+      ],
+      "to": [
+        29,
+        13,
+        12
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        19,
+        14,
+        3
+      ],
+      "to": [
+        29,
+        14,
+        13
+      ],
+      "block": "minecraft:spruce_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        35,
+        1,
+        3
+      ],
+      "to": [
+        46,
+        1,
+        13
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "type": "fill",
+      "from": [
+        35,
+        2,
+        3
+      ],
+      "to": [
+        46,
+        13,
+        3
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        35,
+        2,
+        13
+      ],
+      "to": [
+        46,
+        13,
+        13
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        35,
+        2,
+        4
+      ],
+      "to": [
+        35,
+        13,
+        12
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        46,
+        2,
+        4
+      ],
+      "to": [
+        46,
+        13,
+        12
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        35,
+        14,
+        3
+      ],
+      "to": [
+        46,
+        14,
+        13
+      ],
+      "block": "minecraft:spruce_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        51,
+        1,
+        3
+      ],
+      "to": [
+        61,
+        1,
+        13
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "type": "fill",
+      "from": [
+        51,
+        2,
+        3
+      ],
+      "to": [
+        61,
+        14,
+        3
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        51,
+        2,
+        13
+      ],
+      "to": [
+        61,
+        14,
+        13
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        51,
+        2,
+        4
+      ],
+      "to": [
+        51,
+        14,
+        12
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        61,
+        2,
+        4
+      ],
+      "to": [
+        61,
+        14,
+        12
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        51,
+        15,
+        3
+      ],
+      "to": [
+        61,
+        15,
+        13
+      ],
+      "block": "minecraft:spruce_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        3,
+        1,
+        19
+      ],
+      "to": [
+        13,
+        1,
+        30
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "type": "fill",
+      "from": [
+        3,
+        2,
+        19
+      ],
+      "to": [
+        13,
+        14,
+        19
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        3,
+        2,
+        30
+      ],
+      "to": [
+        13,
+        14,
+        30
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        3,
+        2,
+        20
+      ],
+      "to": [
+        3,
+        14,
+        29
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        13,
+        2,
+        20
+      ],
+      "to": [
+        13,
+        14,
+        29
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        3,
+        15,
+        19
+      ],
+      "to": [
+        13,
+        15,
+        30
+      ],
+      "block": "minecraft:spruce_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        19,
+        1,
+        19
+      ],
+      "to": [
+        30,
+        1,
+        29
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "type": "fill",
+      "from": [
+        19,
+        2,
+        19
+      ],
+      "to": [
+        30,
+        16,
+        19
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        19,
+        2,
+        29
+      ],
+      "to": [
+        30,
+        16,
+        29
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        19,
+        2,
+        20
+      ],
+      "to": [
+        19,
+        16,
+        28
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        30,
+        2,
+        20
+      ],
+      "to": [
+        30,
+        16,
+        28
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        19,
+        17,
+        19
+      ],
+      "to": [
+        30,
+        17,
+        29
+      ],
+      "block": "minecraft:spruce_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        35,
+        1,
+        19
+      ],
+      "to": [
+        46,
+        1,
+        30
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "type": "fill",
+      "from": [
+        35,
+        2,
+        19
+      ],
+      "to": [
+        46,
+        12,
+        19
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        35,
+        2,
+        30
+      ],
+      "to": [
+        46,
+        12,
+        30
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        35,
+        2,
+        20
+      ],
+      "to": [
+        35,
+        12,
+        29
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        46,
+        2,
+        20
+      ],
+      "to": [
+        46,
+        12,
+        29
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        35,
+        13,
+        19
+      ],
+      "to": [
+        46,
+        13,
+        30
+      ],
+      "block": "minecraft:spruce_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        51,
+        1,
+        19
+      ],
+      "to": [
+        62,
+        1,
+        30
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "type": "fill",
+      "from": [
+        51,
+        2,
+        19
+      ],
+      "to": [
+        62,
+        16,
+        19
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        51,
+        2,
+        30
+      ],
+      "to": [
+        62,
+        16,
+        30
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        51,
+        2,
+        20
+      ],
+      "to": [
+        51,
+        16,
+        29
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        62,
+        2,
+        20
+      ],
+      "to": [
+        62,
+        16,
+        29
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        51,
+        17,
+        19
+      ],
+      "to": [
+        62,
+        17,
+        30
+      ],
+      "block": "minecraft:spruce_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        3,
+        1,
+        35
+      ],
+      "to": [
+        13,
+        1,
+        46
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "type": "fill",
+      "from": [
+        3,
+        2,
+        35
+      ],
+      "to": [
+        13,
+        13,
+        35
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        3,
+        2,
+        46
+      ],
+      "to": [
+        13,
+        13,
+        46
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        3,
+        2,
+        36
+      ],
+      "to": [
+        3,
+        13,
+        45
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        13,
+        2,
+        36
+      ],
+      "to": [
+        13,
+        13,
+        45
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        3,
+        14,
+        35
+      ],
+      "to": [
+        13,
+        14,
+        46
+      ],
+      "block": "minecraft:spruce_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        19,
+        1,
+        35
+      ],
+      "to": [
+        29,
+        1,
+        45
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "type": "fill",
+      "from": [
+        19,
+        2,
+        35
+      ],
+      "to": [
+        29,
+        12,
+        35
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        19,
+        2,
+        45
+      ],
+      "to": [
+        29,
+        12,
+        45
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        19,
+        2,
+        36
+      ],
+      "to": [
+        19,
+        12,
+        44
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        29,
+        2,
+        36
+      ],
+      "to": [
+        29,
+        12,
+        44
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        19,
+        13,
+        35
+      ],
+      "to": [
+        29,
+        13,
+        45
+      ],
+      "block": "minecraft:spruce_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        35,
+        1,
+        35
+      ],
+      "to": [
+        45,
+        1,
+        46
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "type": "fill",
+      "from": [
+        35,
+        2,
+        35
+      ],
+      "to": [
+        45,
+        16,
+        35
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        35,
+        2,
+        46
+      ],
+      "to": [
+        45,
+        16,
+        46
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        35,
+        2,
+        36
+      ],
+      "to": [
+        35,
+        16,
+        45
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        45,
+        2,
+        36
+      ],
+      "to": [
+        45,
+        16,
+        45
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        35,
+        17,
+        35
+      ],
+      "to": [
+        45,
+        17,
+        46
+      ],
+      "block": "minecraft:spruce_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        51,
+        1,
+        35
+      ],
+      "to": [
+        61,
+        1,
+        46
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "type": "fill",
+      "from": [
+        51,
+        2,
+        35
+      ],
+      "to": [
+        61,
+        12,
+        35
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        51,
+        2,
+        46
+      ],
+      "to": [
+        61,
+        12,
+        46
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        51,
+        2,
+        36
+      ],
+      "to": [
+        51,
+        12,
+        45
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        61,
+        2,
+        36
+      ],
+      "to": [
+        61,
+        12,
+        45
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        51,
+        13,
+        35
+      ],
+      "to": [
+        61,
+        13,
+        46
+      ],
+      "block": "minecraft:spruce_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        3,
+        1,
+        51
+      ],
+      "to": [
+        14,
+        1,
+        62
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "type": "fill",
+      "from": [
+        3,
+        2,
+        51
+      ],
+      "to": [
+        14,
+        16,
+        51
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        3,
+        2,
+        62
+      ],
+      "to": [
+        14,
+        16,
+        62
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        3,
+        2,
+        52
+      ],
+      "to": [
+        3,
+        16,
+        61
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        14,
+        2,
+        52
+      ],
+      "to": [
+        14,
+        16,
+        61
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        3,
+        17,
+        51
+      ],
+      "to": [
+        14,
+        17,
+        62
+      ],
+      "block": "minecraft:spruce_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        19,
+        1,
+        51
+      ],
+      "to": [
+        30,
+        1,
+        62
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "type": "fill",
+      "from": [
+        19,
+        2,
+        51
+      ],
+      "to": [
+        30,
+        14,
+        51
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        19,
+        2,
+        62
+      ],
+      "to": [
+        30,
+        14,
+        62
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        19,
+        2,
+        52
+      ],
+      "to": [
+        19,
+        14,
+        61
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        30,
+        2,
+        52
+      ],
+      "to": [
+        30,
+        14,
+        61
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        19,
+        15,
+        51
+      ],
+      "to": [
+        30,
+        15,
+        62
+      ],
+      "block": "minecraft:spruce_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        35,
+        1,
+        51
+      ],
+      "to": [
+        45,
+        1,
+        61
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "type": "fill",
+      "from": [
+        35,
+        2,
+        51
+      ],
+      "to": [
+        45,
+        13,
+        51
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        35,
+        2,
+        61
+      ],
+      "to": [
+        45,
+        13,
+        61
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        35,
+        2,
+        52
+      ],
+      "to": [
+        35,
+        13,
+        60
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        45,
+        2,
+        52
+      ],
+      "to": [
+        45,
+        13,
+        60
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        35,
+        14,
+        51
+      ],
+      "to": [
+        45,
+        14,
+        61
+      ],
+      "block": "minecraft:spruce_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        51,
+        1,
+        51
+      ],
+      "to": [
+        62,
+        1,
+        61
+      ],
+      "block": "minecraft:cobblestone"
+    },
+    {
+      "type": "fill",
+      "from": [
+        51,
+        2,
+        51
+      ],
+      "to": [
+        62,
+        12,
+        51
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        51,
+        2,
+        61
+      ],
+      "to": [
+        62,
+        12,
+        61
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        51,
+        2,
+        52
+      ],
+      "to": [
+        51,
+        12,
+        60
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        62,
+        2,
+        52
+      ],
+      "to": [
+        62,
+        12,
+        60
+      ],
+      "block": "minecraft:oak_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        51,
+        13,
+        51
+      ],
+      "to": [
+        62,
+        13,
+        61
+      ],
+      "block": "minecraft:spruce_planks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        0,
+        0,
+        0
+      ],
+      "to": [
+        0,
+        0,
+        0
+      ],
+      "block": "minecraft:stone_bricks"
+    },
+    {
+      "type": "fill",
+      "from": [
+        63,
+        47,
+        63
+      ],
+      "to": [
+        63,
+        47,
+        63
+      ],
+      "block": "minecraft:stone_bricks"
+    }
+  ]
+}
