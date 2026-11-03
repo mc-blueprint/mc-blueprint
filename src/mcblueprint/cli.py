@@ -351,6 +351,7 @@ def build_parser() -> argparse.ArgumentParser:
     view_parser.add_argument("-o", "--output")
     view_parser.add_argument("--set", action="append", default=[], metavar="KEY=VALUE")
     view_parser.add_argument("--minecraft-version")
+    _add_render_parser(subparsers)
     edits_parser = subparsers.add_parser(
         "apply-edits", help="編集を保存する（再生成しない）",
         description="editsを検証・保存する。--specは既定で原本を更新する。"
@@ -363,6 +364,16 @@ def build_parser() -> argparse.ArgumentParser:
     edits_parser.add_argument("--scene", type=Path, required=True)
     edits_parser.add_argument("-o", "--output", type=Path)
     return parser
+
+
+def _add_render_parser(subparsers) -> None:
+    parser = subparsers.add_parser("render", help="同梱viewerで3D静止画を出力する")
+    parser.add_argument("input", type=Path, nargs="?")
+    parser.add_argument("--setup", action="store_true", help="対応Chromiumだけを取得する")
+    parser.add_argument("--views", help="iso,front,top（既定は全3視点）")
+    parser.add_argument("--out", type=Path, help="画像保存先（既定preview/）")
+    parser.add_argument("--set", action="append", default=[], metavar="KEY=VALUE")
+    parser.add_argument("--minecraft-version")
 
 
 def _add_common_arguments(parser: argparse.ArgumentParser) -> None:
@@ -421,6 +432,7 @@ def main(argv: Sequence[str] | None = None) -> int:
         "spec-template": _run_spec_template,
         "help": _run_help,
         "view": _run_view,
+        "render": _run_render,
         "apply-edits": _run_apply_edits,
     }
     try:
@@ -433,6 +445,33 @@ def main(argv: Sequence[str] | None = None) -> int:
     except BlueprintError as exc:
         print(f"Error: {exc}", file=sys.stderr)
         return EXIT_USAGE_ERROR
+
+
+def _run_render(args: argparse.Namespace, out: TextIO) -> int:
+    from mcblueprint.assets import ensure_assets
+    from mcblueprint.render import VIEWS, render, setup
+    from mcblueprint.viewer_input import prepare_input
+
+    if args.setup:
+        if (args.input is not None or args.views is not None
+                or args.out is not None or args.set or args.minecraft_version):
+            raise BlueprintError("--setupは入力・描画オプションと併用できません")
+        setup()
+        return EXIT_OK
+    if args.input is None:
+        raise BlueprintError("入力を指定するか、初回は render --setup を実行してください")
+    views = tuple((args.views if args.views is not None else "iso,front,top").split(","))
+    if not views or len(set(views)) != len(views) or any(v not in VIEWS for v in views):
+        raise BlueprintError("--viewsはiso,front,topから重複なしで指定してください")
+    try:
+        prepared = prepare_input(args.input, overrides=args.set,
+                                 minecraft_version=args.minecraft_version)
+        assets = ensure_assets(prepared.scene["minecraftVersion"], prepared.config["assets"])
+        for path in render(prepared, assets, args.out or Path("preview"), views=views, out=out):
+            print(f"Wrote {path.as_posix()}", file=out)
+    except (OSError, ValueError) as exc:
+        raise BlueprintError(f"render: {exc}") from exc
+    return EXIT_OK
 
 
 def _run_view(args: argparse.Namespace, out: TextIO) -> int:
