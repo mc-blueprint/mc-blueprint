@@ -21,7 +21,7 @@ make由来の生成metadataがあるときは同じ混色・Weather経路を使�
 `--set KEY=VALUE` は通常の設定合成に従う。
 `assets.minecraft_dir`、`assets.download` による資産解決は
 [VIEWER_BUNDLE.md](VIEWER_BUNDLE.md) を参照。
-`preview.open_browser=false` ならURLだけを表示する。表示中は前景を保持し、Ctrl+Cで
+`preview.open_browser=false` ならブラウザを開かず接続情報を表示する。表示中は前景を保持し、Ctrl+Cで
 サーバーとSSE接続を閉じる。表示しているだけでは出力を占有しない。
 CLIの `make` も既定で生成済みsceneを表示する。生成を二度実行せず、評価不合格
 （終了コード3）の成果も表示する。`preview.enabled=false` なら表示を省略し、
@@ -74,13 +74,23 @@ engine・dataの世代も照合する。CLIでspecを書き換えた後は古い
 | POST | `/api/regenerate` | 保存済みeditsで固定入力・出力を再生成 |
 
 APIはすべて起動ごとのBearer tokenが必要。tokenは起動URLのフラグメントから渡す。
+標準出力にはtokenを含まないURLと、token付きURLの取得方法を表示する。
+自動起動時はtoken付きURLをブラウザへ直接渡し、標準出力・標準エラーには出さない。
+`preview.open_browser=false` の場合だけ、手動で開くtoken付きURLを標準エラーへ表示する。
+規定の `run_logged.py` は標準エラーも記録するため、この設定では監査ログにもtokenが残る。
+監査ログにtokenを残さない場合は自動起動を使う。手動起動時のログは認証情報を含むものとして
+アクセス・共有範囲を制限し、未加工のまま共有しない。標準エラーへの出力だけではマスクされない。
+tokenはサーバー終了まで有効で、再起動時に変わる。
 Hostは同じポートの `127.0.0.1` / `localhost` に限定し、OriginがあればHostに対応する
 自身のoriginと完全一致するものだけを許す。Originなしでも認証は必要。
 CORSは有効にしない。静的ファイルは同梱manifestの一覧に限定する。
+要求パスを一度だけデコードし、認証・配信先の判定・アセットの範囲検査で共有する。
+二重エンコード、ドット区間、バックスラッシュ、drive・UNCなど不正なパスは404で拒否する。
 
 POSTは `Content-Type: application/json`、本文最大1 MiB。
 regenerateは空本文または `{}` だけを受け、コマンド・パス・設定を指定できない。
-形式不正400、認証なし401、Host/Origin/パス拒否403、未保存・古い世代・競合409、
+形式不正400、認証なし401、Host/Origin/アセット範囲拒否403、不正パス・未定義パス404、
+未保存・古い世代・競合409、
 サイズ超過413、Content-Type不正415、意味検証失敗422、I/O失敗500を返す。
 
 ## 開発時のブラウザ検証
