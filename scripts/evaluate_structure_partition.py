@@ -32,6 +32,7 @@ def run():
               "partition_script": evaluation.reference(Path(__file__).resolve()),
               "reason": "固定課題は各辺16未満なので16/32/64だけではcore境界を跨がない。",
               "core": 7, "results": []}
+    extra_inputs = []
     with tempfile.TemporaryDirectory(prefix="structure-partition-") as temporary:
         folder = Path(temporary)
         for case in ("single-house", "standalone-tower"):
@@ -56,8 +57,9 @@ def run():
                     == sorted(json.dumps(d, sort_keys=True) for d in expected_diagnostics),
                     "base_diagnostics": expected_diagnostics, "diagnostics": diagnostics,
                 })
+        extra_inputs = list(folder.glob("*.yaml"))
     evaluation.write_json(evaluation.ROOT / "evaluation/records/structure-detail-partition.json",
-                          record)
+                          record, extra_inputs)
     print(json.dumps(record["results"], ensure_ascii=False))
 
 
