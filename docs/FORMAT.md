@@ -40,6 +40,42 @@ Blueprint JSON は、AI エージェントや人間が記述する Minecraft 建
 - 上記以外のトップレベルキーは検証エラーになる。
 - `metadata` の中身だけは任意の JSON を許可する。
 
+### 2.1 Operation のセル属性
+
+すべての Operation に次の省略可能な項目を付けられる。ネスト・部品・複合
+Operation の子へ継承し、子が指定した項目を優先する。属性は最終配置と同時に
+更新し、明示的な air にも残す。トップレベルの `metadata` は引き続き自由記述で、
+生成経路・乱数方式を切り替えるフラグとして解釈しない。
+
+| キー | 内容 |
+|---|---|
+| `id` | Operation の安定ID（空でない文字列）。省略時は入力パスを使う |
+| `role` | `frame`・`wall_main` などの役割（空でない文字列） |
+| `element` | 計画上の要素ID（空でない文字列） |
+| `face` | ローカル座標の外壁面。north/east/south/west/up/down。回転・反転に追従する |
+| `reserved` | structure（柱・梁）または circulation（通路・階段）の予約 |
+| `owner` | 予約を書ける責務ID。予約時に省略すると element、さらに省略すると予約元の安定子ID |
+| `source` | BuildSpec の入力パスなどの出典（空でない文字列） |
+| `onConflict` | error（既定）または skip。任意装飾だけが skip を指定する |
+
+予約を作る Operation 自身と、同じ owner を明示した予約本体は配置できる。
+異なる責務からの書込みは、同じブロック・air であっても衝突となる。
+skip ではブロックと属性の両方を保ち、error では BlueprintError になる。
+明示的な構造・開口・override は error を使い、予約を回避して成功扱いにしない。
+予約を解除する指定はない。後段で予約を継続する本体も reserved と owner を指定する。
+旧 Blueprint の属性なしの配置と後勝ち規則は変わらない。
+
+```json
+{
+  "type": "fill", "from": [2, 1, 2], "to": [2, 3, 6], "block": "air",
+  "id": "stairs.headroom", "element": "house.stairs", "role": "path",
+  "reserved": "circulation", "owner": "house.stairs", "source": "features.stairs"
+}
+```
+
+セルから取得できる `operation` は、親子の入力IDと繰返し・変換から作る安定子ID。
+領域サイズ・走査順はIDへ含めない。JSON の `id` は継承せず、子ごとに導出する。
+
 ## 3. 座標系
 
 - Minecraft と同じ右手系を使う。X: 東が正、Y: 上が正、Z: 南が正。

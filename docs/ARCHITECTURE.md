@@ -31,6 +31,52 @@ AI エージェントは Blueprint JSON を書くところまでを担当し、M
 
 ## 2. モジュール構成
 
+### 領域生成API（BuildSpec経路の接続用）
+
+`generate_regions(blueprint, limits=GenerationLimits(...), seed=None,
+reference_radius=0, reverse=False)` は `GeneratedRegion(core, volume)` を逐次返す。
+既存CLIの `generate()` / `generate_with_report()` は引き続き全体の `BlockVolume`
+を返し、従来の共有 `random.Random(seed)` を使う。新しいAPIのCLI接続は別の責務。
+
+- `GenerationLimits.region` は `(64, None, 64)`、`halo` は16、`max_memory_mb` は2048が既定。
+  高さのNoneは全高。参照半径がhaloを超える場合は実効haloを広げる。
+- `volume` はhalo付きの `RegionVolume`。配置と `attributes(pos)` は世界座標で参照する。
+  `core` だけを出力・集計し、haloは後処理の参照に使う。領域外のgetはNone、setはエラー。
+  消費側は1領域ずつ処理して参照を解放する。イテレータは過去の領域を蓄積しない。
+- `RegionVolume` はuint32のブロック添字と属性添字を別配列に持ち、それぞれをパレット化する。
+  `CellAttributes` のrole/element/face/reserved/owner/source/operationをブロックと同時に更新する。
+  未配置と明示airは区別する。予約airは通常セルと同じく保持する。
+- 入力パスまたはid、親子関係、繰返しの変換から安定子IDを作る。段seedは
+  UTF-8・空白なしJSON `[seed, stage, element]` のSHA-256を整数化する。
+  新経路のPalette抽選にはさらに安定子ID・世界座標・用途mixを使う。
+  分割サイズと領域列挙順は乱数へ含めない。
+- Operationの解析boundsで領域と交差しない操作を除く。fill/replaceは配置・参照の
+  ローカル矩形も切り詰める。他の局所形状はセルを逐次列挙して領域内だけを保持する。
+  セルへの適用順は入力のOperation順を守る。
+- 領域のfillは矩形の配列スライスへ一括配置する。段seed・OperationのJSONとSHA prefixを
+  再利用し、セルごとのSHA-256から従来と同じ整数seedを作る。
+  MT19937の整数seed初期化と初回53bit抽選をNumPyでまとめ、累積重みをsearchsortedで選ぶ。
+  初回値は[CPythonの整数seed実装](https://github.com/python/cpython/blob/3.12/Modules/_randommodule.c)
+  に合わせる。旧経路のRandomと領域経路の修正前の値を変えない。
+- haloを縮めず、32立方以下の抽選添字だけを上限24MiBのLRUで再利用する。
+  属性や全体BlockVolumeはキャッシュしない。低メモリではタイルとMTのバッチを小さくする。
+- join_buildingsの子もregistryで共通属性を読み、専用実行時も子の属性スコープを適用する。
+  共有面・接合屋根はjoinが所有する。接合内の後段屋根が最終配置するセルは、宣言矩形を
+  使って先行する子から責務を移譲し、それ以外では子の明示属性・予約を保持する。
+- 非局所copyは領域の列挙前にネスト・部品・複合操作も含めて拒否する。
+  元地形・foundation・surfacePathの施工も領域経路では未対応として拒否する。
+  従来generateの対応は維持する。
+- メモリ予算はセルあたり64 bytes（配置・属性配列と後段snapshot・距離配列の余裕）と
+  Operationあたり4096 bytesに、混色用MTバッチ・LRU・生成中タイルの余裕を足して判定する。
+  MTは予算の1/4以内、LRUは1/8以内かつ24MiB以下とし、部品内のPaletteも考慮する。
+  超過時は最長のcore軸を半減し、
+  最小coreと必要haloでも収まらなければBlueprintError。haloや精度は縮めない。
+  予算は生成用の見積りであり、入力・Pythonランタイムを含むRSSの強制上限ではない。
+  `volume.nbytes` は2本のセル配列だけの実バイト数で、RSSとは区別する。
+
+NumPyは既存nbtlibの間接依存を利用するだけでなく、Python 3.12対応の下限1.26を
+直接依存として宣言する。NBT実装・設定フレームワークは追加しない。
+
 ```text
 src/mcblueprint/
 ├─ __init__.py          __version__

@@ -739,6 +739,30 @@
           },
           "comment": {
             "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/cellAttributes/properties/id"
+          },
+          "role": {
+            "$ref": "#/$defs/cellAttributes/properties/role"
+          },
+          "element": {
+            "$ref": "#/$defs/cellAttributes/properties/element"
+          },
+          "owner": {
+            "$ref": "#/$defs/cellAttributes/properties/owner"
+          },
+          "source": {
+            "$ref": "#/$defs/cellAttributes/properties/source"
+          },
+          "face": {
+            "$ref": "#/$defs/cellAttributes/properties/face"
+          },
+          "reserved": {
+            "$ref": "#/$defs/cellAttributes/properties/reserved"
+          },
+          "onConflict": {
+            "$ref": "#/$defs/cellAttributes/properties/onConflict"
           }
         }
       },
@@ -768,6 +792,30 @@
           },
           "comment": {
             "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/cellAttributes/properties/id"
+          },
+          "role": {
+            "$ref": "#/$defs/cellAttributes/properties/role"
+          },
+          "element": {
+            "$ref": "#/$defs/cellAttributes/properties/element"
+          },
+          "owner": {
+            "$ref": "#/$defs/cellAttributes/properties/owner"
+          },
+          "source": {
+            "$ref": "#/$defs/cellAttributes/properties/source"
+          },
+          "face": {
+            "$ref": "#/$defs/cellAttributes/properties/face"
+          },
+          "reserved": {
+            "$ref": "#/$defs/cellAttributes/properties/reserved"
+          },
+          "onConflict": {
+            "$ref": "#/$defs/cellAttributes/properties/onConflict"
           }
         }
       },
@@ -800,6 +848,30 @@
           },
           "comment": {
             "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/cellAttributes/properties/id"
+          },
+          "role": {
+            "$ref": "#/$defs/cellAttributes/properties/role"
+          },
+          "element": {
+            "$ref": "#/$defs/cellAttributes/properties/element"
+          },
+          "owner": {
+            "$ref": "#/$defs/cellAttributes/properties/owner"
+          },
+          "source": {
+            "$ref": "#/$defs/cellAttributes/properties/source"
+          },
+          "face": {
+            "$ref": "#/$defs/cellAttributes/properties/face"
+          },
+          "reserved": {
+            "$ref": "#/$defs/cellAttributes/properties/reserved"
+          },
+          "onConflict": {
+            "$ref": "#/$defs/cellAttributes/properties/onConflict"
           }
         }
       },
@@ -838,6 +910,30 @@
           },
           "comment": {
             "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/cellAttributes/properties/id"
+          },
+          "role": {
+            "$ref": "#/$defs/cellAttributes/properties/role"
+          },
+          "element": {
+            "$ref": "#/$defs/cellAttributes/properties/element"
+          },
+          "owner": {
+            "$ref": "#/$defs/cellAttributes/properties/owner"
+          },
+          "source": {
+            "$ref": "#/$defs/cellAttributes/properties/source"
+          },
+          "face": {
+            "$ref": "#/$defs/cellAttributes/properties/face"
+          },
+          "reserved": {
+            "$ref": "#/$defs/cellAttributes/properties/reserved"
+          },
+          "onConflict": {
+            "$ref": "#/$defs/cellAttributes/properties/onConflict"
           }
         }
       },
@@ -867,6 +963,30 @@
           },
           "comment": {
             "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/cellAttributes/properties/id"
+          },
+          "role": {
+            "$ref": "#/$defs/cellAttributes/properties/role"
+          },
+          "element": {
+            "$ref": "#/$defs/cellAttributes/properties/element"
+          },
+          "owner": {
+            "$ref": "#/$defs/cellAttributes/properties/owner"
+          },
+          "source": {
+            "$ref": "#/$defs/cellAttributes/properties/source"
+          },
+          "face": {
+            "$ref": "#/$defs/cellAttributes/properties/face"
+          },
+          "reserved": {
+            "$ref": "#/$defs/cellAttributes/properties/reserved"
+          },
+          "onConflict": {
+            "$ref": "#/$defs/cellAttributes/properties/onConflict"
           }
         }
       },
@@ -896,6 +1016,30 @@
           },
           "comment": {
             "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/cellAttributes/properties/id"
+          },
+          "role": {
+            "$ref": "#/$defs/cellAttributes/properties/role"
+          },
+          "element": {
+            "$ref": "#/$defs/cellAttributes/properties/element"
+          },
+          "owner": {
+            "$ref": "#/$defs/cellAttributes/properties/owner"
+          },
+          "source": {
+            "$ref": "#/$defs/cellAttributes/properties/source"
+          },
+          "face": {
+            "$ref": "#/$defs/cellAttributes/properties/face"
+          },
+          "reserved": {
+            "$ref": "#/$defs/cellAttributes/properties/reserved"
+          },
+          "onConflict": {
+            "$ref": "#/$defs/cellAttributes/properties/onConflict"
           }
         }
       },
@@ -932,6 +1076,30 @@
           },
           "comment": {
             "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/cellAttributes/properties/id"
+          },
+          "role": {
+            "$ref": "#/$defs/cellAttributes/properties/role"
+          },
+          "element": {
+            "$ref": "#/$defs/cellAttributes/properties/element"
+          },
+          "owner": {
+            "$ref": "#/$defs/cellAttributes/properties/owner"
+          },
+          "source": {
+            "$ref": "#/$defs/cellAttributes/properties/source"
+          },
+          "face": {
+            "$ref": "#/$defs/cellAttributes/properties/face"
+          },
+          "reserved": {
+            "$ref": "#/$defs/cellAttributes/properties/reserved"
+          },
+          "onConflict": {
+            "$ref": "#/$defs/cellAttributes/properties/onConflict"
           }
         }
       },
@@ -973,6 +1141,30 @@
           },
           "comment": {
             "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/cellAttributes/properties/id"
+          },
+          "role": {
+            "$ref": "#/$defs/cellAttributes/properties/role"
+          },
+          "element": {
+            "$ref": "#/$defs/cellAttributes/properties/element"
+          },
+          "owner": {
+            "$ref": "#/$defs/cellAttributes/properties/owner"
+          },
+          "source": {
+            "$ref": "#/$defs/cellAttributes/properties/source"
+          },
+          "face": {
+            "$ref": "#/$defs/cellAttributes/properties/face"
+          },
+          "reserved": {
+            "$ref": "#/$defs/cellAttributes/properties/reserved"
+          },
+          "onConflict": {
+            "$ref": "#/$defs/cellAttributes/properties/onConflict"
           }
         }
       },
@@ -1006,6 +1198,30 @@
           },
           "comment": {
             "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/cellAttributes/properties/id"
+          },
+          "role": {
+            "$ref": "#/$defs/cellAttributes/properties/role"
+          },
+          "element": {
+            "$ref": "#/$defs/cellAttributes/properties/element"
+          },
+          "owner": {
+            "$ref": "#/$defs/cellAttributes/properties/owner"
+          },
+          "source": {
+            "$ref": "#/$defs/cellAttributes/properties/source"
+          },
+          "face": {
+            "$ref": "#/$defs/cellAttributes/properties/face"
+          },
+          "reserved": {
+            "$ref": "#/$defs/cellAttributes/properties/reserved"
+          },
+          "onConflict": {
+            "$ref": "#/$defs/cellAttributes/properties/onConflict"
           }
         }
       },
@@ -1037,6 +1253,30 @@
           },
           "comment": {
             "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/cellAttributes/properties/id"
+          },
+          "role": {
+            "$ref": "#/$defs/cellAttributes/properties/role"
+          },
+          "element": {
+            "$ref": "#/$defs/cellAttributes/properties/element"
+          },
+          "owner": {
+            "$ref": "#/$defs/cellAttributes/properties/owner"
+          },
+          "source": {
+            "$ref": "#/$defs/cellAttributes/properties/source"
+          },
+          "face": {
+            "$ref": "#/$defs/cellAttributes/properties/face"
+          },
+          "reserved": {
+            "$ref": "#/$defs/cellAttributes/properties/reserved"
+          },
+          "onConflict": {
+            "$ref": "#/$defs/cellAttributes/properties/onConflict"
           }
         }
       },
@@ -1066,6 +1306,30 @@
           },
           "comment": {
             "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/cellAttributes/properties/id"
+          },
+          "role": {
+            "$ref": "#/$defs/cellAttributes/properties/role"
+          },
+          "element": {
+            "$ref": "#/$defs/cellAttributes/properties/element"
+          },
+          "owner": {
+            "$ref": "#/$defs/cellAttributes/properties/owner"
+          },
+          "source": {
+            "$ref": "#/$defs/cellAttributes/properties/source"
+          },
+          "face": {
+            "$ref": "#/$defs/cellAttributes/properties/face"
+          },
+          "reserved": {
+            "$ref": "#/$defs/cellAttributes/properties/reserved"
+          },
+          "onConflict": {
+            "$ref": "#/$defs/cellAttributes/properties/onConflict"
           }
         }
       },
@@ -1110,6 +1374,30 @@
           },
           "comment": {
             "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/cellAttributes/properties/id"
+          },
+          "role": {
+            "$ref": "#/$defs/cellAttributes/properties/role"
+          },
+          "element": {
+            "$ref": "#/$defs/cellAttributes/properties/element"
+          },
+          "owner": {
+            "$ref": "#/$defs/cellAttributes/properties/owner"
+          },
+          "source": {
+            "$ref": "#/$defs/cellAttributes/properties/source"
+          },
+          "face": {
+            "$ref": "#/$defs/cellAttributes/properties/face"
+          },
+          "reserved": {
+            "$ref": "#/$defs/cellAttributes/properties/reserved"
+          },
+          "onConflict": {
+            "$ref": "#/$defs/cellAttributes/properties/onConflict"
           }
         }
       },
@@ -1133,6 +1421,30 @@
           },
           "comment": {
             "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/cellAttributes/properties/id"
+          },
+          "role": {
+            "$ref": "#/$defs/cellAttributes/properties/role"
+          },
+          "element": {
+            "$ref": "#/$defs/cellAttributes/properties/element"
+          },
+          "owner": {
+            "$ref": "#/$defs/cellAttributes/properties/owner"
+          },
+          "source": {
+            "$ref": "#/$defs/cellAttributes/properties/source"
+          },
+          "face": {
+            "$ref": "#/$defs/cellAttributes/properties/face"
+          },
+          "reserved": {
+            "$ref": "#/$defs/cellAttributes/properties/reserved"
+          },
+          "onConflict": {
+            "$ref": "#/$defs/cellAttributes/properties/onConflict"
           }
         }
       },
@@ -1160,6 +1472,30 @@
           },
           "comment": {
             "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/cellAttributes/properties/id"
+          },
+          "role": {
+            "$ref": "#/$defs/cellAttributes/properties/role"
+          },
+          "element": {
+            "$ref": "#/$defs/cellAttributes/properties/element"
+          },
+          "owner": {
+            "$ref": "#/$defs/cellAttributes/properties/owner"
+          },
+          "source": {
+            "$ref": "#/$defs/cellAttributes/properties/source"
+          },
+          "face": {
+            "$ref": "#/$defs/cellAttributes/properties/face"
+          },
+          "reserved": {
+            "$ref": "#/$defs/cellAttributes/properties/reserved"
+          },
+          "onConflict": {
+            "$ref": "#/$defs/cellAttributes/properties/onConflict"
           }
         }
       },
@@ -1191,6 +1527,30 @@
           },
           "comment": {
             "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/cellAttributes/properties/id"
+          },
+          "role": {
+            "$ref": "#/$defs/cellAttributes/properties/role"
+          },
+          "element": {
+            "$ref": "#/$defs/cellAttributes/properties/element"
+          },
+          "owner": {
+            "$ref": "#/$defs/cellAttributes/properties/owner"
+          },
+          "source": {
+            "$ref": "#/$defs/cellAttributes/properties/source"
+          },
+          "face": {
+            "$ref": "#/$defs/cellAttributes/properties/face"
+          },
+          "reserved": {
+            "$ref": "#/$defs/cellAttributes/properties/reserved"
+          },
+          "onConflict": {
+            "$ref": "#/$defs/cellAttributes/properties/onConflict"
           }
         }
       },
@@ -1236,6 +1596,30 @@
           },
           "comment": {
             "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/cellAttributes/properties/id"
+          },
+          "role": {
+            "$ref": "#/$defs/cellAttributes/properties/role"
+          },
+          "element": {
+            "$ref": "#/$defs/cellAttributes/properties/element"
+          },
+          "owner": {
+            "$ref": "#/$defs/cellAttributes/properties/owner"
+          },
+          "source": {
+            "$ref": "#/$defs/cellAttributes/properties/source"
+          },
+          "face": {
+            "$ref": "#/$defs/cellAttributes/properties/face"
+          },
+          "reserved": {
+            "$ref": "#/$defs/cellAttributes/properties/reserved"
+          },
+          "onConflict": {
+            "$ref": "#/$defs/cellAttributes/properties/onConflict"
           }
         }
       },
@@ -1285,6 +1669,30 @@
           },
           "comment": {
             "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/cellAttributes/properties/id"
+          },
+          "role": {
+            "$ref": "#/$defs/cellAttributes/properties/role"
+          },
+          "element": {
+            "$ref": "#/$defs/cellAttributes/properties/element"
+          },
+          "owner": {
+            "$ref": "#/$defs/cellAttributes/properties/owner"
+          },
+          "source": {
+            "$ref": "#/$defs/cellAttributes/properties/source"
+          },
+          "face": {
+            "$ref": "#/$defs/cellAttributes/properties/face"
+          },
+          "reserved": {
+            "$ref": "#/$defs/cellAttributes/properties/reserved"
+          },
+          "onConflict": {
+            "$ref": "#/$defs/cellAttributes/properties/onConflict"
           }
         }
       },
@@ -1336,6 +1744,30 @@
           },
           "comment": {
             "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/cellAttributes/properties/id"
+          },
+          "role": {
+            "$ref": "#/$defs/cellAttributes/properties/role"
+          },
+          "element": {
+            "$ref": "#/$defs/cellAttributes/properties/element"
+          },
+          "owner": {
+            "$ref": "#/$defs/cellAttributes/properties/owner"
+          },
+          "source": {
+            "$ref": "#/$defs/cellAttributes/properties/source"
+          },
+          "face": {
+            "$ref": "#/$defs/cellAttributes/properties/face"
+          },
+          "reserved": {
+            "$ref": "#/$defs/cellAttributes/properties/reserved"
+          },
+          "onConflict": {
+            "$ref": "#/$defs/cellAttributes/properties/onConflict"
           }
         }
       },
@@ -1372,6 +1804,30 @@
           },
           "comment": {
             "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/cellAttributes/properties/id"
+          },
+          "role": {
+            "$ref": "#/$defs/cellAttributes/properties/role"
+          },
+          "element": {
+            "$ref": "#/$defs/cellAttributes/properties/element"
+          },
+          "owner": {
+            "$ref": "#/$defs/cellAttributes/properties/owner"
+          },
+          "source": {
+            "$ref": "#/$defs/cellAttributes/properties/source"
+          },
+          "face": {
+            "$ref": "#/$defs/cellAttributes/properties/face"
+          },
+          "reserved": {
+            "$ref": "#/$defs/cellAttributes/properties/reserved"
+          },
+          "onConflict": {
+            "$ref": "#/$defs/cellAttributes/properties/onConflict"
           }
         }
       },
@@ -1413,6 +1869,30 @@
           },
           "comment": {
             "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/cellAttributes/properties/id"
+          },
+          "role": {
+            "$ref": "#/$defs/cellAttributes/properties/role"
+          },
+          "element": {
+            "$ref": "#/$defs/cellAttributes/properties/element"
+          },
+          "owner": {
+            "$ref": "#/$defs/cellAttributes/properties/owner"
+          },
+          "source": {
+            "$ref": "#/$defs/cellAttributes/properties/source"
+          },
+          "face": {
+            "$ref": "#/$defs/cellAttributes/properties/face"
+          },
+          "reserved": {
+            "$ref": "#/$defs/cellAttributes/properties/reserved"
+          },
+          "onConflict": {
+            "$ref": "#/$defs/cellAttributes/properties/onConflict"
           }
         }
       },
@@ -1457,6 +1937,30 @@
           },
           "comment": {
             "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/cellAttributes/properties/id"
+          },
+          "role": {
+            "$ref": "#/$defs/cellAttributes/properties/role"
+          },
+          "element": {
+            "$ref": "#/$defs/cellAttributes/properties/element"
+          },
+          "owner": {
+            "$ref": "#/$defs/cellAttributes/properties/owner"
+          },
+          "source": {
+            "$ref": "#/$defs/cellAttributes/properties/source"
+          },
+          "face": {
+            "$ref": "#/$defs/cellAttributes/properties/face"
+          },
+          "reserved": {
+            "$ref": "#/$defs/cellAttributes/properties/reserved"
+          },
+          "onConflict": {
+            "$ref": "#/$defs/cellAttributes/properties/onConflict"
           }
         }
       },
@@ -1518,6 +2022,30 @@
           },
           "comment": {
             "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/cellAttributes/properties/id"
+          },
+          "role": {
+            "$ref": "#/$defs/cellAttributes/properties/role"
+          },
+          "element": {
+            "$ref": "#/$defs/cellAttributes/properties/element"
+          },
+          "owner": {
+            "$ref": "#/$defs/cellAttributes/properties/owner"
+          },
+          "source": {
+            "$ref": "#/$defs/cellAttributes/properties/source"
+          },
+          "face": {
+            "$ref": "#/$defs/cellAttributes/properties/face"
+          },
+          "reserved": {
+            "$ref": "#/$defs/cellAttributes/properties/reserved"
+          },
+          "onConflict": {
+            "$ref": "#/$defs/cellAttributes/properties/onConflict"
           }
         }
       },
@@ -1573,6 +2101,30 @@
           },
           "comment": {
             "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/cellAttributes/properties/id"
+          },
+          "role": {
+            "$ref": "#/$defs/cellAttributes/properties/role"
+          },
+          "element": {
+            "$ref": "#/$defs/cellAttributes/properties/element"
+          },
+          "owner": {
+            "$ref": "#/$defs/cellAttributes/properties/owner"
+          },
+          "source": {
+            "$ref": "#/$defs/cellAttributes/properties/source"
+          },
+          "face": {
+            "$ref": "#/$defs/cellAttributes/properties/face"
+          },
+          "reserved": {
+            "$ref": "#/$defs/cellAttributes/properties/reserved"
+          },
+          "onConflict": {
+            "$ref": "#/$defs/cellAttributes/properties/onConflict"
           }
         }
       },
@@ -1724,6 +2276,30 @@
           },
           "comment": {
             "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/cellAttributes/properties/id"
+          },
+          "role": {
+            "$ref": "#/$defs/cellAttributes/properties/role"
+          },
+          "element": {
+            "$ref": "#/$defs/cellAttributes/properties/element"
+          },
+          "owner": {
+            "$ref": "#/$defs/cellAttributes/properties/owner"
+          },
+          "source": {
+            "$ref": "#/$defs/cellAttributes/properties/source"
+          },
+          "face": {
+            "$ref": "#/$defs/cellAttributes/properties/face"
+          },
+          "reserved": {
+            "$ref": "#/$defs/cellAttributes/properties/reserved"
+          },
+          "onConflict": {
+            "$ref": "#/$defs/cellAttributes/properties/onConflict"
           }
         }
       },
@@ -1795,6 +2371,30 @@
           },
           "comment": {
             "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/cellAttributes/properties/id"
+          },
+          "role": {
+            "$ref": "#/$defs/cellAttributes/properties/role"
+          },
+          "element": {
+            "$ref": "#/$defs/cellAttributes/properties/element"
+          },
+          "owner": {
+            "$ref": "#/$defs/cellAttributes/properties/owner"
+          },
+          "source": {
+            "$ref": "#/$defs/cellAttributes/properties/source"
+          },
+          "face": {
+            "$ref": "#/$defs/cellAttributes/properties/face"
+          },
+          "reserved": {
+            "$ref": "#/$defs/cellAttributes/properties/reserved"
+          },
+          "onConflict": {
+            "$ref": "#/$defs/cellAttributes/properties/onConflict"
           }
         }
       },
@@ -2032,6 +2632,30 @@
           },
           "comment": {
             "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/cellAttributes/properties/id"
+          },
+          "role": {
+            "$ref": "#/$defs/cellAttributes/properties/role"
+          },
+          "element": {
+            "$ref": "#/$defs/cellAttributes/properties/element"
+          },
+          "owner": {
+            "$ref": "#/$defs/cellAttributes/properties/owner"
+          },
+          "source": {
+            "$ref": "#/$defs/cellAttributes/properties/source"
+          },
+          "face": {
+            "$ref": "#/$defs/cellAttributes/properties/face"
+          },
+          "reserved": {
+            "$ref": "#/$defs/cellAttributes/properties/reserved"
+          },
+          "onConflict": {
+            "$ref": "#/$defs/cellAttributes/properties/onConflict"
           }
         }
       },
@@ -2112,6 +2736,30 @@
           },
           "comment": {
             "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/cellAttributes/properties/id"
+          },
+          "role": {
+            "$ref": "#/$defs/cellAttributes/properties/role"
+          },
+          "element": {
+            "$ref": "#/$defs/cellAttributes/properties/element"
+          },
+          "owner": {
+            "$ref": "#/$defs/cellAttributes/properties/owner"
+          },
+          "source": {
+            "$ref": "#/$defs/cellAttributes/properties/source"
+          },
+          "face": {
+            "$ref": "#/$defs/cellAttributes/properties/face"
+          },
+          "reserved": {
+            "$ref": "#/$defs/cellAttributes/properties/reserved"
+          },
+          "onConflict": {
+            "$ref": "#/$defs/cellAttributes/properties/onConflict"
           }
         }
       },
@@ -2175,6 +2823,30 @@
           },
           "comment": {
             "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/cellAttributes/properties/id"
+          },
+          "role": {
+            "$ref": "#/$defs/cellAttributes/properties/role"
+          },
+          "element": {
+            "$ref": "#/$defs/cellAttributes/properties/element"
+          },
+          "owner": {
+            "$ref": "#/$defs/cellAttributes/properties/owner"
+          },
+          "source": {
+            "$ref": "#/$defs/cellAttributes/properties/source"
+          },
+          "face": {
+            "$ref": "#/$defs/cellAttributes/properties/face"
+          },
+          "reserved": {
+            "$ref": "#/$defs/cellAttributes/properties/reserved"
+          },
+          "onConflict": {
+            "$ref": "#/$defs/cellAttributes/properties/onConflict"
           }
         }
       },
@@ -2207,6 +2879,30 @@
           },
           "comment": {
             "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/cellAttributes/properties/id"
+          },
+          "role": {
+            "$ref": "#/$defs/cellAttributes/properties/role"
+          },
+          "element": {
+            "$ref": "#/$defs/cellAttributes/properties/element"
+          },
+          "owner": {
+            "$ref": "#/$defs/cellAttributes/properties/owner"
+          },
+          "source": {
+            "$ref": "#/$defs/cellAttributes/properties/source"
+          },
+          "face": {
+            "$ref": "#/$defs/cellAttributes/properties/face"
+          },
+          "reserved": {
+            "$ref": "#/$defs/cellAttributes/properties/reserved"
+          },
+          "onConflict": {
+            "$ref": "#/$defs/cellAttributes/properties/onConflict"
           }
         }
       },
@@ -2254,6 +2950,30 @@
           },
           "comment": {
             "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/cellAttributes/properties/id"
+          },
+          "role": {
+            "$ref": "#/$defs/cellAttributes/properties/role"
+          },
+          "element": {
+            "$ref": "#/$defs/cellAttributes/properties/element"
+          },
+          "owner": {
+            "$ref": "#/$defs/cellAttributes/properties/owner"
+          },
+          "source": {
+            "$ref": "#/$defs/cellAttributes/properties/source"
+          },
+          "face": {
+            "$ref": "#/$defs/cellAttributes/properties/face"
+          },
+          "reserved": {
+            "$ref": "#/$defs/cellAttributes/properties/reserved"
+          },
+          "onConflict": {
+            "$ref": "#/$defs/cellAttributes/properties/onConflict"
           }
         },
         "allOf": [
@@ -2362,6 +3082,30 @@
           },
           "comment": {
             "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/cellAttributes/properties/id"
+          },
+          "role": {
+            "$ref": "#/$defs/cellAttributes/properties/role"
+          },
+          "element": {
+            "$ref": "#/$defs/cellAttributes/properties/element"
+          },
+          "owner": {
+            "$ref": "#/$defs/cellAttributes/properties/owner"
+          },
+          "source": {
+            "$ref": "#/$defs/cellAttributes/properties/source"
+          },
+          "face": {
+            "$ref": "#/$defs/cellAttributes/properties/face"
+          },
+          "reserved": {
+            "$ref": "#/$defs/cellAttributes/properties/reserved"
+          },
+          "onConflict": {
+            "$ref": "#/$defs/cellAttributes/properties/onConflict"
           }
         },
         "allOf": [
@@ -2453,6 +3197,30 @@
           "joinRoof": {
             "type": "boolean",
             "default": false
+          },
+          "id": {
+            "$ref": "#/$defs/cellAttributes/properties/id"
+          },
+          "role": {
+            "$ref": "#/$defs/cellAttributes/properties/role"
+          },
+          "element": {
+            "$ref": "#/$defs/cellAttributes/properties/element"
+          },
+          "owner": {
+            "$ref": "#/$defs/cellAttributes/properties/owner"
+          },
+          "source": {
+            "$ref": "#/$defs/cellAttributes/properties/source"
+          },
+          "face": {
+            "$ref": "#/$defs/cellAttributes/properties/face"
+          },
+          "reserved": {
+            "$ref": "#/$defs/cellAttributes/properties/reserved"
+          },
+          "onConflict": {
+            "$ref": "#/$defs/cellAttributes/properties/onConflict"
           }
         },
         "allOf": [
@@ -2664,6 +3432,53 @@
         },
         "to": {
           "$ref": "#/$defs/position"
+        }
+      }
+    },
+    "cellAttributes": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role": {
+          "type": "string",
+          "minLength": 1
+        },
+        "element": {
+          "type": "string",
+          "minLength": 1
+        },
+        "owner": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1
+        },
+        "face": {
+          "enum": [
+            "north",
+            "east",
+            "south",
+            "west",
+            "up",
+            "down"
+          ]
+        },
+        "reserved": {
+          "enum": [
+            "structure",
+            "circulation"
+          ]
+        },
+        "onConflict": {
+          "enum": [
+            "error",
+            "skip"
+          ]
         }
       }
     }

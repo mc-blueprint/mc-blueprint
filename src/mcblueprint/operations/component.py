@@ -74,4 +74,4 @@ class ComponentOperation(Operation):
     def apply(self, ctx: ExecutionContext) -> None:
         child = ctx.child(self.transform, palettes=self.palettes)
         for op in self.operations:
-            op.apply(child)
+            child.execute(op)

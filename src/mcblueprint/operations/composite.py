@@ -116,4 +116,4 @@ class CompositeOperation(Operation):
 
     def apply(self, ctx: ExecutionContext) -> None:
         for op in self.expanded:
-            op.apply(ctx)
+            ctx.execute(op)

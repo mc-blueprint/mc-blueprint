@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
-from functools import reduce
+from functools import partial, reduce
 from typing import Any, Self
 
 from mcblueprint.errors import BlueprintError
@@ -107,6 +107,16 @@ class JoinBuildingsOperation(Operation):
             (a.layout, b.layout), BuildingFace(faces[0], shared), floor_y, tuple(boxes),
         )
         self._roof_operations = self._joined_roof() if join_roof else []
+        roof_operations = self._roof_operations if join_roof else b.expanded[-1].expanded
+        roof_boxes = tuple(
+            part.bounds() for operation in roof_operations
+            for part in (
+                operation.expanded if isinstance(operation, RoofOperation) else [operation]
+            )
+        )
+        if not join_roof:
+            roof_boxes = tuple(b.transform.bounds(box) for box in roof_boxes)
+        self._roof_exclusions = (roof_boxes, roof_boxes if join_roof else ())
 
     def _joined_roof(self) -> list[Operation]:
         a, b = self.buildings
@@ -157,7 +167,7 @@ class JoinBuildingsOperation(Operation):
         for index, item in enumerate(raw):
             if not isinstance(item, Mapping) or item.get("type") != "building":
                 raise BlueprintError(f"{path}.buildings[{index}]: building が必要です")
-            buildings.append(BuildingOperation.from_dict(item, f"{path}.buildings[{index}]"))
+            buildings.append(build_operation(item, f"{path}.buildings[{index}]"))
         wall = parse_block(data, "wall", path)
         if wall is None:
             raise BlueprintError(f"{path}.wall: 共有壁材を指定してください")
@@ -171,8 +181,12 @@ class JoinBuildingsOperation(Operation):
         return self.buildings[0].bounds().union(self.buildings[1].bounds())
 
     def apply(self, ctx: ExecutionContext) -> None:
-        for building in self.buildings:
-            building.apply_without_face(ctx, self._owned_face, include_roof=not self.join_roof)
+        for building, excluded in zip(self.buildings, self._roof_exclusions, strict=True):
+            ctx.execute(building, apply=partial(
+                building.apply_without_face, face=self._owned_face,
+                include_roof=not self.join_roof,
+                excluded=excluded,
+            ))
         floor = BlockSpec(block=self.buildings[0].materials["floor"])
         air = BlockSpec(block=BlockState.parse("air"))
         for x in range(self._owned_face.min.x, self._owned_face.max.x + 1):
@@ -186,4 +200,4 @@ class JoinBuildingsOperation(Operation):
                         spec = floor if floor_row else self.wall
                     ctx.place(pos, spec)
         for operation in self._roof_operations:
-            operation.apply(ctx)
+            ctx.execute(operation)

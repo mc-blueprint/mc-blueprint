@@ -27,7 +27,14 @@ def build_operation(data: Mapping[str, Any], path: str) -> Operation:
     if cls is None:
         known = ", ".join(sorted(OPERATIONS)) or "none"
         raise BlueprintError(f"{path}: unknown operation type {op_type!r} (known: {known})")
-    return cls.from_dict(data, path)
+    operation = cls.from_dict(data, path)
+    operation.id = data.get("id")
+    operation.attributes = {
+        key: data[key] for key in ("role", "element", "face", "reserved", "owner", "source")
+        if key in data
+    }
+    operation.on_conflict = data.get("onConflict")
+    return operation
 
 
 def build_operations(items: Sequence[Mapping[str, Any]], path: str) -> list[Operation]:

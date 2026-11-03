@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from collections.abc import Mapping
+from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
 from typing import Any, Self
 
@@ -41,13 +41,30 @@ class BuildingLayout:
 
 
 class _SharedFaceContext(ExecutionContext):
-    def __init__(self, ctx: ExecutionContext, transform: Transform, face: AABB) -> None:
+    def __init__(
+        self, ctx: ExecutionContext, transform: Transform, face: AABB,
+        excluded: Sequence[AABB] = (),
+    ) -> None:
         super().__init__(ctx.volume, ctx.rng, ctx.palettes, transform, ctx.depth)
+        self.seed = ctx.seed
+        self.attributes = ctx.attributes
+        self.operation_id = ctx.operation_id
+        self.on_conflict = ctx.on_conflict
+        self.sampler = ctx.sampler
         self.face = ctx.transform.bounds(face)
+        self.excluded = tuple(ctx.transform.bounds(box) for box in excluded)
 
     def place(self, pos: Vec3, spec: BlockSpec) -> None:
-        if not self.face.contains(self.transform.apply(pos)):
+        world = self.transform.apply(pos)
+        if not self.face.contains(world) and not any(box.contains(world) for box in self.excluded):
             super().place(pos, spec)
+
+    def fill(self, box: AABB, spec: BlockSpec) -> None:
+        from mcblueprint.operations.box_like import iter_box
+
+        clipped = self.clip_box(box)
+        if clipped is not None:
+            self.place_all(iter_box(clipped), spec)
 
 
 @register
@@ -187,22 +204,23 @@ class BuildingOperation(CompositeOperation):
 
     def apply_without_face(
         self, ctx: ExecutionContext, face: AABB, *, include_roof: bool = True,
+        excluded: Sequence[AABB] = (),
     ) -> None:
         """join_buildings が所有する共有面への配置を行わず、他の部分だけを生成する。
 
         face は building 自身の position / angle 適用後、外側変換前の配置座標。
         床・窓・屋根も含め、この範囲の全セルの生成責務を接続操作へ移譲する。
         include_roof=False は屋根全体の生成も接続操作へ移譲する。
+        excluded は同じ配置座標で、接合内部の後段屋根へ最終配置を移譲する矩形。
         """
-        child = _SharedFaceContext(ctx, self.transform.then(ctx.transform), face)
+        child = _SharedFaceContext(ctx, self.transform.then(ctx.transform), face, excluded)
         operations = self.expanded if include_roof else self.expanded[:-1]
         for operation in operations:
-            operation.apply(child)
+            child.execute(operation)
 
     def bounds(self) -> AABB:
         return self.transform.bounds(super().bounds())
 
     def apply(self, ctx: ExecutionContext) -> None:
-        super().apply(ExecutionContext(
-            ctx.volume, ctx.rng, ctx.palettes, self.transform.then(ctx.transform), ctx.depth,
-        ))
+        child = ctx.child(self.transform, nesting=False)
+        super().apply(child)

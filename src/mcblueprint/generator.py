@@ -2,15 +2,144 @@
 
 from __future__ import annotations
 
+import math
 import random
+from collections.abc import Iterator
+from dataclasses import dataclass
 
 from mcblueprint.errors import BlueprintError
 from mcblueprint.foundation import FoundationResult
 from mcblueprint.model.blueprint import Blueprint
-from mcblueprint.operations.base import ExecutionContext
+from mcblueprint.model.vec import AABB, Vec3
+from mcblueprint.operations.base import ExecutionContext, Operation, intersect
 from mcblueprint.operations.box_like import iter_box
+from mcblueprint.operations.randomness import PaletteSampler
 from mcblueprint.surface_path import check_surface_path
-from mcblueprint.volume import MAX_VOLUME, BlockVolume
+from mcblueprint.volume import MAX_VOLUME, BlockVolume, RegionVolume
+
+
+@dataclass(frozen=True)
+class GenerationLimits:
+    """領域生成の上限。region のNoneは全高、メモリ単位はMiB。
+
+    max_memory_mb は生成用の領域・パレットと後段の作業領域の予算。
+    プロセス全体のRSS上限ではない。実効haloは参照半径以上にする。
+    """
+
+    region: tuple[int, int | None, int] = (64, None, 64)
+    halo: int = 16
+    max_memory_mb: float = 2048
+
+    def __post_init__(self) -> None:
+        if not isinstance(self.region, tuple | list) or len(self.region) != 3 or any(
+            not (i == 1 and n is None) and (type(n) is not int or n < 1)
+            for i, n in enumerate(self.region)
+        ):
+            raise BlueprintError("limits.region は正整数3個（高さのみnull可）が必要です")
+        if type(self.halo) is not int or self.halo < 0:
+            raise BlueprintError("limits.halo は0以上の整数が必要です")
+        if (
+            isinstance(self.max_memory_mb, bool)
+            or not isinstance(self.max_memory_mb, int | float)
+            or not math.isfinite(self.max_memory_mb) or self.max_memory_mb <= 0
+        ):
+            raise BlueprintError("limits.max_memory_mb は有限の正数が必要です")
+
+
+@dataclass(frozen=True)
+class GeneratedRegion:
+    """coreだけを後段で確定する。volumeはhaloを含み、世界座標で参照する。"""
+
+    core: AABB
+    volume: RegionVolume
+
+
+def _check_local(operations: list[Operation]) -> tuple[int, bool]:
+    count = 0
+    has_palettes = False
+    for operation in operations:
+        if operation.type == "copy":
+            raise BlueprintError(f"{operation.path}: copy は領域生成では未対応です")
+        count += 1
+        has_palettes |= bool(getattr(operation, "palettes", {}))
+        children = getattr(operation, "operations", None)
+        if children is not None:
+            multiplier = operation.count if operation.type == "repeat" else 1
+            if operation.type == "mirror" and operation.keep_original:
+                multiplier = 2
+            child_count, child_palettes = _check_local(children)
+            count += multiplier * child_count
+            has_palettes |= child_palettes
+        expanded = getattr(operation, "expanded", None)
+        if expanded is not None:
+            child_count, child_palettes = _check_local(expanded)
+            count += child_count
+            has_palettes |= child_palettes
+    return count, has_palettes
+
+
+def generate_regions(
+    blueprint: Blueprint, *, limits: GenerationLimits | None = None,
+    seed: int | None = None, reference_radius: int = 0, reverse: bool = False,
+) -> Iterator[GeneratedRegion]:
+    """決定的な生成をcore/halo単位で返す。全体BlockVolumeは作らない。
+
+    呼出し元は1領域ずつ消費・解放する。core外は参照専用で、出力・集計しない。
+    copy・元地形の施工は従来generateを使用する。予算不足時はcoreを縮め、
+    1セルのcoreと必要haloでも収まらなければBlueprintErrorになる。
+    各セルの適用順は元のOperation順を維持する。reverseは領域の列挙順だけを変える。
+    """
+    limits = limits or GenerationLimits()
+    if type(reference_radius) is not int or reference_radius < 0:
+        raise BlueprintError("reference_radius は0以上の整数が必要です")
+    if blueprint.terrain is not None or blueprint.foundation is not None or blueprint.surface_path:
+        raise BlueprintError("元地形の施工は領域生成では未対応です")
+    operation_count, has_palettes = _check_local(blueprint.operations)
+    has_palettes |= bool(blueprint.palettes)
+    bounds = blueprint.bounds()
+    halo = max(limits.halo, reference_radius)
+    size = bounds.size
+    core_size = [min(n or size[i], size[i]) for i, n in enumerate(limits.region)]
+    budget = limits.max_memory_mb * 1024 * 1024
+    sampler = PaletteSampler(bounds, int(budget))
+    # セル配列8 bytesに加え、後段snapshot・距離配列・パレットの余裕を確保する。
+    def estimated_bytes() -> int:
+        cells = math.prod(min(core_size[i] + 2 * halo, size[i]) for i in range(3))
+        scratch = sampler.batch_size * 2600 if has_palettes else 0
+        cache = 2 * sampler.cache_limit if has_palettes else 0
+        return cells * 64 + operation_count * 4096 + scratch + cache
+
+    while estimated_bytes() > budget:
+        axis = max(range(3), key=lambda i: core_size[i])
+        if core_size[axis] == 1:
+            raise BlueprintError("最小coreと必要haloが limits.max_memory_mb に収まりません")
+        core_size[axis] = max(1, core_size[axis] // 2)
+
+    xs = range(bounds.min.x, bounds.max.x + 1, core_size[0])
+    ys = range(bounds.min.y, bounds.max.y + 1, core_size[1])
+    zs = range(bounds.min.z, bounds.max.z + 1, core_size[2])
+    for x in reversed(xs) if reverse else xs:
+        for y in reversed(ys) if reverse else ys:
+            for z in reversed(zs) if reverse else zs:
+                low = Vec3(x, y, z)
+                high = Vec3.min(low + Vec3(*core_size) - Vec3(1, 1, 1), bounds.max)
+                core = AABB(low, high)
+                margin = Vec3(halo, halo, halo)
+                area = intersect(AABB(low - margin, high + margin), bounds)
+                assert area is not None
+                try:
+                    volume = RegionVolume(area)
+                except MemoryError as exc:
+                    raise BlueprintError("領域配列を保持するメモリを確保できません") from exc
+                ctx = ExecutionContext(
+                    volume, random.Random(0), blueprint.palettes,
+                    seed=blueprint.seed if seed is None else seed,
+                    sampler=sampler,
+                )
+                for operation in blueprint.operations:
+                    ctx.execute(operation)
+                yield GeneratedRegion(core, volume)
+                del ctx, volume
 
 
 def generate(blueprint: Blueprint, *, seed: int | None = None) -> BlockVolume:
@@ -48,7 +177,7 @@ def generate_with_report(
             volume.set(pos, state)
     ctx = ExecutionContext(volume, random.Random(effective_seed), blueprint.palettes)
     for operation in blueprint.operations:
-        operation.apply(ctx)
+        ctx.execute(operation)
     if blueprint.surface_path is not None:
         check_surface_path(volume, blueprint.surface_path)
     return volume, blueprint.foundation.result if blueprint.foundation is not None else None

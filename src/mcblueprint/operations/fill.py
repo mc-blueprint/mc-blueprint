@@ -6,7 +6,7 @@ from collections.abc import Iterable, Mapping
 from typing import Any, Self
 
 from mcblueprint.model.vec import Vec3
-from mcblueprint.operations.base import BlockSpec
+from mcblueprint.operations.base import BlockSpec, ExecutionContext
 from mcblueprint.operations.box_like import CornerOperation, iter_box
 from mcblueprint.operations.registry import register
 
@@ -22,3 +22,6 @@ class FillOperation(CornerOperation):
 
     def cells(self) -> Iterable[Vec3]:
         return iter_box(self.box)
+
+    def apply(self, ctx: ExecutionContext) -> None:
+        ctx.fill(self.box, self.spec)
