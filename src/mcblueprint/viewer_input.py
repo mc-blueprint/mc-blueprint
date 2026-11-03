@@ -160,9 +160,10 @@ def _write_blueprint_scene(data: dict, base: Path, target: Path, source: dict,
                     preview, view["biome"] or "plains")
 
 
-def _spec_sources(scene: dict, resolved) -> None:
+def _spec_sources(scene: dict, resolved, *, massing: dict | None = None) -> None:
     # 子要素しかセルを持たない場合も、編集対象の親要素をsource表へ残す。
-    massing = plan_buildspec(resolved).massing
+    if massing is None:
+        massing = plan_buildspec(resolved).massing
     root = massing["element"]
     if any(entry.get("element") == root for entry in scene["sources"]):
         return

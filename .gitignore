@@ -20,6 +20,7 @@ __pycache__/
 venv/
 dist/
 build/
+benchmarks/.tmp/
 *.egg-info/
 .pytest_cache/
 .ruff_cache/

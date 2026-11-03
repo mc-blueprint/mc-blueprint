@@ -102,6 +102,8 @@ def _plan_contract(root, body, detail, transform, params, layout):
             beams.append({"id": f"{root}.beam#{len(beams) + 1}",
                           "y": bounds.min.y, "from": bounds.min.to_list(),
                           "to": bounds.max.to_list()})
+    opening_boxes = [(opening, transform.bounds(build_operation(opening, root).bounds()))
+                     for opening in detail if opening["type"] in ("window", "doorway")]
     facades = []
     for op in body:
         if "face" not in op:
@@ -119,10 +121,9 @@ def _plan_contract(root, body, detail, transform, params, layout):
             [1, 0, 0] if op["face"] in ("north", "south") else [0, 0, 1]
         ))
         openings = []
-        for opening in detail:
-            if opening.get("face") != op["face"] or opening["type"] not in ("window", "doorway"):
+        for opening, box in opening_boxes:
+            if opening.get("face") != op["face"]:
                 continue
-            box = transform.bounds(build_operation(opening, root).bounds())
             openings.append({"id": opening["element"], "from": box.min.to_list(),
                              "to": box.max.to_list(), "projection": _projection(box, origin, axis)})
         facades.append({"id": op["element"], "normal": face.to_list(),
@@ -157,10 +158,7 @@ def _plan_contract(root, body, detail, transform, params, layout):
                 local_box = AABB.of(lo, hi)
                 box = transform.bounds(local_box)
                 openings = []
-                for opening in detail:
-                    if opening["type"] not in ("window", "doorway"):
-                        continue
-                    opening_box = transform.bounds(build_operation(opening, root).bounds())
+                for opening, opening_box in opening_boxes:
                     center = Vec3((opening_box.min.x + opening_box.max.x) // 2,
                                   (opening_box.min.y + opening_box.max.y) // 2,
                                   (opening_box.min.z + opening_box.max.z) // 2)

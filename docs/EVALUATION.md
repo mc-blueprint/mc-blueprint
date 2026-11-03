@@ -228,3 +228,33 @@ git diff --check
 リポジトリのstrict検証は22ファイル、クリーンwheelのpatterns指定は19ファイルで、どちらもエラー・警告0。
 wheelビルド、4版blockdataとスキーマのlock hash照合、3様式・Blueprintスキーマの存在確認、
 変更26ファイルのUTF-8 BOMなし／LF確認、測定方式・計画hashの照合、git diff --checkにも成功した。
+
+## makeの性能修正と結果の不変性（Issue #210）
+
+#209適用済みの `3261ea9` を修正前として、Dの固定16入力を変更せずに再実行した。
+[make-performance-210.json](../evaluation/records/make-performance-210.json) の
+`fixed-before` と `fixed-after` に入力hashと4種の結果hashを保存する。
+世界座標と完全なブロック状態を整列した配置、全指標、構造化診断、展開後scene JSONが
+16組すべてで一致した。構造化診断は配列の順序も含めて比較し、除外や正規化で差を隠さない。
+各組の終了コードは修正前後とも0だった。
+
+sceneには入力パスが含まれるため、両実行で同じ入力パス・byteを使う。
+run記録とscene sidecarに含むengine世代・出力パスは実装修正や保存先の違いで変わるので、
+これらのファイル全体のhashは不変性の判定に使わない。
+配置hashには `.schem`／`.litematic` の時刻情報や圧縮byteを含めない。
+性能用のmedium／largeも同じ4種のhashを比較し、反復間の不一致も検出する。
+住宅・塔のmedium／large 4入力を各3回測定し、12試行すべてで修正前の結果と一致した。
+固定16入力と合わせて20入力で不変性を確認した。
+LF統一後も固定16入力を再生成し、計測前と同じ4種のhashで一致した。
+結果は `publication_fixed_cases` に分離し、計測時の記録を置き換えない。
+手順と時間境界は [PERFORMANCE.md](PERFORMANCE.md) を参照する。
+
+性能修正はMassingの再利用、開口boundsの再利用、既存Palette表の再利用に限る。
+公開API、保存形式、乱数系列、Criticの算式・閾値は変更していない。
+追加試験では通常生成／Blueprintからの再開でscene用の再計画を防ぎ、
+状態の異なる階段とfullブロックが同一Paletteへ誤って統合されないことを確認する。
+NFR2の達成、未測定入力の品質、人間の外観評価、実画面確認はこの一致確認から推定しない。
+
+ローカル検証はPython 3.12.15でruff成功、pytest全件2474成功・1skip
+（任意のtiktoken未導入）、check --strictは22ファイルでエラー・警告0、wheelビルド成功。
+git diff --checkと変更ファイルのUTF-8 BOMなし／LFも確認した。

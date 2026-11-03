@@ -628,7 +628,7 @@ def make(
             from mcblueprint.viewer_input import _spec_sources
 
             source_table = {"sources": list(scene_sources.values())}
-            _spec_sources(source_table, resolved)
+            _spec_sources(source_table, resolved, massing=context["massing"])
             scene_sources = {entry["id"]: entry for entry in source_table["sources"]}
             scene_hash = write_scene(
                 staged_scene, source_spool, spool, scene_sources, blueprint, context,
