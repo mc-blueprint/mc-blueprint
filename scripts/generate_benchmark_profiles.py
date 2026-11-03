@@ -9,8 +9,6 @@ from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
-FIXTURES = ROOT / "benchmarks" / "fixtures"
-RECORD = ROOT / "benchmarks" / "generation-profiles.json"
 DEFINITION_VERSION = "generation-profile-v1"
 MEDIUM = (64, 48, 64)
 HUGE = (256, 128, 256)
@@ -163,8 +161,11 @@ def _box(size: tuple[int, int, int], seed: int, kind: str) -> list[dict[str, Any
     return operations
 
 
-def generate_profiles() -> list[dict[str, Any]]:
-    FIXTURES.mkdir(parents=True, exist_ok=True)
+def generate_profiles(output_dir: Path | None = None) -> list[dict[str, Any]]:
+    output_dir = output_dir or ROOT / "benchmarks"
+    fixtures = output_dir / "fixtures"
+    record_path = output_dir / "generation-profiles.json"
+    fixtures.mkdir(parents=True, exist_ok=True)
     profiles = []
     cases = [(kind, "medium", MEDIUM) for kind in SEEDS]
     cases.append(("castle", "huge", HUGE))
@@ -177,7 +178,7 @@ def generate_profiles() -> list[dict[str, Any]]:
             "name": name,
             "operations": _box(size, seed, kind),
         }
-        path = FIXTURES / f"{name}.json"
+        path = fixtures / f"{name}.json"
         path.write_text(
             json.dumps(blueprint, ensure_ascii=False, indent=2) + "\n",
             encoding="utf-8",
@@ -208,7 +209,7 @@ def generate_profiles() -> list[dict[str, Any]]:
             }
         )
     record = {"schema_version": 1, "definition_version": DEFINITION_VERSION, "profiles": profiles}
-    RECORD.write_text(
+    record_path.write_text(
         json.dumps(record, ensure_ascii=False, indent=2) + "\n", encoding="utf-8", newline="\n"
     )
     return profiles
