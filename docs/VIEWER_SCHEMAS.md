@@ -15,3 +15,7 @@ scene は gzip 展開後の UTF-8 JSON。トップレベルの `source` は入�
 ## edits v1
 
 `scene` は gzip を展開した後の scene JSON のバイト列の SHA-256。現在の生成結果と一致しない場合は競合として適用しない。`edits` は `replace`（領域と置換ブロック）、`delete`（`at` の単一点または `region` の範囲のどちらか一方）、`param`（要素・パラメーター・値）、`note`（要素・文章）のいずれかで、座標は scene ローカル座標。`region` は `[[x1,y1,z1],[x2,y2,z2]]` 形式で両端を含む。
+
+Python API `mcblueprint.edits.apply_edits(scene, edits, source, *, scene_bytes=None)` は入力を変更せず、適用候補を返す。`scene_bytes` を渡すと展開済みJSONのSHA-256も照合する。BuildSpecの編集は既存 `planning.plan_buildspec` で検証し、`replace` / `delete` が `structure` または `circulation` の予約Operationのboundsと重なる場合は要素ID・予約種別を示して拒否する。BuildSpec以外は `replace` / `delete` を派生Blueprintの `overrides` にし、元入力を上書きしない。`note` は要素付きメタデータとして保持し、生成処理を起動しない。
+
+`mcblueprint.output_lock.lock_paths(*paths)` は入力・出力の正規化パスを一定順で非待機ロックするコンテキストマネージャー。ロック競合は `BlockingIOError`。Windowsは `msvcrt.locking`、Unixは `fcntl.flock` を使い、ロックファイルは削除しない。
