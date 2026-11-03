@@ -15,6 +15,7 @@ from mcblueprint.errors import BlueprintError
 from mcblueprint.generator import GeneratedRegion
 from mcblueprint.model import AABB, Vec3
 from mcblueprint.model.block import BlockState
+from mcblueprint.operations.transform import Transform
 from mcblueprint.volume import CellAttributes, RegionVolume
 
 
@@ -210,6 +211,9 @@ def test_outside_depth_core_is_merged_before_finalizing():
     facade = plan.facades[0]
     plan = replace(plan, facades=(replace(facade, cells=tuple(
         replace(c, pos=Vec3(c.pos.x, c.pos.y, 0)) for c in facade.cells)),))
+    for cell in plan.facades[0].cells:
+        region.volume.set(cell.pos, BlockState.of("stone"), CellAttributes(
+            role="wall_main", element=facade.element, face=facade.face))
     front = GeneratedRegion(AABB(Vec3(-2, 0, -1), Vec3(5, 5, -1)), region.volume)
     back = GeneratedRegion(AABB(Vec3(-2, 0, 0), Vec3(5, 5, 1)), region.volume)
     accumulator = CriticAccumulator(plan)
@@ -230,7 +234,7 @@ def test_only_explicit_decoration_operations_are_counted():
     result = evaluate(plan, [region])
     assert result.metrics["decoration_density"]["house#1.facade.north:north"]["numerator"] == 3
     assert evaluate(replace(plan, decoration_operations={}), [region]).metrics[
-        "decoration_density"] == {}
+        "decoration_density"]["house#1.facade.north:north"]["value"] == 0
 
 
 def test_decoration_metadata_is_used_for_final_cells():
@@ -255,4 +259,72 @@ def test_decoration_metadata_is_used_for_final_cells():
 def test_missing_planning_is_an_error():
     with pytest.raises(BlueprintError, match="Critic計画"):
         plan_from_metadata({"columns": [], "beams": []})
+
+
+def test_outer_decoration_does_not_hide_missing_base_wall():
+    plan, region = _fixture(missing={(2, 2)})
+    region.volume.set(Vec3(2, 2, -1), BlockState.of("stone"), CellAttributes(
+        role="trim", element="house#1.facade.north", face="north", operation="decoration"))
+    result = evaluate(plan, [region])
+    assert result.metrics["facade_surface_missing"]["value"] == 1
+    assert any(d["code"] == "E203" for d in result.diagnostics)
+
+
+def test_missing_wall_diagnostic_points_to_its_override():
+    plan, region = _fixture()
+    region.volume.set(Vec3(2, 2, 0), BlockState.of("air"), CellAttributes(
+        role="override", element="override#remove-wall", source="overrides.remove-wall",
+        operation="/override#remove-wall"))
+    result = evaluate(plan, [region])
+    diagnostic = next(d for d in result.diagnostics if d["code"] == "E203")
+    assert "overrides[remove-wall]" in diagnostic["repairPaths"]
+
+
+def test_empty_decoration_plan_is_zero_density_with_existing_wall():
+    plan, region = _fixture()
+    result = evaluate(replace(plan, decoration_operations={}), [region])
+    assert result.metrics["decoration_density"]["house#1.facade.north:north"] == {
+        "value": 0, "numerator": 0, "denominator": 16}
+    assert any(d["code"] == "E202" for d in result.diagnostics)
+
+
+@pytest.mark.parametrize("decoration", (False, True))
+def test_nonair_base_wall_without_attributes_is_a_failure(decoration):
+    plan, region = _fixture()
+    pos = Vec3(2, 2, 0)
+    region.volume.set(pos, BlockState.of("stone"), CellAttributes())
+    if decoration:
+        region.volume.set(pos + Vec3(0, 0, -1), BlockState.of("stone"), CellAttributes(
+            role="trim", element="house#1.facade.north", face="north"))
+    result = evaluate(plan, [region])
+    assert result.metrics["facade_surface_missing"]["value"] == 1
+
+
+@pytest.mark.parametrize("angle", (0, 90, 180, 270))
+def test_metadata_windows_follow_signed_local_axes(angle):
+    transform = Transform.rotation(angle, Vec3(0, 0, 0)).then(
+        Transform.translation(Vec3(-17, 0, -23)))
+    normal = transform.apply_direction("north")
+    box = transform.bounds(AABB(Vec3(0, 0, 0), Vec3(8, 3, 0)))
+    origin = transform.apply(Vec3(0, 0, 0))
+    axis = transform.apply(Vec3(1, 0, 0)) - origin
+    plan = plan_from_metadata({
+        "columns": [{"id": "frame", "from": [-17, 0, -23], "to": [-17, 0, -23]}],
+        "beams": [], "facades": [{"id": "wall", "normal": list({
+            "north": (0, 0, -1), "south": (0, 0, 1),
+            "east": (1, 0, 0), "west": (-1, 0, 0)}[normal]),
+            "origin": origin.to_list(), "uAxis": axis.to_list(),
+            "from": box.min.to_list(), "to": box.max.to_list(), "openings": []}],
+    })
+    volume = RegionVolume(transform.bounds(AABB(Vec3(0, 0, -1), Vec3(8, 3, 0))))
+    for x in range(9):
+        for y in range(4):
+            volume.set(transform.apply(Vec3(x, y, 0)), BlockState.of("stone"), CellAttributes(
+                role="wall_main", element="wall", face=normal))
+            if x in (0, 4):
+                volume.set(transform.apply(Vec3(x, y, -1)), BlockState.of("stone"),
+                           CellAttributes(role="trim", element="wall", face=normal))
+    result = evaluate(plan, [GeneratedRegion(volume.region, volume)])
+    assert result.metrics["flat_ratio"] == {"value": 1 / 3, "numerator": 1, "denominator": 3}
+    assert not any(d["code"] == "E201" for d in result.diagnostics)
 
