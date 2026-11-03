@@ -74,6 +74,37 @@ Minecraft Java Edition 1.21.11の確認用ワールドで、配布した `manual
 
 今回の比較画像ファイルは未提出で、AIが新たに撮影・画像照合した記録ではない。一般／熟練の評価者区分と外観・内部の1〜5採点は未回答、provider token等も未測定のまま保持する。正常報告から数値採点、人間同等以上の品質や使用量削減を推定しない。
 
+## makeの実測品質診断
+
+`make` はWeather後の各coreを一度だけ集計し、計画した柱・梁・外壁・開口と照合する。
+支持・歩行は完成spoolから検査する。haloを最終状態とみなしたり、全体の属性付きvolumeを復元したりしない。
+出力隣の `<出力>.run.json` に既存の文字列 `diagnostics` と、`metrics`・`structuredDiagnostics` を保存する。
+構造化診断は `code`・`metric`・`severity`・`element`・`source`・`actual`・`expected`・`repairPaths` を持つ。
+修正先は利用可能なBuildSpec入力項目だけを示す。既存の `validate --json` の契約は変えない。
+
+| 指標／コード | 測定と判定 | 修正・停止 |
+| --- | --- | --- |
+| column_continuity / E101 | 期待柱と梁の非air・frame・structure予約・ownerを照合。柱の合格割合は1.0 | 構造エラー1。通常生成の欠損はエンジン不具合として停止 |
+| flat_ratio / E201 | 開口を除いた固定4×4投影窓（端は部分窓）の深度一定率。0.35以下 | FAIL。`config.decoration.depth`・`config.decoration.density` |
+| decoration_density / E202 | 開口以外の外壁100投影面あたり、明示装飾Operationの最終非air数。様式範囲の100倍と比較 | FAIL。`config.decoration.density` |
+| facade_surface_missing / E203 | 計画開口に含まれない外壁の欠損 | FAIL。該当override・`config.weathering.missing_blocks` |
+| facade_mix / E305 | 建物・面・wall_main/wall_secondary役割ごとの最多ブロックID占有率。0.85以下 | WARN。`config.palette.mix`。固定ID役割は除外 |
+| palette_relation | 既存の配色関係診断 | FAIL。役割材質・`config.palette.contrast`・`config.palette.saturation` |
+| support / walkability | 既存の支持・到達判定。`blocked` と `unsupported` を区別 | FAIL。該当箇所・床材など根拠のある項目だけ修正 |
+
+外壁の最外深度はcore間で合成し、roundの輪郭の段差は区間ごとの基準深度として差し引く。
+面単位のFAILを全体平均で相殺しない。計画の `decorations` は
+`{"operation": "最終セルと同じOperation ID", "element": "facades[].id", "face": "north"}` の列である。
+Operation IDの文字列から装飾を推定せず、この表に含まれるセルだけを数える。
+装飾指定がない計画は装飾密度を `value: null, status: "n/a"` と理由付きで記録する。
+固定IDだけの外壁混合も対象外であり、測定失敗・計画や属性の欠落はn/aへ変えない。
+固定課題におけるn/aの受入判定は別途行い、実行成功から品質合格を推定しない。
+
+終了コードはFAILなし（WARNのみを含む）0、検証・構造エラー1、引数・I/O・資源不足2、
+品質FAIL 3。3では成果物と `status: "failed"` のrun記録を保存する。
+1・2では完成成果物を公開せず、既存成果物・run記録を保全する。
+これらは内部閾値であり、美観の受入基準や人間評価を代替しない。
+
 ## 生成コア固定課題（Issue #153）
 
 [generation-core.json](../evaluation/records/generation-core.json) に固定住宅・塔を全4版×両出力形式で記録した。各組でBuildSpecから `make` し、emitしたBlueprintを従来の `build` 経路でも出力して、ブロック配置の一致と各必須条件の機械判定を保存する。条件判定は到達可能な経路・ドア、床ブロックと壁面の被覆、屋根の居住域上の配置、塔の階別到達・床・窓ガラスを出力ブロックから調べる。これらは課題文の構造条件を機械判定するもので、美観やMinecraft実画面の確認ではない。

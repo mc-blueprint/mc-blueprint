@@ -33,3 +33,21 @@ def test_skill_frontmatter() -> None:
     text = (CODEX_SKILL / "SKILL.md").read_text(encoding="utf-8")
     assert text.startswith("---\nname: minecraft-blueprint\n")
     assert "\ndescription: " in text.split("---")[1]
+
+
+def test_skill_diagnostic_and_stop_contract() -> None:
+    text = (CODEX_SKILL / "SKILL.md").read_text(encoding="utf-8")
+    assert all(code in text for code in ("E101", "E201", "E202", "E203", "E305"))
+    assert "repairPaths" in text and "structuredDiagnostics" in text
+    assert "make を3回" in text and "連続2回" in text and "unsupported" in text
+    assert "not-implemented" not in text
+
+
+def test_skill_token_limit() -> None:
+    # tokenizerは開発用venvだけに導入し、通常の依存へ追加しない。
+    tiktoken = pytest.importorskip("tiktoken")
+    from importlib.metadata import version
+
+    assert version("tiktoken") == "0.9.0"
+    encoding = tiktoken.get_encoding("o200k_base")
+    assert len(encoding.encode((CODEX_SKILL / "SKILL.md").read_text(encoding="utf-8"))) <= 2000

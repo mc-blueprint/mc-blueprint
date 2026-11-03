@@ -18,7 +18,9 @@ description: Minecraft の建築を BuildSpec から生成し、評価診断に�
    - 同じ診断コードが連続2回、改善しなかった
    - `unsupported` だけが残り、修正可能な根拠がない
 
-合格は終了コード0です。評価不合格は3で、成果物と failed 状態の記録が出力されるので、診断を確認してから次の試行を判断します。入力・構造違反は1、引数・入出力・資源不足は2です。未実装指標の `not-implemented` は改善目標として扱わず、利用者へ報告します。
+終了コード0はFAILなし（WARNのみを含む）、3は品質不合格で、成果物と failed 状態の記録が残ります。1は入力・構造違反、2は引数・入出力・資源不足です。E101の通常生成での構造欠損はエンジン不具合として停止し、根拠なく寸法を変えません。
+
+E201は `config.decoration.depth`・`density`、E202は `config.decoration.density`、E203は該当override・`config.weathering.missing_blocks`、E305（WARN）は `config.palette.mix` を、診断の `repairPaths` に従って調整します。対象なしの `n/a` と測定失敗を区別し、固定課題の品質合格を推定しません。実測値と構造化診断は出力隣の `.run.json` の `metrics`・`structuredDiagnostics` で確認できます。
 
 診断に示された BuildSpec 項目だけを変えます。診断が対象や修正先を示さない場合は推測で無関係な項目を変えず、状況を報告します。画像や viewer は自動で開きません。
 
