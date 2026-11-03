@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["formatVersion", "minecraftVersion", "archetype"],
+  "additionalProperties": false,
+  "properties": {
+    "formatVersion": {"const": 1},
+    "minecraftVersion": {"enum": ["1.21.11", "26.1.2", "26.2", "26.3"]},
+    "archetype": {"enum": ["house", "tower"]},
+    "style": {"type": "string", "minLength": 1},
+    "scale": {"enum": ["tiny", "small", "medium", "large", "huge"]},
+    "size": {"type": "array", "prefixItems": [
+      {"type": "integer", "minimum": 1, "maximum": 256},
+      {"type": "integer", "minimum": 1, "maximum": 256},
+      {"type": "integer", "minimum": 1, "maximum": 256}
+    ], "minItems": 3, "maxItems": 3},
+    "seed": {"type": "integer"},
+    "site": {"type": "object", "additionalProperties": false, "properties": {
+      "terrain": {"type": "string", "minLength": 1},
+      "biome": {"type": "string", "minLength": 1}
+    }},
+    "features": {"type": "object"},
+    "materials": {"$ref": "#/$defs/materials"},
+    "interior": {"enum": ["none", "minimal"]},
+    "config": {"type": "object"},
+    "elements": {"type": "object", "additionalProperties": {"type": "object"}},
+    "overrides": {"type": "array", "items": {"type": "object"}}
+  },
+  "anyOf": [{"required": ["scale"]}, {"required": ["size"]}],
+  "allOf": [
+    {"if": {"properties": {"archetype": {"const": "house"}}},
+     "then": {"properties": {"features": {"type": "object", "additionalProperties": false, "properties": {
+       "floors": {"type": "integer", "minimum": 1, "maximum": 2},
+       "floor_height": {"type": "integer", "minimum": 4},
+       "roof": {"enum": ["gable", "hip"]}
+     }}}}},
+    {"if": {"properties": {"archetype": {"const": "tower"}}},
+     "then": {"properties": {"features": {"type": "object", "additionalProperties": false, "properties": {
+       "shape": {"enum": ["round", "square"]},
+       "floors": {"type": "integer", "minimum": 1},
+       "floor_height": {"type": "integer", "minimum": 4},
+       "battlement": {"type": "boolean"}
+     }}}}}
+  ],
+  "$defs": {
+    "material": {"oneOf": [
+      {"type": "string", "minLength": 1},
+      {"type": "object", "required": ["color", "material"], "additionalProperties": false, "properties": {
+        "color": {"type": "array", "prefixItems": [
+          {"type": "number", "minimum": 0, "maximum": 1},
+          {"type": "number", "minimum": -0.4, "maximum": 0.4},
+          {"type": "number", "minimum": -0.4, "maximum": 0.4}
+        ], "minItems": 3, "maxItems": 3},
+        "material": {"type": "string", "minLength": 1}
+      }}
+    ]},
+    "materials": {"type": "object", "additionalProperties": {"$ref": "#/$defs/material"}}
+  }
+}
