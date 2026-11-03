@@ -215,6 +215,45 @@ def test_failed_export_keeps_completed_file(tmp_path, monkeypatch):
     assert not list(tmp_path.glob(".keep.schem-*-*"))
 
 
+@pytest.mark.parametrize("failure", ("record", "output", "record_publish"))
+def test_failed_publish_keeps_existing_output_and_record(tmp_path, monkeypatch, failure):
+    source = spec_file(tmp_path)
+    output = tmp_path / "keep.schem"
+    record = output.with_suffix(".schem.run.json")
+    output.write_bytes(b"old output")
+    record.write_bytes(b"old record")
+
+    if failure == "record":
+        original = pipeline._atomic_json
+
+        def fail_record(path, value):
+            if path.name == record.name:
+                raise OSError("disk full")
+            original(path, value)
+
+        monkeypatch.setattr(pipeline, "_atomic_json", fail_record)
+    else:
+        original = pipeline.os.replace
+        failed = False
+
+        def fail_output_replace(src, dst):
+            nonlocal failed
+            target = record if failure == "record_publish" else output
+            if Path(dst) == target and not failed:
+                failed = True
+                raise OSError("disk full")
+            original(src, dst)
+
+        monkeypatch.setattr(pipeline.os, "replace", fail_output_replace)
+
+    with pytest.raises(pipeline.PipelineError) as exc:
+        pipeline.make(source, output=output)
+
+    assert exc.value.code == 2
+    assert output.read_bytes() == b"old output"
+    assert record.read_bytes() == b"old record"
+
+
 def test_emit_survives_later_failure(tmp_path):
     source = spec_file(tmp_path, materials={"wall_main": "not-a-material"})
     with pytest.raises(pipeline.PipelineError):
