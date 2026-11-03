@@ -3,8 +3,8 @@
   "name": "medieval.stone_cornice",
   "description": "幅 5 の石造コーニス。壁上部から北側へ張り出す",
   "operations": [
-    {"type": "fill", "from": [0, 0, 0], "to": [4, 0, 0], "block": "minecraft:stone_bricks"},
-    {"type": "fill", "from": [0, 1, 0], "to": [4, 1, 1], "block": "minecraft:stone_brick_stairs[facing=south]"}
+    {"type": "fill", "from": [0, 0, 0], "to": [4, 0, 0], "block": {"role": "wall_main", "shape": "full", "state": {}}},
+    {"type": "fill", "from": [0, 1, 0], "to": [4, 1, 1], "block": {"role": "trim", "shape": "stairs", "state": {"facing": "south"}}}
   ],
   "anchors": {"wall": [2, 0, 0], "outer": [2, 1, 1]},
   "metadata": {"dimensions": [5, 2, 2], "defaultFacing": "north", "connectionFaces": ["south"], "provenance": "独自作成（MIT）"}

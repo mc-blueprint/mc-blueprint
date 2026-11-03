@@ -181,6 +181,43 @@ def test_roof_styles_and_exact_size_limit(tmp_path, style, roof):
         plan(tmp_path, style=style, features=features, size=[size[0] - 1, size[1], size[2]])
 
 
+@pytest.mark.parametrize("style", STYLES)
+def test_detail_uses_bundled_facade_modules_and_marks_decoration(tmp_path, style):
+    spec = {"style": style, "config": {"decoration": {"density": 1.0}}}
+    first = plan(tmp_path, **spec)
+    second = plan(tmp_path, **spec)
+    components = [op for op in first.detail["operations"] if op["type"] == "component"]
+    assert components
+    assert all(op["decoration"] is True and op["onConflict"] == "skip" for op in components)
+    assert all(any(item["id"] == op["id"] and item["face"] == op["face"]
+                   for item in first.detail["decorations"]) for op in components)
+    assert first.detail == second.detail
+    built(first, style)
+
+
+def test_detail_density_depth_and_symmetry_settings(tmp_path, monkeypatch):
+    def components(**decoration):
+        result = plan(tmp_path, config={"decoration": decoration})
+        return [op for op in result.detail["operations"] if op["type"] == "component"]
+
+    default = components()
+    sparse = components(density=0.0, symmetry=0.0)
+    dense = components(density=1.0, symmetry=0.0)
+    shallow = components(density=1.0, depth=0.0, symmetry=0.0)
+    monkeypatch.setattr("mcblueprint.planning._overlaps", lambda first, second: False)
+    deep = components(density=1.0, depth=1.0, symmetry=1.0)
+    assert default
+    assert len(dense) >= len(sparse)
+    assert len(shallow) < len(deep)
+    bays = {(op["face"], op["id"].rsplit("bay#", 1)[-1])
+            for op in deep if ".bay#" in op["id"]}
+    for face in ("north", "east"):
+        opposite = "south" if face == "north" else "west"
+        assert {bay for current, bay in bays if current == face} == {
+            bay for current, bay in bays if current == opposite
+        }
+
+
 @pytest.mark.parametrize("floors,height", ((1, 4), (2, 5), (4, 6)))
 def test_tower_floor_spacing_and_no_battlement(tmp_path, floors, height):
     result = plan(tmp_path, archetype="tower", features={"floors": floors,
@@ -203,6 +240,11 @@ def test_elements_errors_and_furnished(tmp_path):
         plan(tmp_path, interior="furnished")
     with pytest.raises(BlueprintError, match="size"):
         plan(tmp_path, size=[2, 4, 2])
+
+
+def test_explicit_flat_roof_is_accepted_by_buildspec_schema(tmp_path):
+    result = plan(tmp_path, style="modern", features={"roof": "flat"})
+    assert result.massing["params"]["roof"] == "flat"
 
 
 def test_override_scene_coordinates_idempotence_and_reservation_conflict(tmp_path):
@@ -258,7 +300,7 @@ def test_planning_uses_resolved_style_roles_without_supplements(tmp_path, style)
     result = plan_buildspec(resolved)
     assert result.palette == resolved.config["palette"]
     assert result.palette is not resolved.config["palette"]
-    assert len(result.palette["materials"]) == 8
+    assert len(result.palette["materials"]) == 9
 
 
 def test_fixed_case_fixtures_preserve_requirements(tmp_path):

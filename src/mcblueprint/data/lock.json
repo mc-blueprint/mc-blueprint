@@ -1,8 +1,8 @@
 {
   "patterns": {
     "repository": "https://github.com/mc-blueprint/mc-blueprint-patterns",
-    "commit": "2f3e01b55109e5537a728a7c9869f34701198869",
-    "sha256": "7832e62505afc9730b3476c54f3e949d6171d10a3ed62f5a59bad4bbfcb0af42"
+    "commit": "7ea61f3b794f4f761816c25c37061ebd2d9a0013",
+    "sha256": "30cc9271a7ebacbb22d7ca662e3c4529efd579855df5a80a77fa864798329e3b"
   },
   "blockdata": {
     "repository": "https://github.com/mc-blueprint/mc-blueprint-blockdata",

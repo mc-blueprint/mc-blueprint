@@ -3,9 +3,9 @@
   "name": "modern.parapet_eave",
   "description": "幅 5 のフラット屋根縁。低いパラペットを壁上に連続させる",
   "operations": [
-    {"type": "fill", "from": [0, 0, 0], "to": [4, 0, 0], "block": "minecraft:quartz_block"},
-    {"type": "fill", "from": [0, 1, 0], "to": [4, 1, 0], "block": "minecraft:stone_brick_wall"},
-    {"type": "fill", "from": [0, 0, 1], "to": [4, 0, 1], "block": "minecraft:quartz_slab[type=bottom]"}
+    {"type": "fill", "from": [0, 0, 0], "to": [4, 0, 0], "block": {"role": "roof", "shape": "full", "state": {}}},
+    {"type": "fill", "from": [0, 1, 0], "to": [4, 1, 0], "block": {"role": "trim", "shape": "wall", "state": {}}},
+    {"type": "fill", "from": [0, 0, 1], "to": [4, 0, 1], "block": {"role": "trim", "shape": "slab", "state": {"type": "bottom"}}}
   ],
   "anchors": {"wall": [2, 0, 0], "roof": [2, 0, 1]},
   "metadata": {"dimensions": [5, 2, 2], "defaultFacing": "north", "connectionFaces": ["south", "east", "west"], "provenance": "独自作成（MIT）"}

@@ -31,4 +31,5 @@ roles:
   floor: wood
   foundation: [stone, brick]
   roof: [stone, wood]
+  trim: [wood, stone]
   path: [sand, stone]
