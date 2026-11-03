@@ -31,7 +31,7 @@ def test_benchmark_fixtures_cover_fixed_workloads_and_validate() -> None:
         assert not validate(read_blueprint_json(path))
 
 
-def test_generation_profiles_are_fixed_valid_and_deterministic() -> None:
+def test_generation_profiles_are_fixed_valid_and_deterministic(tmp_path: Path) -> None:
     root = Path(__file__).parents[1]
     record_path = root / "benchmarks" / "generation-profiles.json"
     record_before = record_path.read_bytes()
@@ -66,11 +66,14 @@ def test_generation_profiles_are_fixed_valid_and_deterministic() -> None:
     assert generator_spec is not None and generator_spec.loader is not None
     generator = importlib.util.module_from_spec(generator_spec)
     generator_spec.loader.exec_module(generator)
-    generator.generate_profiles()
+    generated_dir = tmp_path / "generated"
+    generator.generate_profiles(generated_dir)
 
-    assert record_path.read_bytes() == record_before
+    assert (generated_dir / "generation-profiles.json").read_bytes() == record_before.replace(
+        b"\r\n", b"\n"
+    )
     assert {
-        profile["name"]: (root / "benchmarks" / "fixtures" / f"{profile['name']}.json").read_bytes()
+        profile["name"]: (generated_dir / "fixtures" / f"{profile['name']}.json").read_bytes()
         for profile in profiles
     } == before
 
