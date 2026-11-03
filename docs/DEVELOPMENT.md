@@ -78,6 +78,8 @@ mcblueprint components
 
 ## ディレクトリ構成
 
+ローカル3D表示と編集の適用は [VIEWER.md](VIEWER.md) を参照。
+
 ```text
 src/mcblueprint/   パッケージ本体（CLI, Loader, Validator, Generator, Exporter）
 schema/            Blueprint JSON Schema

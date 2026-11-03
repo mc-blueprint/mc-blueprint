@@ -346,6 +346,22 @@ def build_parser() -> argparse.ArgumentParser:
                           choices=blockdata.supported_versions())
     help_parser = subparsers.add_parser("help", help="必要な仕様の参照先を表示")
     help_parser.add_argument("topic", choices=("buildspec", "operations", "materials", "resume"))
+    view_parser = subparsers.add_parser("view", help="実入力を認証付きローカルviewerで表示する")
+    view_parser.add_argument("input", type=Path)
+    view_parser.add_argument("-o", "--output")
+    view_parser.add_argument("--set", action="append", default=[], metavar="KEY=VALUE")
+    view_parser.add_argument("--minecraft-version")
+    edits_parser = subparsers.add_parser(
+        "apply-edits", help="編集を保存する（再生成しない）",
+        description="editsを検証・保存する。--specは既定で原本を更新する。"
+                    "--inputは置換・削除だけを派生Blueprintへ保存し原本を保つ。再生成は行わない。",
+    )
+    edits_parser.add_argument("edits", type=Path)
+    source = edits_parser.add_mutually_exclusive_group(required=True)
+    source.add_argument("--spec", type=Path)
+    source.add_argument("--input", type=Path)
+    edits_parser.add_argument("--scene", type=Path, required=True)
+    edits_parser.add_argument("-o", "--output", type=Path)
     return parser
 
 
@@ -404,6 +420,8 @@ def main(argv: Sequence[str] | None = None) -> int:
         "archetypes": _run_archetypes,
         "spec-template": _run_spec_template,
         "help": _run_help,
+        "view": _run_view,
+        "apply-edits": _run_apply_edits,
     }
     try:
         paths = components.default_search_paths(getattr(args, "blueprint", None))
@@ -415,6 +433,36 @@ def main(argv: Sequence[str] | None = None) -> int:
     except BlueprintError as exc:
         print(f"Error: {exc}", file=sys.stderr)
         return EXIT_USAGE_ERROR
+
+
+def _run_view(args: argparse.Namespace, out: TextIO) -> int:
+    from mcblueprint.assets import ensure_assets
+    from mcblueprint.viewer_input import prepare_input
+    from mcblueprint.viewer_server import serve
+
+    try:
+        prepared = prepare_input(args.input, output=args.output, overrides=args.set,
+                                 minecraft_version=args.minecraft_version)
+        assets = ensure_assets(prepared.scene["minecraftVersion"], prepared.config["assets"])
+        serve(prepared, assets, open_browser=prepared.config["preview"]["open_browser"], out=out)
+    except (OSError, ValueError) as exc:
+        raise BlueprintError(f"view: {exc}") from exc
+    return EXIT_OK
+
+
+def _run_apply_edits(args: argparse.Namespace, out: TextIO) -> int:
+    from mcblueprint.viewer_input import apply_input_edits
+
+    notes = []
+    try:
+        path = apply_input_edits(args.edits, args.spec or args.input, args.scene,
+                                 output=args.output, spec=args.spec is not None, notes=notes)
+    except (OSError, ValueError) as exc:
+        raise BlueprintError(f"apply-edits: {exc}") from exc
+    print(f"Wrote {path.as_posix()}", file=out)
+    for note in notes:
+        print("メモ " + json.dumps(note, ensure_ascii=False), file=out)
+    return EXIT_OK
 
 
 def _run_config(args: argparse.Namespace, out: TextIO) -> int:
