@@ -26,7 +26,13 @@ from mcblueprint.importers import ImportedSchematic, read_schematic, to_blueprin
 from mcblueprint.model.block import BlockState
 from mcblueprint.model.vec import Vec3
 from mcblueprint.output_lock import lock_paths
-from mcblueprint.pipeline import _environment, _hash, generated_blueprint_regions, make
+from mcblueprint.pipeline import (
+    _cli_overrides,
+    _environment,
+    _hash,
+    generated_blueprint_regions,
+    make,
+)
 from mcblueprint.planning import plan_buildspec
 from mcblueprint.scene import capture_sources, write_scene
 from mcblueprint.validator import validate_and_load
@@ -277,6 +283,7 @@ class ViewerInput:
                     meta = {"formatVersion": 1, "inputSha256": _sha(encoded),
                             "resolvedHash": _hash(resolved.buildspec),
                             "configHash": _hash(resolved.config), "environment": _environment(),
+                            "cliOverrides": _cli_overrides(resolved),
                             "sceneSha256": _sha(raw)}
                     changes[self.input] = encoded
                     record = json.loads(result.record.read_bytes())
@@ -403,14 +410,21 @@ def prepare_input(path: str | Path, *, output: str | Path | None = None,
 
 def apply_input_edits(edits_path: Path, source: Path, scene_path: Path, *,
                        output: Path | None = None, spec: bool = False,
-                       notes: list[dict] | None = None) -> Path:
-    """再生成せず編集候補だけを保存する。specは既定で原本、非specは派生JSON。"""
+                       notes: list[dict] | None = None,
+                       overrides: list[str] | None = None) -> Path:
+    """再生成せず編集候補だけを保存する。specは既定で原本、非specは派生JSON。
+
+    overridesはspec生成時のkey=value指定を再現する。非specへの指定は拒否する。
+    """
     from mcblueprint.edits import apply_edits_file
 
     if spec:
         if source.suffix.lower() not in (".yaml", ".yml"):
             raise BlueprintError("--specにはBuildSpec YAMLが必要です")
-        return apply_edits_file(scene_path, edits_path, source, output or source, notes=notes)
+        return apply_edits_file(scene_path, edits_path, source, output or source, notes=notes,
+                                overrides=overrides)
+    if overrides:
+        raise BlueprintError("--set・--seedは--specと組み合わせて指定してください")
     if output is not None and output.resolve() in (source.resolve(), scene_path.resolve()):
         raise BlueprintError("非spec入力とsceneは上書きできません")
     raw, scene = read_scene(scene_path)
