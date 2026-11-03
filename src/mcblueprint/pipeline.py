@@ -606,6 +606,9 @@ def make(
                     window, blueprint, context, source, max_nodes=max(1, int(budget // 2048)),
                     critic=accumulator.finalize(),
                 )
+                for diagnostic in context["detail"]["diagnostics"]:
+                    structured.append(diagnostic)
+                    lines.append(_diagnostic_line(diagnostic))
                 for code, count in sorted(weather_counts.items()):
                     diagnostic = {"code": code, "metric": "weather_transition", "severity": "warn",
                                   "source": str(source), "element": context["massing"]["element"],
