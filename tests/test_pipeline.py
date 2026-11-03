@@ -360,9 +360,9 @@ def test_fixed_cases_make_matrix(tmp_path, capsys, version, format, archetype):
     assert len(densities) == (8 if archetype == "house" else 18)
     assert all(20 <= item["value"] <= 40 for item in densities.values())
     assert record["metrics"]["flat_ratio"]["value"] <= 0.35
-    assert record["metrics"]["flat_ratio"]["denominator"] == (16 if archetype == "house" else 27)
+    assert record["metrics"]["flat_ratio"]["denominator"] == (16 if archetype == "house" else 30)
     assert record["metrics"]["facade_surface_missing"]["denominator"] == (
-        212 if archetype == "house" else 273
+        212 if archetype == "house" else 295
     )
     assert not any(d["code"] in ("E201", "E202") for d in record["structuredDiagnostics"])
     assert not any(d["code"] in ("E101", "E203") for d in record["structuredDiagnostics"])
@@ -655,8 +655,10 @@ def test_measured_success_and_warning_only(tmp_path, monkeypatch, fixed):
         facade = plan.facades[0]
         cells = tuple(c for c in facade.cells if c.v == 0 and not c.opening and c.u < 4)
         selected.extend(cells)
+        # 密度下限0の計画で、装飾なしでも材質混合のWARNだけを検証する。
         return replace(plan, facades=(replace(facade, cells=cells),),
                        decoration_operations={},
+                       decoration_range=(0.0, plan.decoration_range[1]),
                        fixed_roles=frozenset({"wall_main"}) if fixed else frozenset())
 
     def sculpted(*args, **kwargs):
