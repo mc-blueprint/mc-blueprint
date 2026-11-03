@@ -41,13 +41,25 @@ def test_square_facades_follow_corners_between_columns(tmp_path, radius):
                for face in critic.facades for cell in face.cells)
 
 
-def test_round_modern_tower_reports_integer_density_capacity(tmp_path):
+def test_round_modern_tower_reports_integer_density_capacity():
+    from mcblueprint import detail
+
+    data = Path(detail.__file__).parent / "data/patterns"
+    style = yaml.safe_load((data / "styles/modern.yaml").read_text(encoding="utf-8"))
+    params = {"radius": 5, "shape": "round", "floors": 1, "floor_height": 5,
+              "height": 4, "angle": 0}
+    root = "tower#1"
+    contract = {"columns": [], "beams": [], "facades": [{
+        "id": f"{root}.facade.north", "normal": [0, 0, -1],
+        "origin": [0, 1, -5], "uAxis": [1, 0, 0], "vAxis": [0, 1, 0],
+        "from": [0, 1, -5], "to": [0, 4, -5], "openings": [],
+    }]}
+    modules = {name: detail._module(name) for name in style["modules"]["cornice"]}
+    config = {"seed": 42, "decoration": {"density": 0.6, "depth": 0.5, "symmetry": 1}}
+    low, high = style["decoration"]["density"]
     with pytest.raises(BlueprintError, match="装飾の収容不足.*非開口面積=4"):
-        plan_buildspec(resolve_buildspec({
-            "minecraftVersion": "1.21.11", "archetype": "tower", "style": "modern",
-            "scale": "medium", "features": {"shape": "round", "floor_height": 5},
-            "elements": {"tower#1": {"radius": 12}},
-        }, project_dir=tmp_path, user_config=tmp_path / "missing.yaml"))
+        detail._facade_selection([], params, style, config, root, [], contract, modules,
+                                 low + config["decoration"]["density"] * (high - low))
 
 
 @pytest.mark.parametrize("style", ("medieval", "japanese", "modern"))
