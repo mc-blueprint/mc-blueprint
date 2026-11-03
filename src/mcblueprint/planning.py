@@ -29,6 +29,7 @@ class PlanningResult:
     site/massing/detailはformatVersion=1。blueprintは役割参照を含むため、
     materializeにstyle・biome・paletteを併せて渡してからloaderで読む。
     layoutは住宅のみ、入口・各階到着点を計画座標で保持する。
+    diagnosticsはDetailの診断で、detail["diagnostics"]にも保存する。
     """
 
     site: dict[str, Any]
@@ -454,7 +455,7 @@ def plan_buildspec(resolved: ResolveResult) -> PlanningResult:
     projected_contract = _plan_contract(
         root, body, detail, Transform.rotation(params["angle"], Vec3(0, 0, 0)), params, layout,
     )
-    decorations, detail_palettes = plan_detail(
+    decorations, detail_palettes, diagnostics = plan_detail(
         params, style, resolved.config, root, body, detail, local_contract, projected_contract,
     )
     if spec["interior"] == "minimal":
@@ -570,5 +571,7 @@ def plan_buildspec(resolved: ResolveResult) -> PlanningResult:
                "entrance": entrance.to_list(), "arrivals": [p.to_list() for p in arrivals],
                "operations": body, **contract}
     detail_json = {"formatVersion": 1, "stage": "detail", "operations": detail,
-                   "decorations": decorations, "overrides": overrides}
-    return PlanningResult(site, massing, detail_json, blueprint, palette, layout, ())
+                   "decorations": decorations, "overrides": overrides,
+                   "diagnostics": diagnostics}
+    return PlanningResult(site, massing, detail_json, blueprint, palette, layout,
+                          tuple(diagnostics))

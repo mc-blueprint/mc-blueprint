@@ -40,6 +40,49 @@ def spec_file(tmp_path, archetype="house", version="1.21.11", **values):
     return path
 
 
+@pytest.mark.parametrize("resume_stage", [None, "detail", "blueprint"])
+def test_opening_recess_diagnostics_survive_make_and_resume(
+    tmp_path, monkeypatch, capsys, recwarn, resume_stage,
+):
+    source = spec_file(tmp_path)
+    checkpoint = None
+    if resume_stage:
+        pipeline.make(source, output=tmp_path / "first.schem", emit=[resume_stage])
+        checkpoint = tmp_path / f"first.{resume_stage}.json"
+
+        def unexpected(*args, **kwargs):
+            pytest.fail("保存済みのDetail計画を再生成した")
+
+        monkeypatch.setattr(pipeline, "plan_buildspec", unexpected)
+        capsys.readouterr()
+
+    args = ["make", str(source), "-o", str(tmp_path / "result.schem")]
+    if checkpoint:
+        args.extend(["--resume", str(checkpoint)])
+    assert main(args) == 0
+    output = capsys.readouterr().out
+    record = json.loads((tmp_path / "result.schem.run.json").read_text(encoding="utf-8"))
+    blocked = [d for d in record["structuredDiagnostics"]
+               if d["code"] == "opening_recess_blocked"]
+    assert blocked
+    for diagnostic in blocked:
+        assert diagnostic["severity"] == "warn"
+        assert diagnostic["metric"] == "opening_recess"
+        assert diagnostic["actual"] == 0 and diagnostic["expected"] == 1
+        assert diagnostic["source"] == "config.decoration.depth"
+        assert diagnostic["repairPaths"] == ["config.decoration.depth"]
+        assert "予約" in diagnostic["reason"]
+        line = pipeline._diagnostic_line(diagnostic)
+        assert line.startswith("WARN opening_recess_blocked ")
+        assert record["diagnostics"].count(line) == 1
+        assert output.count(line) == 1
+    if checkpoint:
+        first = json.loads((tmp_path / "first.schem.run.json").read_text(encoding="utf-8"))
+        assert record["structuredDiagnostics"] == first["structuredDiagnostics"]
+        assert record["diagnostics"] == first["diagnostics"]
+    assert not recwarn
+
+
 @pytest.mark.parametrize("resume", [False, True])
 def test_make_scene_uses_completed_massing_without_replanning(tmp_path, monkeypatch, resume):
     from mcblueprint import viewer_input
