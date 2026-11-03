@@ -40,6 +40,33 @@ def spec_file(tmp_path, archetype="house", version="1.21.11", **values):
     return path
 
 
+@pytest.mark.parametrize("resume", [False, True])
+def test_make_scene_uses_completed_massing_without_replanning(tmp_path, monkeypatch, resume):
+    from mcblueprint import viewer_input
+
+    source = spec_file(tmp_path)
+    checkpoint = None
+    if resume:
+        pipeline.make(source, output=tmp_path / "first.schem", emit=["blueprint"])
+        checkpoint = tmp_path / "first.blueprint.json"
+
+    def unexpected(*args, **kwargs):
+        pytest.fail("完成済みの計画をscene出典のために再生成した")
+
+    monkeypatch.setattr(viewer_input, "plan_buildspec", unexpected)
+    if resume:
+        monkeypatch.setattr(pipeline, "plan_buildspec", unexpected)
+    result = pipeline.make(source, output=tmp_path / "result.schem", resume=checkpoint)
+    scene = json.loads(gzip.decompress((tmp_path / "result.scene.json.gz").read_bytes()))
+
+    assert result.code == 0
+    root = next(entry for entry in scene["sources"] if entry.get("element") == "house#1")
+    assert "width" in root["params"]
+    if resume:
+        assert (tmp_path / "result.scene.json.gz").read_bytes() == (
+            tmp_path / "first.scene.json.gz").read_bytes()
+
+
 @pytest.mark.parametrize("open_browser", [False, True])
 @pytest.mark.parametrize("failed", [False, True])
 def test_cli_make_serves_completed_scene_once(tmp_path, monkeypatch, open_browser, failed):
