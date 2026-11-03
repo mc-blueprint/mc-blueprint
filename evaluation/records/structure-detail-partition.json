@@ -1,0 +1,1252 @@
+{
+  "schema_version": 1,
+  "record_type": "structure-detail-partition",
+  "method": "structure-detail-v1",
+  "script": {
+    "path": "scripts/evaluate_structure.py",
+    "sha256": "6570126d9505e400d13bcc96140c194dbca969606711cd1d681d25a5d1de00ab"
+  },
+  "benchmark_helpers": {
+    "path": "scripts/benchmark.py",
+    "sha256": "9cc6c994c1a8b44457146bd518206cd0c38390b221b2c5b89c9223cb9ba8cfcd"
+  },
+  "plan": {
+    "path": "evaluation/cases/structure-detail.json",
+    "sha256": "8adeadaa427ff782a9d6b86f05230aca4d43d3405535acf815120b0d77358b93"
+  },
+  "environment": {
+    "os": "Windows-11-10.0.26200-SP0",
+    "cpu": "AMD Ryzen 7 5700X 8-Core Processor",
+    "cpu_reason": null,
+    "logical_cpu_count": 16,
+    "memory_total_bytes": 68640256000,
+    "memory_reason": null,
+    "gpu": "NVIDIA GeForce RTX 4070 SUPER",
+    "gpu_reason": null,
+    "python": "3.12.15 (main, Oct 21 2026, 17:48:33) [MSC v.1944 64 bit (AMD64)]",
+    "python_version": "3.12.15"
+  },
+  "provenance": {
+    "commit": "b416651866bd96fd45f574810c1d89c030d7cf9e",
+    "engine_sha256": "3f6377ed30ceab391b2ee58c41d1124b8aa6c430032dba13fbeefe545a6f4f59",
+    "lock_sha256": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48",
+    "default_config_sha256": "17f5c240ead94ebb8c410f045b3344f07d07ec9c29a8a769645f853b5ea28d64"
+  },
+  "measured_at": "2026-11-03T14:28:47.866522+00:00",
+  "time_scope": "子プロセス起動からmake完了・worker JSON出力まで。build比較は除外。",
+  "memory_metric": "独立子プロセスのmake直後のOS最大RSS/PeakWorkingSetSize。",
+  "stage_sample_definition": "段開始時の累積時間と現在RSS。段単独ピークではない。",
+  "unconfirmed": [
+    "Minecraft実画面・人間の外観評価は未実施",
+    "NFR1の内蔵GPU・8GB想定端末は未測定",
+    "並行タスクのCPU/メモリ競合を制御していない"
+  ],
+  "partition_script": {
+    "path": "scripts/evaluate_structure_partition.py",
+    "sha256": "f8b3faef9fb1d4cff9aa96e94e4d3268af4399eb3d40b51dbd56ad3671439e4a"
+  },
+  "reason": "固定課題は各辺16未満なので16/32/64だけではcore境界を跨がない。",
+  "core": 7,
+  "results": [
+    {
+      "case": "single-house",
+      "input": {
+        "path": "evaluation/cases/structure-detail/single-house-1.21.11-schem.yaml",
+        "sha256": "cb0c67dbee9a083b80c20e4cdb5d2fe249685cede48be1c722a77e7cc8d1547a"
+      },
+      "reverse": false,
+      "code": 0,
+      "core_count": 8,
+      "cores": [
+        [
+          [
+            3,
+            0,
+            2
+          ],
+          [
+            9,
+            6,
+            8
+          ]
+        ],
+        [
+          [
+            3,
+            0,
+            9
+          ],
+          [
+            9,
+            6,
+            12
+          ]
+        ],
+        [
+          [
+            3,
+            7,
+            2
+          ],
+          [
+            9,
+            12,
+            8
+          ]
+        ],
+        [
+          [
+            3,
+            7,
+            9
+          ],
+          [
+            9,
+            12,
+            12
+          ]
+        ],
+        [
+          [
+            10,
+            0,
+            2
+          ],
+          [
+            11,
+            6,
+            8
+          ]
+        ],
+        [
+          [
+            10,
+            0,
+            9
+          ],
+          [
+            11,
+            6,
+            12
+          ]
+        ],
+        [
+          [
+            10,
+            7,
+            2
+          ],
+          [
+            11,
+            12,
+            8
+          ]
+        ],
+        [
+          [
+            10,
+            7,
+            9
+          ],
+          [
+            11,
+            12,
+            12
+          ]
+        ]
+      ],
+      "placement_identical": true,
+      "metrics_identical": true,
+      "diagnostics_order_identical": true,
+      "diagnostics_identical": true,
+      "base_diagnostics": [
+        {
+          "actual": 0.8947368421052632,
+          "code": "E305",
+          "element": "house#1.facade.east.floor#1",
+          "expected": 0.85,
+          "face": "east",
+          "metric": "facade_mix",
+          "repairPaths": [
+            "config.palette.mix"
+          ],
+          "role": "wall_main",
+          "severity": "warn",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\single-house-1.21.11-schem.yaml"
+        },
+        {
+          "actual": 0,
+          "code": "support",
+          "detail": null,
+          "element": "house#1",
+          "expected": 0,
+          "metric": "support",
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\single-house-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "house#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            7,
+            1,
+            4
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\single-house-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "house#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            5,
+            5,
+            9
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\single-house-1.21.11-schem.yaml"
+        }
+      ],
+      "diagnostics": [
+        {
+          "actual": 0.8947368421052632,
+          "code": "E305",
+          "element": "house#1.facade.east.floor#1",
+          "expected": 0.85,
+          "face": "east",
+          "metric": "facade_mix",
+          "repairPaths": [
+            "config.palette.mix"
+          ],
+          "role": "wall_main",
+          "severity": "warn",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\single-house-1.21.11-schem.yaml"
+        },
+        {
+          "actual": 0,
+          "code": "support",
+          "detail": null,
+          "element": "house#1",
+          "expected": 0,
+          "metric": "support",
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\single-house-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "house#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            7,
+            1,
+            4
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\single-house-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "house#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            5,
+            5,
+            9
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\single-house-1.21.11-schem.yaml"
+        }
+      ]
+    },
+    {
+      "case": "single-house",
+      "input": {
+        "path": "evaluation/cases/structure-detail/single-house-1.21.11-schem.yaml",
+        "sha256": "cb0c67dbee9a083b80c20e4cdb5d2fe249685cede48be1c722a77e7cc8d1547a"
+      },
+      "reverse": true,
+      "code": 0,
+      "core_count": 8,
+      "cores": [
+        [
+          [
+            10,
+            7,
+            9
+          ],
+          [
+            11,
+            12,
+            12
+          ]
+        ],
+        [
+          [
+            10,
+            7,
+            2
+          ],
+          [
+            11,
+            12,
+            8
+          ]
+        ],
+        [
+          [
+            10,
+            0,
+            9
+          ],
+          [
+            11,
+            6,
+            12
+          ]
+        ],
+        [
+          [
+            10,
+            0,
+            2
+          ],
+          [
+            11,
+            6,
+            8
+          ]
+        ],
+        [
+          [
+            3,
+            7,
+            9
+          ],
+          [
+            9,
+            12,
+            12
+          ]
+        ],
+        [
+          [
+            3,
+            7,
+            2
+          ],
+          [
+            9,
+            12,
+            8
+          ]
+        ],
+        [
+          [
+            3,
+            0,
+            9
+          ],
+          [
+            9,
+            6,
+            12
+          ]
+        ],
+        [
+          [
+            3,
+            0,
+            2
+          ],
+          [
+            9,
+            6,
+            8
+          ]
+        ]
+      ],
+      "placement_identical": true,
+      "metrics_identical": true,
+      "diagnostics_order_identical": true,
+      "diagnostics_identical": true,
+      "base_diagnostics": [
+        {
+          "actual": 0.8947368421052632,
+          "code": "E305",
+          "element": "house#1.facade.east.floor#1",
+          "expected": 0.85,
+          "face": "east",
+          "metric": "facade_mix",
+          "repairPaths": [
+            "config.palette.mix"
+          ],
+          "role": "wall_main",
+          "severity": "warn",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\single-house-1.21.11-schem.yaml"
+        },
+        {
+          "actual": 0,
+          "code": "support",
+          "detail": null,
+          "element": "house#1",
+          "expected": 0,
+          "metric": "support",
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\single-house-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "house#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            7,
+            1,
+            4
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\single-house-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "house#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            5,
+            5,
+            9
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\single-house-1.21.11-schem.yaml"
+        }
+      ],
+      "diagnostics": [
+        {
+          "actual": 0.8947368421052632,
+          "code": "E305",
+          "element": "house#1.facade.east.floor#1",
+          "expected": 0.85,
+          "face": "east",
+          "metric": "facade_mix",
+          "repairPaths": [
+            "config.palette.mix"
+          ],
+          "role": "wall_main",
+          "severity": "warn",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\single-house-1.21.11-schem.yaml"
+        },
+        {
+          "actual": 0,
+          "code": "support",
+          "detail": null,
+          "element": "house#1",
+          "expected": 0,
+          "metric": "support",
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\single-house-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "house#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            7,
+            1,
+            4
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\single-house-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "house#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            5,
+            5,
+            9
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\single-house-1.21.11-schem.yaml"
+        }
+      ]
+    },
+    {
+      "case": "standalone-tower",
+      "input": {
+        "path": "evaluation/cases/structure-detail/standalone-tower-1.21.11-schem.yaml",
+        "sha256": "350b0969681551f114a68681e9a0e89af38e55956b4672bfcb22402da4f729f4"
+      },
+      "reverse": false,
+      "code": 0,
+      "core_count": 12,
+      "cores": [
+        [
+          [
+            2,
+            0,
+            2
+          ],
+          [
+            8,
+            6,
+            8
+          ]
+        ],
+        [
+          [
+            2,
+            0,
+            9
+          ],
+          [
+            8,
+            6,
+            12
+          ]
+        ],
+        [
+          [
+            2,
+            7,
+            2
+          ],
+          [
+            8,
+            13,
+            8
+          ]
+        ],
+        [
+          [
+            2,
+            7,
+            9
+          ],
+          [
+            8,
+            13,
+            12
+          ]
+        ],
+        [
+          [
+            2,
+            14,
+            2
+          ],
+          [
+            8,
+            15,
+            8
+          ]
+        ],
+        [
+          [
+            2,
+            14,
+            9
+          ],
+          [
+            8,
+            15,
+            12
+          ]
+        ],
+        [
+          [
+            9,
+            0,
+            2
+          ],
+          [
+            12,
+            6,
+            8
+          ]
+        ],
+        [
+          [
+            9,
+            0,
+            9
+          ],
+          [
+            12,
+            6,
+            12
+          ]
+        ],
+        [
+          [
+            9,
+            7,
+            2
+          ],
+          [
+            12,
+            13,
+            8
+          ]
+        ],
+        [
+          [
+            9,
+            7,
+            9
+          ],
+          [
+            12,
+            13,
+            12
+          ]
+        ],
+        [
+          [
+            9,
+            14,
+            2
+          ],
+          [
+            12,
+            15,
+            8
+          ]
+        ],
+        [
+          [
+            9,
+            14,
+            9
+          ],
+          [
+            12,
+            15,
+            12
+          ]
+        ]
+      ],
+      "placement_identical": true,
+      "metrics_identical": true,
+      "diagnostics_order_identical": true,
+      "diagnostics_identical": true,
+      "base_diagnostics": [
+        {
+          "actual": 1.0,
+          "code": "E305",
+          "element": "tower#1.facade.segment#2.floor#1",
+          "expected": 0.85,
+          "face": "north",
+          "metric": "facade_mix",
+          "repairPaths": [
+            "config.palette.mix"
+          ],
+          "role": "wall_main",
+          "severity": "warn",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+        },
+        {
+          "actual": 1.0,
+          "code": "E305",
+          "element": "tower#1.facade.segment#2.floor#3",
+          "expected": 0.85,
+          "face": "north",
+          "metric": "facade_mix",
+          "repairPaths": [
+            "config.palette.mix"
+          ],
+          "role": "wall_main",
+          "severity": "warn",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+        },
+        {
+          "actual": 0,
+          "code": "support",
+          "detail": null,
+          "element": "tower#1",
+          "expected": 0,
+          "metric": "support",
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "tower#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            7,
+            1,
+            4
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "tower#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            7,
+            5,
+            7
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "tower#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            7,
+            9,
+            7
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "tower#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            7,
+            13,
+            7
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+        }
+      ],
+      "diagnostics": [
+        {
+          "actual": 1.0,
+          "code": "E305",
+          "element": "tower#1.facade.segment#2.floor#1",
+          "expected": 0.85,
+          "face": "north",
+          "metric": "facade_mix",
+          "repairPaths": [
+            "config.palette.mix"
+          ],
+          "role": "wall_main",
+          "severity": "warn",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+        },
+        {
+          "actual": 1.0,
+          "code": "E305",
+          "element": "tower#1.facade.segment#2.floor#3",
+          "expected": 0.85,
+          "face": "north",
+          "metric": "facade_mix",
+          "repairPaths": [
+            "config.palette.mix"
+          ],
+          "role": "wall_main",
+          "severity": "warn",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+        },
+        {
+          "actual": 0,
+          "code": "support",
+          "detail": null,
+          "element": "tower#1",
+          "expected": 0,
+          "metric": "support",
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "tower#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            7,
+            1,
+            4
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "tower#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            7,
+            5,
+            7
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "tower#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            7,
+            9,
+            7
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "tower#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            7,
+            13,
+            7
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+        }
+      ]
+    },
+    {
+      "case": "standalone-tower",
+      "input": {
+        "path": "evaluation/cases/structure-detail/standalone-tower-1.21.11-schem.yaml",
+        "sha256": "350b0969681551f114a68681e9a0e89af38e55956b4672bfcb22402da4f729f4"
+      },
+      "reverse": true,
+      "code": 0,
+      "core_count": 12,
+      "cores": [
+        [
+          [
+            9,
+            14,
+            9
+          ],
+          [
+            12,
+            15,
+            12
+          ]
+        ],
+        [
+          [
+            9,
+            14,
+            2
+          ],
+          [
+            12,
+            15,
+            8
+          ]
+        ],
+        [
+          [
+            9,
+            7,
+            9
+          ],
+          [
+            12,
+            13,
+            12
+          ]
+        ],
+        [
+          [
+            9,
+            7,
+            2
+          ],
+          [
+            12,
+            13,
+            8
+          ]
+        ],
+        [
+          [
+            9,
+            0,
+            9
+          ],
+          [
+            12,
+            6,
+            12
+          ]
+        ],
+        [
+          [
+            9,
+            0,
+            2
+          ],
+          [
+            12,
+            6,
+            8
+          ]
+        ],
+        [
+          [
+            2,
+            14,
+            9
+          ],
+          [
+            8,
+            15,
+            12
+          ]
+        ],
+        [
+          [
+            2,
+            14,
+            2
+          ],
+          [
+            8,
+            15,
+            8
+          ]
+        ],
+        [
+          [
+            2,
+            7,
+            9
+          ],
+          [
+            8,
+            13,
+            12
+          ]
+        ],
+        [
+          [
+            2,
+            7,
+            2
+          ],
+          [
+            8,
+            13,
+            8
+          ]
+        ],
+        [
+          [
+            2,
+            0,
+            9
+          ],
+          [
+            8,
+            6,
+            12
+          ]
+        ],
+        [
+          [
+            2,
+            0,
+            2
+          ],
+          [
+            8,
+            6,
+            8
+          ]
+        ]
+      ],
+      "placement_identical": true,
+      "metrics_identical": true,
+      "diagnostics_order_identical": false,
+      "diagnostics_identical": true,
+      "base_diagnostics": [
+        {
+          "actual": 1.0,
+          "code": "E305",
+          "element": "tower#1.facade.segment#2.floor#1",
+          "expected": 0.85,
+          "face": "north",
+          "metric": "facade_mix",
+          "repairPaths": [
+            "config.palette.mix"
+          ],
+          "role": "wall_main",
+          "severity": "warn",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+        },
+        {
+          "actual": 1.0,
+          "code": "E305",
+          "element": "tower#1.facade.segment#2.floor#3",
+          "expected": 0.85,
+          "face": "north",
+          "metric": "facade_mix",
+          "repairPaths": [
+            "config.palette.mix"
+          ],
+          "role": "wall_main",
+          "severity": "warn",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+        },
+        {
+          "actual": 0,
+          "code": "support",
+          "detail": null,
+          "element": "tower#1",
+          "expected": 0,
+          "metric": "support",
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "tower#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            7,
+            1,
+            4
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "tower#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            7,
+            5,
+            7
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "tower#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            7,
+            9,
+            7
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "tower#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            7,
+            13,
+            7
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+        }
+      ],
+      "diagnostics": [
+        {
+          "actual": 1.0,
+          "code": "E305",
+          "element": "tower#1.facade.segment#2.floor#3",
+          "expected": 0.85,
+          "face": "north",
+          "metric": "facade_mix",
+          "repairPaths": [
+            "config.palette.mix"
+          ],
+          "role": "wall_main",
+          "severity": "warn",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+        },
+        {
+          "actual": 1.0,
+          "code": "E305",
+          "element": "tower#1.facade.segment#2.floor#1",
+          "expected": 0.85,
+          "face": "north",
+          "metric": "facade_mix",
+          "repairPaths": [
+            "config.palette.mix"
+          ],
+          "role": "wall_main",
+          "severity": "warn",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+        },
+        {
+          "actual": 0,
+          "code": "support",
+          "detail": null,
+          "element": "tower#1",
+          "expected": 0,
+          "metric": "support",
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "tower#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            7,
+            1,
+            4
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "tower#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            7,
+            5,
+            7
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "tower#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            7,
+            9,
+            7
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "tower#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            7,
+            13,
+            7
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "H:\\mc-blueprint\\worktrees\\mcb-180\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,981 @@
+{
+  "schema_version": 1,
+  "record_type": "structure-detail-performance",
+  "method": "structure-detail-v1",
+  "script": {
+    "path": "scripts/evaluate_structure.py",
+    "sha256": "6570126d9505e400d13bcc96140c194dbca969606711cd1d681d25a5d1de00ab"
+  },
+  "benchmark_helpers": {
+    "path": "scripts/benchmark.py",
+    "sha256": "9cc6c994c1a8b44457146bd518206cd0c38390b221b2c5b89c9223cb9ba8cfcd"
+  },
+  "plan": {
+    "path": "evaluation/cases/structure-detail.json",
+    "sha256": "8adeadaa427ff782a9d6b86f05230aca4d43d3405535acf815120b0d77358b93"
+  },
+  "environment": {
+    "os": "Windows-11-10.0.26200-SP0",
+    "cpu": "AMD Ryzen 7 5700X 8-Core Processor",
+    "cpu_reason": null,
+    "logical_cpu_count": 16,
+    "memory_total_bytes": 68640256000,
+    "memory_reason": null,
+    "gpu": "NVIDIA GeForce RTX 4070 SUPER",
+    "gpu_reason": null,
+    "python": "3.12.15 (main, Oct 21 2026, 17:48:33) [MSC v.1944 64 bit (AMD64)]",
+    "python_version": "3.12.15"
+  },
+  "provenance": {
+    "commit": "b416651866bd96fd45f574810c1d89c030d7cf9e",
+    "engine_sha256": "3f6377ed30ceab391b2ee58c41d1124b8aa6c430032dba13fbeefe545a6f4f59",
+    "lock_sha256": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48",
+    "default_config_sha256": "17f5c240ead94ebb8c410f045b3344f07d07ec9c29a8a769645f853b5ea28d64"
+  },
+  "measured_at": "2026-11-03T14:22:17.583947+00:00",
+  "time_scope": "子プロセス起動からmake完了・worker JSON出力まで。build比較は除外。",
+  "memory_metric": "独立子プロセスのmake直後のOS最大RSS/PeakWorkingSetSize。",
+  "stage_sample_definition": "段開始時の累積時間と現在RSS。段単独ピークではない。",
+  "unconfirmed": [
+    "Minecraft実画面・人間の外観評価は未実施",
+    "NFR1の内蔵GPU・8GB想定端末は未測定",
+    "並行タスクのCPU/メモリ競合を制御していない"
+  ],
+  "reference": {
+    "path": "benchmarks/make-baseline.json",
+    "sha256": "35a521b0581a182a72f1e60d89aba5e146c7643ef1d1ae59611a46904ae096bc"
+  },
+  "baseline_environment": {
+    "os": "Windows-11-10.0.26200-SP0",
+    "cpu": "AMD Ryzen 7 5700X 8-Core Processor",
+    "cpu_reason": null,
+    "logical_cpu_count": 16,
+    "memory_total_bytes": 68640256000,
+    "memory_reason": null,
+    "gpu": "NVIDIA GeForce RTX 4070 SUPER",
+    "gpu_reason": null,
+    "python": "3.12.15 (main, Oct 21 2026, 17:48:33) [MSC v.1944 64 bit (AMD64)]",
+    "python_version": "3.12.15"
+  },
+  "results": [
+    {
+      "archetype": "house",
+      "scale": "tiny",
+      "input_sha256": "d4b4655a297d347556c40582b8c964a546cd76bed84075c258c458d945db8f56",
+      "input": {
+        "minecraftVersion": "1.21.11",
+        "archetype": "house",
+        "style": "medieval",
+        "scale": "tiny",
+        "seed": 42,
+        "features": {
+          "floors": 2,
+          "floor_height": 4,
+          "roof": "gable"
+        },
+        "interior": "minimal",
+        "size": [
+          32,
+          32,
+          32
+        ]
+      },
+      "input_identical_to_c": false,
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 1.1604265000205487,
+          "process_peak_rss_bytes": 82948096,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.001021499978378415,
+              "rss_at_stage_start_bytes": 51372032
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.043663799995556474,
+              "rss_at_stage_start_bytes": 51560448
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.07294620003085583,
+              "rss_at_stage_start_bytes": 51589120
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.39152060000924394,
+              "rss_at_stage_start_bytes": 77176832
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 1.079969800019171,
+              "rss_at_stage_start_bytes": 79757312
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 1.0899716999847442,
+              "rss_at_stage_start_bytes": 79757312
+            }
+          ],
+          "seconds": 2.0360126000014134
+        },
+        {
+          "code": 0,
+          "make_runtime_seconds": 1.1294945999979973,
+          "process_peak_rss_bytes": 83423232,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.00109779997728765,
+              "rss_at_stage_start_bytes": 50778112
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.043964499956928194,
+              "rss_at_stage_start_bytes": 51523584
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.07489749998785555,
+              "rss_at_stage_start_bytes": 51548160
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.3964850999764167,
+              "rss_at_stage_start_bytes": 77402112
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 1.0582895999541506,
+              "rss_at_stage_start_bytes": 80232448
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 1.0663196999812499,
+              "rss_at_stage_start_bytes": 80232448
+            }
+          ],
+          "seconds": 2.0679529000190087
+        },
+        {
+          "code": 0,
+          "make_runtime_seconds": 1.149365100020077,
+          "process_peak_rss_bytes": 83476480,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0011033000191673636,
+              "rss_at_stage_start_bytes": 51941376
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04223560000536963,
+              "rss_at_stage_start_bytes": 52039680
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.07255610002903268,
+              "rss_at_stage_start_bytes": 52080640
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.40653840004233643,
+              "rss_at_stage_start_bytes": 77848576
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 1.079475300037302,
+              "rss_at_stage_start_bytes": 80285696
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 1.0870388000039384,
+              "rss_at_stage_start_bytes": 80285696
+            }
+          ],
+          "seconds": 1.978865900018718
+        }
+      ],
+      "seconds_median": 2.0360126000014134,
+      "process_peak_rss_bytes_median": 83423232,
+      "seconds_delta": 0.7890957000199705,
+      "rss_delta_bytes": 4911104,
+      "baseline_seconds_median": 1.2469168999814428,
+      "baseline_rss_bytes_median": 78512128,
+      "measurement_completed": true,
+      "nfr2_target_seconds": null
+    },
+    {
+      "archetype": "tower",
+      "scale": "tiny",
+      "input_sha256": "f986b03084208ab2ae8ad83866d788cb5770c133d57b904388bde3223b62e92d",
+      "input": {
+        "minecraftVersion": "1.21.11",
+        "archetype": "tower",
+        "style": "medieval",
+        "scale": "tiny",
+        "seed": 42,
+        "features": {
+          "shape": "round",
+          "floors": 3,
+          "floor_height": 4,
+          "battlement": true
+        },
+        "interior": "minimal",
+        "size": [
+          32,
+          32,
+          32
+        ]
+      },
+      "input_identical_to_c": false,
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 1.0849040999892168,
+          "process_peak_rss_bytes": 84537344,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.001101300003938377,
+              "rss_at_stage_start_bytes": 51470336
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.044291700003668666,
+              "rss_at_stage_start_bytes": 50647040
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.10761710000224411,
+              "rss_at_stage_start_bytes": 50692096
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.44856499996967614,
+              "rss_at_stage_start_bytes": 76869632
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 0.9478208000073209,
+              "rss_at_stage_start_bytes": 79728640
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 0.976595800020732,
+              "rss_at_stage_start_bytes": 79765504
+            }
+          ],
+          "seconds": 1.9710598000092432
+        },
+        {
+          "code": 0,
+          "make_runtime_seconds": 1.0569923000293784,
+          "process_peak_rss_bytes": 84684800,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0010338000138290226,
+              "rss_at_stage_start_bytes": 51712000
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.042441500001586974,
+              "rss_at_stage_start_bytes": 51826688
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.10508420004043728,
+              "rss_at_stage_start_bytes": 51863552
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.4427161000203341,
+              "rss_at_stage_start_bytes": 77627392
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 0.9351241000113077,
+              "rss_at_stage_start_bytes": 79880192
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 0.9566258999984711,
+              "rss_at_stage_start_bytes": 79912960
+            }
+          ],
+          "seconds": 1.9092665000353009
+        },
+        {
+          "code": 0,
+          "make_runtime_seconds": 1.1047496999963187,
+          "process_peak_rss_bytes": 84979712,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0011536000529304147,
+              "rss_at_stage_start_bytes": 50683904
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.045512600045185536,
+              "rss_at_stage_start_bytes": 51249152
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.111392600054387,
+              "rss_at_stage_start_bytes": 51294208
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.4541146000265144,
+              "rss_at_stage_start_bytes": 77193216
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 0.9761580000049435,
+              "rss_at_stage_start_bytes": 80171008
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 1.0007531000301242,
+              "rss_at_stage_start_bytes": 80207872
+            }
+          ],
+          "seconds": 2.0110068999929354
+        }
+      ],
+      "seconds_median": 1.9710598000092432,
+      "process_peak_rss_bytes_median": 84684800,
+      "seconds_delta": 0.722756200004369,
+      "rss_delta_bytes": 4284416,
+      "baseline_seconds_median": 1.2483036000048742,
+      "baseline_rss_bytes_median": 80400384,
+      "measurement_completed": true,
+      "nfr2_target_seconds": null
+    },
+    {
+      "archetype": "house",
+      "scale": "medium",
+      "input_sha256": "5aae28387110c6a8fc46fd103bb8ab0575da4171aa738e90f48081b67d965447",
+      "input": {
+        "minecraftVersion": "1.21.11",
+        "archetype": "house",
+        "style": "medieval",
+        "scale": "medium",
+        "seed": 42,
+        "features": {
+          "floors": 2,
+          "floor_height": 4,
+          "roof": "gable"
+        },
+        "interior": "minimal",
+        "size": [
+          64,
+          48,
+          64
+        ],
+        "elements": {
+          "house#1": {
+            "width": 61,
+            "depth": 61
+          }
+        }
+      },
+      "input_identical_to_c": false,
+      "samples": [
+        {
+          "code": 3,
+          "make_runtime_seconds": 62.580045800015796,
+          "process_peak_rss_bytes": 203800576,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0011030000168830156,
+              "rss_at_stage_start_bytes": 51052544
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.044010200013872236,
+              "rss_at_stage_start_bytes": 51466240
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.22580090002156794,
+              "rss_at_stage_start_bytes": 52637696
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 1.4652766000363044,
+              "rss_at_stage_start_bytes": 79945728
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 61.45980220002821,
+              "rss_at_stage_start_bytes": 84574208
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 61.935762999986764,
+              "rss_at_stage_start_bytes": 84774912
+            }
+          ],
+          "seconds": 63.42019080003956
+        },
+        {
+          "code": 3,
+          "make_runtime_seconds": 68.01346559997182,
+          "process_peak_rss_bytes": 203280384,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0010331000084988773,
+              "rss_at_stage_start_bytes": 51785728
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04281100002117455,
+              "rss_at_stage_start_bytes": 51126272
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.21783490001689643,
+              "rss_at_stage_start_bytes": 52244480
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 1.495447899971623,
+              "rss_at_stage_start_bytes": 79499264
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 66.8123727000202,
+              "rss_at_stage_start_bytes": 84295680
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 67.23500089999288,
+              "rss_at_stage_start_bytes": 84525056
+            }
+          ],
+          "seconds": 68.90396789996885
+        },
+        {
+          "code": 3,
+          "make_runtime_seconds": 77.0569299000199,
+          "process_peak_rss_bytes": 201752576,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0010737000266090035,
+              "rss_at_stage_start_bytes": 52375552
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04548730002716184,
+              "rss_at_stage_start_bytes": 52568064
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.21347210003295913,
+              "rss_at_stage_start_bytes": 53682176
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 1.4786044000065885,
+              "rss_at_stage_start_bytes": 80855040
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 75.76641280000331,
+              "rss_at_stage_start_bytes": 84840448
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 76.21961900003953,
+              "rss_at_stage_start_bytes": 84381696
+            }
+          ],
+          "seconds": 77.98725730000297
+        }
+      ],
+      "seconds_median": 68.90396789996885,
+      "process_peak_rss_bytes_median": 203280384,
+      "seconds_delta": 39.221584699931554,
+      "rss_delta_bytes": 11780096,
+      "baseline_seconds_median": 29.682383200037293,
+      "baseline_rss_bytes_median": 191500288,
+      "measurement_completed": true,
+      "nfr2_target_seconds": 10
+    },
+    {
+      "archetype": "tower",
+      "scale": "medium",
+      "input_sha256": "f4391589c22710d842e9289fd7dc032a8081ecd8b58a7cb6703596e3888a42c0",
+      "input": {
+        "minecraftVersion": "1.21.11",
+        "archetype": "tower",
+        "style": "medieval",
+        "scale": "medium",
+        "seed": 42,
+        "features": {
+          "shape": "square",
+          "floors": 8,
+          "floor_height": 5,
+          "battlement": true
+        },
+        "interior": "minimal",
+        "size": [
+          64,
+          48,
+          64
+        ],
+        "elements": {
+          "tower#1": {
+            "radius": 29
+          }
+        }
+      },
+      "input_identical_to_c": false,
+      "samples": [
+        {
+          "code": 3,
+          "make_runtime_seconds": 135.0738519000006,
+          "process_peak_rss_bytes": 204472320,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.006603599991649389,
+              "rss_at_stage_start_bytes": 51609600
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.2095710999565199,
+              "rss_at_stage_start_bytes": 50900992
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 3.2060602999990806,
+              "rss_at_stage_start_bytes": 60342272
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 6.770848199957982,
+              "rss_at_stage_start_bytes": 88383488
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 124.43877519998932,
+              "rss_at_stage_start_bytes": 99164160
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 130.781166700006,
+              "rss_at_stage_start_bytes": 100184064
+            }
+          ],
+          "seconds": 137.73548579995986
+        },
+        {
+          "code": 3,
+          "make_runtime_seconds": 159.68377499998314,
+          "process_peak_rss_bytes": 203055104,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0016107999836094677,
+              "rss_at_stage_start_bytes": 52355072
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.053264399990439415,
+              "rss_at_stage_start_bytes": 50884608
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 2.663042200030759,
+              "rss_at_stage_start_bytes": 60145664
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 6.812421299982816,
+              "rss_at_stage_start_bytes": 88064000
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 149.06389019999187,
+              "rss_at_stage_start_bytes": 99086336
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 154.56611920002615,
+              "rss_at_stage_start_bytes": 100098048
+            }
+          ],
+          "seconds": 160.6299806999741
+        },
+        {
+          "code": 3,
+          "make_runtime_seconds": 143.4501343999873,
+          "process_peak_rss_bytes": 203788288,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0010578000219538808,
+              "rss_at_stage_start_bytes": 51789824
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04719660000409931,
+              "rss_at_stage_start_bytes": 52035584
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 2.84850770002231,
+              "rss_at_stage_start_bytes": 60694528
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 7.81998690002365,
+              "rss_at_stage_start_bytes": 87154688
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 135.77230640000198,
+              "rss_at_stage_start_bytes": 99061760
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 140.11572270002216,
+              "rss_at_stage_start_bytes": 100155392
+            }
+          ],
+          "seconds": 144.40541050001048
+        }
+      ],
+      "seconds_median": 144.40541050001048,
+      "process_peak_rss_bytes_median": 203788288,
+      "seconds_delta": 123.03108669997891,
+      "rss_delta_bytes": 34095104,
+      "baseline_seconds_median": 21.37432380003156,
+      "baseline_rss_bytes_median": 169693184,
+      "measurement_completed": true,
+      "nfr2_target_seconds": 10
+    },
+    {
+      "archetype": "house",
+      "scale": "large",
+      "input_sha256": "25ba7157ff2ffd25ccffee7a11ea94f7e79c26b3a12ff617e2746aa9310739f1",
+      "input": {
+        "minecraftVersion": "1.21.11",
+        "archetype": "house",
+        "style": "medieval",
+        "scale": "large",
+        "seed": 42,
+        "features": {
+          "floors": 2,
+          "floor_height": 4,
+          "roof": "gable"
+        },
+        "interior": "minimal",
+        "size": [
+          128,
+          96,
+          128
+        ],
+        "elements": {
+          "house#1": {
+            "width": 125,
+            "depth": 125
+          }
+        }
+      },
+      "input_identical_to_c": false,
+      "samples": [
+        {
+          "code": 3,
+          "make_runtime_seconds": 314.3880369999679,
+          "process_peak_rss_bytes": 212893696,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0013571999734267592,
+              "rss_at_stage_start_bytes": 52092928
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.05068819998996332,
+              "rss_at_stage_start_bytes": 52375552
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.3797122999676503,
+              "rss_at_stage_start_bytes": 55099392
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 2.6811564000090584,
+              "rss_at_stage_start_bytes": 84422656
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 306.9600779999746,
+              "rss_at_stage_start_bytes": 88862720
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 309.8118958999985,
+              "rss_at_stage_start_bytes": 89890816
+            }
+          ],
+          "seconds": 315.3446273000445
+        },
+        {
+          "code": 3,
+          "make_runtime_seconds": 288.1775626000017,
+          "process_peak_rss_bytes": 212807680,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0012366999872028828,
+              "rss_at_stage_start_bytes": 51896320
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04363939998438582,
+              "rss_at_stage_start_bytes": 52109312
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.44793189998017624,
+              "rss_at_stage_start_bytes": 54800384
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 2.9537366000004113,
+              "rss_at_stage_start_bytes": 83947520
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 283.0892833999824,
+              "rss_at_stage_start_bytes": 88518656
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 285.11427459999686,
+              "rss_at_stage_start_bytes": 89583616
+            }
+          ],
+          "seconds": 289.12937340000644
+        },
+        {
+          "code": 3,
+          "make_runtime_seconds": 289.599231900007,
+          "process_peak_rss_bytes": 213110784,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0010710000060498714,
+              "rss_at_stage_start_bytes": 51720192
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.05082479998236522,
+              "rss_at_stage_start_bytes": 50888704
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.4367241999716498,
+              "rss_at_stage_start_bytes": 53796864
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 3.1378208000096492,
+              "rss_at_stage_start_bytes": 83337216
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 284.8354112000088,
+              "rss_at_stage_start_bytes": 88399872
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 286.65274310001405,
+              "rss_at_stage_start_bytes": 89473024
+            }
+          ],
+          "seconds": 290.55328300001565
+        }
+      ],
+      "seconds_median": 290.55328300001565,
+      "process_peak_rss_bytes_median": 212893696,
+      "seconds_delta": 106.95843970001442,
+      "rss_delta_bytes": 10248192,
+      "baseline_seconds_median": 183.59484330000123,
+      "baseline_rss_bytes_median": 202645504,
+      "measurement_completed": true,
+      "nfr2_target_seconds": 120
+    },
+    {
+      "archetype": "tower",
+      "scale": "large",
+      "input_sha256": "cd2e1cf461a97e26b211d40a10229b68630d4c8bb54e63843edb4a54a6317ba8",
+      "input": {
+        "minecraftVersion": "1.21.11",
+        "archetype": "tower",
+        "style": "medieval",
+        "scale": "large",
+        "seed": 42,
+        "features": {
+          "shape": "square",
+          "floors": 17,
+          "floor_height": 5,
+          "battlement": true
+        },
+        "interior": "minimal",
+        "size": [
+          128,
+          96,
+          128
+        ],
+        "elements": {
+          "tower#1": {
+            "radius": 61
+          }
+        }
+      },
+      "input_identical_to_c": false,
+      "samples": [
+        {
+          "code": 3,
+          "make_runtime_seconds": 1046.283896900015,
+          "process_peak_rss_bytes": 278523904,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0010132999741472304,
+              "rss_at_stage_start_bytes": 50814976
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.0479419999755919,
+              "rss_at_stage_start_bytes": 51126272
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 20.176902999985032,
+              "rss_at_stage_start_bytes": 89968640
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 34.84886099997675,
+              "rss_at_stage_start_bytes": 110358528
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 864.0403610999929,
+              "rss_at_stage_start_bytes": 165605376
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 1017.6439829000155,
+              "rss_at_stage_start_bytes": 169099264
+            }
+          ],
+          "seconds": 1047.1647520000115
+        },
+        {
+          "code": 3,
+          "make_runtime_seconds": 961.3593944000313,
+          "process_peak_rss_bytes": 280268800,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.001194800017401576,
+              "rss_at_stage_start_bytes": 51236864
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.043216400023084134,
+              "rss_at_stage_start_bytes": 51417088
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 21.876406000053976,
+              "rss_at_stage_start_bytes": 89935872
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 36.359339600021485,
+              "rss_at_stage_start_bytes": 110477312
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 834.7307687000139,
+              "rss_at_stage_start_bytes": 165101568
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 922.5061849000049,
+              "rss_at_stage_start_bytes": 168165376
+            }
+          ],
+          "seconds": 962.2815502000158
+        },
+        {
+          "code": 3,
+          "make_runtime_seconds": 1018.2587854000158,
+          "process_peak_rss_bytes": 278614016,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0012481000158004463,
+              "rss_at_stage_start_bytes": 52273152
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.051837600010912865,
+              "rss_at_stage_start_bytes": 52617216
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 30.655876600008924,
+              "rss_at_stage_start_bytes": 90636288
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 50.934243499999866,
+              "rss_at_stage_start_bytes": 109211648
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 925.9402924000169,
+              "rss_at_stage_start_bytes": 165568512
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 988.7224332000478,
+              "rss_at_stage_start_bytes": 169017344
+            }
+          ],
+          "seconds": 1019.3773640000727
+        }
+      ],
+      "seconds_median": 1019.3773640000727,
+      "process_peak_rss_bytes_median": 278614016,
+      "seconds_delta": 863.6410962000955,
+      "rss_delta_bytes": 92516352,
+      "baseline_seconds_median": 155.7362677999772,
+      "baseline_rss_bytes_median": 186097664,
+      "measurement_completed": true,
+      "nfr2_target_seconds": 120
+    }
+  ],
+  "comparison_limits": [
+    "Cと入力byte・Python版・CPU・メモリ総量を照合。実装と依存版は同一ではない。",
+    "Cの時間境界はschem export、Dは追加されたscene出力も含むmake全体。",
+    "起動からworker JSON出力までを測定。runnerのimport量も時間に含む。",
+    "巨大地形を未測定のため、NFR3全体の達成は判定しない。"
+  ]
+}

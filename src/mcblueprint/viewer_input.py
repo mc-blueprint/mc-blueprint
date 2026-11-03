@@ -27,6 +27,7 @@ from mcblueprint.model.block import BlockState
 from mcblueprint.model.vec import Vec3
 from mcblueprint.output_lock import lock_paths
 from mcblueprint.pipeline import (
+    _check_cli_overrides,
     _cli_overrides,
     _environment,
     _hash,
@@ -207,6 +208,10 @@ class ViewerInput:
         if self.spec:
             meta_path = self.scene_path.with_suffix(self.scene_path.suffix + ".meta.json")
             resolved = resolve_buildspec(self.input, overrides=self.overrides)
+            try:
+                _check_cli_overrides(self.meta, resolved)
+            except BlueprintError as exc:
+                raise EditConflict(str(exc)) from exc
             if (json.loads(meta_path.read_bytes()) != self.meta
                     or self.meta.get("inputSha256") != _sha(self.original)
                     or self.meta.get("sceneSha256") != self.scene_hash
@@ -404,8 +409,11 @@ def prepare_input(path: str | Path, *, output: str | Path | None = None,
     raw, scene = read_scene(scene_path)
     meta_path = scene_path.with_suffix(scene_path.suffix + ".meta.json")
     meta = json.loads(meta_path.read_bytes()) if spec else {"environment": _environment()}
-    return ViewerInput(path, out, scene_path, edits_path, derived_path, config, overrides,
-                       spec, original, raw, scene, meta)
+    prepared = ViewerInput(path, out, scene_path, edits_path, derived_path, config, overrides,
+                           spec, original, raw, scene, meta)
+    if spec:
+        prepared.check_generation()
+    return prepared
 
 
 def apply_input_edits(edits_path: Path, source: Path, scene_path: Path, *,
