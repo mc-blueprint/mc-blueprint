@@ -220,11 +220,16 @@ def test_tint_linear_multiplication_and_quantiles():
     assert face_linear(fixed, next(iter(fixed.faces.values())), registry)
 
 
-def test_old_examples_are_unchanged():
+def test_concrete_examples_are_unchanged_and_role_components_are_materialized():
     for path in Path("examples").glob("*.json"):
         raw = json.loads(path.read_text(encoding="utf-8"))
         if "minecraftVersion" in raw:
-            assert materialize(raw).blueprint == raw
+            result = materialize(raw)
+            if path.stem == "gatehouse":
+                assert result.roles
+                assert validate(result.blueprint) == []
+            else:
+                assert result.blueprint == raw
 
 
 @pytest.mark.parametrize("version", supported_versions())

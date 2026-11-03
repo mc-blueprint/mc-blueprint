@@ -85,7 +85,7 @@ def _uses_palettes(value: Any, names: frozenset[str]) -> bool:
         return False
     if isinstance(value, dict):
         if value.get("type") == "component":
-            raw = components.load_component(value["name"])
+            raw = components.load_component(value["name"], raw=True)
             with components.loading(value["name"]):
                 return _uses_palettes(raw["operations"], names.difference(raw.get("palettes", {})))
         return any(
@@ -107,7 +107,7 @@ def _inline_components(
         if "operations" in op:
             op["operations"] = _inline_components(op["operations"], palettes, inherit=inherit)
         if op.get("type") == "component":
-            raw = components.load_component(op["name"])
+            raw = components.load_component(op["name"], raw=True)
             local = copy.deepcopy(raw.get("palettes", {}))
             inherited = inherit.difference(local)
             with components.loading(op["name"]):

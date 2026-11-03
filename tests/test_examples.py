@@ -43,7 +43,7 @@ def test_example_generates_within_declared_size(path: Path) -> None:
 
 
 @pytest.mark.parametrize("path", EXAMPLES, ids=lambda p: p.name)
-def test_pattern_migration_preserves_example_volumes(path: Path, tmp_path: Path) -> None:
+def test_pattern_migration_preserves_example_geometry(path: Path, tmp_path: Path) -> None:
     raw = read_blueprint_json(path)
 
     def use_legacy_names(value: object) -> None:
@@ -64,7 +64,17 @@ def test_pattern_migration_preserves_example_volumes(path: Path, tmp_path: Path)
     with components.component_search_paths([old_components]):
         before = generate(load_blueprint_dict(old_blueprint))
     after = generate(load_blueprint(path))
-    assert dict(before) == dict(after)
+    if path.stem not in ("gatehouse", "village_path"):
+        assert dict(before) == dict(after)
+        return
+    # patterns#11の役割参照化で材質は変わるが、位置・形状・向きは維持する。
+    registry = blockdata.load_block_data(raw["minecraftVersion"])
+    assert set(dict(before)) == set(dict(after))
+    for pos, state in before:
+        actual = after.get(pos)
+        assert registry.get(state.id).shape == registry.get(actual.id).shape
+        for key in ("facing", "half", "type"):
+            assert state.get(key) == actual.get(key)
 
 
 @pytest.mark.parametrize("path", EXAMPLES, ids=lambda p: p.name)

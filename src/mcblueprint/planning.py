@@ -3,10 +3,7 @@
 from __future__ import annotations
 
 import copy
-import hashlib
-import json
 import math
-import random
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -14,6 +11,7 @@ from typing import Any
 import yaml
 
 from mcblueprint.buildspec import ResolveResult
+from mcblueprint.detail import NORMALS, plan_detail
 from mcblueprint.errors import BlueprintError
 from mcblueprint.foundation import STABLE_GROUND
 from mcblueprint.importers import read_terrain
@@ -57,23 +55,7 @@ def _tag(op, element, role, source, *, reserved=None, face=None):
 
 
 def _bounds(operations):
-    boxes = []
-    for op in operations:
-        if op["type"] != "component":
-            boxes.append(build_operation(op, "planning").bounds())
-            continue
-        path = Path(__file__).parent / "data" / "patterns" / "modules" / (
-            op["name"].replace(".", "/") + ".json"
-        )
-        module = json.loads(path.read_text(encoding="utf-8"))
-        inner = [build_operation(item, f"planning<{op['name']}>")
-                 for item in module["operations"]]
-        local = AABB.from_points([point for item in inner
-                                  for point in (item.bounds().min, item.bounds().max)])
-        transform = Transform.rotation(op.get("rotation", 0), Vec3(0, 0, 0)).then(
-            Transform.translation(Vec3.from_seq(op["position"]))
-        )
-        boxes.append(transform.bounds(local))
+    boxes = [build_operation(op, "planning").bounds() for op in operations]
     return AABB.from_points([point for box in boxes for point in (box.min, box.max)])
 
 
@@ -103,210 +85,9 @@ def _projection(box, origin, axis):
             "v": [box.min.y - origin.y, box.max.y - origin.y]}
 
 
-def _detail_component(module, position, rotation, face, element, source):
-    operation = _tag(
-        {"type": "component", "name": module, "position": position,
-         "rotation": rotation, "onConflict": "skip"},
-        element, "wall_main", source,
-        face=face,
-    )
-    operation["decoration"] = True
-    return operation
-
-
-def _module_size(name):
-    path = Path(__file__).parent / "data" / "patterns" / "modules" / (
-        name.replace(".", "/") + ".json"
-    )
-    data = json.loads(path.read_text(encoding="utf-8"))
-    if "dimensions" in data.get("metadata", {}):
-        return data["metadata"]["dimensions"]
-    bounds = _bounds(data["operations"])
-    return bounds.size.to_list()
-
-
-def _module_fits_depth(name, depth):
-    required = _module_size(name)[2] - 1
-    available = math.floor(depth * 2 + 0.5)
-    return required <= available
-
-
-def _overlaps(first, second):
-    return all(first.min[i] <= second.max[i] and second.min[i] <= first.max[i]
-               for i in range(3))
-
-
-def _detail_house(params, style, config, root, body, detail):
-    """様式の固定モジュールを収まる外壁ベイへ配置する。"""
-    width, depth, floors, height = (params[k] for k in
-                                    ("width", "depth", "floors", "floor_height"))
-    modules = style["modules"]
-    low, high = style["decoration"]["density"]
-    target = low + config["decoration"]["density"] * (high - low)
-    rng_seed = hashlib.sha256(
-        f"{config['seed']}:{root}:detail".encode()
-    ).digest()
-    rng = random.Random(int.from_bytes(rng_seed[:8], "big"))
-    faces = {
-        "north": (width, 0, 0, 0),
-        "south": (width, depth - 1, 180, 0),
-        "west": (depth - 1, 0, 270, 1),
-        "east": (depth - 1, width - 1, 90, 1),
-    }
-    decorations = []
-    original_detail = list(detail)
-    circulation = [build_operation(op, root).bounds() for op in body + detail
-                   if op.get("reserved") == "circulation"]
-    openings = [op for op in detail if op.get("type") in ("window", "doorway")]
-    selected: dict[tuple[str, int], bool] = {}
-    symmetry = config["decoration"]["symmetry"]
-    for face, opposite in (("north", "south"), ("east", "west")):
-        length, _, _, axis = faces[face]
-        positions = list(range(0, length - 1, 4))
-        if positions[-1] != length - 1:
-            positions.append(length - 1)
-        for bay_index, _start in enumerate(positions[:-1]):
-            if rng.random() < symmetry:
-                chosen = rng.random() < target
-                selected[(face, bay_index)] = chosen
-                selected[(opposite, bay_index)] = chosen
-            else:
-                selected[(face, bay_index)] = rng.random() < target
-                selected[(opposite, bay_index)] = rng.random() < target
-
-    for level in range(floors):
-        y = level * height + 1
-        for face, (length, fixed, rotation, axis) in faces.items():
-            starts = list(range(0, length - 1, 4))
-            if starts[-1] != length - 1:
-                starts.append(length - 1)
-            for bay_index, start in enumerate(starts[:-1]):
-                end = starts[bay_index + 1]
-                if end - start != 4:
-                    continue
-                door = next((opening for opening in openings
-                             if level == 0 and opening.get("face") == face
-                             and opening["type"] == "doorway"), None)
-                if door and abs((start + end) / 2 - door["position"][axis]) <= 2:
-                    module = modules.get("entrance", [None])[0]
-                    module_height = _module_size(module)[1] if module else 0
-                    if (module and height >= module_height
-                            and _module_fits_depth(module, config["decoration"]["depth"])):
-                        position = ([start, y, fixed] if axis == 0 else
-                                    [fixed, y, start])
-                        if rotation == 180:
-                            position[0] += 4
-                        elif rotation == 270:
-                            position[2] += 4
-                        detail_id = f"{root}.detail.{face}.floor#{level + 1}.entrance"
-                        detail.append(_detail_component(
-                            module, position, rotation, face,
-                            f"{root}.facade.{face}.floor#{level + 1}",
-                            "style.modules.entrance",
-                        ) | {"id": detail_id})
-                        decorations.append({"id": detail_id, "element":
-                                           f"{root}.facade.{face}.floor#{level + 1}",
-                                           "face": face})
-                    continue
-                if not selected[(face, bay_index)]:
-                    continue
-                window = any(op.get("face") == face and op["type"] == "window"
-                             and start <= op["position"][axis] <= end for op in openings)
-                kind = "window" if window else "bay"
-                choices = modules.get(kind, modules.get("bay", []))
-                module = choices[0] if choices else None
-                module_width = _module_size(module)[0] if module else 0
-                if (module is None or module_width > 5
-                        or not _module_fits_depth(module, config["decoration"]["depth"])
-                        or _module_size(module)[1] > height):
-                    continue
-                offset = (5 - module_width) // 2
-                position = ([start + offset, y, fixed] if axis == 0
-                            else [fixed, y, start + offset])
-                if rotation == 180:
-                    position[0] += module_width - 1
-                elif rotation == 270:
-                    position[2] += module_width - 1
-                detail_id = f"{root}.detail.{face}.floor#{level + 1}.bay#{bay_index + 1}"
-                component = _detail_component(
-                    module, position, rotation, face,
-                    f"{root}.facade.{face}.floor#{level + 1}", f"style.modules.{kind}",
-                ) | {"id": detail_id}
-                if any(_overlaps(_bounds([component]), box) for box in circulation):
-                    continue
-                detail.append(component)
-                decorations.append({"id": detail_id,
-                                   "element": f"{root}.facade.{face}.floor#{level + 1}",
-                                   "face": face})
-
-    cornice_levels = (
-        ([floors] if style["decoration"].get("cornice") else [])
-        + (list(range(1, floors)) if style["decoration"].get("band_course") else [])
-    )
-    for level in cornice_levels:
-            for face, (length, fixed, rotation, axis) in faces.items():
-                choices = modules.get("cornice", [])
-                if not choices:
-                    continue
-                module = choices[0]
-                module_width, module_height, _ = _module_size(module)
-                if (module_width > length or module_height > height
-                        or not _module_fits_depth(module, config["decoration"]["depth"])):
-                    continue
-                start = ((length + 1) - module_width) // 2
-                y = level * height - module_height
-                position = ([start, y, fixed] if axis == 0 else [fixed, y, start])
-                if rotation == 180:
-                    position[0] += module_width - 1
-                elif rotation == 270:
-                    position[2] += module_width - 1
-                detail_id = f"{root}.detail.{face}.cornice#{level}"
-                component = _detail_component(
-                    module, position, rotation, face,
-                    f"{root}.facade.{face}.floor#{min(level, floors)}",
-                    "style.modules.cornice",
-                ) | {"id": detail_id}
-                if any(_overlaps(_bounds([component]), box) for box in circulation):
-                    continue
-                detail.append(component)
-                decorations.append({"id": detail_id,
-                                   "element": f"{root}.facade.{face}.floor#{min(level, floors)}",
-                                   "face": face})
-
-    for face, (length, fixed, rotation, axis) in faces.items():
-        choices = modules.get("roof_edge", [])
-        if not choices:
-            continue
-        module = choices[0]
-        module_width, module_height, _ = _module_size(module)
-        if (module_width > length or module_height > height
-                or not _module_fits_depth(module, config["decoration"]["depth"])):
-            continue
-        start = ((length + 1) - module_width) // 2
-        y = floors * height - module_height
-        position = ([start, y, fixed] if axis == 0 else [fixed, y, start])
-        if rotation == 180:
-            position[0] += module_width - 1
-        elif rotation == 270:
-            position[2] += module_width - 1
-        detail_id = f"{root}.detail.{face}.roof_edge"
-        component = _detail_component(
-            module, position, rotation, face,
-            f"{root}.facade.{face}.floor#{floors}", "style.modules.roof_edge",
-        ) | {"id": detail_id}
-        if any(_overlaps(_bounds([component]), box) for box in circulation):
-            continue
-        detail.append(component)
-        decorations.append({"id": detail_id,
-                           "element": f"{root}.facade.{face}.floor#{floors}",
-                           "face": face})
-    components = detail[len(original_detail):]
-    detail[:] = components + original_detail
-    return decorations
-
-
 def _plan_contract(root, body, detail, transform, params, layout):
     """Criticが期待構造と面上の開口を照合する座標契約を作る。"""
+    rotation = Transform(transform.rows)
     frame = next(op for op in body if op["element"] == f"{root}.frame")
     frame_ops = frame["operations"]
     columns, beams = [], []
@@ -329,12 +110,12 @@ def _plan_contract(root, body, detail, transform, params, layout):
         bounds = transform.bounds(bounds)
         directions = {"north": Vec3(0, 0, -1), "south": Vec3(0, 0, 1),
                       "west": Vec3(-1, 0, 0), "east": Vec3(1, 0, 0)}
-        face = transform.apply_direction(directions[op["face"]])
+        face = rotation.apply(directions[op["face"]])
         origin = bounds.min
         if face.x < 0 or face.z < 0:
             origin = Vec3(bounds.max.x if face.x < 0 else bounds.min.x, bounds.min.y,
                           bounds.max.z if face.z < 0 else bounds.min.z)
-        axis = transform.apply_direction(Vec3.from_seq(
+        axis = rotation.apply(Vec3.from_seq(
             [1, 0, 0] if op["face"] in ("north", "south") else [0, 0, 1]
         ))
         openings = []
@@ -382,15 +163,15 @@ def _plan_contract(root, body, detail, transform, params, layout):
                                                            lo.y, (start[1] + end[1]) // 2))
                     if (center.x - segment_center.x) ** 2 + (center.z - segment_center.z) ** 2 < 16:
                         origin = transform.apply(lo)
-                        u_axis = transform.apply_direction(Vec3(dx, 0, dz))
+                        u_axis = rotation.apply(Vec3(dx, 0, dz))
                         openings.append({"id": opening["element"],
                                          "from": opening_box.min.to_list(),
                                          "to": opening_box.max.to_list(),
                                          "projection": _projection(opening_box, origin, u_axis)})
                 facades.append({"id": f"{root}.facade.segment#{index + 1}.floor#{level + 1}",
-                                "normal": transform.apply_direction(normal).to_list(),
+                                "normal": rotation.apply(normal).to_list(),
                                 "origin": transform.apply(lo).to_list(),
-                                "uAxis": transform.apply_direction(Vec3(dx, 0, dz)).to_list(),
+                                "uAxis": rotation.apply(Vec3(dx, 0, dz)).to_list(),
                                 "vAxis": [0, 1, 0],
                                 "from": box.min.to_list(), "to": box.max.to_list(),
                                 "openings": openings})
@@ -642,10 +423,8 @@ def plan_buildspec(resolved: ResolveResult) -> PlanningResult:
         if params["roof"] not in ("gable", "hip", "flat"):
             raise BlueprintError("Massing: 未対応の屋根です")
         body, detail, layout = _house(params, root)
-        decorations = _detail_house(params, style, resolved.config, root, body, detail)
         entrance, arrivals = layout.entrance, list(layout.arrivals)
     else:
-        decorations = []
         if "height" in changes and "floor_height" not in changes:
             if (params["height"] + 1) % params["floors"]:
                 raise BlueprintError("Massing: height + 1は階数で割り切れる必要があります")
@@ -662,6 +441,13 @@ def plan_buildspec(resolved: ResolveResult) -> PlanningResult:
             raise BlueprintError("Massing: 塔の半径・形・高さ・階数が不整合です")
         body, detail, entrance, arrivals = _tower(params, root)
         layout = None
+    local_contract = _plan_contract(root, body, detail, Transform.identity(), params, layout)
+    projected_contract = _plan_contract(
+        root, body, detail, Transform.rotation(params["angle"], Vec3(0, 0, 0)), params, layout,
+    )
+    decorations, detail_palettes = plan_detail(
+        params, style, resolved.config, root, body, detail, local_contract, projected_contract,
+    )
     if spec["interior"] == "minimal":
         # 歩行域の上ではなく、壁際の床面を発光させる。
         for level in range(params["floors"]):
@@ -710,12 +496,19 @@ def plan_buildspec(resolved: ResolveResult) -> PlanningResult:
         }
     transform = transform.then(Transform.translation(offset))
     contract = _plan_contract(root, body, detail, transform, params, layout)
+    for item in decorations:
+        item["operation"] = f"/{root}@:{transform.rows}:{transform.offset}/{item['operation']}"
+        facade = next(f for f in contract["facades"] if f["id"] == item["element"])
+        item["face"] = max(NORMALS, key=lambda face: sum(
+            a * b for a, b in zip(NORMALS[face], facade["normal"], strict=True)
+        ))
+    contract["decorations"] = decorations
     entrance = transform.apply(entrance)
     arrivals = [transform.apply(p) for p in arrivals]
     wrapper = {"type": "translate", "offset": offset.to_list(),
                "rotation": params["angle"], "operations": body + detail,
                "id": root, "element": root, "source": "archetype"}
-    bounds = transform.bounds(_bounds(body + detail))
+    bounds = _bounds([wrapper])
     scene_bounds = region if terrain_json else bounds
     overrides = []
     seen = {}
@@ -746,7 +539,8 @@ def plan_buildspec(resolved: ResolveResult) -> PlanningResult:
     palette = copy.deepcopy(resolved.config["palette"])
     seed = resolved.config["seed"] if resolved.config["seed"] is not None else spec["seed"]
     blueprint = {"formatVersion": 1, "minecraftVersion": spec["minecraftVersion"],
-                 "name": root, "seed": seed, "operations": [wrapper, *overrides], **terrain_json,
+                 "name": root, "seed": seed, "operations": [wrapper, *overrides],
+                 "palettes": detail_palettes, **terrain_json,
                  "metadata": {"planning": {"element": root, "params": params,
                               "entrance": entrance.to_list(),
                               "arrivals": [p.to_list() for p in arrivals], **contract}}}

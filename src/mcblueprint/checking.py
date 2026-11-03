@@ -106,6 +106,24 @@ def check_component(
         if search_paths is None
         else search_paths
     )
+    from mcblueprint.materialize import _references, materialize
+
+    if isinstance(raw, dict) and list(_references(raw)):
+        from mcblueprint.pattern_checking import _module_registry, _schema, _validate
+
+        schema = _schema("pattern-module.schema.json")
+        errors = _validate(raw, schema, _module_registry(schema))
+        if errors:
+            return CheckResult(path, "component", errors)
+        try:
+            with components.component_search_paths(search):
+                raw = materialize(
+                    {**raw, "minecraftVersion": version}, style=raw["name"].split(".")[0],
+                ).blueprint
+            raw.pop("minecraftVersion")
+            raw.pop("seed", None)
+        except BlueprintError as exc:
+            return CheckResult(path, "component", [ValidationError("operations", str(exc))])
     return check_component_data(path, version, raw, search)
 
 
