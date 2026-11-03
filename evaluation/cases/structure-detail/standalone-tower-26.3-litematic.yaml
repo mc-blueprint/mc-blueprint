@@ -1,0 +1,14 @@
+archetype: tower
+config:
+  output:
+    format: litematic
+features:
+  battlement: true
+  floor_height: 4
+  floors: 3
+  shape: round
+interior: minimal
+minecraftVersion: '26.3'
+scale: tiny
+seed: 42
+style: medieval

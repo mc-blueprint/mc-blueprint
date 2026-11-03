@@ -1,0 +1,13 @@
+archetype: house
+config:
+  output:
+    format: schem
+features:
+  floor_height: 4
+  floors: 2
+  roof: gable
+interior: minimal
+minecraftVersion: '26.3'
+scale: tiny
+seed: 42
+style: medieval

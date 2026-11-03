@@ -1,0 +1,290 @@
+{
+  "schema_version": 1,
+  "method": "structure-detail-v1",
+  "frozen_at": "2026-11-03T14:14:06.555803+00:00",
+  "base_commit": "b416651866bd96fd45f574810c1d89c030d7cf9e",
+  "design_commit": "b2f7ab6",
+  "case_definition": {
+    "path": "evaluation/cases/fixed-cases.json",
+    "sha256": "8636cafff3ab5c5d16cfa03d14e7ab0463b2d019da20660db6091dd9f8cdc952"
+  },
+  "thresholds": {
+    "column_continuity": 1.0,
+    "flat_ratio_max": 0.35,
+    "local_flat_fail_allowed": false,
+    "structural_errors_allowed": false,
+    "c_requirements_must_pass": true,
+    "facade_mix_max": 0.85
+  },
+  "inputs": [
+    {
+      "case": "single-house",
+      "version": "1.21.11",
+      "format": "schem",
+      "seed": 42,
+      "source": {
+        "path": "tests/data/buildspec/single-house.yaml",
+        "sha256": "be195dadba179d7912603ca879317da4aa6e5715e36fd2282d7824c499a0d535"
+      },
+      "input": {
+        "path": "evaluation/cases/structure-detail/single-house-1.21.11-schem.yaml",
+        "sha256": "cb0c67dbee9a083b80c20e4cdb5d2fe249685cede48be1c722a77e7cc8d1547a"
+      }
+    },
+    {
+      "case": "single-house",
+      "version": "1.21.11",
+      "format": "litematic",
+      "seed": 42,
+      "source": {
+        "path": "tests/data/buildspec/single-house.yaml",
+        "sha256": "be195dadba179d7912603ca879317da4aa6e5715e36fd2282d7824c499a0d535"
+      },
+      "input": {
+        "path": "evaluation/cases/structure-detail/single-house-1.21.11-litematic.yaml",
+        "sha256": "b8784023efc3867850a115134a72c1cadc7a2733772595ce79bc2bf0b9c242d1"
+      }
+    },
+    {
+      "case": "single-house",
+      "version": "26.1.2",
+      "format": "schem",
+      "seed": 42,
+      "source": {
+        "path": "tests/data/buildspec/single-house.yaml",
+        "sha256": "be195dadba179d7912603ca879317da4aa6e5715e36fd2282d7824c499a0d535"
+      },
+      "input": {
+        "path": "evaluation/cases/structure-detail/single-house-26.1.2-schem.yaml",
+        "sha256": "c5855684a5f0e4e8d809808105e53ec5bdf8d38f3b869d048d9319ea3db58ab3"
+      }
+    },
+    {
+      "case": "single-house",
+      "version": "26.1.2",
+      "format": "litematic",
+      "seed": 42,
+      "source": {
+        "path": "tests/data/buildspec/single-house.yaml",
+        "sha256": "be195dadba179d7912603ca879317da4aa6e5715e36fd2282d7824c499a0d535"
+      },
+      "input": {
+        "path": "evaluation/cases/structure-detail/single-house-26.1.2-litematic.yaml",
+        "sha256": "4eeded49b37c742f5758fbcc0417450b5ce19369fef7bbc694fa7720cd0682a9"
+      }
+    },
+    {
+      "case": "single-house",
+      "version": "26.2",
+      "format": "schem",
+      "seed": 42,
+      "source": {
+        "path": "tests/data/buildspec/single-house.yaml",
+        "sha256": "be195dadba179d7912603ca879317da4aa6e5715e36fd2282d7824c499a0d535"
+      },
+      "input": {
+        "path": "evaluation/cases/structure-detail/single-house-26.2-schem.yaml",
+        "sha256": "73412c7599e63914e410a66bddcd2f553727017588cc499f128d2c90560361bf"
+      }
+    },
+    {
+      "case": "single-house",
+      "version": "26.2",
+      "format": "litematic",
+      "seed": 42,
+      "source": {
+        "path": "tests/data/buildspec/single-house.yaml",
+        "sha256": "be195dadba179d7912603ca879317da4aa6e5715e36fd2282d7824c499a0d535"
+      },
+      "input": {
+        "path": "evaluation/cases/structure-detail/single-house-26.2-litematic.yaml",
+        "sha256": "f0da68d7c5e871098d049f00eb2b4ee741b1656847f47a49f6a29274f533baea"
+      }
+    },
+    {
+      "case": "single-house",
+      "version": "26.3",
+      "format": "schem",
+      "seed": 42,
+      "source": {
+        "path": "tests/data/buildspec/single-house.yaml",
+        "sha256": "be195dadba179d7912603ca879317da4aa6e5715e36fd2282d7824c499a0d535"
+      },
+      "input": {
+        "path": "evaluation/cases/structure-detail/single-house-26.3-schem.yaml",
+        "sha256": "cb2c9b8fa285d288f762bf0613fbc3c0e1bbd4a363e29db731da6a616ffc6c38"
+      }
+    },
+    {
+      "case": "single-house",
+      "version": "26.3",
+      "format": "litematic",
+      "seed": 42,
+      "source": {
+        "path": "tests/data/buildspec/single-house.yaml",
+        "sha256": "be195dadba179d7912603ca879317da4aa6e5715e36fd2282d7824c499a0d535"
+      },
+      "input": {
+        "path": "evaluation/cases/structure-detail/single-house-26.3-litematic.yaml",
+        "sha256": "e140f9c7c6bfdc511bf41ac0758144396b65677884132f42245b9326c65afe2c"
+      }
+    },
+    {
+      "case": "standalone-tower",
+      "version": "1.21.11",
+      "format": "schem",
+      "seed": 42,
+      "source": {
+        "path": "tests/data/buildspec/standalone-tower.yaml",
+        "sha256": "5bd56e05ea4155058a8cedaa1eeca6a28b0044cb7c9bb1c475dff87a7c55b1dc"
+      },
+      "input": {
+        "path": "evaluation/cases/structure-detail/standalone-tower-1.21.11-schem.yaml",
+        "sha256": "350b0969681551f114a68681e9a0e89af38e55956b4672bfcb22402da4f729f4"
+      }
+    },
+    {
+      "case": "standalone-tower",
+      "version": "1.21.11",
+      "format": "litematic",
+      "seed": 42,
+      "source": {
+        "path": "tests/data/buildspec/standalone-tower.yaml",
+        "sha256": "5bd56e05ea4155058a8cedaa1eeca6a28b0044cb7c9bb1c475dff87a7c55b1dc"
+      },
+      "input": {
+        "path": "evaluation/cases/structure-detail/standalone-tower-1.21.11-litematic.yaml",
+        "sha256": "88f302c19597551b3e26edbd1568175f66093b56e503417e71b4bf4c0b95be3c"
+      }
+    },
+    {
+      "case": "standalone-tower",
+      "version": "26.1.2",
+      "format": "schem",
+      "seed": 42,
+      "source": {
+        "path": "tests/data/buildspec/standalone-tower.yaml",
+        "sha256": "5bd56e05ea4155058a8cedaa1eeca6a28b0044cb7c9bb1c475dff87a7c55b1dc"
+      },
+      "input": {
+        "path": "evaluation/cases/structure-detail/standalone-tower-26.1.2-schem.yaml",
+        "sha256": "d825ab6d5142729c1ba242199de94d43d905ce7b3d4cba6e1fede59dd64e636a"
+      }
+    },
+    {
+      "case": "standalone-tower",
+      "version": "26.1.2",
+      "format": "litematic",
+      "seed": 42,
+      "source": {
+        "path": "tests/data/buildspec/standalone-tower.yaml",
+        "sha256": "5bd56e05ea4155058a8cedaa1eeca6a28b0044cb7c9bb1c475dff87a7c55b1dc"
+      },
+      "input": {
+        "path": "evaluation/cases/structure-detail/standalone-tower-26.1.2-litematic.yaml",
+        "sha256": "d186c4d6159fce108d360ff5191ccd05e459121a886a2e789c26197ea959c368"
+      }
+    },
+    {
+      "case": "standalone-tower",
+      "version": "26.2",
+      "format": "schem",
+      "seed": 42,
+      "source": {
+        "path": "tests/data/buildspec/standalone-tower.yaml",
+        "sha256": "5bd56e05ea4155058a8cedaa1eeca6a28b0044cb7c9bb1c475dff87a7c55b1dc"
+      },
+      "input": {
+        "path": "evaluation/cases/structure-detail/standalone-tower-26.2-schem.yaml",
+        "sha256": "aef508c3081529da4a8b08a3f9ee52660fdd9b403ba04061902b2745d8ca0446"
+      }
+    },
+    {
+      "case": "standalone-tower",
+      "version": "26.2",
+      "format": "litematic",
+      "seed": 42,
+      "source": {
+        "path": "tests/data/buildspec/standalone-tower.yaml",
+        "sha256": "5bd56e05ea4155058a8cedaa1eeca6a28b0044cb7c9bb1c475dff87a7c55b1dc"
+      },
+      "input": {
+        "path": "evaluation/cases/structure-detail/standalone-tower-26.2-litematic.yaml",
+        "sha256": "7a5fc18134e5a43c9dd5aa2140290aa5f7fb77864f4cf8d2a6d4560b9f235dde"
+      }
+    },
+    {
+      "case": "standalone-tower",
+      "version": "26.3",
+      "format": "schem",
+      "seed": 42,
+      "source": {
+        "path": "tests/data/buildspec/standalone-tower.yaml",
+        "sha256": "5bd56e05ea4155058a8cedaa1eeca6a28b0044cb7c9bb1c475dff87a7c55b1dc"
+      },
+      "input": {
+        "path": "evaluation/cases/structure-detail/standalone-tower-26.3-schem.yaml",
+        "sha256": "a9782a8f8720d5ef20f1a3485bacbdf467971681c2bedc4b5481a09269cf85f8"
+      }
+    },
+    {
+      "case": "standalone-tower",
+      "version": "26.3",
+      "format": "litematic",
+      "seed": 42,
+      "source": {
+        "path": "tests/data/buildspec/standalone-tower.yaml",
+        "sha256": "5bd56e05ea4155058a8cedaa1eeca6a28b0044cb7c9bb1c475dff87a7c55b1dc"
+      },
+      "input": {
+        "path": "evaluation/cases/structure-detail/standalone-tower-26.3-litematic.yaml",
+        "sha256": "9349c79e1bccecf5a88286af897e1813cc1b0f05ce12990a1d2228d6ec34902f"
+      }
+    }
+  ],
+  "regression": {
+    "seeds": [
+      42,
+      73
+    ],
+    "cores": [
+      16,
+      32,
+      64
+    ],
+    "reverse": true,
+    "resume": [
+      "resolve",
+      "site",
+      "massing",
+      "detail",
+      "blueprint"
+    ],
+    "angle": 90,
+    "styles": [
+      "medieval",
+      "japanese",
+      "modern"
+    ],
+    "tower_shapes": [
+      "round",
+      "square"
+    ],
+    "negative": "最初の期待柱の先頭セルをairへ置換"
+  },
+  "performance": {
+    "reference": {
+      "path": "benchmarks/make-baseline.json",
+      "sha256": "35a521b0581a182a72f1e60d89aba5e146c7643ef1d1ae59611a46904ae096bc"
+    },
+    "scales": [
+      "tiny",
+      "medium",
+      "large"
+    ],
+    "repetitions": 3,
+    "version": "1.21.11",
+    "format": "schem",
+    "input_rule": "scripts/benchmark.py _make_workerと同じsize/要素寸法"
+  }
+}
