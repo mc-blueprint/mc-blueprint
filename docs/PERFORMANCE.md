@@ -104,7 +104,7 @@ mediumの住宅・塔はNFR2の10秒目標を超え、large住宅・塔も2分�
 
 測定端末は上記のWindows 11 / Ryzen 7 5700X / RTX 4070 SUPER機であり、NFR1の内蔵GPU・8GB端末では未測定である。街並み・地形・地下・植生の計画生成はHの範囲で、今回のBlueprint区間計測は計画品質を評価しない。人間比較・3D viewer・初回表示とfps・モデル使用量比較はIまたはFの範囲であり未測定である。
 
-## D・F追加処理の切り分け（Issue #210）
+## D・F追加処理の初回切り分け（Issue #210、3261ea9）
 
 新しい証跡は [make-performance-210.json](../evaluation/records/make-performance-210.json)
 に分離する。Cのbaselineと#180の性能記録は上書きしない。修正前の起点は
@@ -195,6 +195,10 @@ Materialize区間には、次のGenerate hookまでのBlueprint検証も含む�
 
 ### 再実行
 
+この節は最新develop取り込み前の初回記録で、対応するスクリプトは
+`756ca3d:scripts/evaluate_make_performance.py` にある。
+現行スクリプトによるfc8fbf9単体との再比較は、次節の手順を使う。
+
 再測定時はPython 3.12のタスク専用venvから、環境指定のコマンド記録を介して次の順に実行する。
 `before`・`profile`・`fixed-before` は実装修正前に実行する。
 同じ記録の完了済みケースは再実行しないので、新しい比較では別worktreeを使うか、
@@ -212,3 +216,64 @@ python scripts/evaluate_make_performance.py --phase fixed-after
 一時出力・生の `.prof` は `benchmarks/.tmp/issue-210/` に残す。
 sceneは入力絶対パスを含むため、修正前後で同じ入力パスとbyteを使用する。
 別端末のscene hashそのものとの一致は要求しない。
+
+## 最新develop統合後の再検証（Issue #210、fc8fbf9）
+
+#214（PR #216）・#215（PR #218）を含む `fc8fbf9` を取り込み、
+[make-performance-210-develop-fc8fbf9.json](../evaluation/records/make-performance-210-develop-fc8fbf9.json)
+へ新しい比較を分離する。初回の3261ea9基準の記録は保持する。
+WIPは `756ca3d`、mergeは `a9f601f` で、再計測結果はmerge後の作業差分として保存する。
+
+比較用コードは `git archive` で担当領域内へ展開し、全461 blobがfc8fbf9と一致することを照合した。
+archive時だけ `core.autocrlf=false` を指定してGit blobのbyteを維持し、Git設定は永続変更しない。
+beforeの各workerではこの参照コードを先にimportし、afterは担当worktreeのコードをimportする。
+各試行にpipelineの実パスとengine・lock・dataのhashを保存し、対象外の実装を読んだ場合は停止する。
+
+入力パスは両実装で共有し、固定16件と性能用4件について、配置・全指標・構造化診断・
+展開後scene JSONのSHA-256を比較する。前の3261ea9の出力は比較基準に使わない。
+性能用のbeforeは各1回、afterは住宅・塔のmedium／largeを各3回、独立プロセスで直列実行する。
+計時境界と段階値の定義は初回と同じで、workerの実装識別情報のJSON出力も全体時間に含む。
+hash検査は計時外。端末全体の負荷は統制せず、NFR2の達成判定も行わない。
+
+### 再測定結果
+
+秒数はdevelop単体が各1回、統合実装が各3回の中央値。全試行の終了コードは0で、
+全12試行の配置・指標・構造化診断・scene hashがそれぞれdevelop単体と一致した。
+
+| 対象 | fc8fbf9単体 | fc8fbf9＋#210 | 目標 | 判定 |
+| --- | ---: | ---: | ---: | --- |
+| 塔 medium | 66.216 | 56.908 | 65以下 | 達成 |
+| 塔 large | 471.330 | 283.235 | 350以下 | 達成 |
+| 住宅 medium | 44.483 | 57.325 | 規定なし | 観測上増加 |
+| 住宅 large | 282.698 | 207.027 | 規定なし | 観測上短縮 |
+
+塔の段階別値。前は1回、後は区間ごとの3回中央値で、全体時間の中央値とは集計境界が異なる。
+
+| 区間 | medium前 | medium後 | large前 | large後 |
+| --- | ---: | ---: | ---: | ---: |
+| Resolve | 0.043 | 0.042 | 0.043 | 0.042 |
+| Site/Massing/Detail | 3.531 | 1.455 | 28.670 | 12.363 |
+| Materialize・検証 | 15.978 | 8.921 | 72.194 | 36.833 |
+| Generate・生成中の集計 | 37.180 | 37.547 | 238.028 | 170.030 |
+| Critic・support・walkability | 4.422 | 6.802 | 84.719 | 56.245 |
+| Export・scene・公開 | 4.199 | 1.316 | 46.763 | 6.964 |
+
+住宅mediumの増加は主にGenerate区間の38.721→52.501秒として観測した。
+この経路のコードは#210で変更しておらず、原因は未特定である。
+塔largeも268.6〜371.4秒、住宅largeも205.0〜272.3秒と試行間の変動がある。
+測定中のCPU全体利用率はCIMの瞬間値で22%だったが、負荷・クロックは統制しておらず、
+これだけで変動原因を特定したとは扱わない。beforeは1回のため、差を変更単独の因果効果とせず、
+住宅mediumを短縮したとも記載しない。中央値による塔の目標達成とNFR2全体の達成は区別する。
+
+参照コードは `output/issue-210/develop-fc8fbf9/`、一時出力は
+`benchmarks/.tmp/issue-210-fc8fbf9/` に分離する。参照コードを同じcommitから展開・blob照合した後、
+Python 3.12のvenvからコマンド記録を介して実行する。日本語警告の文字コードを揃えるため、
+親・子の両プロセスをUTF-8モードで起動する。
+
+```text
+python -X utf8 scripts/prepare_make_reference.py
+python -X utf8 scripts/evaluate_make_performance.py --phase fixed-before --baseline-root output/issue-210/develop-fc8fbf9
+python -X utf8 scripts/evaluate_make_performance.py --phase fixed-after
+python -X utf8 scripts/evaluate_make_performance.py --phase before --baseline-root output/issue-210/develop-fc8fbf9
+python -X utf8 scripts/evaluate_make_performance.py --phase after
+```

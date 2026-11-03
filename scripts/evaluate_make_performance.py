@@ -20,8 +20,9 @@ import evaluate_structure as structure
 import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
-WORK = ROOT / "benchmarks/.tmp/issue-210"
-RECORD = ROOT / "evaluation/records/make-performance-210.json"
+WORK = ROOT / "benchmarks/.tmp/issue-210-fc8fbf9"
+RECORD = ROOT / "evaluation/records/make-performance-210-develop-fc8fbf9.json"
+BASE_COMMIT = "fc8fbf9fea3bf05506ec42b841bf678fb0dd001e"
 
 
 def digest(value):
@@ -55,9 +56,13 @@ def worker(source, output, profile):
     if profiler:
         profiler.disable()
         profiler.dump_stats(profile)
-    return {"code": result.code, "make_runtime_seconds": time.perf_counter() - started,
-            "process_peak_rss_bytes": benchmark._process_peak_rss(),
-            "stage_hook_samples": samples}
+    elapsed = time.perf_counter() - started
+    peak = benchmark._process_peak_rss()
+    run_record = json.loads(result.record.read_bytes())
+    return {"code": result.code, "make_runtime_seconds": elapsed,
+            "process_peak_rss_bytes": peak, "stage_hook_samples": samples,
+            "implementation": {"pipeline": str(Path(structure.pipeline.__file__).resolve()),
+                               "environment": run_record["environment"]}}
 
 
 def profile_summary(path):
@@ -77,20 +82,32 @@ def profile_summary(path):
             "top_own": sorted(rows, key=lambda r: r["own_seconds"], reverse=True)[:20]}
 
 
-def run(phase):
+def run(phase, baseline_root):
+    baseline = phase in ("before", "fixed-before", "profile")
+    if baseline and baseline_root is None:
+        raise ValueError("develop単体の比較には --baseline-root が必要です")
     WORK.mkdir(parents=True, exist_ok=True)
     record = json.loads(RECORD.read_bytes()) if RECORD.exists() else {
         "schema_version": 1, "record_type": "make-performance-210",
-        "base_commit": "3261ea9", "environment": benchmark._profile_environment(),
+        "base_commit": BASE_COMMIT, "environment": benchmark._profile_environment(),
         "comparison_limits": [
-            "Cはscene追加前、Dは#209前。本記録のbeforeは#209適用後。",
+            "beforeは#214/#215を含むfc8fbf9そのもの、afterはfc8fbf9へ#210を加えた実装。",
+            "Cはscene追加前、Dは#209前で、今回の修正前後比較とは異なる履歴。",
             "時間は子プロセス起動からworker JSON出力まで。hash検査は計時外。",
             "段開始の累積時間とRSS。隣接差分は段の時間で、段単独ピークではない。",
             "各実行は直列。別担当の読み取りreviewのCPU負荷は制御していない。",
             "NFR2達成判定はHの範囲であり、本記録では行わない。",
         ],
     }
-    record[f"{phase}_provenance"] = benchmark._benchmark_provenance()
+    if baseline:
+        baseline_root = baseline_root.resolve()
+        reference = json.loads(baseline_root.with_suffix(".json").read_bytes())
+        if reference["commit"] != BASE_COMMIT:
+            raise ValueError("指定したdevelopのcommitと参照コードが一致しません")
+        record["baseline_reference"] = reference
+    else:
+        record[f"{phase}_provenance"] = benchmark._benchmark_provenance()
+    record["script"] = structure.reference(Path(__file__).resolve())
     record["dependencies"] = {name: version(name) for name in
                               ("numpy", "nbtlib", "jsonschema", "PyYAML")}
     record.setdefault(phase, [])
@@ -125,12 +142,24 @@ def run(phase):
         output = folder / f"result.{fmt}"
         samples = []
         for index in range(3 if phase == "after" else 1):
-            command = [sys.executable, str(Path(__file__).resolve()), "--worker",
-                       str(source), str(output)]
+            worker_args = [str(Path(__file__).resolve()), "--worker", str(source), str(output)]
             profile = folder / "make.prof"
             if profiled:
-                command.extend(["--profile", str(profile)])
+                worker_args.extend(["--profile", str(profile)])
+            command = [sys.executable, "-X", "utf8", *worker_args]
+            if baseline:
+                bootstrap = (
+                    "import sys, runpy; "
+                    f"sys.path[:0] = {[str(baseline_root / 'src'), str(ROOT / 'scripts')]!r}; "
+                    f"sys.argv = {worker_args!r}; "
+                    f"runpy.run_path({worker_args[0]!r}, run_name='__main__')"
+                )
+                command = [sys.executable, "-X", "utf8", "-c", bootstrap]
             elapsed, sample = benchmark._isolated(command)
+            expected_root = baseline_root if baseline else ROOT
+            if not Path(sample["implementation"]["pipeline"]).is_relative_to(expected_root / "src"):
+                raise ValueError("比較対象と異なる実装を読み込みました")
+            record[f"{phase}_implementation"] = sample["implementation"]
             sample["seconds"] = elapsed
             sample["signature"] = signature(output)
             samples.append(sample)
@@ -174,8 +203,9 @@ if __name__ == "__main__":
                                             "fixed-before", "fixed-after"))
     parser.add_argument("--worker", nargs=2, type=Path)
     parser.add_argument("--profile", type=Path)
+    parser.add_argument("--baseline-root", type=Path)
     args = parser.parse_args()
     if args.worker:
         print(json.dumps(worker(*args.worker, args.profile)))
     elif args.phase:
-        run(args.phase)
+        run(args.phase, args.baseline_root)
