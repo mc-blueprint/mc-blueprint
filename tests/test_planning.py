@@ -135,11 +135,14 @@ def test_seed_stability_and_columns(tmp_path, archetype):
 
 @pytest.mark.parametrize("archetype,shape", (("house", None), ("tower", "round"),
                                                ("tower", "square")))
-def test_planning_exports_expected_structure_and_facade_contract(tmp_path, archetype, shape):
+@pytest.mark.parametrize("angle", (90, 180, 270))
+def test_planning_exports_expected_structure_and_facade_contract(tmp_path, archetype, shape, angle):
+    from mcblueprint.operations.transform import Transform
+
     features = {"shape": shape} if shape else {}
     first = plan(tmp_path, archetype=archetype, features=features)
     second = plan(tmp_path, archetype=archetype, features=features,
-                  elements={f"{archetype}#1": {"angle": 90}})
+                  elements={f"{archetype}#1": {"angle": angle}})
     contract = first.massing
     assert contract["columns"] and contract["beams"] and contract["facades"]
     assert [column["id"] for column in contract["columns"]] == [
@@ -148,6 +151,11 @@ def test_planning_exports_expected_structure_and_facade_contract(tmp_path, arche
     assert [beam["id"] for beam in contract["beams"]] == [
         beam["id"] for beam in second.massing["beams"]
     ]
+    rotation = Transform.rotation(angle, Vec3(0, 0, 0))
+    for before, after in zip(contract["facades"], second.massing["facades"], strict=True):
+        assert after["id"] == before["id"]
+        for key in ("normal", "uAxis"):
+            assert after[key] == rotation.apply(Vec3.from_seq(before[key])).to_list()
     assert all(facade["normal"] and facade["origin"] and facade["uAxis"]
                and facade["vAxis"] for facade in contract["facades"])
     assert all(opening["projection"]["u"] and opening["projection"]["v"]
@@ -166,6 +174,13 @@ def test_planning_exports_expected_structure_and_facade_contract(tmp_path, arche
                    for y in range(y0, y1 + 1))
     assert first.blueprint["metadata"]["planning"]["columns"] == contract["columns"]
 
+    from mcblueprint.critic import plan_from_metadata
+
+    for result in (first, second):
+        critic = plan_from_metadata(result.blueprint["metadata"]["planning"],
+                                    massing=result.massing, offset=result.site["offset"])
+        assert critic.decoration_operations
+
 
 @pytest.mark.parametrize("style,roof", (("medieval", "hip"), ("japanese", "gable"),
                                        ("modern", "flat")))
@@ -179,6 +194,54 @@ def test_roof_styles_and_exact_size_limit(tmp_path, style, roof):
     assert built(exact, style)[0].bounds().size.to_list() == size
     with pytest.raises(BlueprintError, match="size"):
         plan(tmp_path, style=style, features=features, size=[size[0] - 1, size[1], size[2]])
+
+
+@pytest.mark.parametrize("style", STYLES)
+def test_detail_uses_bundled_facade_modules_and_marks_decoration(tmp_path, style):
+    spec = {"style": style, "config": {"decoration": {"density": 1.0}}}
+    first = plan(tmp_path, **spec)
+    second = plan(tmp_path, **spec)
+    components = [op for op in first.detail["operations"]
+                  if op.get("source", "").startswith("style.modules.")]
+    assert components
+    assert all(op["onConflict"] == "skip" for op in components)
+    assert first.detail["decorations"] == first.massing["decorations"]
+    assert first.detail["decorations"] == first.blueprint["metadata"]["planning"]["decorations"]
+    _, volume = built(first, style)
+    declared = {item["operation"] for item in first.detail["decorations"]}
+    actual = {volume.attributes(pos).operation for pos, _ in volume
+              if volume.attributes(pos).role in ("trim", "window_frame")
+              and (volume.attributes(pos).source or "").startswith("style.modules.")}
+    assert actual and actual <= declared
+    assert not any(volume.attributes(pos).operation in declared for pos, _ in volume
+                   if volume.attributes(pos).role in ("frame", "roof", "floor"))
+    assert first.detail == second.detail
+    built(first, style)
+
+
+def test_detail_density_depth_and_symmetry_settings(tmp_path):
+    def components(**decoration):
+        result = plan(tmp_path, config={"decoration": decoration})
+        return [op for op in result.detail["operations"]
+                if op.get("source", "").startswith("style.modules.")]
+
+    default = components()
+    sparse = components(density=0.0, symmetry=0.0)
+    dense = components(density=1.0, symmetry=0.0)
+    shallow = components(density=1.0, depth=0.0, symmetry=0.0)
+    deep = components(density=1.0, depth=1.0, symmetry=1.0)
+    assert default
+    assert len(dense) >= len(sparse)
+    assert len(shallow) < len(deep)
+    assert deep == components(density=1.0, depth=1.0, symmetry=1.0)
+    assert deep != components(density=1.0, depth=1.0, symmetry=0.0)
+
+
+def test_unselected_window_frame_does_not_require_its_material_states(tmp_path):
+    result = plan(tmp_path, materials={"window_frame": "gold_block"},
+                  config={"decoration": {"density": 0}})
+    _, volume = built(result)
+    assert not any(state.id == "minecraft:gold_block" for _, state in volume)
 
 
 @pytest.mark.parametrize("floors,height", ((1, 4), (2, 5), (4, 6)))
@@ -203,6 +266,136 @@ def test_elements_errors_and_furnished(tmp_path):
         plan(tmp_path, interior="furnished")
     with pytest.raises(BlueprintError, match="size"):
         plan(tmp_path, size=[2, 4, 2])
+
+
+def test_explicit_flat_roof_is_accepted_by_buildspec_schema(tmp_path):
+    result = plan(tmp_path, style="modern", features={"roof": "flat"})
+    assert result.massing["params"]["roof"] == "flat"
+
+
+@pytest.mark.parametrize("style", STYLES)
+@pytest.mark.parametrize("shape", ("square", "round"))
+def test_tower_detail_keeps_modules_at_original_size(tmp_path, style, shape):
+    result = plan(tmp_path, archetype="tower", style=style, scale="medium", seed=29,
+                  features={"shape": shape, "floor_height": 5},
+                  elements={"tower#1": {"radius": 12}},
+                  config={"decoration": {"density": 1, "depth": 1}})
+    sources = {op.get("source") for op in result.detail["operations"]}
+    assert "style.modules.entrance" in sources
+    assert "style.modules.roof_edge" in sources
+    assert sources & {"style.modules.bay", "style.modules.window"}
+    _, volume = built(result, style)
+    assert all(check_route(volume, Vec3.from_seq(result.massing["entrance"]),
+                           Vec3.from_seq(point), "1.21.11").status == "reachable"
+               for point in result.massing["arrivals"])
+
+
+def test_detail_missing_module_is_diagnosed(tmp_path, monkeypatch):
+    from mcblueprint import detail
+
+    load = detail.components.load_component
+
+    def missing(name, **kwargs):
+        if name == "medieval.entry_portico":
+            raise BlueprintError("見つかりません")
+        return load(name, **kwargs)
+
+    monkeypatch.setattr(detail.components, "load_component", missing)
+    with pytest.raises(BlueprintError, match="Detail: 必須部品 medieval.entry_portico"):
+        plan(tmp_path)
+
+
+def test_small_facade_reports_density_that_has_no_feasible_integer_count():
+    import math
+
+    import yaml
+
+    from mcblueprint.critic import CriticAccumulator, plan_from_metadata
+    from mcblueprint.detail import _facade_selection
+    from mcblueprint.operations.transform import Transform
+
+    root = "house#1"
+    element = f"{root}.facade.north.floor#1"
+    contract = {"columns": [], "beams": [], "facades": [{
+        "id": element, "normal": [0, 0, -1], "origin": [0, 3, 0],
+        "uAxis": [1, 0, 0], "vAxis": [0, 1, 0],
+        "from": [0, 3, 0], "to": [0, 3, 0], "openings": [],
+    }]}
+    params = {"width": 5, "depth": 5, "floors": 1, "floor_height": 4, "angle": 0}
+    data = Path("src/mcblueprint/data/patterns")
+    style = yaml.safe_load((data / "styles/medieval.yaml").read_text(encoding="utf-8"))
+    modules = {"medieval.stone_cornice": json.loads(
+        (data / "modules/medieval/stone_cornice.json").read_text(encoding="utf-8"))}
+    config = {"seed": 0, "decoration": {"density": 0.6, "depth": 0.5, "symmetry": 1}}
+    operations, decorations = _facade_selection(
+        [], params, style, config, root, [], contract, modules, 0.32,
+    )
+    transform = Transform.identity()
+    for item in decorations:
+        item["operation"] = f"/{root}@:{transform.rows}:{transform.offset}/{item['operation']}"
+    metadata = {"element": root, "params": params, **contract, "decorations": decorations}
+    metadata["columns"] = [{"id": "test.column", "owner": "test.frame",
+                            "from": [2, 0, 0], "to": [2, 1, 0]}]
+    metadata["beams"] = [{"id": "test.beam", "owner": "test.frame",
+                          "from": [2, 1, 0], "to": [3, 1, 0]}]
+    frame = {"type": "translate", "offset": [0, 0, 0], "role": "frame",
+             "element": "test.frame", "owner": "test.frame", "reserved": "structure",
+             "operations": [
+                 {"type": "fill", "from": [2, 0, 0], "to": [2, 1, 0], "block": "stone"},
+                 {"type": "fill", "from": [2, 1, 0], "to": [3, 1, 0], "block": "stone"},
+             ]}
+    concrete = materialize({
+        "formatVersion": 1, "minecraftVersion": "1.21.11", "name": root, "seed": 0,
+        "operations": [{"type": "translate", "id": root, "offset": [0, 0, 0],
+                        "operations": [frame, *operations]}],
+    })
+    accumulator = CriticAccumulator(
+        plan_from_metadata(metadata, decoration_range=(0.2, 0.4)), max_memory_mb=16,
+    )
+    for region in generate_regions(load_blueprint_dict(concrete.blueprint)):
+        accumulator.consume(region)
+    result = accumulator.finalize()
+    measured = result.metrics["decoration_density"][f"{element}:north"]
+    assert measured == {"value": 100.0, "numerator": 1, "denominator": 1}
+    assert math.ceil(0.2 * measured["denominator"]) > math.floor(0.4 * measured["denominator"])
+    assert any(d["code"] == "E202" and d["actual"] == 100.0 for d in result.diagnostics)
+
+
+def test_detail_keeps_opening_projections_and_explicit_materials(tmp_path):
+    from mcblueprint.operations.registry import build_operation
+    from mcblueprint.operations.transform import Transform
+
+    result = plan(tmp_path, features={"floors": 2}, materials={
+        "frame": "oak_log", "trim": "stone_bricks", "window_frame": "birch_log",
+    }, config={"decoration": {"density": 1, "depth": 1}})
+    _, volume = built(result)
+    transform = Transform.translation(Vec3.from_seq(result.site["offset"]))
+    for op in result.detail["operations"]:
+        if op["type"] not in ("window", "doorway"):
+            continue
+        mask = transform.bounds(build_operation(op, "test").bounds())
+        axis = 0 if op["face"] in ("north", "south") else 2
+        for pos, _ in volume:
+            attrs = volume.attributes(pos)
+            if attrs.face == op["face"] and (attrs.source or "").startswith("style.modules."):
+                assert not (mask.min[axis] <= pos[axis] <= mask.max[axis]
+                            and mask.min.y <= pos.y <= mask.max.y)
+    seen = set()
+    for pos, state in volume:
+        attrs = volume.attributes(pos)
+        if not (attrs.source or "").startswith("style.modules."):
+            continue
+        if attrs.role == "frame":
+            assert state.id == "minecraft:oak_log"
+            seen.add("frame")
+        elif attrs.role == "trim":
+            assert state.id in ("minecraft:stone_bricks", "minecraft:stone_brick_stairs",
+                                "minecraft:stone_brick_slab")
+            seen.add("trim")
+        elif attrs.role == "window_frame":
+            assert state.id == "minecraft:birch_log"
+            seen.add("window_frame")
+    assert seen == {"frame", "trim", "window_frame"}
 
 
 def test_override_scene_coordinates_idempotence_and_reservation_conflict(tmp_path):
@@ -258,7 +451,7 @@ def test_planning_uses_resolved_style_roles_without_supplements(tmp_path, style)
     result = plan_buildspec(resolved)
     assert result.palette == resolved.config["palette"]
     assert result.palette is not resolved.config["palette"]
-    assert len(result.palette["materials"]) == 8
+    assert len(result.palette["materials"]) == 9
 
 
 def test_fixed_case_fixtures_preserve_requirements(tmp_path):

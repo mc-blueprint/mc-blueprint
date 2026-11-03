@@ -5,11 +5,11 @@
   "palettes": {
     "frame": [
       {
-        "block": "minecraft:dark_oak_planks",
+        "block": {"role": "window_frame", "shape": "full", "state": {}},
         "weight": 80
       },
       {
-        "block": "minecraft:stripped_dark_oak_log[axis=y]",
+        "block": {"role": "window_frame", "shape": "full", "state": {"axis": "y"}},
         "weight": 20
       }
     ]
@@ -49,7 +49,7 @@
         0,
         0
       ],
-      "block": "minecraft:dark_oak_stairs[facing=north,half=top]",
+      "block": {"role": "trim", "shape": "stairs", "state": {"facing": "north", "half": "top"}},
       "comment": "窓台"
     },
     {
@@ -59,7 +59,7 @@
         3,
         0
       ],
-      "block": "minecraft:dark_oak_slab[type=bottom]",
+      "block": {"role": "trim", "shape": "slab", "state": {"type": "bottom"}},
       "comment": "庇"
     }
   ]

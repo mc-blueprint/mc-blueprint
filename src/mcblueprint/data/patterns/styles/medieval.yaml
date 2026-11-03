@@ -31,8 +31,9 @@ roles:
   foundation: [stone, brick]
   wall_main: [brick, stone]
   wall_secondary: plaster
-  frame: wood
+  frame: [stone, wood]
   window_frame: wood
   floor: wood
   roof: wood
+  trim: [stone, wood]
   path: [stone, sand]

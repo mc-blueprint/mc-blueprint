@@ -11,6 +11,7 @@ from typing import Any
 import yaml
 
 from mcblueprint.buildspec import ResolveResult
+from mcblueprint.detail import NORMALS, plan_detail
 from mcblueprint.errors import BlueprintError
 from mcblueprint.foundation import STABLE_GROUND
 from mcblueprint.importers import read_terrain
@@ -86,6 +87,7 @@ def _projection(box, origin, axis):
 
 def _plan_contract(root, body, detail, transform, params, layout):
     """Criticが期待構造と面上の開口を照合する座標契約を作る。"""
+    rotation = Transform(transform.rows)
     frame = next(op for op in body if op["element"] == f"{root}.frame")
     frame_ops = frame["operations"]
     columns, beams = [], []
@@ -108,17 +110,17 @@ def _plan_contract(root, body, detail, transform, params, layout):
         bounds = transform.bounds(bounds)
         directions = {"north": Vec3(0, 0, -1), "south": Vec3(0, 0, 1),
                       "west": Vec3(-1, 0, 0), "east": Vec3(1, 0, 0)}
-        face = transform.apply_direction(directions[op["face"]])
+        face = rotation.apply(directions[op["face"]])
         origin = bounds.min
         if face.x < 0 or face.z < 0:
             origin = Vec3(bounds.max.x if face.x < 0 else bounds.min.x, bounds.min.y,
                           bounds.max.z if face.z < 0 else bounds.min.z)
-        axis = transform.apply_direction(Vec3.from_seq(
+        axis = rotation.apply(Vec3.from_seq(
             [1, 0, 0] if op["face"] in ("north", "south") else [0, 0, 1]
         ))
         openings = []
         for opening in detail:
-            if opening.get("face") != op["face"]:
+            if opening.get("face") != op["face"] or opening["type"] not in ("window", "doorway"):
                 continue
             box = transform.bounds(build_operation(opening, root).bounds())
             openings.append({"id": opening["element"], "from": box.min.to_list(),
@@ -161,15 +163,15 @@ def _plan_contract(root, body, detail, transform, params, layout):
                                                            lo.y, (start[1] + end[1]) // 2))
                     if (center.x - segment_center.x) ** 2 + (center.z - segment_center.z) ** 2 < 16:
                         origin = transform.apply(lo)
-                        u_axis = transform.apply_direction(Vec3(dx, 0, dz))
+                        u_axis = rotation.apply(Vec3(dx, 0, dz))
                         openings.append({"id": opening["element"],
                                          "from": opening_box.min.to_list(),
                                          "to": opening_box.max.to_list(),
                                          "projection": _projection(opening_box, origin, u_axis)})
                 facades.append({"id": f"{root}.facade.segment#{index + 1}.floor#{level + 1}",
-                                "normal": transform.apply_direction(normal).to_list(),
+                                "normal": rotation.apply(normal).to_list(),
                                 "origin": transform.apply(lo).to_list(),
-                                "uAxis": transform.apply_direction(Vec3(dx, 0, dz)).to_list(),
+                                "uAxis": rotation.apply(Vec3(dx, 0, dz)).to_list(),
                                 "vAxis": [0, 1, 0],
                                 "from": box.min.to_list(), "to": box.max.to_list(),
                                 "openings": openings})
@@ -439,6 +441,13 @@ def plan_buildspec(resolved: ResolveResult) -> PlanningResult:
             raise BlueprintError("Massing: 塔の半径・形・高さ・階数が不整合です")
         body, detail, entrance, arrivals = _tower(params, root)
         layout = None
+    local_contract = _plan_contract(root, body, detail, Transform.identity(), params, layout)
+    projected_contract = _plan_contract(
+        root, body, detail, Transform.rotation(params["angle"], Vec3(0, 0, 0)), params, layout,
+    )
+    decorations, detail_palettes = plan_detail(
+        params, style, resolved.config, root, body, detail, local_contract, projected_contract,
+    )
     if spec["interior"] == "minimal":
         # 歩行域の上ではなく、壁際の床面を発光させる。
         for level in range(params["floors"]):
@@ -487,6 +496,13 @@ def plan_buildspec(resolved: ResolveResult) -> PlanningResult:
         }
     transform = transform.then(Transform.translation(offset))
     contract = _plan_contract(root, body, detail, transform, params, layout)
+    for item in decorations:
+        item["operation"] = f"/{root}@:{transform.rows}:{transform.offset}/{item['operation']}"
+        facade = next(f for f in contract["facades"] if f["id"] == item["element"])
+        item["face"] = max(NORMALS, key=lambda face: sum(
+            a * b for a, b in zip(NORMALS[face], facade["normal"], strict=True)
+        ))
+    contract["decorations"] = decorations
     entrance = transform.apply(entrance)
     arrivals = [transform.apply(p) for p in arrivals]
     wrapper = {"type": "translate", "offset": offset.to_list(),
@@ -523,7 +539,8 @@ def plan_buildspec(resolved: ResolveResult) -> PlanningResult:
     palette = copy.deepcopy(resolved.config["palette"])
     seed = resolved.config["seed"] if resolved.config["seed"] is not None else spec["seed"]
     blueprint = {"formatVersion": 1, "minecraftVersion": spec["minecraftVersion"],
-                 "name": root, "seed": seed, "operations": [wrapper, *overrides], **terrain_json,
+                 "name": root, "seed": seed, "operations": [wrapper, *overrides],
+                 "palettes": detail_palettes, **terrain_json,
                  "metadata": {"planning": {"element": root, "params": params,
                               "entrance": entrance.to_list(),
                               "arrivals": [p.to_list() for p in arrivals], **contract}}}
@@ -542,5 +559,5 @@ def plan_buildspec(resolved: ResolveResult) -> PlanningResult:
                "entrance": entrance.to_list(), "arrivals": [p.to_list() for p in arrivals],
                "operations": body, **contract}
     detail_json = {"formatVersion": 1, "stage": "detail", "operations": detail,
-                   "overrides": overrides}
+                   "decorations": decorations, "overrides": overrides}
     return PlanningResult(site, massing, detail_json, blueprint, palette, layout, ())
