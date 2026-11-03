@@ -382,7 +382,9 @@ def prepare_input(path: str | Path, *, output: str | Path | None = None,
             raise BlueprintError("既知のMinecraft版と指定値が矛盾しています")
         if scene_path == path:
             scene_path = out.with_name(out.stem + ".view.scene.json.gz")
-        atomic_write(scene_path, original)
+        for entry in scene["sources"]:
+            entry.pop("params", None)
+        atomic_write(scene_path, gzip.compress(_json(scene), mtime=0))
     else:
         if path.suffix.lower() == ".json":
             data = json.loads(original)
