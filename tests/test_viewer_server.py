@@ -2,7 +2,10 @@ import gzip
 import http.client
 import json
 import socket
+import subprocess
+import sys
 import threading
+from pathlib import Path
 
 import pytest
 
@@ -71,6 +74,102 @@ def test_authentication_over_socket(server, headers, status):
             assert request(server, "POST", path, "{}", headers)[0] == status
 
 
+@pytest.mark.parametrize("prefix", ["/%61pi/", "/api%2f", "/%2561pi/", "/api%252f"])
+@pytest.mark.parametrize("endpoint", ["scene", "assets", "events", "edits", "regenerate"])
+def test_encoded_api_requires_authentication(server, monkeypatch, prefix, endpoint):
+    calls = []
+    monkeypatch.setattr(server.prepared, "save_edits", lambda body: calls.append(body) or {})
+    monkeypatch.setattr(server.prepared, "regenerate", lambda: calls.append("regenerate") or {})
+    method = "POST" if endpoint in ("edits", "regenerate") else "GET"
+    path = prefix + endpoint
+    if endpoint == "assets":
+        path += "/1.21.11/assets/minecraft/models/block/stone.json"
+    connection = http.client.HTTPConnection("127.0.0.1", server.server_port, timeout=5)
+    try:
+        connection.request(method, path, body="{}" if method == "POST" else None,
+                           headers={"Content-Type": "application/json"})
+        response = connection.getresponse()
+        assert response.status in (401, 404)
+    finally:
+        connection.close()
+    assert calls == []
+
+
+@pytest.mark.parametrize("path", [
+    "/%ff", "/%", "/%252e%252e/api/scene", "/%2e%2e/api/scene",
+    "/%5capi/scene", "/C%3a/api/scene", "/%2fserver/share", "/#fragment",
+    "http://evil.example/", "/api/scene?query=1",
+])
+def test_invalid_paths_are_not_routed(server, path):
+    for method in ("GET", "POST", "OPTIONS"):
+        assert request(server, method, path, "{}")[0] == 404
+
+
+def test_encoded_routes_with_authentication(server):
+    assert request(server, path="/%61pi/scene")[0] == 200
+    assert request(server, path="/%61ssets/worker-Yfb6Qb8X.js")[0] == 200
+    assert request(server, path="/?editMode=blocks")[0] == 200
+    assert request(server, "POST", "/%61pi/edits", json.dumps(edit(server)))[0] == 200
+    assert request(server, "POST", "/%61pi/regenerate", "{}")[0] == 200
+
+
+@pytest.mark.parametrize("open_browser", [False, True])
+def test_serve_token_output(server, monkeypatch, capsys, open_browser):
+    from mcblueprint import viewer_server
+
+    opened = []
+    monkeypatch.setattr(server, "token", "output-test-token")
+    monkeypatch.setattr(viewer_server, "ViewerServer", lambda *_args: server)
+    monkeypatch.setattr(server, "start", lambda: None)
+    monkeypatch.setattr(server.thread, "is_alive", lambda: False)
+    monkeypatch.setattr(viewer_server.webbrowser, "open", opened.append)
+    viewer_server.serve(server.prepared, server.assets, open_browser=open_browser)
+    captured = capsys.readouterr()
+    assert server.origin in captured.out
+    assert server.token not in captured.out
+    assert opened == ([server.url] if open_browser else [])
+    assert (server.url in captured.err) is (not open_browser)
+
+
+def test_view_stdout_in_command_log(tmp_path):
+    logger = Path.home() / ".codex/scripts/run_logged.py"
+    if not logger.is_file():
+        pytest.skip("規定のコマンド記録スクリプトがない環境")
+    source = tmp_path / "input.json"
+    source.write_text(json.dumps({
+        "formatVersion": 1, "minecraftVersion": "1.21.11", "name": "試験",
+        "operations": [{"type": "set", "position": [0, 0, 0], "block": "minecraft:stone"}],
+    }), encoding="utf-8")
+    script = tmp_path / "view.py"
+    script.write_text('''from pathlib import Path
+from unittest.mock import patch
+from mcblueprint.cli import main
+from mcblueprint import viewer_server
+import sys
+
+def stop(url):
+    raise KeyboardInterrupt
+
+with patch.object(viewer_server.secrets, "token_urlsafe", return_value="audit-test-token"), \\
+     patch.object(viewer_server.webbrowser, "open", stop), \\
+     patch("mcblueprint.assets.ensure_assets", return_value=Path(".")):
+    raise SystemExit(main(["view", sys.argv[1], "-o", sys.argv[2]]))
+''', encoding="utf-8", newline="\n")
+    logs = tmp_path / "logs"
+    command = [sys.executable, str(script), str(source), str(tmp_path / "output")]
+    runner = ("import runpy,sys; "
+              "raise SystemExit(runpy.run_path(sys.argv[1])['run_logged']("
+              "sys.argv[3:], log_dir=sys.argv[2]))")
+    result = subprocess.run([sys.executable, "-c", runner, str(logger), str(logs), *command],
+                            capture_output=True, timeout=30)
+    assert result.returncode == 0, result.stderr.decode(errors="replace")
+    records = [json.loads(line) for path in logs.glob("*.jsonl")
+               for line in path.read_text(encoding="utf-8").splitlines()]
+    stdout = "".join(record["text"] for record in records if record["event"] == "stdout")
+    assert "http://127.0.0.1:" in stdout
+    assert "audit-test-token" not in stdout
+
+
 def test_same_origin_localhost_and_gzip(server):
     port = server.server_port
     status, headers, raw = request(server, headers={"Origin": server.origin})
@@ -93,7 +192,7 @@ def test_same_origin_localhost_and_gzip(server):
     "assets/minecraft/models/%5csecret.json",
 ])
 def test_path_confinement_over_socket(server, path):
-    assert request(server, path="/api/assets/1.21.11/" + path)[0] == 403
+    assert request(server, path="/api/assets/1.21.11/" + path)[0] == 404
 
 
 def test_symlink_escape_over_socket(server, tmp_path):
