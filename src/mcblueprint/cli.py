@@ -495,10 +495,14 @@ def _run_view(args: argparse.Namespace, out: TextIO) -> int:
 def _run_apply_edits(args: argparse.Namespace, out: TextIO) -> int:
     from mcblueprint.viewer_input import apply_input_edits
 
+    overrides = args.set.copy()
+    if args.seed is not None:
+        overrides.append(f"seed={args.seed}")
     notes = []
     try:
         path = apply_input_edits(args.edits, args.spec or args.input, args.scene,
-                                 output=args.output, spec=args.spec is not None, notes=notes)
+                                 output=args.output, spec=args.spec is not None, notes=notes,
+                                 overrides=overrides)
     except (OSError, ValueError) as exc:
         raise BlueprintError(f"apply-edits: {exc}") from exc
     print(f"Wrote {path.as_posix()}", file=out)

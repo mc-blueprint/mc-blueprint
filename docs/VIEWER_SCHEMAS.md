@@ -18,6 +18,12 @@ BuildSpec の住宅・塔では、root とその子要素のセルの source は
 
 ## edits v1
 
+`apply_edits_file(..., overrides=["seed=42", "weathering.age=0"])` はmakeと同じ設定合成を使い、
+BuildSpecの生成時CLI指定と合成設定のhashを照合する。内部sidecarの `cliOverrides` は、
+CLI由来の設定パスから合成後の値への辞書（指定なしは `{}`）。makeとviewer再生成で記録する。
+適用時の指定が省略・変更・追加されていれば相違キーを示して拒否し、記録値は自動採用しない。
+記録がないsidecarはsceneを再生成する。scene v1・edits v1の形式は変更しない。
+
 `scene` は gzip を展開した後の scene JSON のバイト列の SHA-256。現在の生成結果と一致しない場合は競合として適用しない。`edits` は `replace`（領域と置換ブロック）、`delete`（`at` の単一点または `region` の範囲のどちらか一方）、`param`（要素・パラメーター・値）、`note`（要素・文章）のいずれかで、座標は scene ローカル座標。`region` は `[[x1,y1,z1],[x2,y2,z2]]` 形式で両端を含む。
 
 Python API `mcblueprint.edits.apply_edits(scene, edits, source, *, scene_bytes=None, notes=None)` は入力を変更せず、適用候補を返す。`scene_bytes` を渡すと展開済みJSONのSHA-256も照合する。BuildSpecの編集は既存 `planning.plan_buildspec` で検証し、`replace` / `delete` が `structure` または `circulation` の予約Operationのboundsと重なる場合は要素ID・予約種別を示して拒否する。BuildSpec以外は `replace` / `delete` を派生Blueprintの `overrides` にし、元入力を上書きしない。`note` は入力へ書き込まず、成功時に呼出し元の `notes` リストへ `{id, element, text}` を追加する。`apply_edits_file(..., notes=...)` も保存成功後にメモを返す。CLIは対象付きメモを出力し、HTTPの保存・再生成応答は `notes` に含める。元のeditsファイルは残し、noteから生成処理を起動しない。
