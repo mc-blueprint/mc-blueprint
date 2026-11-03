@@ -24,6 +24,8 @@ class BlockInfo:
     family: str | None = None
     shape: str = "full"
     weathering: dict[str, str] = field(default_factory=dict)
+    light: tuple[dict[str, Any], ...] = ()
+    render: str = "model"
 
 
 class BlockData:
@@ -74,6 +76,20 @@ class BlockData:
         if info is None:
             raise BlueprintError(f"Unknown block id: {state.id}")
         return state.with_defaults(info.default)
+
+    def drawing(self, state: BlockState) -> tuple[int, int, str, str, list[float] | None]:
+        """ブロック状態に一致する光・描画属性とtint色を返す。"""
+        info = self._blocks.get(state.id)
+        if info is None:
+            raise BlueprintError(f"Unknown block id: {state.id}")
+        properties = dict(state.properties)
+        matches = [rule for rule in info.light if all(
+            properties.get(key) == value for key, value in rule["when"].items()
+        )]
+        light = (max(matches, key=lambda rule: len(rule["when"])) if matches else
+                 {"emission": 0, "opacity": 15})
+        tint_color = self.tints.get("fixed", {}).get(state.id) if info.tint == "fixed" else None
+        return light["emission"], light["opacity"], info.render, info.tint, tint_color
 
 
 def _data_root() -> Traversable:
@@ -145,6 +161,8 @@ def load_block_data(version: str) -> BlockData:
             family=entry.get("family"),
             shape=entry["shape"],
             weathering=entry.get("weathering", {}),
+            light=tuple(entry.get("light", ())),
+            render=entry.get("render", "model"),
         )
         for block_id, entry in raw["blocks"].items()
     }
