@@ -102,8 +102,12 @@ def iter_components() -> Iterator[tuple[str, Path]]:
         yield name, resolve(name)
 
 
-def load_component(name: str) -> dict[str, Any]:
-    """Read and minimally check a component file; cycle detection included."""
+def load_component(name: str, *, raw: bool = False) -> dict[str, Any]:
+    """部品を読み、循環参照を検査する。rawなら材質解決前の役割参照を保つ。
+
+    版を持たない従来の部品経路は、同梱最古版と所属様式の既定材で解決する。
+    BuildSpecのMaterializeはrawを使い、入力の版・材質指定で解決する。
+    """
     if name in _loading.get():
         chain = " -> ".join((*_loading.get(), name))
         raise BlueprintError(f"Component {name!r} includes itself: {chain}")
@@ -118,6 +122,16 @@ def load_component(name: str) -> dict[str, Any]:
         raise BlueprintError(f"Component {name!r}: unsupported formatVersion")
     if not isinstance(data.get("operations"), list) or not data["operations"]:
         raise BlueprintError(f"Component {name!r}: operations must be a non-empty array")
+    if not raw and MODULE_NAME_PATTERN.fullmatch(name):
+        from mcblueprint.blockdata import supported_versions
+        from mcblueprint.materialize import materialize
+
+        concrete = materialize(
+            {**data, "minecraftVersion": supported_versions()[0]},
+            style=name.split(".")[0],
+        ).blueprint
+        data = {key: value for key, value in concrete.items()
+                if key not in ("minecraftVersion", "seed")}
     return data
 
 

@@ -10,6 +10,8 @@
 
 `decoration.density` と `decoration.depth` は0〜1の強度、`decoration.symmetry` は対称配置を共有する割合です。Detailは様式の密度範囲を `min + density × (max − min)` で選択し、固定モジュールがベイの寸法に合わない場合は基本壁と開口を維持します。
 
+奥行きは役割ごとに様式の層へ写し、`floor(value + 0.5)` で整数化します。外付け材を壁の外へ配置し、必須開口・通路は移動しません。depth=0では任意部品を省略できます。同じ階の部品系列を揃え、対向するベイの選択をsymmetryの割合で共有します。配置後に密度を測り、予約衝突後に不足分を追加する調整はしません。
+
 ```console
 mcblueprint config show --set weathering.age=0.4
 ```

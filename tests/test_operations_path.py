@@ -109,8 +109,11 @@ class TestLights:
             path(edge="cobblestone", lights={"spacing": 4, "component": "medieval.lantern_post"})
         )
         # right of travel (+z): edge at z 2, post base at z 3 one above the surface
+        from mcblueprint.blockdata import load_block_data
+
         for x in (0, 4, 8):
-            assert volume.get(Vec3(x, 1, 3)) == B("stone_bricks")
+            base = load_block_data("1.21.11").get(volume.get(Vec3(x, 1, 3)).id)
+            assert base.shape == "full" and base.material in ("stone", "brick")
             assert volume.get(Vec3(x, 4, 3)) == B("lantern")
         assert volume.get(Vec3(2, 1, 3)) is None
 
