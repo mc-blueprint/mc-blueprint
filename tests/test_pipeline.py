@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 import yaml
 
-from mcblueprint import pipeline
+from mcblueprint import cli, pipeline
 from mcblueprint.cli import main
 from mcblueprint.errors import BlueprintError
 from mcblueprint.importers import read_schematic
@@ -85,6 +85,26 @@ def test_emit_build_and_every_resume_generate_once(tmp_path, monkeypatch, archet
     materialized = json.loads(concrete.read_text(encoding="utf-8"))
     assert materialized["metadata"]["planning"]["element"] == f"{archetype}#1"
     assert materialized["seed"] == 42
+
+
+def test_preview_of_emitted_blueprint_matches_make_volume(tmp_path, monkeypatch):
+    source = spec_file(tmp_path, materials={"wall_main": "minecraft:stone_bricks"},
+                       config={"weathering": {"age": 1, "moss": {"amount": 1},
+                                               "cracks": {"amount": 0}}})
+    result = pipeline.make(source, output=tmp_path / "result.schem", emit=["blueprint"])
+    expected = cells(result.output)
+    captured = []
+
+    def capture(volume, *_args, **_kwargs):
+        captured.extend((pos, state.to_string()) for pos, state in volume
+                        if state.id != "minecraft:air")
+        return []
+
+    monkeypatch.setattr(cli, "write_previews", capture)
+    assert main(["preview", str(tmp_path / "result.blueprint.json"), "--views", "top"]) == 0
+    assert {pos: state.split("[", 1)[0] for pos, state in captured} == {
+        pos: state.split("[", 1)[0] for pos, state in expected.items()
+    }
 
 
 @pytest.mark.parametrize("change", ("payload", "sidecar", "engine", "lock", "parent", "input"))
