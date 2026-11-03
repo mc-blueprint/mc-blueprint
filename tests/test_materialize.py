@@ -100,6 +100,7 @@ def test_fixed_roles_remain_fixed_after_twenty_attempts():
     assert result.diagnostics[0]["code"] == "palette_relation"
     assert result.diagnostics[0]["candidates"] == {"wall_main": 1, "roof": 1}
     assert result.roles["roof"]["full"].id == "minecraft:stone"
+    assert result.fixed_roles == frozenset({"wall_main", "roof"})
 
 
 def test_fixed_id_without_face_colors_is_kept_and_diagnosed():

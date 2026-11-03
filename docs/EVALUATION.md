@@ -1,5 +1,13 @@
 # 建築品質評価
 
+## 生成後のCritic指標
+
+`mcblueprint.critic.evaluate` は型付き計画と `GeneratedRegion` の列を受け、各coreを一度だけ集計する。列・梁は全期待セルが同じownerの`structure`予約かつ`frame`役割を保つrunの割合で判定する。欠損座標はE101とし、消費したcoreに含まれなかった期待セルは`unobserved`理由を付けて失敗にする。外壁も計画した非開口投影セルのcore被覆を確認し、欠損・未観測をE203に分ける。開口は外壁面積の分母から除外する。
+
+`flat_ratio` は各面の(u,y)固定4×4窓で測り、端は存在する投影セルだけを使う。round面は計画のsegmentごとに窓を分け、基準深度からの差を比較する。平坦な窓の比率が0.35を超えるとE201となる。`decoration_density` は計画で装飾対象とされたOperation由来の最終非airセルを外壁100投影面あたりに換算し、様式の0〜1範囲を100倍した区間と比較する。`facade_mix` は面・role内の最大ブロックID占有率で、固定ID roleは除外してE305を警告する。状態違いは同じブロックIDとして数える。
+
+Criticの面要約は計画された投影セル数から常駐量を見積もり、`max_memory_mb` を超える計画を拒否する。全体集計は分子・分母を保持し、局所FAILを全体平均で打ち消さない。既存の`palette_relation`、`support`、`walkability`判定は従来の処理を維持する。
+
 ## 目的と範囲
 
 この評価は Blueprint を出力したモデル、モデルの設定、seed、修正履歴を記録し、同じ課題の結果を追跡・比較するためのもの。課題は [fixed-cases.json](../evaluation/cases/fixed-cases.json)、このリポジトリで取った初期証跡は [baseline.json](../evaluation/records/baseline.json) に置く。既存 examples は構文・Operationの参照資料として使い、評価対象の正解や美観の正本とはみなさない。
