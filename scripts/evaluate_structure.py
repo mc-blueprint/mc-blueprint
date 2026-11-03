@@ -7,6 +7,7 @@ import contextlib
 import hashlib
 import io
 import json
+import re
 import statistics
 import sys
 import tempfile
@@ -35,7 +36,7 @@ METHOD = "structure-detail-v1"
 
 def write_json(path, value):
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(value, ensure_ascii=False, indent=2) + "\n",
+    path.write_text(json.dumps(repository_relative(value), ensure_ascii=False, indent=2) + "\n",
                     encoding="utf-8", newline="\n")
 
 
@@ -45,6 +46,21 @@ def digest(path):
 
 def reference(path):
     return {"path": path.relative_to(ROOT).as_posix(), "sha256": digest(path)}
+
+
+def repository_relative(value):
+    if isinstance(value, str):
+        value = value.replace("\\", "/")
+        value = re.sub(r"(?:[A-Za-z]:)?(?:/[^/]+)*/mc-blueprint/", "", value,
+                       flags=re.IGNORECASE)
+        value = re.sub(r"(?<![A-Za-z0-9])(?:[A-Za-z]:/)(?:[^/\s\"']*/)*([^/\s\"']+)",
+                       r"\1", value)
+        return re.sub(r"(?<![A-Za-z0-9:])/(?:[^/\s\"']*/)*([^/\s\"']+)", r"\1", value)
+    if isinstance(value, list):
+        return [repository_relative(item) for item in value]
+    if isinstance(value, dict):
+        return {key: repository_relative(item) for key, item in value.items()}
+    return value
 
 
 def freeze():
