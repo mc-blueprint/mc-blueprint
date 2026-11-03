@@ -7,6 +7,7 @@ import json
 import mimetypes
 import queue
 import secrets
+import sys
 import threading
 import webbrowser
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -97,7 +98,7 @@ class _Handler(BaseHTTPRequestHandler):
     def _error(self, status: int, message: str):
         self._reply(status, json.dumps({"error": message}, ensure_ascii=False).encode("utf-8"))
 
-    def _guard(self) -> bool:
+    def _guard(self, path: str) -> bool:
         hosts = {f"127.0.0.1:{self.server.server_port}", f"localhost:{self.server.server_port}"}
         host = self.headers.get_all("Host", [])
         origins = self.headers.get_all("Origin", [])
@@ -107,7 +108,7 @@ class _Handler(BaseHTTPRequestHandler):
         if origins and origins != [f"http://{host[0]}"]:
             self._error(403, "Originが許可されていません")
             return False
-        if self.path.startswith("/api/"):
+        if path.startswith("/api/"):
             auth = self.headers.get_all("Authorization", [])
             expected = "Bearer " + self.server.token
             if len(auth) != 1 or not hmac.compare_digest(auth[0].encode(), expected.encode()):
@@ -116,29 +117,32 @@ class _Handler(BaseHTTPRequestHandler):
         return True
 
     def _path(self) -> str | None:
-        parsed = urlsplit(self.path)
-        path = unquote(parsed.path, errors="strict")
+        try:
+            parsed = urlsplit(self.path)
+            path = unquote(parsed.path, errors="strict")
+        except (ValueError, UnicodeError):
+            self._error(404, "パスが許可されていません")
+            return None
         if (parsed.scheme or parsed.netloc or parsed.query or parsed.fragment
                 or not path.startswith("/") or path.startswith("//")
                 or any(c in path for c in ("\\", ":", "%", "\x00"))
                 or any(part in (".", "..", "") for part in path[1:].split("/"))):
-            if path == "/" and not parsed.query:
+            if (path == "/" and not parsed.scheme and not parsed.netloc
+                    and not parsed.fragment):
                 return path
-            self._error(403, "パスが許可されていません")
+            self._error(404, "パスが許可されていません")
             return None
         return path
 
     def do_GET(self):
         try:
-            if not self._guard():
+            path = self._path()
+            if path is None or not self._guard(path):
                 return
             # viewerの表示パラメータは静的入口だけで解釈する。
-            if urlsplit(self.path).path == "/" and not urlsplit(self.path).scheme:
+            if path == "/":
                 raw = self.server.bundle.joinpath("index.html").read_bytes()
                 self._reply(200, raw, "text/html")
-                return
-            path = self._path()
-            if path is None:
                 return
             if path == "/api/scene":
                 with self.server.gate:
@@ -233,10 +237,8 @@ class _Handler(BaseHTTPRequestHandler):
 
     def do_POST(self):
         try:
-            if not self._guard():
-                return
             path = self._path()
-            if path is None:
+            if path is None or not self._guard(path):
                 return
             if path not in ("/api/edits", "/api/regenerate"):
                 self._error(404, "要求先がありません")
@@ -271,18 +273,27 @@ class _Handler(BaseHTTPRequestHandler):
             self._error(500, "入出力に失敗しました")
 
     def do_OPTIONS(self):
-        if self._guard():
+        path = self._path()
+        if path is not None and self._guard(path):
             self._error(405, "OPTIONSは使用できません")
 
 
 def serve(prepared: ViewerInput, assets: Path, *, open_browser: bool = True, out=None) -> None:
-    """URLを表示し、Ctrl+Cまで前景を保持する。終了時はSSEとサーバーを閉じる。"""
+    """安全なURLをoutへ表示し、Ctrl+Cまで前景を保持する。
+
+    token付きURLはブラウザへ渡し、自動起動しない場合だけ標準エラーへ表示する。
+    終了時はSSEとサーバーを閉じる。
+    """
     server = ViewerServer(prepared, assets)
     try:
-        print(server.url, file=out, flush=True)
+        print(server.url.partition("#")[0], file=out, flush=True)
+        print("token付きURLは自動起動したブラウザ、または自動起動無効時の標準エラーで"
+              "確認してください。", file=out, flush=True)
         server.start()
         if open_browser:
             webbrowser.open(server.url)
+        else:
+            print(server.url, file=sys.stderr, flush=True)
         while server.thread.is_alive():
             server.thread.join(timeout=0.25)
     except KeyboardInterrupt:
