@@ -1,0 +1,13 @@
+{
+  "formatVersion": 1,
+  "name": "modern.glazed_bay",
+  "description": "幅 5・高さ 5 のガラス面ベイ。左右に支持柱を配し、窓面を北へ 1 ブロック後退させる",
+  "operations": [
+    {"type": "pillar", "position": [0, 0, 0], "height": 5, "block": "minecraft:quartz_pillar[axis=y]"},
+    {"type": "pillar", "position": [4, 0, 0], "height": 5, "block": "minecraft:quartz_pillar[axis=y]"},
+    {"type": "fill", "from": [1, 0, 0], "to": [3, 4, 0], "block": "minecraft:air"},
+    {"type": "fill", "from": [1, 0, 1], "to": [3, 4, 1], "block": "minecraft:glass"}
+  ],
+  "anchors": {"left": [0, 0, 0], "right": [4, 0, 0], "wall": [2, 0, 0]},
+  "metadata": {"dimensions": [5, 5, 2], "defaultFacing": "north", "connectionFaces": ["south"], "provenance": "独自作成（MIT）"}
+}

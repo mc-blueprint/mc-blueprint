@@ -5,12 +5,28 @@ grid:
   story_height: [4, 5]
 roofs: [gable, hip]
 modules:
+  bay:
+    - medieval.bay_recessed
   window:
     - medieval.window
+  entrance:
+    - medieval.entry_portico
+  cornice:
+    - medieval.stone_cornice
+  roof_edge:
+    - medieval.gable_eave
   gate:
     - medieval.arched_gate
   lantern:
     - medieval.lantern_post
+depth_layers:
+  frame: 1
+  opening: [1, 2]
+  cornice: 2
+decoration:
+  density: [0.2, 0.4]
+  band_course: true
+  cornice: true
 roles:
   foundation: [stone, brick]
   wall_main: [brick, stone]
@@ -19,3 +35,4 @@ roles:
   window_frame: wood
   floor: wood
   roof: wood
+  path: [stone, sand]

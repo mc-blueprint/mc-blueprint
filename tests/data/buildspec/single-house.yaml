@@ -1,0 +1,14 @@
+# 居住できる小規模な住宅を設計する。入口、採光、内部床、雨をしのげる屋根を備える。
+# 外から入口を識別でき、内部へ通り抜けられる
+# 内部に床があり、主要な部屋を外壁で囲む
+# 屋根が主要な居住空間を覆う
+minecraftVersion: "1.21.11"
+archetype: house
+style: medieval
+scale: tiny
+seed: 42
+features:
+  floors: 2
+  floor_height: 4
+  roof: gable
+interior: minimal

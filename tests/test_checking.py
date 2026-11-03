@@ -16,6 +16,23 @@ from mcblueprint.cli import EXIT_OK, EXIT_USAGE_ERROR, EXIT_VALIDATION_ERROR, ma
 from mcblueprint.errors import BlueprintError
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+BUNDLED_MODULES = (
+    "japanese.engawa_bay",
+    "japanese.genkan_entry",
+    "japanese.kawara_eave",
+    "japanese.noki_eave",
+    "medieval.arched_gate",
+    "medieval.bay_recessed",
+    "medieval.entry_portico",
+    "medieval.gable_eave",
+    "medieval.lantern_post",
+    "medieval.stone_cornice",
+    "medieval.window",
+    "modern.flat_cornice",
+    "modern.glazed_bay",
+    "modern.parapet_eave",
+    "modern.recessed_entry",
+)
 
 
 def test_patterns_cli_validates_schemas_and_references(
@@ -282,9 +299,7 @@ class TestComponents:
             "broken",
             "floating",
             "lamp",
-            "arched_gate",
-            "lantern_post",
-            "window",
+            *(name.split(".")[1] for name in BUNDLED_MODULES),
         ]
         assert results[2].path.parent == tree / "components"
 
@@ -318,7 +333,7 @@ class TestCli:
         assert "bad.md (preset)" in out and "broken.json (component)" in out
         assert "ERROR json[0].palettes.wall[0].block" in out
         assert "WARNING [0, 1, 0] minecraft:lantern" in out
-        assert "12 files checked: 4 error(s), 1 warning(s)." in out
+        assert "24 files checked: 4 error(s), 1 warning(s)." in out
         assert "good.md" not in out and "lamp.json" not in out
 
     def test_check_explicit_paths_and_strict(
@@ -355,9 +370,7 @@ class TestCli:
             "broken",
             "floating",
             "lamp",
-            "medieval.arched_gate",
-            "medieval.lantern_post",
-            "medieval.window",
+            *BUNDLED_MODULES,
         }
         assert next(r for r in rows if r["name"] == "lamp")["size"] == [1, 2, 1]
 

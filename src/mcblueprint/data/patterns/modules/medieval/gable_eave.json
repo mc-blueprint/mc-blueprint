@@ -1,0 +1,12 @@
+{
+  "formatVersion": 1,
+  "name": "medieval.gable_eave",
+  "description": "幅 7 の切妻屋根端。北側から見た屋根縁と棟を形成する",
+  "operations": [
+    {"type": "fill", "from": [0, 0, 0], "to": [6, 0, 1], "block": "minecraft:stone_brick_stairs[facing=north]"},
+    {"type": "fill", "from": [1, 1, 0], "to": [5, 1, 1], "block": "minecraft:stone_brick_stairs[facing=north]"},
+    {"type": "fill", "from": [2, 2, 0], "to": [4, 2, 1], "block": "minecraft:stone_brick_stairs[facing=north]"}
+  ],
+  "anchors": {"left": [0, 0, 0], "ridge": [3, 2, 0], "right": [6, 0, 0]},
+  "metadata": {"dimensions": [7, 3, 2], "defaultFacing": "north", "connectionFaces": ["south", "east", "west"], "provenance": "独自作成（MIT）"}
+}

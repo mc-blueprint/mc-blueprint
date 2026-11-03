@@ -20,7 +20,7 @@ def test_patterns_lock_matches_bundled_files() -> None:
     )
     entry = lock["patterns"]
     assert entry["repository"] == "https://github.com/mc-blueprint/mc-blueprint-patterns"
-    assert entry["commit"] == "ce58c1cf0860992f3cd1250d27b7d4fdd01e1760"
+    assert entry["commit"] == "2f3e01b55109e5537a728a7c9869f34701198869"
 
     digest = hashlib.sha256()
     for path in sorted(path for path in PATTERNS_DIR.rglob("*") if path.is_file()):

@@ -1,0 +1,15 @@
+# 複数階を移動でき、各階に床と開口部がある独立した塔を設計する。上部を屋根または胸壁で仕上げる。
+# 地上階から上部まで連続する移動経路がある
+# 各階に利用可能な床面がある
+# 開口部が外壁を貫通し、内部から外を見られる
+minecraftVersion: "1.21.11"
+archetype: tower
+style: medieval
+scale: tiny
+seed: 42
+features:
+  shape: round
+  floors: 3
+  floor_height: 4
+  battlement: true
+interior: minimal

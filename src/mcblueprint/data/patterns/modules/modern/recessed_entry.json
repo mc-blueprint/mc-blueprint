@@ -1,0 +1,14 @@
+{
+  "formatVersion": 1,
+  "name": "modern.recessed_entry",
+  "description": "幅 5 の北向き後退入口。開口を保持し、左右の角柱とフラットな庇で支持する",
+  "operations": [
+    {"type": "pillar", "position": [0, 0, 0], "height": 4, "block": "minecraft:quartz_pillar[axis=y]"},
+    {"type": "pillar", "position": [4, 0, 0], "height": 4, "block": "minecraft:quartz_pillar[axis=y]"},
+    {"type": "fill", "from": [1, 0, 0], "to": [3, 0, 0], "block": "minecraft:stone"},
+    {"type": "fill", "from": [1, 1, 0], "to": [3, 2, 0], "block": "minecraft:air"},
+    {"type": "fill", "from": [0, 3, 0], "to": [4, 3, 2], "block": "minecraft:quartz_slab[type=bottom]"}
+  ],
+  "anchors": {"threshold": [2, 0, 0], "left": [0, 0, 0], "right": [4, 0, 0]},
+  "metadata": {"dimensions": [5, 4, 3], "defaultFacing": "north", "connectionFaces": ["south"], "provenance": "独自作成（MIT）"}
+}

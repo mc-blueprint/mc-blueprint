@@ -1,0 +1,15 @@
+{
+  "formatVersion": 1,
+  "name": "medieval.entry_portico",
+  "description": "幅 5・高さ 5 の石造入口。北向きの開口と両脇の支持柱、浅い庇を備える",
+  "operations": [
+    {"type": "pillar", "position": [0, 0, 0], "height": 5, "block": "minecraft:stone_bricks"},
+    {"type": "pillar", "position": [4, 0, 0], "height": 5, "block": "minecraft:stone_bricks"},
+    {"type": "fill", "from": [1, 0, 0], "to": [3, 3, 0], "block": "minecraft:stone_bricks"},
+    {"type": "fill", "from": [1, 1, 0], "to": [3, 3, 0], "block": "minecraft:air"},
+    {"type": "fill", "from": [1, 1, 1], "to": [3, 3, 1], "block": "minecraft:air"},
+    {"type": "fill", "from": [0, 4, 0], "to": [4, 4, 2], "block": "minecraft:stone_brick_slab[type=bottom]"}
+  ],
+  "anchors": {"threshold": [2, 0, 0], "left": [0, 0, 0], "right": [4, 0, 0]},
+  "metadata": {"dimensions": [5, 5, 3], "defaultFacing": "north", "connectionFaces": ["south"], "provenance": "独自作成（MIT）"}
+}

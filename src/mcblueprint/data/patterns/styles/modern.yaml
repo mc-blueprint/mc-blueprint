@@ -4,10 +4,30 @@ grid:
   bay: [3, 6]
   story_height: [4, 4]
 roofs: [flat]
-modules: {}
+modules:
+  bay:
+    - modern.glazed_bay
+  window:
+    - modern.glazed_bay
+  entrance:
+    - modern.recessed_entry
+  cornice:
+    - modern.flat_cornice
+  roof_edge:
+    - modern.parapet_eave
+depth_layers:
+  frame: 1
+  opening: [1, 2]
+  cornice: 2
+decoration:
+  density: [0.05, 0.2]
+  band_course: false
+  cornice: true
 roles:
+  frame: [concrete, metal]
   wall_main: concrete
   wall_secondary: concrete
+  window_frame: metal
   floor: mineral
   foundation: stone
   roof: mineral
