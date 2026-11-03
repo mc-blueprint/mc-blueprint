@@ -25,7 +25,13 @@
 役割参照入りPaletteは全entryを同じ役割に揃えます。異なる役割、または役割参照と具体ブロックを混在させたPaletteはMaterializeで未対応として拒否します。
 役割参照を持つ入れ子の `component` はMaterialize時に展開し、Paletteの親からの継承・子での上書きと、位置・回転・セル属性を保持します。
 部品の展開は、役割参照の解決や改名対象Paletteの継承に必要なものに限定します。未参照の役割入りPaletteや子での同名上書きだけを理由に、無関係な具体部品を展開しません。必要な展開も平行移動と回転を1段にまとめ、部品1個分の入れ子の深さを保ちます。
-同梱patternsとlockは本機能のためには更新しません。
+現行Dでは同梱モジュールをDetailの固定ベイ・入口・屋根縁として使用します。更新時はpatterns正本の確定commitから `styles/`・`modules/`・`sources.yaml` を無加工で置き換え、lockのcommitとSHA-256を更新します。
+
+patterns#11の役割参照を含む部品は、BuildSpecでは対象版・様式・指定材でMaterializeします。版情報を持たない従来の部品読み込みでは、同梱最古版と部品名の様式の既定材を使います。gatehouse・village_pathの部品材質はこの既定材へ変わりますが、原寸・配置・向きは維持します。
+
+Detailは部品の外付けframe・window_frame・trim・屋根縁を役割ごとに配置し、必須壁・床・機能開口は基本施工を維持します。原寸で収まらない区間は基本施工のままとし、部品の非一様スケールは行いません。round塔は輪郭の同じ基準面を持つ区間だけに固定幅部品を置きます。
+
+内部計画の `decorations` はMassing/Detail JSONと `metadata.planning` に保持します。各要素の `operation` は最終セルの `CellAttributes.operation` と同じID、`element` は `facades[].id`、`face` は回転後の外壁方向です。trim・window_frame・accentの配置だけを明示し、構造frame・床・屋根・機能ガラスを装飾密度へ含めません。
 
 ## 検証
 

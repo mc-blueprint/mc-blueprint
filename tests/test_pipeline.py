@@ -72,8 +72,7 @@ def test_fixed_cases_make_matrix(tmp_path, capsys, version, format, archetype):
     spec = spec_file(tmp_path, archetype, version)
     path = tmp_path / f"result.{format}"
     code = main(["make", str(spec), "--format", format, "-o", str(path)])
-    # Detail装飾が未接続の基準計画は、実測した平坦率で品質不合格になる。
-    assert code == 3, capsys.readouterr().out
+    assert code in (0, 3), capsys.readouterr().out
     assert cells(path)
     expected = {tuple(pos): state for pos, state in cells(path).items()}
     scene_path = path.with_name(f"{path.stem}.scene.json.gz")
@@ -83,11 +82,25 @@ def test_fixed_cases_make_matrix(tmp_path, capsys, version, format, archetype):
     assert scene_meta["sceneSha256"] == hashlib.sha256(scene_bytes).hexdigest()
     assert scene_meta["inputSha256"] == hashlib.sha256(spec.read_bytes()).hexdigest()
     record = json.loads(path.with_suffix(path.suffix + ".run.json").read_text(encoding="utf-8"))
-    assert record["status"] == "failed"
+    # 版ごとの材質候補で配色関係が解けない場合も、外壁品質は独立して検証する。
+    expected_code = 0 if record["metrics"]["palette_relation"]["value"] else 3
+    assert code == expected_code
+    assert record["status"] == ("passed" if expected_code == 0 else "failed")
+    assert all(d["code"] == "palette_relation" for d in record["structuredDiagnostics"]
+               if d["severity"] in ("error", "fail"))
     assert record["metrics"]["column_continuity"]["value"] == 1
     assert record["metrics"]["beam_continuity"]["value"] == 1
-    assert record["metrics"]["decoration_density"]["status"] == "n/a"
-    assert any(d["code"] == "E201" for d in record["structuredDiagnostics"])
+    assert record["metrics"]["decoration_density"]
+    assert "status" not in record["metrics"]["decoration_density"]
+    densities = record["metrics"]["decoration_density"]
+    assert len(densities) == (8 if archetype == "house" else 18)
+    assert all(20 <= item["value"] <= 40 for item in densities.values())
+    assert record["metrics"]["flat_ratio"]["value"] <= 0.35
+    assert record["metrics"]["flat_ratio"]["denominator"] == (16 if archetype == "house" else 27)
+    assert record["metrics"]["facade_surface_missing"]["denominator"] == (
+        212 if archetype == "house" else 273
+    )
+    assert not any(d["code"] in ("E201", "E202") for d in record["structuredDiagnostics"])
     assert not any(d["code"] in ("E101", "E203") for d in record["structuredDiagnostics"])
     assert record["preview"] == "not-run"
     routes = [line for line in record["diagnostics"] if "walkability=" in line]
@@ -195,7 +208,8 @@ def test_seed_variation_fixed_ids_and_region_invariance(tmp_path):
     fixed = {"wall_main": "minecraft:stone_bricks", "frame": "minecraft:oak_log",
              "roof": "minecraft:oak_planks", "floor": "minecraft:oak_planks"}
     source = spec_file(tmp_path, materials=fixed,
-                       config={"weathering": {"age": 0, "moss": {"amount": 0},
+                       config={"decoration": {"depth": 0},
+                               "weathering": {"age": 0, "moss": {"amount": 0},
                                                "cracks": {"amount": 0}}})
     a = pipeline.make(source, output=tmp_path / "a.schem")
     b = pipeline.make(source, output=tmp_path / "b.schem", overrides=["seed=73"])
@@ -210,7 +224,7 @@ def test_core_16_32_64_produce_identical_cells(tmp_path):
             source, output=tmp_path / f"core-{core}.schem",
             overrides=[f"limits.region=[{core},{core},{core}]", "limits.halo=0"],
         )
-        assert result.code == 3
+        assert result.code == 0
         outputs.append(cells(result.output))
     assert outputs[0] == outputs[1] == outputs[2]
 
@@ -225,7 +239,7 @@ def test_cli_error_codes_and_existing_output(tmp_path, capsys):
     assert main(["make", str(source), "--set", "limits.max_memory_mb=0"]) == 1
     output = tmp_path / "keep.schem"
     output.write_bytes(b"existing")
-    source = spec_file(tmp_path, overrides=[{
+    source = spec_file(tmp_path, config={"decoration": {"depth": 0}}, overrides=[{
         "id": "break", "at": [1, 0, 1], "block": "air",
     }])
     assert main(["make", str(source), "-o", str(output)]) == 1
@@ -378,6 +392,7 @@ def test_measured_success_and_warning_only(tmp_path, monkeypatch, fixed):
         cells = tuple(c for c in facade.cells if c.v == 0 and not c.opening and c.u < 4)
         selected.extend(cells)
         return replace(plan, facades=(replace(facade, cells=cells),),
+                       decoration_operations={},
                        fixed_roles=frozenset({"wall_main"}) if fixed else frozenset())
 
     def sculpted(*args, **kwargs):
@@ -461,6 +476,23 @@ def test_plan_conversion_invariants(tmp_path, archetype, shape, angle):
     assert record["metrics"]["beam_continuity"]["value"] == 1
     assert record["metrics"]["facade_surface_missing"]["value"] == 0
     assert record["metrics"]["flat_ratio"]["denominator"] > 0
+
+
+@pytest.mark.parametrize("archetype", ("house", "tower"))
+@pytest.mark.parametrize("angle", (90, 180, 270))
+def test_rotated_fixed_cases_preserve_local_quality(tmp_path, archetype, angle):
+    source = spec_file(tmp_path, archetype, elements={f"{archetype}#1": {"angle": angle}})
+    result = pipeline.make(source, output=tmp_path / "rotated.schem")
+    record = json.loads(result.record.read_text(encoding="utf-8"))
+    failures = [d for d in record["structuredDiagnostics"] if d["severity"] in ("fail", "error")]
+    assert result.code == 0, failures
+    assert not any(d["code"] in ("E201", "E202") for d in record["structuredDiagnostics"])
+    assert record["metrics"]["flat_ratio"]["value"] <= 0.35
+    assert record["metrics"]["column_continuity"]["value"] == 1
+    assert record["metrics"]["facade_surface_missing"]["value"] == 0
+    densities = record["metrics"]["decoration_density"]
+    assert len(densities) == (8 if archetype == "house" else 18)
+    assert all(20 <= value["value"] <= 40 for value in densities.values())
 
 
 def test_structured_repair_paths_resolve(tmp_path):

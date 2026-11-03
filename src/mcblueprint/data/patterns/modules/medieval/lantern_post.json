@@ -10,7 +10,7 @@
         0,
         0
       ],
-      "block": "minecraft:stone_bricks"
+      "block": {"role": "foundation", "shape": "full", "state": {}}
     },
     {
       "type": "fill",
@@ -24,7 +24,7 @@
         2,
         0
       ],
-      "block": "minecraft:oak_fence"
+      "block": {"role": "frame", "shape": "fence", "state": {}}
     },
     {
       "type": "set",

@@ -3,9 +3,9 @@
   "name": "japanese.kawara_eave",
   "description": "幅 7 の瓦屋根端。棟から両側へ下がる切妻縁",
   "operations": [
-    {"type": "fill", "from": [0, 0, 0], "to": [6, 0, 1], "block": "minecraft:deepslate_tile_stairs[facing=north]"},
-    {"type": "fill", "from": [1, 1, 0], "to": [5, 1, 1], "block": "minecraft:deepslate_tile_stairs[facing=north]"},
-    {"type": "fill", "from": [2, 2, 0], "to": [4, 2, 1], "block": "minecraft:deepslate_tile_stairs[facing=north]"}
+    {"type": "fill", "from": [0, 0, 0], "to": [6, 0, 1], "block": {"role": "roof", "shape": "stairs", "state": {"facing": "north"}}},
+    {"type": "fill", "from": [1, 1, 0], "to": [5, 1, 1], "block": {"role": "roof", "shape": "stairs", "state": {"facing": "north"}}},
+    {"type": "fill", "from": [2, 2, 0], "to": [4, 2, 1], "block": {"role": "roof", "shape": "stairs", "state": {"facing": "north"}}}
   ],
   "anchors": {"left": [0, 0, 0], "ridge": [3, 2, 0], "right": [6, 0, 0]},
   "metadata": {"dimensions": [7, 3, 2], "defaultFacing": "north", "connectionFaces": ["south", "east", "west"], "provenance": "独自作成（MIT）"}

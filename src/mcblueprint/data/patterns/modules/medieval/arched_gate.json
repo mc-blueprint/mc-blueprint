@@ -14,8 +14,8 @@
       "width": 3,
       "height": 4,
       "style": "round",
-      "block": "minecraft:stone_bricks",
-      "trim": "minecraft:stone_brick_stairs",
+      "block": {"role": "wall_main", "shape": "full", "state": {}},
+      "trim": {"role": "trim", "shape": "stairs", "state": {}},
       "comment": "通路（アーチの下）を空けて縁取る"
     },
     {
@@ -26,8 +26,8 @@
         0
       ],
       "height": 4,
-      "block": "minecraft:stone_bricks",
-      "base": "minecraft:chiseled_stone_bricks"
+      "block": {"role": "frame", "shape": "full", "state": {}},
+      "base": {"role": "foundation", "shape": "full", "state": {}}
     },
     {
       "type": "pillar",
@@ -37,8 +37,8 @@
         0
       ],
       "height": 4,
-      "block": "minecraft:stone_bricks",
-      "base": "minecraft:chiseled_stone_bricks"
+      "block": {"role": "frame", "shape": "full", "state": {}},
+      "base": {"role": "foundation", "shape": "full", "state": {}}
     },
     {
       "type": "set",
@@ -47,7 +47,7 @@
         5,
         0
       ],
-      "block": "minecraft:stone_brick_slab[type=bottom]",
+      "block": {"role": "trim", "shape": "slab", "state": {"type": "bottom"}},
       "comment": "要石"
     }
   ]
