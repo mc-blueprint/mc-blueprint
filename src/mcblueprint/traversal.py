@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from typing import Literal
 
 from mcblueprint import blockdata
+from mcblueprint.errors import BlueprintError
 from mcblueprint.model.block import BlockState
 from mcblueprint.model.vec import AABB, Vec3
 from mcblueprint.operations.building import BuildingLayout
@@ -67,8 +68,9 @@ class TraversalResult:
 
 
 class _Walker:
-    def __init__(self, volume: BlockVolume, minecraft_version: str) -> None:
+    def __init__(self, volume: BlockVolume, minecraft_version: str, max_nodes: int | None = None):
         self.volume = volume
+        self.max_nodes = max_nodes
         self.blocks = blockdata.load_block_data(minecraft_version)
         bounds = volume.bounds()
         self.bounds = AABB(bounds.min + UP, bounds.max + UP) if bounds is not None else None
@@ -165,6 +167,10 @@ class _Walker:
         issues: set[TraversalIssue] = set()
         stairs_issues: set[TraversalIssue] = set()
         while queue:
+            if self.max_nodes is not None and (
+                len(previous) + len(issues) + len(stairs_issues) > self.max_nodes
+            ):
+                raise BlueprintError("traversalの探索状態が limits.max_memory_mb に収まりません")
             current = queue.popleft()
             if current == end:
                 path = []
@@ -219,14 +225,16 @@ class _Walker:
 
 def check_route(
     volume: BlockVolume, start: Vec3, end: Vec3, minecraft_version: str,
+    *, max_nodes: int | None = None,
 ) -> TraversalResult:
     """立位の足元セル間の歩行と直進階段を検査する。volume は変更しない。
 
     通常の木・銅ドアは開閉可能とみなす。未知形状・半slab等は通行可能と推測しない。
     足場なし・頭上2セルの障害・階段方向の不一致はblocked。未知形状が探索境界に
     残り既知経路が見つからなければunsupported。未対応版はBlueprintError。
+    max_nodes指定時は探索・境界状態の件数を制限し、超過はBlueprintError。
     """
-    return _Walker(volume, minecraft_version).route(start, end)
+    return _Walker(volume, minecraft_version, max_nodes=max_nodes).route(start, end)
 
 
 def check_building(

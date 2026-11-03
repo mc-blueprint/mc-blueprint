@@ -3,6 +3,8 @@
 Codex、Claude Code などのコーディングエージェントから mc-blueprint を使って Minecraft の建築を生成する手順。
 エージェントに依存しない共通の流れをここに書き、各エージェント固有の設定は Skill / 設定ファイルに置く。
 
+住宅・塔は [BuildSpecの手順](#buildspecから住宅塔を生成する) で短いYAMLから生成できます。
+
 ## 役割分担
 
 ```text
@@ -178,3 +180,21 @@ Gemini CLI、Cursor、ローカル LLM などでも、次を守れば同じ Core
 ## 明示対象の通行検査
 
 `mcblueprint traverse FILE --building INDEX` でトップレベルbuildingの入口・各階到着点を、`--start X Y Z --end X Y Z` で足元セル間を検査できる。通常validateと別の限定モデルであり、未知形状はunsupportedとなる。ネストされたbuildingは変換後の明示座標で指定する。対応条件・結果・終了コードは [TRAVERSAL.md](TRAVERSAL.md) を参照。
+## BuildSpecから住宅・塔を生成する
+
+住宅・塔は `mcblueprint archetypes` で対応語彙を確認し、
+`mcblueprint spec-template house --minecraft-version 26.3` の出力をYAMLへ保存して編集します。
+`mcblueprint make house.yaml --emit blueprint` で生成・最小評価・単一出力まで実行できます。
+塔は `tower` を選びます。低レベルの仕様は `mcblueprint help operations`、
+材質や再開は `mcblueprint help materials` / `mcblueprint help resume` で参照できます。
+
+診断は入力パスと要素IDを含む1行です。終了コードは合格0、入力・構造違反1、引数・I/O・
+資源不足2、評価不合格3です。3でも成果物とfailed状態のrun記録を残します。
+未実装の指標は `not-implemented` と表示します。3D表示は未実行で、画像やブラウザは開きません。
+3回試行した、同じ診断が2回続けて改善しない、unsupportedだけが残った場合は止めて利用者へ報告します。
+
+細部を直す場合はemitしたBlueprintを `validate`・`build` で扱います。生成metadataを保つと、
+同じ混色・Weather設定でmakeの配置を再現します。途中からは元のYAMLを指定したまま
+`make house.yaml --resume output/house.detail.json` を実行します。
+入力・合成設定・engine・データが変わった中間出力は再開できません。
+詳細は [BUILDSPEC.md](BUILDSPEC.md) を参照してください。

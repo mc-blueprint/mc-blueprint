@@ -35,6 +35,23 @@ def test_zero_settings_preserve_blocks_even_with_randomness():
     assert tuple(region.volume) == before
 
 
+@pytest.mark.parametrize("ground", ("stone_bricks", "dirt"))
+def test_ground_plants_obey_support_rules(ground):
+    from mcblueprint.support import check_support
+
+    bounds = AABB(Vec3(0, 0, 0), Vec3(4, 2, 4))
+    volume = RegionVolume(bounds)
+    for x in range(5):
+        for z in range(5):
+            volume.set(Vec3(x, 0, z), BlockState.of(ground))
+    apply_weather(GeneratedRegion(bounds, volume), load_block_data("1.21.11"),
+                  seed=42, config={"age": 1, "vegetation": 1}, ground_height=0)
+    assert not check_support(volume)
+    plants = [state for _, state in volume if state.id in
+              ("minecraft:short_grass", "minecraft:fern")]
+    assert bool(plants) == (ground == "dirt")
+
+
 def test_weathering_transition_changes_only_the_core_cell():
     region = region_with_block("stone_bricks")
 

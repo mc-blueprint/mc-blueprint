@@ -325,6 +325,22 @@ def build_parser() -> argparse.ArgumentParser:
     config_subparsers = config_parser.add_subparsers(dest="config_command", required=True)
     config_show = config_subparsers.add_parser("show", help="合成済み設定と値の出所を表示")
     config_show.add_argument("--set", action="append", default=[], metavar="KEY=VALUE")
+    make_parser = subparsers.add_parser("make", help="BuildSpecから生成・評価・出力する")
+    make_parser.add_argument("spec", type=Path)
+    make_parser.add_argument("-o", "--output", help="出力先ファイルまたはディレクトリ")
+    make_parser.add_argument("--format", choices=tuple(EXPORTERS))
+    make_parser.add_argument("--seed", type=int)
+    make_parser.add_argument("--set", action="append", default=[], metavar="KEY=VALUE")
+    make_parser.add_argument("--emit", action="append",
+                             choices=("resolve", "site", "massing", "detail", "blueprint"))
+    make_parser.add_argument("--resume", type=Path, help="検証付き中間ファイルから再開")
+    subparsers.add_parser("archetypes", help="対応アーキタイプを1行1件で表示")
+    template = subparsers.add_parser("spec-template", help="コメント付きBuildSpec雛形")
+    template.add_argument("archetype", choices=("house", "tower"))
+    template.add_argument("--minecraft-version", required=True,
+                          choices=blockdata.supported_versions())
+    help_parser = subparsers.add_parser("help", help="必要な仕様の参照先を表示")
+    help_parser.add_argument("topic", choices=("buildspec", "operations", "materials", "resume"))
     return parser
 
 
@@ -379,6 +395,10 @@ def main(argv: Sequence[str] | None = None) -> int:
         "components": _run_components,
         "design": _run_design,
         "config": _run_config,
+        "make": _run_make,
+        "archetypes": _run_archetypes,
+        "spec-template": _run_spec_template,
+        "help": _run_help,
     }
     try:
         paths = components.default_search_paths(getattr(args, "blueprint", None))
@@ -402,6 +422,80 @@ def _run_config(args: argparse.Namespace, out: TextIO) -> int:
         ),
         file=out,
     )
+    return EXIT_OK
+
+
+def _run_make(args: argparse.Namespace, out: TextIO) -> int:
+    from mcblueprint.pipeline import PipelineError, make
+
+    overrides = args.set.copy()
+    if args.format is not None:
+        overrides.append(f"output.format={args.format}")
+    if args.seed is not None:
+        overrides.append(f"seed={args.seed}")
+    try:
+        result = make(args.spec, output=args.output, emit=args.emit, resume=args.resume,
+                      overrides=overrides)
+    except PipelineError as exc:
+        print(f"FAIL {exc} {args.spec}", file=out)
+        return exc.code
+    for line in result.diagnostics:
+        print(line, file=out)
+    print(f"Wrote {result.output.as_posix()}", file=out)
+    print(f"Run {result.record.as_posix()}", file=out)
+    return result.code
+
+
+def _run_archetypes(args: argparse.Namespace, out: TextIO) -> int:
+    print("house 住宅（1〜2階、gable/hip、最小内装）", file=out)
+    print("tower 塔（round/square、階段・各階床・胸壁）", file=out)
+    return EXIT_OK
+
+
+def _run_spec_template(args: argparse.Namespace, out: TextIO) -> int:
+    features = ("  floors: 2\n  floor_height: 4\n  roof: gable" if args.archetype == "house"
+                else "  shape: round\n  floors: 3\n  floor_height: 4\n  battlement: true")
+    print(f'''# 対象版を明示し、敷地は軒・胸壁を含む上限にする。
+formatVersion: 1
+minecraftVersion: "{args.minecraft_version}"
+archetype: {args.archetype}
+# medieval / japanese / modern
+style: medieval
+# tiny / small / medium / large / huge。size指定が優先。
+scale: small
+# size: [32, 32, 32]
+seed: 42
+site:
+  terrain: none
+  biome: plains
+features:
+{features}
+# none / minimal。furnishedはDで対応。
+interior: minimal
+# 材質名または固定ブロックIDで指定する。
+# materials:
+#   wall_main: minecraft:stone_bricks
+#   frame: minecraft:oak_log
+# 既知ルートIDのパラメータだけ編集できる。
+# elements:
+#   {args.archetype}#1:
+#     angle: 90
+# config:
+#   weathering:
+#     age: 0.4''', file=out)
+    return EXIT_OK
+
+
+def _run_help(args: argparse.Namespace, out: TextIO) -> int:
+    topics = {
+        "buildspec": ("docs/BUILDSPEC.md", "語彙・寸法・要素編集"),
+        "operations": ("docs/OPERATIONS.md", "Operation一覧・引数・組合せ"),
+        "materials": ("docs/OPERATIONS.md#materialize-前の役割入力", "材質・配色"),
+        "resume": ("docs/BUILDSPEC.md#中間出力と再開", "hash・engine・データ検証"),
+    }
+    path, description = topics[args.topic]
+    print(description, file=out)
+    print("https://github.com/mc-blueprint/mc-blueprint/blob/develop/" + path, file=out)
     return EXIT_OK
 
 
@@ -494,10 +588,30 @@ def _load_validated(
 
 
 def _run_build(args: argparse.Namespace, out: TextIO) -> int:
+    data = _read_blueprint(args)
+    metadata = data.get("metadata")
+    generation = metadata.get("generation") if isinstance(metadata, dict) else None
+    if isinstance(generation, dict) and generation.get("mode") == "buildspec-v1":
+        from mcblueprint.pipeline import export_generated_blueprint
+
+        blueprint = _load_validated(args, out, data=data)
+        if blueprint is None:
+            return EXIT_VALIDATION_ERROR
+        if args.region_size is not None:
+            raise BlueprintError("make由来Blueprintのbuildは単一出力に対応します")
+        path = resolve_output_path(args.output, args.blueprint, EXPORTERS[args.format].extension)
+        count, first = export_generated_blueprint(blueprint, path, format=args.format,
+                                                 seed=args.seed, strict=args.strict)
+        if count:
+            print(f"WARNING support={count} {first}", file=out)
+            if args.strict:
+                print("Not written because of warnings (--strict).", file=out)
+                return EXIT_VALIDATION_ERROR
+        print(f"Wrote {path.as_posix()}", file=out)
+        return EXIT_OK
     if args.region_size is not None and any(value <= 0 for value in args.region_size):
         raise BlueprintError("分割寸法は各軸とも正整数にしてください")
     input_hash = None
-    data = None
     if args.region_size is not None:
         try:
             raw = args.blueprint.read_bytes()
