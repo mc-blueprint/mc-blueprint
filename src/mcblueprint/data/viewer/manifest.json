@@ -1,0 +1,26 @@
+{
+  "source": "mc-blueprint/viewer",
+  "commit": "7b2e0f44bc53780499fb500d1fd6c1d5b52039c1",
+  "files": [
+    {
+      "path": "assets/index-BFhRTilM.css",
+      "sha256": "93251f69185c3b433d84a7663acefe49143c6a266cbf4488f4b28f8e6f8c28ad"
+    },
+    {
+      "path": "assets/index-u8M9rc8l.js",
+      "sha256": "344db8ed0a44b0e1617632e025c55146d6c36c92de795da928f090212be05d35"
+    },
+    {
+      "path": "assets/worker-Yfb6Qb8X.js",
+      "sha256": "0e3fe43dccb1bfec9834568ae1ad8cc77d999adbb23a4ec03744248f250a6709"
+    },
+    {
+      "path": "index.html",
+      "sha256": "5440749164c7781eb67ea89ccdabeb8f5eb1981d1ec4bf7b4a3505a5bfeaf186"
+    },
+    {
+      "path": "THIRD_PARTY_LICENSES.txt",
+      "sha256": "e90d7e904f4ded1dbd2ee44295d6e9935e667eaef6adcec9016699278d1f6bdc"
+    }
+  ]
+}
