@@ -518,8 +518,6 @@ def _run_config(args: argparse.Namespace, out: TextIO) -> int:
 
 
 def _run_make(args: argparse.Namespace, out: TextIO) -> int:
-    from mcblueprint.buildspec import resolve_buildspec
-    from mcblueprint.output_lock import lock_paths
     from mcblueprint.pipeline import PipelineError, make, preview_make
 
     overrides = args.set.copy()
@@ -528,14 +526,8 @@ def _run_make(args: argparse.Namespace, out: TextIO) -> int:
     if args.seed is not None:
         overrides.append(f"seed={args.seed}")
     try:
-        resolved = resolve_buildspec(args.spec, overrides=overrides)
-        fmt = resolved.config["output"]["format"]
-        target = Path(args.output or resolved.config["output"]["directory"])
-        if target.suffix != EXPORTERS[fmt].extension:
-            target /= Path(args.spec).stem + EXPORTERS[fmt].extension
-        with lock_paths(Path(args.spec), target):
-            result = make(args.spec, output=args.output, emit=args.emit, resume=args.resume,
-                          overrides=overrides)
+        result = make(args.spec, output=args.output, emit=args.emit, resume=args.resume,
+                      overrides=overrides)
     except PipelineError as exc:
         print(f"FAIL {exc} {args.spec}", file=out)
         return exc.code
