@@ -17,6 +17,7 @@ from mcblueprint.importers import read_terrain
 from mcblueprint.model import AABB, Vec3
 from mcblueprint.operations.building import BuildingFace, BuildingLayout
 from mcblueprint.operations.registry import build_operation
+from mcblueprint.operations.shapes import disc_offsets
 from mcblueprint.operations.transform import Transform
 
 
@@ -55,6 +56,124 @@ def _tag(op, element, role, source, *, reserved=None, face=None):
 def _bounds(operations):
     boxes = [build_operation(op, "planning").bounds() for op in operations]
     return AABB.from_points([point for box in boxes for point in (box.min, box.max)])
+
+
+def _grid_positions(length, spacing):
+    positions = list(range(0, length, spacing))
+    if positions[-1] != length - 1:
+        positions.append(length - 1)
+    return positions
+
+
+def _column_clear(x, z, height, operations, root):
+    for op in operations:
+        if not (op.get("reserved") == "circulation"
+                or op["element"].endswith((".light#1", ".threshold"))
+                or op["type"] in ("window", "doorway")):
+            continue
+        box = build_operation(op, root).bounds()
+        if box.min.x <= x <= box.max.x and box.min.z <= z <= box.max.z and box.min.y <= height:
+            return False
+    return True
+
+
+def _projection(box, origin, axis):
+    values = [((x - origin.x) * axis.x + (z - origin.z) * axis.z)
+              for x in (box.min.x, box.max.x) for z in (box.min.z, box.max.z)]
+    return {"u": [min(values), max(values)],
+            "v": [box.min.y - origin.y, box.max.y - origin.y]}
+
+
+def _plan_contract(root, body, detail, transform, params, layout):
+    """Criticが期待構造と面上の開口を照合する座標契約を作る。"""
+    frame = next(op for op in body if op["element"] == f"{root}.frame")
+    frame_ops = frame["operations"]
+    columns, beams = [], []
+    for index, op in enumerate(frame_ops):
+        if op["type"] == "fill" and op["from"][0] == op["to"][0] and op["from"][2] == op["to"][2]:
+            start = transform.apply(Vec3.from_seq(op["from"]))
+            end = transform.apply(Vec3.from_seq(op["to"]))
+            columns.append({"id": f"{root}.column#{index + 1}",
+                            "from": start.to_list(), "to": end.to_list()})
+        else:
+            bounds = transform.bounds(build_operation(op, root).bounds())
+            beams.append({"id": f"{root}.beam#{len(beams) + 1}",
+                          "y": bounds.min.y, "from": bounds.min.to_list(),
+                          "to": bounds.max.to_list()})
+    facades = []
+    for op in body:
+        if "face" not in op:
+            continue
+        bounds = build_operation(op, root).bounds()
+        bounds = transform.bounds(bounds)
+        directions = {"north": Vec3(0, 0, -1), "south": Vec3(0, 0, 1),
+                      "west": Vec3(-1, 0, 0), "east": Vec3(1, 0, 0)}
+        face = transform.apply_direction(directions[op["face"]])
+        origin = bounds.min
+        if face.x < 0 or face.z < 0:
+            origin = Vec3(bounds.max.x if face.x < 0 else bounds.min.x, bounds.min.y,
+                          bounds.max.z if face.z < 0 else bounds.min.z)
+        axis = transform.apply_direction(Vec3.from_seq(
+            [1, 0, 0] if op["face"] in ("north", "south") else [0, 0, 1]
+        ))
+        openings = []
+        for opening in detail:
+            if opening.get("face") != op["face"]:
+                continue
+            box = transform.bounds(build_operation(opening, root).bounds())
+            openings.append({"id": opening["element"], "from": box.min.to_list(),
+                             "to": box.max.to_list(), "projection": _projection(box, origin, axis)})
+        facades.append({"id": op["element"], "normal": face.to_list(),
+                        "origin": origin.to_list(), "uAxis": axis.to_list(),
+                        "vAxis": [0, 1, 0], "from": bounds.min.to_list(),
+                        "to": bounds.max.to_list(), "openings": openings})
+    if not layout:
+        points = sorted({(op["from"][0], op["from"][2]) for op in frame_ops
+                         if op["type"] == "fill" and op["from"][0] == op["to"][0]
+                         and op["from"][2] == op["to"][2]},
+                        key=lambda p: math.atan2(p[1], p[0]))
+        for index, start in enumerate(points):
+            end = points[(index + 1) % len(points)]
+            dx, dz = end[0] - start[0], end[1] - start[1]
+            if params["shape"] == "round":
+                nx, nz = start[0] + end[0], start[1] + end[1]
+                scale = max(1, math.gcd(abs(nx), abs(nz)))
+                normal = Vec3(nx // scale, 0, nz // scale)
+            elif dx:
+                normal = Vec3(0, 0, 1 if (start[0] + end[0]) // 2 > 0 else -1)
+            else:
+                normal = Vec3(1 if (start[1] + end[1]) // 2 > 0 else -1, 0, 0)
+            for level in range(params["floors"]):
+                lo = Vec3(start[0], level * params["floor_height"] + 1, start[1])
+                hi = Vec3(end[0], min((level + 1) * params["floor_height"],
+                                      params["height"]), end[1])
+                local_box = AABB.of(lo, hi)
+                box = transform.bounds(local_box)
+                openings = []
+                for opening in detail:
+                    if opening["type"] not in ("window", "doorway"):
+                        continue
+                    opening_box = transform.bounds(build_operation(opening, root).bounds())
+                    center = Vec3((opening_box.min.x + opening_box.max.x) // 2,
+                                  (opening_box.min.y + opening_box.max.y) // 2,
+                                  (opening_box.min.z + opening_box.max.z) // 2)
+                    segment_center = transform.apply(Vec3((start[0] + end[0]) // 2,
+                                                           lo.y, (start[1] + end[1]) // 2))
+                    if (center.x - segment_center.x) ** 2 + (center.z - segment_center.z) ** 2 < 16:
+                        origin = transform.apply(lo)
+                        u_axis = transform.apply_direction(Vec3(dx, 0, dz))
+                        openings.append({"id": opening["element"],
+                                         "from": opening_box.min.to_list(),
+                                         "to": opening_box.max.to_list(),
+                                         "projection": _projection(opening_box, origin, u_axis)})
+                facades.append({"id": f"{root}.facade.segment#{index + 1}.floor#{level + 1}",
+                                "normal": transform.apply_direction(normal).to_list(),
+                                "origin": transform.apply(lo).to_list(),
+                                "uAxis": transform.apply_direction(Vec3(dx, 0, dz)).to_list(),
+                                "vAxis": [0, 1, 0],
+                                "from": box.min.to_list(), "to": box.max.to_list(),
+                                "openings": openings})
+    return {"columns": columns, "beams": beams, "facades": facades}
 
 
 def _house(params, root):
@@ -104,16 +223,6 @@ def _house(params, root):
     else:
         roof["style"] = params["roof"]
     body.append(_tag(roof, f"{root}.roof", "roof", "features.roof"))
-    frames = []
-    for x, z in ((0, 0), (w - 1, 0), (0, d - 1), (w - 1, d - 1)):
-        frames.append({"type": "fill", "from": [x, 0, z], "to": [x, n * h, z],
-                       "block": _ref("frame")})
-    for y in range(h, n * h + 1, h):
-        frames.append({"type": "wall", "from": [0, y, 0], "to": [w - 1, y, d - 1],
-                       "height": 1, "block": _ref("frame")})
-    body.append(_tag({"type": "translate", "offset": [0, 0, 0], "operations": frames},
-                     f"{root}.frame", "frame", "style.grid", reserved="structure"))
-    door_x = (w - 1) // 2
     arrivals = building.layout.arrivals
     for level, point in enumerate(arrivals):
         detail.append(_tag(
@@ -126,6 +235,38 @@ def _house(params, root):
             f"{root}.stairs" if level else f"{root}.entry", "floor", "features.floors",
             reserved="circulation",
         ))
+    frames = []
+    xs, zs = _grid_positions(w, 4), _grid_positions(d, 4)
+    perimeter = [(x, z) for x, z in ((x, 0) for x in xs)]
+    perimeter += [(x, d - 1) for x in xs]
+    perimeter += [(0, z) for z in zs[1:-1]]
+    perimeter += [(w - 1, z) for z in zs[1:-1]]
+    clear_ops = detail + [op for op in body if op.get("reserved") == "circulation"
+                          or op["element"].endswith((".light#1", ".threshold"))]
+    for x, z in perimeter:
+        candidates = [(x, z)]
+        if z == 0 and x not in (0, w - 1):
+            candidates = [(x + dx, 1) for dx in (0, 1, -1, 2, -2)
+                          if 0 < x + dx < w - 1]
+        elif z == d - 1 and x not in (0, w - 1):
+            candidates = [(x + dx, d - 2) for dx in (0, 1, -1, 2, -2)
+                          if 0 < x + dx < w - 1]
+        elif x == 0 and z not in (0, d - 1):
+            candidates = [(-1, z)]
+        elif x == w - 1 and z not in (0, d - 1):
+            candidates = [(w, z)]
+        point = next(((cx, cz) for cx, cz in candidates
+                      if _column_clear(cx, cz, n * h, clear_ops, root)), None)
+        if point:
+            frames.append({"type": "fill", "from": [point[0], 0, point[1]],
+                           "to": [point[0], n * h, point[1]],
+                           "block": _ref("frame")})
+    for y in range(h, n * h + 1, h):
+        frames.append({"type": "wall", "from": [0, y, 0], "to": [w - 1, y, d - 1],
+                       "height": 1, "block": _ref("frame")})
+    body.append(_tag({"type": "translate", "offset": [0, 0, 0], "operations": frames},
+                     f"{root}.frame", "frame", "style.grid", reserved="structure"))
+    door_x = (w - 1) // 2
     body.append(_tag({"type": "floor", "from": [door_x, 0, -1],
                       "to": [door_x, 0, -1], "block": _ref("floor")},
                      f"{root}.threshold", "floor", "site"))
@@ -177,25 +318,6 @@ def _tower(params, root):
             reserved="circulation",
         ))
         detail[-1]["owner"] = f"{root}.stairs"
-    if params["shape"] == "square":
-        corners = [(x, z) for x in (-r, r) for z in (-r, r)]
-    else:
-        diagonal = math.floor(r / math.sqrt(2))
-        corners = [(x, z) for x in (-diagonal, diagonal) for z in (-diagonal, diagonal)]
-    frame = [{"type": "fill", "from": [x, 0, z], "to": [x, height, z],
-              "block": _ref("frame")} for x, z in corners]
-    # 同じ円／角形の輪を梁として用い、開口の高さを避ける。
-    for y in tower.storey_floors[1:] + [height]:
-        frame.append(
-            {"type": "circle", "center": [0, y, 0], "radius": r, "mode": "hollow",
-             "block": _ref("frame")} if params["shape"] == "round" else
-            {"type": "wall", "from": [-r, y, -r], "to": [r, y, r], "height": 1,
-             "block": _ref("frame")}
-        )
-    body.append(_tag({"type": "translate", "offset": [0, 0, 0], "operations": frame},
-                     f"{root}.frame", "frame", "style.grid", reserved="structure"))
-    body.append(_tag({"type": "floor", "from": [0, 0, -r - 1], "to": [0, 0, -r],
-                      "block": _ref("floor")}, f"{root}.threshold", "floor", "site"))
     points = [Vec3(0, 1, -r + 1)]
     points.extend(Vec3(0, y + 1, 0) for y in tower.storey_floors[1:])
     points.append(Vec3(0, tower.platform_y + 1, 0))
@@ -210,6 +332,47 @@ def _tower(params, root):
             f"{root}.arrival#{level + 1}", "floor", "features.floors",
             reserved="circulation",
         ))
+    if params["shape"] == "square":
+        perimeter = [(x, z) for x in range(-r, r + 1, 4)
+                     for z in (-r, r)] + [(x, z) for z in range(-r + 4, r, 4)
+                                          for x in (-r, r)]
+    else:
+        perimeter = sorted([(p.x, p.z) for p in disc_offsets(r, "hollow", "y")],
+                           key=lambda p: math.atan2(p[1], p[0]))
+        count = max(4, math.ceil(len(perimeter) / 4))
+        perimeter = [perimeter[i * len(perimeter) // count] for i in range(count)]
+    corners = list(dict.fromkeys(perimeter))
+    clear_ops = detail + [op for op in body if op.get("reserved") == "circulation"
+                          or op["element"].endswith((".light#1", ".threshold"))]
+    frame = []
+    used = set()
+    for x, z in corners:
+        candidates = [(x, z)]
+        if params["shape"] == "square":
+            candidates.extend((x + dx, z) if z in (-r, r) else (x, z + dz)
+                              for delta in (1, -1, 2, -2)
+                              for dx, dz in ((delta, 0), (0, delta)))
+        point = next((candidate for candidate in candidates
+                      if candidate not in used
+                      and (params["shape"] == "round"
+                           or abs(candidate[0]) == r or abs(candidate[1]) == r)
+                      and _column_clear(*candidate, height, clear_ops, root)), None)
+        if point:
+            used.add(point)
+            frame.append({"type": "fill", "from": [point[0], 0, point[1]],
+                          "to": [point[0], height, point[1]], "block": _ref("frame")})
+    # 同じ円／角形の輪を梁として用い、開口の高さを避ける。
+    for y in tower.storey_floors[1:] + [height]:
+        frame.append(
+            {"type": "circle", "center": [0, y, 0], "radius": r, "mode": "hollow",
+             "block": _ref("frame")} if params["shape"] == "round" else
+            {"type": "wall", "from": [-r, y, -r], "to": [r, y, r], "height": 1,
+             "block": _ref("frame")}
+        )
+    body.append(_tag({"type": "translate", "offset": [0, 0, 0], "operations": frame},
+                     f"{root}.frame", "frame", "style.grid", reserved="structure"))
+    body.append(_tag({"type": "floor", "from": [0, 0, -r - 1], "to": [0, 0, -r],
+                      "block": _ref("floor")}, f"{root}.threshold", "floor", "site"))
     return body, detail, Vec3(0, 1, -r), points
 
 
@@ -323,6 +486,7 @@ def plan_buildspec(resolved: ResolveResult) -> PlanningResult:
                            "block": "minecraft:stone"},
         }
     transform = transform.then(Transform.translation(offset))
+    contract = _plan_contract(root, body, detail, transform, params, layout)
     entrance = transform.apply(entrance)
     arrivals = [transform.apply(p) for p in arrivals]
     wrapper = {"type": "translate", "offset": offset.to_list(),
@@ -362,7 +526,7 @@ def plan_buildspec(resolved: ResolveResult) -> PlanningResult:
                  "name": root, "seed": seed, "operations": [wrapper, *overrides], **terrain_json,
                  "metadata": {"planning": {"element": root, "params": params,
                               "entrance": entrance.to_list(),
-                              "arrivals": [p.to_list() for p in arrivals]}}}
+                              "arrivals": [p.to_list() for p in arrivals], **contract}}}
     if layout:
         layout = BuildingLayout(
             entrance, transform.apply_direction(layout.entry_direction), tuple(arrivals),
@@ -376,7 +540,7 @@ def plan_buildspec(resolved: ResolveResult) -> PlanningResult:
             "floorY": floor_y, "terrain": terrain}
     massing = {"formatVersion": 1, "stage": "massing", "element": root, "params": params,
                "entrance": entrance.to_list(), "arrivals": [p.to_list() for p in arrivals],
-               "operations": body}
+               "operations": body, **contract}
     detail_json = {"formatVersion": 1, "stage": "detail", "operations": detail,
                    "overrides": overrides}
     return PlanningResult(site, massing, detail_json, blueprint, palette, layout, ())
