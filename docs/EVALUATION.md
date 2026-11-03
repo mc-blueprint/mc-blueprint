@@ -89,8 +89,12 @@ Minecraft Java Edition 1.21.11の確認用ワールドで、配布した `manual
 | decoration_density / E202 | 開口以外の外壁100投影面あたり、明示装飾Operationの最終非air数。様式範囲の100倍と比較 | FAIL。`config.decoration.density` |
 | facade_surface_missing / E203 | 計画開口に含まれない外壁の欠損 | FAIL。該当override・`config.weathering.missing_blocks` |
 | facade_mix / E305 | 建物・面・wall_main/wall_secondary役割ごとの最多ブロックID占有率。0.85以下 | WARN。`config.palette.mix`。固定ID役割は除外 |
+| opening_recess / opening_recess_blocked | 後退域が構造・通路の予約と重なるため開口後退量を0にした。`actual`は0、`expected`は要求された後退量 | WARN。`config.decoration.depth`。この診断だけでは終了コードを変えない |
 | palette_relation | 既存の配色関係診断 | FAIL。役割材質・`config.palette.contrast`・`config.palette.saturation` |
 | support / walkability | 既存の支持・到達判定。`blocked` と `unsupported` を区別 | FAIL。該当箇所・床材など根拠のある項目だけ修正 |
+
+開口後退の診断はDetail計画に保存し、通常実行とDetail・Blueprintからのresumeで
+同じ文字列診断・構造化診断・CLI表示へ渡す。Pythonの警告としては出力しない。
 
 外壁の被覆は開口以外の基準セルの非airと期待面に対応する属性を確認し、手前の装飾では欠損を補わない。
 欠損セルのsource・operationを診断へ残し、override由来なら `overrides[<id>]` を修正先に含める。

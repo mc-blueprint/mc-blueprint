@@ -95,6 +95,9 @@ def test_functional_openings_recede_and_keep_reservations(tmp_path, recwarn, arc
             "elements": {root: {"angle": angle}},
             "config": {"decoration": {"depth": depth}},
         }, project_dir=tmp_path, user_config=tmp_path / "missing.yaml"))
+        if depth == 0:
+            assert planned.diagnostics == ()
+            assert planned.detail["diagnostics"] == []
         bp = load_blueprint_dict(materialize(
             planned.blueprint, style="japanese", palette=planned.palette,
         ).blueprint)
@@ -141,8 +144,9 @@ def test_functional_openings_recede_and_keep_reservations(tmp_path, recwarn, arc
             assert replace(after[pos][1], operation=None) == replace(attrs, operation=None)
     assert moved > 0
     assert blocked
-    emitted = [json.loads(str(w.message)) for w in recwarn]
-    assert {d["element"] for d in emitted} == set(blocked)
+    assert {d["element"]: d for d in planned.diagnostics} == blocked
+    assert list(planned.diagnostics) == planned.detail["diagnostics"]
+    assert not recwarn
 
 
 @pytest.mark.parametrize("face,position,facing", (
