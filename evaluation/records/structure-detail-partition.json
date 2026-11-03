@@ -4,7 +4,7 @@
   "method": "structure-detail-v1",
   "script": {
     "path": "scripts/evaluate_structure.py",
-    "sha256": "6570126d9505e400d13bcc96140c194dbca969606711cd1d681d25a5d1de00ab"
+    "sha256": "379e29868120995e40f5310a49a84de89e399a1c42088c41c7acda2457b29b40"
   },
   "benchmark_helpers": {
     "path": "scripts/benchmark.py",
@@ -27,12 +27,12 @@
     "python_version": "3.12.15"
   },
   "provenance": {
-    "commit": "abbb9c0b0cab39ceb709593c363cd0bfb8e8b754",
-    "engine_sha256": "ce96426aa2aebf215d83eeb828f31d3f78daa8a958bac1e877402337aa7f1ab3",
+    "commit": "fc8fbf9fea3bf05506ec42b841bf678fb0dd001e",
+    "engine_sha256": "237c402b0211cd9e601144abb6300059ff6ede4f5ec79c93de0ad134901e84d7",
     "lock_sha256": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48",
     "default_config_sha256": "17f5c240ead94ebb8c410f045b3344f07d07ec9c29a8a769645f853b5ea28d64"
   },
-  "measured_at": "2026-11-03T18:48:52.528112+00:00",
+  "measured_at": "2026-11-03T19:49:28.286861+00:00",
   "time_scope": "子プロセス起動からmake完了・worker JSON出力まで。build比較は除外。",
   "memory_metric": "独立子プロセスのmake直後のOS最大RSS/PeakWorkingSetSize。",
   "stage_sample_definition": "段開始時の累積時間と現在RSS。段単独ピークではない。",
@@ -172,7 +172,7 @@
           ],
           "role": "wall_main",
           "severity": "warn",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\single-house-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/single-house-1.21.11-schem.yaml"
         },
         {
           "actual": 0,
@@ -183,7 +183,7 @@
           "metric": "support",
           "repairPaths": [],
           "severity": "ok",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\single-house-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/single-house-1.21.11-schem.yaml"
         },
         {
           "actual": "reachable",
@@ -199,7 +199,7 @@
           ],
           "repairPaths": [],
           "severity": "ok",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\single-house-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/single-house-1.21.11-schem.yaml"
         },
         {
           "actual": "reachable",
@@ -215,7 +215,7 @@
           ],
           "repairPaths": [],
           "severity": "ok",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\single-house-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/single-house-1.21.11-schem.yaml"
         }
       ],
       "diagnostics": [
@@ -231,7 +231,7 @@
           ],
           "role": "wall_main",
           "severity": "warn",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\single-house-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/single-house-1.21.11-schem.yaml"
         },
         {
           "actual": 0,
@@ -242,7 +242,7 @@
           "metric": "support",
           "repairPaths": [],
           "severity": "ok",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\single-house-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/single-house-1.21.11-schem.yaml"
         },
         {
           "actual": "reachable",
@@ -258,7 +258,7 @@
           ],
           "repairPaths": [],
           "severity": "ok",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\single-house-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/single-house-1.21.11-schem.yaml"
         },
         {
           "actual": "reachable",
@@ -274,7 +274,7 @@
           ],
           "repairPaths": [],
           "severity": "ok",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\single-house-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/single-house-1.21.11-schem.yaml"
         }
       ]
     },
@@ -402,7 +402,7 @@
           ],
           "role": "wall_main",
           "severity": "warn",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\single-house-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/single-house-1.21.11-schem.yaml"
         },
         {
           "actual": 0,
@@ -413,7 +413,7 @@
           "metric": "support",
           "repairPaths": [],
           "severity": "ok",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\single-house-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/single-house-1.21.11-schem.yaml"
         },
         {
           "actual": "reachable",
@@ -429,7 +429,7 @@
           ],
           "repairPaths": [],
           "severity": "ok",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\single-house-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/single-house-1.21.11-schem.yaml"
         },
         {
           "actual": "reachable",
@@ -445,7 +445,7 @@
           ],
           "repairPaths": [],
           "severity": "ok",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\single-house-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/single-house-1.21.11-schem.yaml"
         }
       ],
       "diagnostics": [
@@ -461,7 +461,7 @@
           ],
           "role": "wall_main",
           "severity": "warn",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\single-house-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/single-house-1.21.11-schem.yaml"
         },
         {
           "actual": 0,
@@ -472,7 +472,7 @@
           "metric": "support",
           "repairPaths": [],
           "severity": "ok",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\single-house-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/single-house-1.21.11-schem.yaml"
         },
         {
           "actual": "reachable",
@@ -488,7 +488,7 @@
           ],
           "repairPaths": [],
           "severity": "ok",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\single-house-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/single-house-1.21.11-schem.yaml"
         },
         {
           "actual": "reachable",
@@ -504,7 +504,7 @@
           ],
           "repairPaths": [],
           "severity": "ok",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\single-house-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/single-house-1.21.11-schem.yaml"
         }
       ]
     },
@@ -680,7 +680,7 @@
           ],
           "role": "wall_main",
           "severity": "warn",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/standalone-tower-1.21.11-schem.yaml"
         },
         {
           "actual": 1.0,
@@ -694,7 +694,7 @@
           ],
           "role": "wall_main",
           "severity": "warn",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/standalone-tower-1.21.11-schem.yaml"
         },
         {
           "actual": 0,
@@ -705,7 +705,7 @@
           "metric": "support",
           "repairPaths": [],
           "severity": "ok",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/standalone-tower-1.21.11-schem.yaml"
         },
         {
           "actual": "reachable",
@@ -721,7 +721,7 @@
           ],
           "repairPaths": [],
           "severity": "ok",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/standalone-tower-1.21.11-schem.yaml"
         },
         {
           "actual": "reachable",
@@ -737,7 +737,7 @@
           ],
           "repairPaths": [],
           "severity": "ok",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/standalone-tower-1.21.11-schem.yaml"
         },
         {
           "actual": "reachable",
@@ -753,7 +753,7 @@
           ],
           "repairPaths": [],
           "severity": "ok",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/standalone-tower-1.21.11-schem.yaml"
         },
         {
           "actual": "reachable",
@@ -769,7 +769,7 @@
           ],
           "repairPaths": [],
           "severity": "ok",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/standalone-tower-1.21.11-schem.yaml"
         }
       ],
       "diagnostics": [
@@ -785,7 +785,7 @@
           ],
           "role": "wall_main",
           "severity": "warn",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/standalone-tower-1.21.11-schem.yaml"
         },
         {
           "actual": 1.0,
@@ -799,7 +799,7 @@
           ],
           "role": "wall_main",
           "severity": "warn",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/standalone-tower-1.21.11-schem.yaml"
         },
         {
           "actual": 0,
@@ -810,7 +810,7 @@
           "metric": "support",
           "repairPaths": [],
           "severity": "ok",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/standalone-tower-1.21.11-schem.yaml"
         },
         {
           "actual": "reachable",
@@ -826,7 +826,7 @@
           ],
           "repairPaths": [],
           "severity": "ok",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/standalone-tower-1.21.11-schem.yaml"
         },
         {
           "actual": "reachable",
@@ -842,7 +842,7 @@
           ],
           "repairPaths": [],
           "severity": "ok",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/standalone-tower-1.21.11-schem.yaml"
         },
         {
           "actual": "reachable",
@@ -858,7 +858,7 @@
           ],
           "repairPaths": [],
           "severity": "ok",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/standalone-tower-1.21.11-schem.yaml"
         },
         {
           "actual": "reachable",
@@ -874,7 +874,7 @@
           ],
           "repairPaths": [],
           "severity": "ok",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/standalone-tower-1.21.11-schem.yaml"
         }
       ]
     },
@@ -1050,7 +1050,7 @@
           ],
           "role": "wall_main",
           "severity": "warn",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/standalone-tower-1.21.11-schem.yaml"
         },
         {
           "actual": 1.0,
@@ -1064,7 +1064,7 @@
           ],
           "role": "wall_main",
           "severity": "warn",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/standalone-tower-1.21.11-schem.yaml"
         },
         {
           "actual": 0,
@@ -1075,7 +1075,7 @@
           "metric": "support",
           "repairPaths": [],
           "severity": "ok",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/standalone-tower-1.21.11-schem.yaml"
         },
         {
           "actual": "reachable",
@@ -1091,7 +1091,7 @@
           ],
           "repairPaths": [],
           "severity": "ok",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/standalone-tower-1.21.11-schem.yaml"
         },
         {
           "actual": "reachable",
@@ -1107,7 +1107,7 @@
           ],
           "repairPaths": [],
           "severity": "ok",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/standalone-tower-1.21.11-schem.yaml"
         },
         {
           "actual": "reachable",
@@ -1123,7 +1123,7 @@
           ],
           "repairPaths": [],
           "severity": "ok",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/standalone-tower-1.21.11-schem.yaml"
         },
         {
           "actual": "reachable",
@@ -1139,7 +1139,7 @@
           ],
           "repairPaths": [],
           "severity": "ok",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/standalone-tower-1.21.11-schem.yaml"
         }
       ],
       "diagnostics": [
@@ -1155,7 +1155,7 @@
           ],
           "role": "wall_main",
           "severity": "warn",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/standalone-tower-1.21.11-schem.yaml"
         },
         {
           "actual": 1.0,
@@ -1169,7 +1169,7 @@
           ],
           "role": "wall_main",
           "severity": "warn",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/standalone-tower-1.21.11-schem.yaml"
         },
         {
           "actual": 0,
@@ -1180,7 +1180,7 @@
           "metric": "support",
           "repairPaths": [],
           "severity": "ok",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/standalone-tower-1.21.11-schem.yaml"
         },
         {
           "actual": "reachable",
@@ -1196,7 +1196,7 @@
           ],
           "repairPaths": [],
           "severity": "ok",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/standalone-tower-1.21.11-schem.yaml"
         },
         {
           "actual": "reachable",
@@ -1212,7 +1212,7 @@
           ],
           "repairPaths": [],
           "severity": "ok",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/standalone-tower-1.21.11-schem.yaml"
         },
         {
           "actual": "reachable",
@@ -1228,7 +1228,7 @@
           ],
           "repairPaths": [],
           "severity": "ok",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/standalone-tower-1.21.11-schem.yaml"
         },
         {
           "actual": "reachable",
@@ -1244,7 +1244,7 @@
           ],
           "repairPaths": [],
           "severity": "ok",
-          "source": "H:\\mc-blueprint\\worktrees\\mcb-215\\mc-blueprint\\evaluation\\cases\\structure-detail\\standalone-tower-1.21.11-schem.yaml"
+          "source": "evaluation/cases/structure-detail/standalone-tower-1.21.11-schem.yaml"
         }
       ]
     }

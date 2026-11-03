@@ -189,6 +189,26 @@ def test_structure_detail_records_keep_local_counts_and_failures() -> None:
     assert record["quality_passed"] == all(r["quality_passed"] for r in record["results"])
 
 
+def test_structure_detail_records_do_not_contain_absolute_paths() -> None:
+    for path in ("evaluation/records/structure-detail.json",
+                 "evaluation/records/structure-detail-partition.json"):
+        text = (ROOT / path).read_text(encoding="utf-8")
+        assert not re.search(r"(?<![A-Za-z0-9])[A-Za-z]:[/\\]", text), path
+        record = json.loads(text)
+
+        def check(value, record_path=path):
+            if isinstance(value, str):
+                assert not value.startswith("/"), (record_path, value)
+            elif isinstance(value, list):
+                for item in value:
+                    check(item)
+            elif isinstance(value, dict):
+                for item in value.values():
+                    check(item)
+
+        check(record)
+
+
 def test_structure_detail_regressions_cover_connections() -> None:
     checks = read_json(Path("evaluation/records/structure-detail.json"))["regression_checks"]
     for case in ("single-house", "standalone-tower"):
