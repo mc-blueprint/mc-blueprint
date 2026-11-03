@@ -109,6 +109,7 @@ def plan_detail(params, style, config, root, body, detail, contract, projected_c
     target = low + settings["density"] * (high - low)
     floors, height = params["floors"], params["floor_height"]
     openings = [op for op in detail if op["type"] in ("window", "doorway")]
+    opening_boxes = [(op, build_operation(op, root).bounds()) for op in openings]
     circulation = [build_operation(op, root).bounds() for op in body + detail
                    if op.get("reserved") == "circulation"]
     placed, palettes = [], {}
@@ -145,7 +146,7 @@ def plan_detail(params, style, config, root, body, detail, contract, projected_c
         transform = Transform.rotation(ROTATIONS[face], Vec3(0, 0, 0)).then(
             Transform.translation(Vec3.from_seq(position)))
         children = []
-        masks = [build_operation(op, root).bounds() for op in openings]
+        masks = [box for _, box in opening_boxes]
         masks = [box for box in masks if box.min[2 if axis == 0 else 0] <= fixed
                  <= box.max[2 if axis == 0 else 0]]
         # 予約と機能開口の投影を切り抜き、外付けの枠でも窓や扉を塞がない。
@@ -198,15 +199,15 @@ def plan_detail(params, style, config, root, body, detail, contract, projected_c
                 index = run_index * 100 + bay_index + 1
                 for level in range(floors):
                     door = any(op["type"] == "doorway"
-                               and build_operation(op, root).bounds().min[2 if axis == 0 else 0]
+                               and box.min[2 if axis == 0 else 0]
                                == fixed and bay_start <= op["position"][axis] <= bay_end
-                               for op in openings) and level == 0
+                               for op, box in opening_boxes) and level == 0
                     kind = "entrance" if door else "bay"
                     if not door and modules.get("window") and any(
                         op["type"] == "window" and bay_start <= op["position"][axis] <= bay_end
-                        and build_operation(op, root).bounds().min[2 if axis == 0 else 0] == fixed
+                        and box.min[2 if axis == 0 else 0] == fixed
                         and level * height <= op["position"][1] < (level + 1) * height
-                        for op in openings
+                        for op, box in opening_boxes
                     ):
                         kind = "window"
                     place(kind, face, bay_start, bay_end, fixed, level, index)

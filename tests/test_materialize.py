@@ -13,6 +13,7 @@ from mcblueprint.errors import BlueprintError
 from mcblueprint.generator import generate
 from mcblueprint.loader import load_blueprint_dict
 from mcblueprint.materialize import materialize
+from mcblueprint.model.block import BlockState
 from mcblueprint.model.vec import Vec3
 from mcblueprint.validator import validate
 
@@ -61,6 +62,26 @@ def ref(role, shape="full", **state):
 def plan(*operations, version="1.21.11"):
     return {"formatVersion": 1, "minecraftVersion": version, "name": "materialize",
             "operations": list(operations)}
+
+
+def test_repeated_mix_references_preserve_shape_and_state():
+    requests = [("stairs", "east"), ("stairs", "west"), ("stairs", "east"),
+                ("full", None), ("full", None)]
+    data = plan(*({"type": "set", "position": [index, 0, 0],
+                  "block": ref("wall_main", shape, **({"facing": facing} if facing else {}))}
+                 for index, (shape, facing) in enumerate(requests)))
+    result = materialize(data, palette={"materials": {"wall_main": "wood"}})
+    operations = result.blueprint["operations"]
+    assert validate(result.blueprint) == []
+    assert operations[0]["palette"] == operations[2]["palette"]
+    assert operations[0]["palette"] != operations[1]["palette"]
+    assert operations[3]["palette"] == operations[4]["palette"]
+    for operation, (shape, facing) in zip(operations, requests, strict=True):
+        entries = result.blueprint["palettes"][operation["palette"]]
+        for entry in entries:
+            state = BlockState.parse(entry["block"])
+            assert load_block_data("1.21.11").get(state.id).shape == shape
+            assert state.get("facing") == facing
 
 
 def cells(*roles):
