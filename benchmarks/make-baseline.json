@@ -1,0 +1,1257 @@
+{
+  "schema_version": 1,
+  "series": "make-buildspec-v1",
+  "environment": {
+    "os": "Windows-11-10.0.26200-SP0",
+    "cpu": "AMD Ryzen 7 5700X 8-Core Processor",
+    "cpu_reason": null,
+    "logical_cpu_count": 16,
+    "memory_total_bytes": 68640256000,
+    "memory_reason": null,
+    "gpu": "NVIDIA GeForce RTX 4070 SUPER",
+    "gpu_reason": null,
+    "python": "3.12.15 (main, Oct 21 2026, 17:48:33) [MSC v.1944 64 bit (AMD64)]",
+    "python_version": "3.12.15"
+  },
+  "provenance": {
+    "commit": "e495e293a1fdddcd70b7d0d9f27b5a160b47dff2",
+    "engine_sha256": "67a3afd65010db5f473f502d0851e8f5d7e1dbc25abe464798f338203ad7ed61",
+    "lock_sha256": "66b47f170d902f75de7d97796420a17319988bb32f7dc34a0fc420c07bfa02ca",
+    "default_config_sha256": "4ff6ca047fd800afe93d20abd51d6bf6e56cc4dd2d09365b63c448909eeb9063"
+  },
+  "time_scope": "独立子プロセス起動からmakeの評価・schem export完了まで。",
+  "memory_metric": "独立子プロセス全体のPeakWorkingSetSize（Windows）またはOS最大RSS。",
+  "stage_sample_definition": "stage_hook呼出時の累積経過秒と、その瞬間のプロセスWorking Set。段単独の時間・ピークRSSではない。",
+  "results": [
+    {
+      "archetype": "house",
+      "scale": "tiny",
+      "minecraft_version": "1.21.11",
+      "format": "schem",
+      "requested_size": [
+        32,
+        32,
+        32
+      ],
+      "repetitions": 3,
+      "samples": [
+        {
+          "process_peak_rss_bytes": 78512128,
+          "seconds": 1.278733099985402,
+          "output_bytes": 980,
+          "output_path": "C:\\Users\\<user>\\AppData\\Local\\Temp\\mcblueprint-make-bench-parent-jbzz3pkb\\result.schem",
+          "input_sha256": "967c7b7fb8846af6029c44cece4d7a84de9d388d20a41cafb612efd835ba7b7f",
+          "config_sha256": "f32d10a7cc34722c90b46034a371acb6cb6be1775dbd0b723962e377cc829f96",
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.00032270001247525215,
+              "rss_at_stage_start_bytes": 47988736
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.03886250004870817,
+              "rss_at_stage_start_bytes": 46997504
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.04949590004980564,
+              "rss_at_stage_start_bytes": 47648768
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.23097340000094846,
+              "rss_at_stage_start_bytes": 73355264
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 0.6319062000256963,
+              "rss_at_stage_start_bytes": 75313152
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 0.6445019000093453,
+              "rss_at_stage_start_bytes": 75317248
+            }
+          ],
+          "actual_dimensions": [
+            9,
+            13,
+            11
+          ],
+          "block_states": [
+            "minecraft:acacia_planks",
+            "minecraft:acacia_stairs",
+            "minecraft:bamboo_mosaic_slab",
+            "minecraft:bamboo_mosaic_stairs",
+            "minecraft:birch_slab",
+            "minecraft:birch_stairs",
+            "minecraft:glass",
+            "minecraft:infested_cracked_stone_bricks",
+            "minecraft:infested_stone",
+            "minecraft:jungle_planks",
+            "minecraft:jungle_stairs",
+            "minecraft:jungle_wood",
+            "minecraft:mangrove_log",
+            "minecraft:oak_door",
+            "minecraft:oak_leaves",
+            "minecraft:sea_lantern",
+            "minecraft:vine"
+          ],
+          "make_runtime_seconds": 0.6687990000355057
+        },
+        {
+          "process_peak_rss_bytes": 78209024,
+          "seconds": 1.2469168999814428,
+          "output_bytes": 980,
+          "output_path": "C:\\Users\\<user>\\AppData\\Local\\Temp\\mcblueprint-make-bench-parent-5drn7xok\\result.schem",
+          "input_sha256": "967c7b7fb8846af6029c44cece4d7a84de9d388d20a41cafb612efd835ba7b7f",
+          "config_sha256": "f32d10a7cc34722c90b46034a371acb6cb6be1775dbd0b723962e377cc829f96",
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0003480000304989517,
+              "rss_at_stage_start_bytes": 47906816
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.03965330001665279,
+              "rss_at_stage_start_bytes": 46862336
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.05031360004795715,
+              "rss_at_stage_start_bytes": 47321088
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.22939050005516037,
+              "rss_at_stage_start_bytes": 72949760
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 0.6408691000542603,
+              "rss_at_stage_start_bytes": 75010048
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 0.6479958000127226,
+              "rss_at_stage_start_bytes": 75014144
+            }
+          ],
+          "actual_dimensions": [
+            9,
+            13,
+            11
+          ],
+          "block_states": [
+            "minecraft:acacia_planks",
+            "minecraft:acacia_stairs",
+            "minecraft:bamboo_mosaic_slab",
+            "minecraft:bamboo_mosaic_stairs",
+            "minecraft:birch_slab",
+            "minecraft:birch_stairs",
+            "minecraft:glass",
+            "minecraft:infested_cracked_stone_bricks",
+            "minecraft:infested_stone",
+            "minecraft:jungle_planks",
+            "minecraft:jungle_stairs",
+            "minecraft:jungle_wood",
+            "minecraft:mangrove_log",
+            "minecraft:oak_door",
+            "minecraft:oak_leaves",
+            "minecraft:sea_lantern",
+            "minecraft:vine"
+          ],
+          "make_runtime_seconds": 0.6677316999994218
+        },
+        {
+          "process_peak_rss_bytes": 78544896,
+          "seconds": 1.240368099999614,
+          "output_bytes": 980,
+          "output_path": "C:\\Users\\<user>\\AppData\\Local\\Temp\\mcblueprint-make-bench-parent-w1rlrusi\\result.schem",
+          "input_sha256": "967c7b7fb8846af6029c44cece4d7a84de9d388d20a41cafb612efd835ba7b7f",
+          "config_sha256": "f32d10a7cc34722c90b46034a371acb6cb6be1775dbd0b723962e377cc829f96",
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.00029930000891909003,
+              "rss_at_stage_start_bytes": 47788032
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.03915129997767508,
+              "rss_at_stage_start_bytes": 47284224
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.04943989997263998,
+              "rss_at_stage_start_bytes": 47177728
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.22393410000950098,
+              "rss_at_stage_start_bytes": 72790016
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 0.62273170001572,
+              "rss_at_stage_start_bytes": 75345920
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 0.6298556000110693,
+              "rss_at_stage_start_bytes": 75358208
+            }
+          ],
+          "actual_dimensions": [
+            9,
+            13,
+            11
+          ],
+          "block_states": [
+            "minecraft:acacia_planks",
+            "minecraft:acacia_stairs",
+            "minecraft:bamboo_mosaic_slab",
+            "minecraft:bamboo_mosaic_stairs",
+            "minecraft:birch_slab",
+            "minecraft:birch_stairs",
+            "minecraft:glass",
+            "minecraft:infested_cracked_stone_bricks",
+            "minecraft:infested_stone",
+            "minecraft:jungle_planks",
+            "minecraft:jungle_stairs",
+            "minecraft:jungle_wood",
+            "minecraft:mangrove_log",
+            "minecraft:oak_door",
+            "minecraft:oak_leaves",
+            "minecraft:sea_lantern",
+            "minecraft:vine"
+          ],
+          "make_runtime_seconds": 0.6499900000053458
+        }
+      ],
+      "seconds_median": 1.2469168999814428,
+      "process_peak_rss_bytes_median": 78512128
+    },
+    {
+      "archetype": "tower",
+      "scale": "tiny",
+      "minecraft_version": "1.21.11",
+      "format": "schem",
+      "requested_size": [
+        32,
+        32,
+        32
+      ],
+      "repetitions": 3,
+      "samples": [
+        {
+          "process_peak_rss_bytes": 80400384,
+          "seconds": 1.2483036000048742,
+          "output_bytes": 1100,
+          "output_path": "C:\\Users\\<user>\\AppData\\Local\\Temp\\mcblueprint-make-bench-parent-b7hj6svx\\result.schem",
+          "input_sha256": "bd45af93ddd81a09eac66f6b82f4d221800e318aa0f2f51b18d73fcb3b26bdc0",
+          "config_sha256": "f32d10a7cc34722c90b46034a371acb6cb6be1775dbd0b723962e377cc829f96",
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0002652999828569591,
+              "rss_at_stage_start_bytes": 47759360
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.0386519999592565,
+              "rss_at_stage_start_bytes": 46731264
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.0496599999605678,
+              "rss_at_stage_start_bytes": 47517696
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.2519231999758631,
+              "rss_at_stage_start_bytes": 73216000
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 0.6296751999761909,
+              "rss_at_stage_start_bytes": 75583488
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 0.6504880999564193,
+              "rss_at_stage_start_bytes": 75587584
+            }
+          ],
+          "actual_dimensions": [
+            11,
+            15,
+            11
+          ],
+          "block_states": [
+            "minecraft:acacia_planks",
+            "minecraft:acacia_stairs",
+            "minecraft:glass",
+            "minecraft:infested_stone",
+            "minecraft:jungle_planks",
+            "minecraft:jungle_stairs",
+            "minecraft:mangrove_log",
+            "minecraft:mossy_cobblestone",
+            "minecraft:oak_door",
+            "minecraft:oak_leaves",
+            "minecraft:sea_lantern",
+            "minecraft:stripped_dark_oak_log",
+            "minecraft:vine"
+          ],
+          "make_runtime_seconds": 0.6754364999942482
+        },
+        {
+          "process_peak_rss_bytes": 80642048,
+          "seconds": 1.2453254999709316,
+          "output_bytes": 1100,
+          "output_path": "C:\\Users\\<user>\\AppData\\Local\\Temp\\mcblueprint-make-bench-parent-umiud3ax\\result.schem",
+          "input_sha256": "bd45af93ddd81a09eac66f6b82f4d221800e318aa0f2f51b18d73fcb3b26bdc0",
+          "config_sha256": "f32d10a7cc34722c90b46034a371acb6cb6be1775dbd0b723962e377cc829f96",
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.00024050002684816718,
+              "rss_at_stage_start_bytes": 46710784
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.0385095999808982,
+              "rss_at_stage_start_bytes": 47435776
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.049293700023554265,
+              "rss_at_stage_start_bytes": 46931968
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.2517688000225462,
+              "rss_at_stage_start_bytes": 72613888
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 0.6301101000281051,
+              "rss_at_stage_start_bytes": 75825152
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 0.6493660000269301,
+              "rss_at_stage_start_bytes": 75829248
+            }
+          ],
+          "actual_dimensions": [
+            11,
+            15,
+            11
+          ],
+          "block_states": [
+            "minecraft:acacia_planks",
+            "minecraft:acacia_stairs",
+            "minecraft:glass",
+            "minecraft:infested_stone",
+            "minecraft:jungle_planks",
+            "minecraft:jungle_stairs",
+            "minecraft:mangrove_log",
+            "minecraft:mossy_cobblestone",
+            "minecraft:oak_door",
+            "minecraft:oak_leaves",
+            "minecraft:sea_lantern",
+            "minecraft:stripped_dark_oak_log",
+            "minecraft:vine"
+          ],
+          "make_runtime_seconds": 0.6705542000127025
+        },
+        {
+          "process_peak_rss_bytes": 80302080,
+          "seconds": 1.294611299992539,
+          "output_bytes": 1100,
+          "output_path": "C:\\Users\\<user>\\AppData\\Local\\Temp\\mcblueprint-make-bench-parent-mzlbxlqb\\result.schem",
+          "input_sha256": "bd45af93ddd81a09eac66f6b82f4d221800e318aa0f2f51b18d73fcb3b26bdc0",
+          "config_sha256": "f32d10a7cc34722c90b46034a371acb6cb6be1775dbd0b723962e377cc829f96",
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0002683000057004392,
+              "rss_at_stage_start_bytes": 47693824
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.03963610000209883,
+              "rss_at_stage_start_bytes": 46882816
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.050210799963679165,
+              "rss_at_stage_start_bytes": 47550464
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.26696340000489727,
+              "rss_at_stage_start_bytes": 73142272
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 0.6607197999837808,
+              "rss_at_stage_start_bytes": 75489280
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 0.6768287000013515,
+              "rss_at_stage_start_bytes": 75493376
+            }
+          ],
+          "actual_dimensions": [
+            11,
+            15,
+            11
+          ],
+          "block_states": [
+            "minecraft:acacia_planks",
+            "minecraft:acacia_stairs",
+            "minecraft:glass",
+            "minecraft:infested_stone",
+            "minecraft:jungle_planks",
+            "minecraft:jungle_stairs",
+            "minecraft:mangrove_log",
+            "minecraft:mossy_cobblestone",
+            "minecraft:oak_door",
+            "minecraft:oak_leaves",
+            "minecraft:sea_lantern",
+            "minecraft:stripped_dark_oak_log",
+            "minecraft:vine"
+          ],
+          "make_runtime_seconds": 0.6991387999732979
+        }
+      ],
+      "seconds_median": 1.2483036000048742,
+      "process_peak_rss_bytes_median": 80400384
+    },
+    {
+      "archetype": "house",
+      "scale": "medium",
+      "minecraft_version": "1.21.11",
+      "format": "schem",
+      "requested_size": [
+        64,
+        48,
+        64
+      ],
+      "repetitions": 3,
+      "samples": [
+        {
+          "process_peak_rss_bytes": 191631360,
+          "seconds": 29.710118799994234,
+          "output_bytes": 10308,
+          "output_path": "C:\\Users\\<user>\\AppData\\Local\\Temp\\mcblueprint-make-bench-parent-ivimh4kc\\result.schem",
+          "input_sha256": "da579621ea40aa3335b09c54318758afda2d668d45e183a8d27ab1811d40bf7d",
+          "config_sha256": "f32d10a7cc34722c90b46034a371acb6cb6be1775dbd0b723962e377cc829f96",
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0003005000180564821,
+              "rss_at_stage_start_bytes": 47886336
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.03895770001690835,
+              "rss_at_stage_start_bytes": 47058944
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.05338659998960793,
+              "rss_at_stage_start_bytes": 47374336
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.3200576999806799,
+              "rss_at_stage_start_bytes": 73105408
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 28.496349400025792,
+              "rss_at_stage_start_bytes": 76943360
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 28.792789300030563,
+              "rss_at_stage_start_bytes": 77127680
+            }
+          ],
+          "actual_dimensions": [
+            63,
+            40,
+            63
+          ],
+          "block_states": [
+            "minecraft:acacia_planks",
+            "minecraft:acacia_stairs",
+            "minecraft:bamboo_mosaic_slab",
+            "minecraft:bamboo_mosaic_stairs",
+            "minecraft:birch_slab",
+            "minecraft:birch_stairs",
+            "minecraft:glass",
+            "minecraft:infested_cracked_stone_bricks",
+            "minecraft:infested_stone",
+            "minecraft:jungle_planks",
+            "minecraft:jungle_stairs",
+            "minecraft:jungle_wood",
+            "minecraft:mangrove_log",
+            "minecraft:oak_door",
+            "minecraft:oak_leaves",
+            "minecraft:sea_lantern",
+            "minecraft:vine"
+          ],
+          "make_runtime_seconds": 29.13965540000936
+        },
+        {
+          "process_peak_rss_bytes": 191500288,
+          "seconds": 29.682383200037293,
+          "output_bytes": 10308,
+          "output_path": "C:\\Users\\<user>\\AppData\\Local\\Temp\\mcblueprint-make-bench-parent-a2ysrehx\\result.schem",
+          "input_sha256": "da579621ea40aa3335b09c54318758afda2d668d45e183a8d27ab1811d40bf7d",
+          "config_sha256": "f32d10a7cc34722c90b46034a371acb6cb6be1775dbd0b723962e377cc829f96",
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.00026780000189319253,
+              "rss_at_stage_start_bytes": 47558656
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.03952869999920949,
+              "rss_at_stage_start_bytes": 46948352
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.054393500031437725,
+              "rss_at_stage_start_bytes": 47337472
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.3227048999979161,
+              "rss_at_stage_start_bytes": 73138176
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 28.42342770000687,
+              "rss_at_stage_start_bytes": 76259328
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 28.721264699997846,
+              "rss_at_stage_start_bytes": 76492800
+            }
+          ],
+          "actual_dimensions": [
+            63,
+            40,
+            63
+          ],
+          "block_states": [
+            "minecraft:acacia_planks",
+            "minecraft:acacia_stairs",
+            "minecraft:bamboo_mosaic_slab",
+            "minecraft:bamboo_mosaic_stairs",
+            "minecraft:birch_slab",
+            "minecraft:birch_stairs",
+            "minecraft:glass",
+            "minecraft:infested_cracked_stone_bricks",
+            "minecraft:infested_stone",
+            "minecraft:jungle_planks",
+            "minecraft:jungle_stairs",
+            "minecraft:jungle_wood",
+            "minecraft:mangrove_log",
+            "minecraft:oak_door",
+            "minecraft:oak_leaves",
+            "minecraft:sea_lantern",
+            "minecraft:vine"
+          ],
+          "make_runtime_seconds": 29.066265500034206
+        },
+        {
+          "process_peak_rss_bytes": 191434752,
+          "seconds": 29.341783299983945,
+          "output_bytes": 10308,
+          "output_path": "C:\\Users\\<user>\\AppData\\Local\\Temp\\mcblueprint-make-bench-parent-n0czd5oq\\result.schem",
+          "input_sha256": "da579621ea40aa3335b09c54318758afda2d668d45e183a8d27ab1811d40bf7d",
+          "config_sha256": "f32d10a7cc34722c90b46034a371acb6cb6be1775dbd0b723962e377cc829f96",
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.00030559999868273735,
+              "rss_at_stage_start_bytes": 48222208
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.039526799984741956,
+              "rss_at_stage_start_bytes": 47038464
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.053939900011755526,
+              "rss_at_stage_start_bytes": 47063040
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.3156857999856584,
+              "rss_at_stage_start_bytes": 72810496
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 28.122475699987262,
+              "rss_at_stage_start_bytes": 76263424
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 28.418055500020273,
+              "rss_at_stage_start_bytes": 76455936
+            }
+          ],
+          "actual_dimensions": [
+            63,
+            40,
+            63
+          ],
+          "block_states": [
+            "minecraft:acacia_planks",
+            "minecraft:acacia_stairs",
+            "minecraft:bamboo_mosaic_slab",
+            "minecraft:bamboo_mosaic_stairs",
+            "minecraft:birch_slab",
+            "minecraft:birch_stairs",
+            "minecraft:glass",
+            "minecraft:infested_cracked_stone_bricks",
+            "minecraft:infested_stone",
+            "minecraft:jungle_planks",
+            "minecraft:jungle_stairs",
+            "minecraft:jungle_wood",
+            "minecraft:mangrove_log",
+            "minecraft:oak_door",
+            "minecraft:oak_leaves",
+            "minecraft:sea_lantern",
+            "minecraft:vine"
+          ],
+          "make_runtime_seconds": 28.765993000008166
+        }
+      ],
+      "seconds_median": 29.682383200037293,
+      "process_peak_rss_bytes_median": 191500288
+    },
+    {
+      "archetype": "tower",
+      "scale": "medium",
+      "minecraft_version": "1.21.11",
+      "format": "schem",
+      "requested_size": [
+        64,
+        48,
+        64
+      ],
+      "repetitions": 3,
+      "samples": [
+        {
+          "process_peak_rss_bytes": 169275392,
+          "seconds": 21.149302800011355,
+          "output_bytes": 15761,
+          "output_path": "C:\\Users\\<user>\\AppData\\Local\\Temp\\mcblueprint-make-bench-parent-2s4gv93x\\result.schem",
+          "input_sha256": "78c6050d83d912b92e19d6e5897dfe330aa03a23791d2e4deae36af24f64bc14",
+          "config_sha256": "f32d10a7cc34722c90b46034a371acb6cb6be1775dbd0b723962e377cc829f96",
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0003093000268563628,
+              "rss_at_stage_start_bytes": 47685632
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.03899710002588108,
+              "rss_at_stage_start_bytes": 46972928
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.05641990003641695,
+              "rss_at_stage_start_bytes": 47337472
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.5053711000364274,
+              "rss_at_stage_start_bytes": 73453568
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 15.67669140000362,
+              "rss_at_stage_start_bytes": 77058048
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 19.92024730000412,
+              "rss_at_stage_start_bytes": 78057472
+            }
+          ],
+          "actual_dimensions": [
+            61,
+            43,
+            61
+          ],
+          "block_states": [
+            "minecraft:acacia_planks",
+            "minecraft:acacia_stairs",
+            "minecraft:glass",
+            "minecraft:infested_stone",
+            "minecraft:jungle_planks",
+            "minecraft:jungle_stairs",
+            "minecraft:mangrove_log",
+            "minecraft:mossy_cobblestone",
+            "minecraft:oak_door",
+            "minecraft:oak_leaves",
+            "minecraft:sea_lantern",
+            "minecraft:stripped_dark_oak_log",
+            "minecraft:vine"
+          ],
+          "make_runtime_seconds": 20.557635900040623
+        },
+        {
+          "process_peak_rss_bytes": 169693184,
+          "seconds": 21.37432380003156,
+          "output_bytes": 15761,
+          "output_path": "C:\\Users\\<user>\\AppData\\Local\\Temp\\mcblueprint-make-bench-parent-bnky_qrp\\result.schem",
+          "input_sha256": "78c6050d83d912b92e19d6e5897dfe330aa03a23791d2e4deae36af24f64bc14",
+          "config_sha256": "f32d10a7cc34722c90b46034a371acb6cb6be1775dbd0b723962e377cc829f96",
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0002519999979995191,
+              "rss_at_stage_start_bytes": 47939584
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.039249999972525984,
+              "rss_at_stage_start_bytes": 46866432
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.05654079996747896,
+              "rss_at_stage_start_bytes": 47415296
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.5224145000101998,
+              "rss_at_stage_start_bytes": 73535488
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 15.842676099971868,
+              "rss_at_stage_start_bytes": 77369344
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 20.15540340001462,
+              "rss_at_stage_start_bytes": 78397440
+            }
+          ],
+          "actual_dimensions": [
+            61,
+            43,
+            61
+          ],
+          "block_states": [
+            "minecraft:acacia_planks",
+            "minecraft:acacia_stairs",
+            "minecraft:glass",
+            "minecraft:infested_stone",
+            "minecraft:jungle_planks",
+            "minecraft:jungle_stairs",
+            "minecraft:mangrove_log",
+            "minecraft:mossy_cobblestone",
+            "minecraft:oak_door",
+            "minecraft:oak_leaves",
+            "minecraft:sea_lantern",
+            "minecraft:stripped_dark_oak_log",
+            "minecraft:vine"
+          ],
+          "make_runtime_seconds": 20.790272699960042
+        },
+        {
+          "process_peak_rss_bytes": 169820160,
+          "seconds": 21.467756900005043,
+          "output_bytes": 15761,
+          "output_path": "C:\\Users\\<user>\\AppData\\Local\\Temp\\mcblueprint-make-bench-parent-pq9hbsfl\\result.schem",
+          "input_sha256": "78c6050d83d912b92e19d6e5897dfe330aa03a23791d2e4deae36af24f64bc14",
+          "config_sha256": "f32d10a7cc34722c90b46034a371acb6cb6be1775dbd0b723962e377cc829f96",
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0002769999555312097,
+              "rss_at_stage_start_bytes": 47685632
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.03863159997854382,
+              "rss_at_stage_start_bytes": 47775744
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.056122399982996285,
+              "rss_at_stage_start_bytes": 47407104
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.5192019999958575,
+              "rss_at_stage_start_bytes": 73613312
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 15.897284700011369,
+              "rss_at_stage_start_bytes": 77606912
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 20.239762599987444,
+              "rss_at_stage_start_bytes": 78499840
+            }
+          ],
+          "actual_dimensions": [
+            61,
+            43,
+            61
+          ],
+          "block_states": [
+            "minecraft:acacia_planks",
+            "minecraft:acacia_stairs",
+            "minecraft:glass",
+            "minecraft:infested_stone",
+            "minecraft:jungle_planks",
+            "minecraft:jungle_stairs",
+            "minecraft:mangrove_log",
+            "minecraft:mossy_cobblestone",
+            "minecraft:oak_door",
+            "minecraft:oak_leaves",
+            "minecraft:sea_lantern",
+            "minecraft:stripped_dark_oak_log",
+            "minecraft:vine"
+          ],
+          "make_runtime_seconds": 20.863621199969202
+        }
+      ],
+      "seconds_median": 21.37432380003156,
+      "process_peak_rss_bytes_median": 169693184
+    },
+    {
+      "archetype": "house",
+      "scale": "large",
+      "minecraft_version": "1.21.11",
+      "format": "schem",
+      "requested_size": [
+        128,
+        96,
+        128
+      ],
+      "repetitions": 3,
+      "samples": [
+        {
+          "process_peak_rss_bytes": 202489856,
+          "seconds": 182.46311589999823,
+          "output_bytes": 40508,
+          "output_path": "C:\\Users\\<user>\\AppData\\Local\\Temp\\mcblueprint-make-bench-parent-jvvf2m43\\result.schem",
+          "input_sha256": "59de976c842ee7d4fa7bca12fc33327fcb6007b7fba8466ba04a64d3d74c206f",
+          "config_sha256": "f32d10a7cc34722c90b46034a371acb6cb6be1775dbd0b723962e377cc829f96",
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0003093000268563628,
+              "rss_at_stage_start_bytes": 47611904
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.039599600015208125,
+              "rss_at_stage_start_bytes": 46899200
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.05888180003967136,
+              "rss_at_stage_start_bytes": 47308800
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.4293372000101954,
+              "rss_at_stage_start_bytes": 73371648
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 178.025434900017,
+              "rss_at_stage_start_bytes": 76709888
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 179.81780670001172,
+              "rss_at_stage_start_bytes": 77705216
+            }
+          ],
+          "actual_dimensions": [
+            127,
+            72,
+            127
+          ],
+          "block_states": [
+            "minecraft:acacia_planks",
+            "minecraft:acacia_stairs",
+            "minecraft:bamboo_mosaic_slab",
+            "minecraft:bamboo_mosaic_stairs",
+            "minecraft:birch_slab",
+            "minecraft:birch_stairs",
+            "minecraft:glass",
+            "minecraft:infested_cracked_stone_bricks",
+            "minecraft:infested_stone",
+            "minecraft:jungle_planks",
+            "minecraft:jungle_stairs",
+            "minecraft:jungle_wood",
+            "minecraft:mangrove_log",
+            "minecraft:oak_door",
+            "minecraft:oak_leaves",
+            "minecraft:sea_lantern",
+            "minecraft:vine"
+          ],
+          "make_runtime_seconds": 181.88111230003415
+        },
+        {
+          "process_peak_rss_bytes": 202645504,
+          "seconds": 184.11017659999197,
+          "output_bytes": 40508,
+          "output_path": "C:\\Users\\<user>\\AppData\\Local\\Temp\\mcblueprint-make-bench-parent-kp2zkhv0\\result.schem",
+          "input_sha256": "59de976c842ee7d4fa7bca12fc33327fcb6007b7fba8466ba04a64d3d74c206f",
+          "config_sha256": "f32d10a7cc34722c90b46034a371acb6cb6be1775dbd0b723962e377cc829f96",
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0002456999500282109,
+              "rss_at_stage_start_bytes": 46665728
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04018599999835715,
+              "rss_at_stage_start_bytes": 47325184
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.059111499984283,
+              "rss_at_stage_start_bytes": 47300608
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.43377579998923466,
+              "rss_at_stage_start_bytes": 73121792
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 179.62328939995496,
+              "rss_at_stage_start_bytes": 76713984
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 181.44125969999004,
+              "rss_at_stage_start_bytes": 77783040
+            }
+          ],
+          "actual_dimensions": [
+            127,
+            72,
+            127
+          ],
+          "block_states": [
+            "minecraft:acacia_planks",
+            "minecraft:acacia_stairs",
+            "minecraft:bamboo_mosaic_slab",
+            "minecraft:bamboo_mosaic_stairs",
+            "minecraft:birch_slab",
+            "minecraft:birch_stairs",
+            "minecraft:glass",
+            "minecraft:infested_cracked_stone_bricks",
+            "minecraft:infested_stone",
+            "minecraft:jungle_planks",
+            "minecraft:jungle_stairs",
+            "minecraft:jungle_wood",
+            "minecraft:mangrove_log",
+            "minecraft:oak_door",
+            "minecraft:oak_leaves",
+            "minecraft:sea_lantern",
+            "minecraft:vine"
+          ],
+          "make_runtime_seconds": 183.51173379999818
+        },
+        {
+          "process_peak_rss_bytes": 203198464,
+          "seconds": 183.59484330000123,
+          "output_bytes": 40508,
+          "output_path": "C:\\Users\\<user>\\AppData\\Local\\Temp\\mcblueprint-make-bench-parent-kxg9t5l7\\result.schem",
+          "input_sha256": "59de976c842ee7d4fa7bca12fc33327fcb6007b7fba8466ba04a64d3d74c206f",
+          "config_sha256": "f32d10a7cc34722c90b46034a371acb6cb6be1775dbd0b723962e377cc829f96",
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.00024670001585036516,
+              "rss_at_stage_start_bytes": 48037888
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.21532929997192696,
+              "rss_at_stage_start_bytes": 47136768
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.23530569998547435,
+              "rss_at_stage_start_bytes": 47427584
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.6142791999736801,
+              "rss_at_stage_start_bytes": 73252864
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 178.0762403999688,
+              "rss_at_stage_start_bytes": 78065664
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 179.88467880000826,
+              "rss_at_stage_start_bytes": 78897152
+            }
+          ],
+          "actual_dimensions": [
+            127,
+            72,
+            127
+          ],
+          "block_states": [
+            "minecraft:acacia_planks",
+            "minecraft:acacia_stairs",
+            "minecraft:bamboo_mosaic_slab",
+            "minecraft:bamboo_mosaic_stairs",
+            "minecraft:birch_slab",
+            "minecraft:birch_stairs",
+            "minecraft:glass",
+            "minecraft:infested_cracked_stone_bricks",
+            "minecraft:infested_stone",
+            "minecraft:jungle_planks",
+            "minecraft:jungle_stairs",
+            "minecraft:jungle_wood",
+            "minecraft:mangrove_log",
+            "minecraft:oak_door",
+            "minecraft:oak_leaves",
+            "minecraft:sea_lantern",
+            "minecraft:vine"
+          ],
+          "make_runtime_seconds": 181.93258849997073
+        }
+      ],
+      "seconds_median": 183.59484330000123,
+      "process_peak_rss_bytes_median": 202645504
+    },
+    {
+      "archetype": "tower",
+      "scale": "large",
+      "minecraft_version": "1.21.11",
+      "format": "schem",
+      "requested_size": [
+        128,
+        96,
+        128
+      ],
+      "repetitions": 3,
+      "samples": [
+        {
+          "process_peak_rss_bytes": 186097664,
+          "seconds": 155.7362677999772,
+          "output_bytes": 97012,
+          "output_path": "C:\\Users\\<user>\\AppData\\Local\\Temp\\mcblueprint-make-bench-parent-gizj34j0\\result.schem",
+          "input_sha256": "0415b0b1009fb4fcfc15dbf400bd1b4b04d402eeb9498f158aeff5b846bc1562",
+          "config_sha256": "f32d10a7cc34722c90b46034a371acb6cb6be1775dbd0b723962e377cc829f96",
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.00030339998193085194,
+              "rss_at_stage_start_bytes": 47857664
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.040392199996858835,
+              "rss_at_stage_start_bytes": 46747648
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.06730449997121468,
+              "rss_at_stage_start_bytes": 47927296
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.889837599999737,
+              "rss_at_stage_start_bytes": 74539008
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 95.88528359995689,
+              "rss_at_stage_start_bytes": 77594624
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 149.7683829999878,
+              "rss_at_stage_start_bytes": 87494656
+            }
+          ],
+          "actual_dimensions": [
+            125,
+            88,
+            125
+          ],
+          "block_states": [
+            "minecraft:acacia_planks",
+            "minecraft:acacia_stairs",
+            "minecraft:glass",
+            "minecraft:infested_stone",
+            "minecraft:jungle_planks",
+            "minecraft:jungle_stairs",
+            "minecraft:mangrove_log",
+            "minecraft:mossy_cobblestone",
+            "minecraft:oak_door",
+            "minecraft:oak_leaves",
+            "minecraft:sea_lantern",
+            "minecraft:stripped_dark_oak_log",
+            "minecraft:vine"
+          ],
+          "make_runtime_seconds": 155.12625849997858
+        },
+        {
+          "process_peak_rss_bytes": 186073088,
+          "seconds": 156.3172923999955,
+          "output_bytes": 97012,
+          "output_path": "C:\\Users\\<user>\\AppData\\Local\\Temp\\mcblueprint-make-bench-parent-ioqtu4jc\\result.schem",
+          "input_sha256": "0415b0b1009fb4fcfc15dbf400bd1b4b04d402eeb9498f158aeff5b846bc1562",
+          "config_sha256": "f32d10a7cc34722c90b46034a371acb6cb6be1775dbd0b723962e377cc829f96",
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0002915999502874911,
+              "rss_at_stage_start_bytes": 46559232
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.03977229999145493,
+              "rss_at_stage_start_bytes": 47202304
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.06784380000317469,
+              "rss_at_stage_start_bytes": 47804416
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.8946739999810234,
+              "rss_at_stage_start_bytes": 74362880
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 95.92726739996579,
+              "rss_at_stage_start_bytes": 77246464
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 150.43451619998086,
+              "rss_at_stage_start_bytes": 87326720
+            }
+          ],
+          "actual_dimensions": [
+            125,
+            88,
+            125
+          ],
+          "block_states": [
+            "minecraft:acacia_planks",
+            "minecraft:acacia_stairs",
+            "minecraft:glass",
+            "minecraft:infested_stone",
+            "minecraft:jungle_planks",
+            "minecraft:jungle_stairs",
+            "minecraft:mangrove_log",
+            "minecraft:mossy_cobblestone",
+            "minecraft:oak_door",
+            "minecraft:oak_leaves",
+            "minecraft:sea_lantern",
+            "minecraft:stripped_dark_oak_log",
+            "minecraft:vine"
+          ],
+          "make_runtime_seconds": 155.70041729998775
+        },
+        {
+          "process_peak_rss_bytes": 186146816,
+          "seconds": 154.72607780003455,
+          "output_bytes": 97012,
+          "output_path": "C:\\Users\\<user>\\AppData\\Local\\Temp\\mcblueprint-make-bench-parent-b3rpl8dq\\result.schem",
+          "input_sha256": "0415b0b1009fb4fcfc15dbf400bd1b4b04d402eeb9498f158aeff5b846bc1562",
+          "config_sha256": "f32d10a7cc34722c90b46034a371acb6cb6be1775dbd0b723962e377cc829f96",
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.00025340000865980983,
+              "rss_at_stage_start_bytes": 46559232
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04057970002759248,
+              "rss_at_stage_start_bytes": 47038464
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.06790620001265779,
+              "rss_at_stage_start_bytes": 47747072
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.8818254999932833,
+              "rss_at_stage_start_bytes": 74375168
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 95.0975463000359,
+              "rss_at_stage_start_bytes": 77438976
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 148.77535120001994,
+              "rss_at_stage_start_bytes": 87203840
+            }
+          ],
+          "actual_dimensions": [
+            125,
+            88,
+            125
+          ],
+          "block_states": [
+            "minecraft:acacia_planks",
+            "minecraft:acacia_stairs",
+            "minecraft:glass",
+            "minecraft:infested_stone",
+            "minecraft:jungle_planks",
+            "minecraft:jungle_stairs",
+            "minecraft:mangrove_log",
+            "minecraft:mossy_cobblestone",
+            "minecraft:oak_door",
+            "minecraft:oak_leaves",
+            "minecraft:sea_lantern",
+            "minecraft:stripped_dark_oak_log",
+            "minecraft:vine"
+          ],
+          "make_runtime_seconds": 154.11861700000009
+        }
+      ],
+      "seconds_median": 155.7362677999772,
+      "process_peak_rss_bytes_median": 186097664
+    }
+  ]
+}

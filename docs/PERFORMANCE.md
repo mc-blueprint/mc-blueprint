@@ -75,3 +75,31 @@ python scripts/benchmark.py --profile-benchmark
 時間は新規Pythonプロセスの起動を含む3回の中央値。各試行の生値はJSON記録を参照する。測定端末はWindows 11（10.0.26200）、AMD Ryzen 7 5700X 8-Core Processor、物理メモリ68,640,256,000 bytes、NVIDIA GeForce RTX 4070 SUPER、Python 3.12.15。
 
 viewer側の参照は `mc-blueprint-viewer` の `7b2e0f4:docs/performance.md`。負荷対応は城→castle、街並み→town、地形→terrain、地下→underground、植生→vegetation。viewerはfixture-v1のscene JSONを読み込み・描画するのに対し、ここでは既存OperationのBlueprintを検証・生成してschemへ出力するため入力データも処理範囲も異なる。viewerの初回表示・fpsと本測定のend-to-end生成時間、またviewerのプロセスRSS集計と本測定のPython子プロセスピークRSSは直接比較しない。
+
+## 生成コア測定（Issue #153）
+
+2026-11-03に同じ6個のBlueprint fixtureを変更せず、新旧エンジンで3回ずつ測定した。新系列はBlueprint入力で利用可能な `generate_regions` → 既定Weather → `export_generated_regions` を対象とする。旧系列はread・parse・validation・model load・generate・support・schem exportを含む。処理範囲が異なるため表は各系列の観測値を並べたもので、速度差の因果比較ではない。全生値、入力hash、環境、設定・lock・engine・commit識別子は [generation-core-baseline.json](../benchmarks/generation-core-baseline.json) と [generation-baseline.json](../benchmarks/generation-baseline.json) を参照。
+
+| 負荷 | 寸法 | 旧時間中央値 | 旧ピークRSS中央値 | 新コア時間中央値 | 新ピークRSS中央値 |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 城 medium | 64×48×64 | 1.277秒 | 74.0 MiB | 6.749秒 | 73.5 MiB |
+| 街並み medium | 64×48×64 | 1.121秒 | 69.8 MiB | 4.998秒 | 71.0 MiB |
+| 地形 medium | 64×48×64 | 2.139秒 | 75.8 MiB | 6.605秒 | 71.8 MiB |
+| 地下 medium | 64×48×64 | 1.533秒 | 75.8 MiB | 6.272秒 | 70.5 MiB |
+| 植生 medium | 64×48×64 | 1.022秒 | 69.0 MiB | 4.628秒 | 70.7 MiB |
+| 城 huge | 256×128×256 | 17.651秒 | 278.0 MiB | 195.677秒 | 91.9 MiB |
+
+新系列のhugeはNFR2の2分目標を超過した。RSSはこの端末ではNFR3の2GB以内だった。medium値は10秒以内だが、make全体の測定は別系列であり、NFR2の達成判定にはmakeの値を用いる。
+
+BuildSpecのmake全体を固定課題住宅・塔およびmedium・largeで測定した値は [make-baseline.json](../benchmarks/make-baseline.json) に記録する。mediumは64×48×64以内、largeは128×96×128以内に収まるよう計画寸法を指定し、実出力寸法も各試行に保存する。段階値は `stage_hook` 呼出時点の累積経過時間とその時点のWorking Setであり、段階単独の時間・ピークRSSではない。end-to-endピークRSSは独立子プロセス全体の値として別に記録する。
+
+| make入力 | 要求上限 | 実出力寸法 | 時間中央値 | ピークRSS中央値 |
+| --- | ---: | ---: | ---: | ---: |
+| 住宅 medium | 64×48×64 | 63×40×63 | 29.682秒 | 182.6 MiB |
+| 塔 medium | 64×48×64 | 61×43×61 | 21.374秒 | 161.8 MiB |
+| 住宅 large | 128×96×128 | 127×72×127 | 183.595秒 | 193.3 MiB |
+| 塔 large | 128×96×128 | 125×88×125 | 155.736秒 | 177.5 MiB |
+
+mediumの住宅・塔はNFR2の10秒目標を超え、large住宅・塔も2分目標を超える。巨大負荷はNFR3の2GB以内だった。住宅・塔の生値、各stage_hook時点の累積経過時間と段開始時RSS、実寸法はJSONを参照する。
+
+測定端末は上記のWindows 11 / Ryzen 7 5700X / RTX 4070 SUPER機であり、NFR1の内蔵GPU・8GB端末では未測定である。街並み・地形・地下・植生の計画生成はHの範囲で、今回のBlueprint区間計測は計画品質を評価しない。人間比較・3D viewer・初回表示とfps・モデル使用量比較はIまたはFの範囲であり未測定である。
