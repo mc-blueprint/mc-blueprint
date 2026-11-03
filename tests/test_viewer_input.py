@@ -15,6 +15,7 @@ from mcblueprint.errors import BlueprintError
 from mcblueprint.exporters import EXPORTERS
 from mcblueprint.generator import generate
 from mcblueprint.importers import read_schematic
+from mcblueprint.output_lock import lock_paths
 from mcblueprint.pipeline import make
 from mcblueprint.planning import plan_buildspec
 from mcblueprint.viewer_input import (
@@ -115,6 +116,33 @@ def test_four_inputs_and_no_scene_provenance_open(tmp_path):
     detached.regenerate()
     assert scene_path.read_bytes() == original
     assert not detached.scene_path.samefile(scene_path)
+
+
+@pytest.mark.parametrize("kind", ["blueprint", "schematic", "scene", "scene-in-place"])
+def test_prepare_input_shares_output_stem_lock(tmp_path, kind):
+    source = tmp_path / "input.json"
+    data = blueprint(source)
+    if kind == "schematic":
+        source = source.with_suffix(".schem")
+        model = _validated(data, tmp_path)
+        EXPORTERS["schem"]().export(generate(model), model, source)
+    elif kind.startswith("scene"):
+        source = prepare_input(source, output=tmp_path / "input.schem").scene_path
+    output = tmp_path / "same.schem"
+    scene_path = tmp_path / "same.scene.json.gz"
+    locked = output.with_suffix(".litematic")
+    if kind == "scene-in-place":
+        output = tmp_path / "input.schem"
+        scene_path = tmp_path / "input.view.scene.json.gz"
+        locked = tmp_path / "input.view.litematic"
+    scene_path.write_bytes(b"existing")
+    with lock_paths(locked):
+        with pytest.raises(BlockingIOError):
+            prepare_input(source, output=output)
+        assert scene_path.read_bytes() == b"existing"
+    prepared = prepare_input(source, output=output)
+    assert prepared.scene_path == scene_path
+    assert prepared.scene["minecraftVersion"] == "1.21.11"
 
 
 def test_spec_param_regeneration(tmp_path):
