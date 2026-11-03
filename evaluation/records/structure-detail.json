@@ -27,12 +27,12 @@
     "python_version": "3.12.15"
   },
   "provenance": {
-    "commit": "9a4352b0ae81eb0b9d6b0a1d5e9867f1df9ce0e4",
-    "engine_sha256": "237c402b0211cd9e601144abb6300059ff6ede4f5ec79c93de0ad134901e84d7",
+    "commit": "87093d5c453f33ab3fa34f825473cd1a774c95a3",
+    "engine_sha256": "2a0d1449dff44097a76b0bb7f06031712eeb3386cdc56cefdd05c7f3372094e6",
     "lock_sha256": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48",
     "default_config_sha256": "17f5c240ead94ebb8c410f045b3344f07d07ec9c29a8a769645f853b5ea28d64"
   },
-  "measured_at": "2026-11-03T20:55:30.945699+00:00",
+  "measured_at": "2026-11-03T21:32:40.911799+00:00",
   "time_scope": "子プロセス起動からmake完了・worker JSON出力まで。build比較は除外。",
   "memory_metric": "独立子プロセスのmake直後のOS最大RSS/PeakWorkingSetSize。",
   "stage_sample_definition": "段開始時の累積時間と現在RSS。段単独ピークではない。",
@@ -56,45 +56,45 @@
         "sha256": "cb0c67dbee9a083b80c20e4cdb5d2fe249685cede48be1c722a77e7cc8d1547a"
       },
       "code": 0,
-      "make_runtime_seconds": 1.1909441000316292,
-      "process_peak_rss_bytes": 83480576,
+      "make_runtime_seconds": 1.0777182000456378,
+      "process_peak_rss_bytes": 83128320,
       "stage_hook_samples": [
         {
           "stage": "Resolve",
-          "elapsed_seconds": 0.0009476999985054135,
-          "rss_at_stage_start_bytes": 51851264
+          "elapsed_seconds": 0.0009812000207602978,
+          "rss_at_stage_start_bytes": 52322304
         },
         {
           "stage": "Site/Massing/Detail",
-          "elapsed_seconds": 0.04674589994829148,
-          "rss_at_stage_start_bytes": 52219904
+          "elapsed_seconds": 0.046502299956046045,
+          "rss_at_stage_start_bytes": 52707328
         },
         {
           "stage": "Materialize",
-          "elapsed_seconds": 0.15395169996190816,
-          "rss_at_stage_start_bytes": 51826688
+          "elapsed_seconds": 0.15096939995419234,
+          "rss_at_stage_start_bytes": 51761152
         },
         {
           "stage": "Generate",
-          "elapsed_seconds": 0.5855778999393806,
-          "rss_at_stage_start_bytes": 78020608
+          "elapsed_seconds": 0.5139939000364393,
+          "rss_at_stage_start_bytes": 77963264
         },
         {
           "stage": "Critic",
-          "elapsed_seconds": 1.1130506999325007,
-          "rss_at_stage_start_bytes": 80289792
+          "elapsed_seconds": 1.0420207000570372,
+          "rss_at_stage_start_bytes": 79937536
         },
         {
           "stage": "Export",
-          "elapsed_seconds": 1.1206489999312907,
-          "rss_at_stage_start_bytes": 80289792
+          "elapsed_seconds": 1.0500787999480963,
+          "rss_at_stage_start_bytes": 79937536
         }
       ],
-      "seconds": 1.9407826999668032,
+      "seconds": 1.8387151000788435,
       "engine_environment": {
         "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
         "engine": "0.1.0",
-        "engineHash": "6ebe3b46a834324b22a5c2e0fed50799b5ffd3b1ff8c7dcdb72174846eaa5da6",
+        "engineHash": "706b21c95fda01b1b13157315bfc64aa7c5e419cfdeb3e0d3d5e17635f65ef8a",
         "lockHash": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48"
       },
       "resolved_input": {
@@ -376,6 +376,7 @@
         "OK decoration_density={'house#1.facade.north.floor#1:north': {'value': 34.61538461538461, 'numerator': 9, 'denominator': 26}, 'house#1.facade.south.floor#1:south': {'value': 30.76923076923077, 'numerator': 8, 'denominator': 26}, 'house#1.facade.west.floor#1:west': {'value': 32.142857142857146, 'numerator': 9, 'denominator': 28}, 'house#1.facade.east.floor#1:east': {'value': 30.76923076923077, 'numerator': 8, 'denominator': 26}, 'house#1.facade.north.floor#2:north': {'value': 30.76923076923077, 'numerator': 8, 'denominator': 26}, 'house#1.facade.south.floor#2:south': {'value': 30.76923076923077, 'numerator': 8, 'denominator': 26}, 'house#1.facade.west.floor#2:west': {'value': 32.142857142857146, 'numerator': 9, 'denominator': 28}, 'house#1.facade.east.floor#2:east': {'value': 30.76923076923077, 'numerator': 8, 'denominator': 26}} evaluation/cases/structure-detail/single-house-1.21.11-schem.yaml house#1",
         "OK facade_surface_missing=0 evaluation/cases/structure-detail/single-house-1.21.11-schem.yaml house#1",
         "OK palette_relation=True evaluation/cases/structure-detail/single-house-1.21.11-schem.yaml house#1",
+        "WARN opening_recess_blocked opening_recess=0 expected=1 config.decoration.depth house#1.opening#1.6 → config.decoration.depth",
         "INFO preview=not-run (表示はCLIが実行)",
         "STATUS passed"
       ],
@@ -761,6 +762,19 @@
           "repairPaths": [],
           "severity": "ok",
           "source": "evaluation/cases/structure-detail/single-house-1.21.11-schem.yaml"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "house#1.opening#1.6",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
         }
       ],
       "blueprint_sha256": "05b2538cc5936a78ccce02a486a10bcc339bd20c7204748580e0f6f6ed7910b1",
@@ -994,45 +1008,45 @@
         "sha256": "b8784023efc3867850a115134a72c1cadc7a2733772595ce79bc2bf0b9c242d1"
       },
       "code": 0,
-      "make_runtime_seconds": 1.1947575999656692,
-      "process_peak_rss_bytes": 83615744,
+      "make_runtime_seconds": 1.0981448999373242,
+      "process_peak_rss_bytes": 84733952,
       "stage_hook_samples": [
         {
           "stage": "Resolve",
-          "elapsed_seconds": 0.0009483000030741096,
-          "rss_at_stage_start_bytes": 51654656
+          "elapsed_seconds": 0.0010192999616265297,
+          "rss_at_stage_start_bytes": 51933184
         },
         {
           "stage": "Site/Massing/Detail",
-          "elapsed_seconds": 0.04625030001625419,
-          "rss_at_stage_start_bytes": 52039680
+          "elapsed_seconds": 0.04932979994919151,
+          "rss_at_stage_start_bytes": 52236288
         },
         {
           "stage": "Materialize",
-          "elapsed_seconds": 0.15327269991394132,
-          "rss_at_stage_start_bytes": 52011008
+          "elapsed_seconds": 0.15481089998502284,
+          "rss_at_stage_start_bytes": 53063680
         },
         {
           "stage": "Generate",
-          "elapsed_seconds": 0.5875757000176236,
-          "rss_at_stage_start_bytes": 78204928
+          "elapsed_seconds": 0.529939700034447,
+          "rss_at_stage_start_bytes": 80121856
         },
         {
           "stage": "Critic",
-          "elapsed_seconds": 1.1139966999180615,
-          "rss_at_stage_start_bytes": 80424960
+          "elapsed_seconds": 1.060233399970457,
+          "rss_at_stage_start_bytes": 81543168
         },
         {
           "stage": "Export",
-          "elapsed_seconds": 1.1217884999932721,
-          "rss_at_stage_start_bytes": 80429056
+          "elapsed_seconds": 1.0679503999417648,
+          "rss_at_stage_start_bytes": 81547264
         }
       ],
-      "seconds": 1.981307200039737,
+      "seconds": 1.8605755000608042,
       "engine_environment": {
         "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
         "engine": "0.1.0",
-        "engineHash": "6ebe3b46a834324b22a5c2e0fed50799b5ffd3b1ff8c7dcdb72174846eaa5da6",
+        "engineHash": "706b21c95fda01b1b13157315bfc64aa7c5e419cfdeb3e0d3d5e17635f65ef8a",
         "lockHash": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48"
       },
       "resolved_input": {
@@ -1314,6 +1328,7 @@
         "OK decoration_density={'house#1.facade.north.floor#1:north': {'value': 34.61538461538461, 'numerator': 9, 'denominator': 26}, 'house#1.facade.south.floor#1:south': {'value': 30.76923076923077, 'numerator': 8, 'denominator': 26}, 'house#1.facade.west.floor#1:west': {'value': 32.142857142857146, 'numerator': 9, 'denominator': 28}, 'house#1.facade.east.floor#1:east': {'value': 30.76923076923077, 'numerator': 8, 'denominator': 26}, 'house#1.facade.north.floor#2:north': {'value': 30.76923076923077, 'numerator': 8, 'denominator': 26}, 'house#1.facade.south.floor#2:south': {'value': 30.76923076923077, 'numerator': 8, 'denominator': 26}, 'house#1.facade.west.floor#2:west': {'value': 32.142857142857146, 'numerator': 9, 'denominator': 28}, 'house#1.facade.east.floor#2:east': {'value': 30.76923076923077, 'numerator': 8, 'denominator': 26}} evaluation/cases/structure-detail/single-house-1.21.11-litematic.yaml house#1",
         "OK facade_surface_missing=0 evaluation/cases/structure-detail/single-house-1.21.11-litematic.yaml house#1",
         "OK palette_relation=True evaluation/cases/structure-detail/single-house-1.21.11-litematic.yaml house#1",
+        "WARN opening_recess_blocked opening_recess=0 expected=1 config.decoration.depth house#1.opening#1.6 → config.decoration.depth",
         "INFO preview=not-run (表示はCLIが実行)",
         "STATUS passed"
       ],
@@ -1699,6 +1714,19 @@
           "repairPaths": [],
           "severity": "ok",
           "source": "evaluation/cases/structure-detail/single-house-1.21.11-litematic.yaml"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "house#1.opening#1.6",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
         }
       ],
       "blueprint_sha256": "0795865bce08713ea4ee95c40d30aa127c14dc869be0c3b1eb3e01f38a9e9f05",
@@ -1932,45 +1960,45 @@
         "sha256": "c5855684a5f0e4e8d809808105e53ec5bdf8d38f3b869d048d9319ea3db58ab3"
       },
       "code": 0,
-      "make_runtime_seconds": 1.2230175000149757,
-      "process_peak_rss_bytes": 84697088,
+      "make_runtime_seconds": 1.086974799982272,
+      "process_peak_rss_bytes": 83714048,
       "stage_hook_samples": [
         {
           "stage": "Resolve",
-          "elapsed_seconds": 0.0009537000441923738,
-          "rss_at_stage_start_bytes": 51466240
+          "elapsed_seconds": 0.0009498000144958496,
+          "rss_at_stage_start_bytes": 51847168
         },
         {
           "stage": "Site/Massing/Detail",
-          "elapsed_seconds": 0.04665460006799549,
-          "rss_at_stage_start_bytes": 51748864
+          "elapsed_seconds": 0.04611160000786185,
+          "rss_at_stage_start_bytes": 52158464
         },
         {
           "stage": "Materialize",
-          "elapsed_seconds": 0.155581200029701,
-          "rss_at_stage_start_bytes": 52142080
+          "elapsed_seconds": 0.1495122000342235,
+          "rss_at_stage_start_bytes": 53018624
         },
         {
           "stage": "Generate",
-          "elapsed_seconds": 0.6060969000682235,
-          "rss_at_stage_start_bytes": 80183296
+          "elapsed_seconds": 0.5195635999552906,
+          "rss_at_stage_start_bytes": 79200256
         },
         {
           "stage": "Critic",
-          "elapsed_seconds": 1.1386213999940082,
-          "rss_at_stage_start_bytes": 81510400
+          "elapsed_seconds": 1.0482249000342563,
+          "rss_at_stage_start_bytes": 80523264
         },
         {
           "stage": "Export",
-          "elapsed_seconds": 1.1469032000750303,
-          "rss_at_stage_start_bytes": 81514496
+          "elapsed_seconds": 1.0558525000233203,
+          "rss_at_stage_start_bytes": 80523264
         }
       ],
-      "seconds": 1.9858255999861285,
+      "seconds": 1.8465528000378981,
       "engine_environment": {
         "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
         "engine": "0.1.0",
-        "engineHash": "6ebe3b46a834324b22a5c2e0fed50799b5ffd3b1ff8c7dcdb72174846eaa5da6",
+        "engineHash": "706b21c95fda01b1b13157315bfc64aa7c5e419cfdeb3e0d3d5e17635f65ef8a",
         "lockHash": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48"
       },
       "resolved_input": {
@@ -2252,6 +2280,7 @@
         "OK decoration_density={'house#1.facade.north.floor#1:north': {'value': 34.61538461538461, 'numerator': 9, 'denominator': 26}, 'house#1.facade.south.floor#1:south': {'value': 30.76923076923077, 'numerator': 8, 'denominator': 26}, 'house#1.facade.west.floor#1:west': {'value': 32.142857142857146, 'numerator': 9, 'denominator': 28}, 'house#1.facade.east.floor#1:east': {'value': 30.76923076923077, 'numerator': 8, 'denominator': 26}, 'house#1.facade.north.floor#2:north': {'value': 30.76923076923077, 'numerator': 8, 'denominator': 26}, 'house#1.facade.south.floor#2:south': {'value': 30.76923076923077, 'numerator': 8, 'denominator': 26}, 'house#1.facade.west.floor#2:west': {'value': 32.142857142857146, 'numerator': 9, 'denominator': 28}, 'house#1.facade.east.floor#2:east': {'value': 30.76923076923077, 'numerator': 8, 'denominator': 26}} evaluation/cases/structure-detail/single-house-26.1.2-schem.yaml house#1",
         "OK facade_surface_missing=0 evaluation/cases/structure-detail/single-house-26.1.2-schem.yaml house#1",
         "OK palette_relation=True evaluation/cases/structure-detail/single-house-26.1.2-schem.yaml house#1",
+        "WARN opening_recess_blocked opening_recess=0 expected=1 config.decoration.depth house#1.opening#1.6 → config.decoration.depth",
         "INFO preview=not-run (表示はCLIが実行)",
         "STATUS passed"
       ],
@@ -2637,6 +2666,19 @@
           "repairPaths": [],
           "severity": "ok",
           "source": "evaluation/cases/structure-detail/single-house-26.1.2-schem.yaml"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "house#1.opening#1.6",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
         }
       ],
       "blueprint_sha256": "2ac48d9691e0d4a09226d95f07839efdd02f53e0d29d157720326477f0fae517",
@@ -2870,45 +2912,45 @@
         "sha256": "4eeded49b37c742f5758fbcc0417450b5ce19369fef7bbc694fa7720cd0682a9"
       },
       "code": 0,
-      "make_runtime_seconds": 1.1966636000433937,
-      "process_peak_rss_bytes": 83390464,
+      "make_runtime_seconds": 1.078220900031738,
+      "process_peak_rss_bytes": 83083264,
       "stage_hook_samples": [
         {
           "stage": "Resolve",
-          "elapsed_seconds": 0.000950800022110343,
-          "rss_at_stage_start_bytes": 51847168
+          "elapsed_seconds": 0.0009619999909773469,
+          "rss_at_stage_start_bytes": 51789824
         },
         {
           "stage": "Site/Massing/Detail",
-          "elapsed_seconds": 0.04694220004603267,
-          "rss_at_stage_start_bytes": 52199424
+          "elapsed_seconds": 0.04620059998705983,
+          "rss_at_stage_start_bytes": 51118080
         },
         {
           "stage": "Materialize",
-          "elapsed_seconds": 0.15407509997021407,
-          "rss_at_stage_start_bytes": 51769344
+          "elapsed_seconds": 0.14943730004597455,
+          "rss_at_stage_start_bytes": 51519488
         },
         {
           "stage": "Generate",
-          "elapsed_seconds": 0.5856443999800831,
-          "rss_at_stage_start_bytes": 78004224
+          "elapsed_seconds": 0.5136121000396088,
+          "rss_at_stage_start_bytes": 77721600
         },
         {
           "stage": "Critic",
-          "elapsed_seconds": 1.1143745000008494,
-          "rss_at_stage_start_bytes": 80207872
+          "elapsed_seconds": 1.0384344999911264,
+          "rss_at_stage_start_bytes": 79892480
         },
         {
           "stage": "Export",
-          "elapsed_seconds": 1.1220577000640333,
-          "rss_at_stage_start_bytes": 80211968
+          "elapsed_seconds": 1.0466441999888048,
+          "rss_at_stage_start_bytes": 79892480
         }
       ],
-      "seconds": 1.9599165000254288,
+      "seconds": 1.8677083000075072,
       "engine_environment": {
         "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
         "engine": "0.1.0",
-        "engineHash": "6ebe3b46a834324b22a5c2e0fed50799b5ffd3b1ff8c7dcdb72174846eaa5da6",
+        "engineHash": "706b21c95fda01b1b13157315bfc64aa7c5e419cfdeb3e0d3d5e17635f65ef8a",
         "lockHash": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48"
       },
       "resolved_input": {
@@ -3190,6 +3232,7 @@
         "OK decoration_density={'house#1.facade.north.floor#1:north': {'value': 34.61538461538461, 'numerator': 9, 'denominator': 26}, 'house#1.facade.south.floor#1:south': {'value': 30.76923076923077, 'numerator': 8, 'denominator': 26}, 'house#1.facade.west.floor#1:west': {'value': 32.142857142857146, 'numerator': 9, 'denominator': 28}, 'house#1.facade.east.floor#1:east': {'value': 30.76923076923077, 'numerator': 8, 'denominator': 26}, 'house#1.facade.north.floor#2:north': {'value': 30.76923076923077, 'numerator': 8, 'denominator': 26}, 'house#1.facade.south.floor#2:south': {'value': 30.76923076923077, 'numerator': 8, 'denominator': 26}, 'house#1.facade.west.floor#2:west': {'value': 32.142857142857146, 'numerator': 9, 'denominator': 28}, 'house#1.facade.east.floor#2:east': {'value': 30.76923076923077, 'numerator': 8, 'denominator': 26}} evaluation/cases/structure-detail/single-house-26.1.2-litematic.yaml house#1",
         "OK facade_surface_missing=0 evaluation/cases/structure-detail/single-house-26.1.2-litematic.yaml house#1",
         "OK palette_relation=True evaluation/cases/structure-detail/single-house-26.1.2-litematic.yaml house#1",
+        "WARN opening_recess_blocked opening_recess=0 expected=1 config.decoration.depth house#1.opening#1.6 → config.decoration.depth",
         "INFO preview=not-run (表示はCLIが実行)",
         "STATUS passed"
       ],
@@ -3575,6 +3618,19 @@
           "repairPaths": [],
           "severity": "ok",
           "source": "evaluation/cases/structure-detail/single-house-26.1.2-litematic.yaml"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "house#1.opening#1.6",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
         }
       ],
       "blueprint_sha256": "2ccf694bc3fe4a13f2e1fa971137b28f3bbbe644e6f788fcc7d3f388660e29b5",
@@ -3808,45 +3864,45 @@
         "sha256": "73412c7599e63914e410a66bddcd2f553727017588cc499f128d2c90560361bf"
       },
       "code": 0,
-      "make_runtime_seconds": 1.1955839999718592,
-      "process_peak_rss_bytes": 83980288,
+      "make_runtime_seconds": 1.1100549000548199,
+      "process_peak_rss_bytes": 83869696,
       "stage_hook_samples": [
         {
           "stage": "Resolve",
-          "elapsed_seconds": 0.001132899895310402,
-          "rss_at_stage_start_bytes": 51671040
+          "elapsed_seconds": 0.000999600044451654,
+          "rss_at_stage_start_bytes": 51101696
         },
         {
           "stage": "Site/Massing/Detail",
-          "elapsed_seconds": 0.04719889990519732,
-          "rss_at_stage_start_bytes": 52015104
+          "elapsed_seconds": 0.04686120001133531,
+          "rss_at_stage_start_bytes": 51441664
         },
         {
           "stage": "Materialize",
-          "elapsed_seconds": 0.1538787999888882,
-          "rss_at_stage_start_bytes": 52682752
+          "elapsed_seconds": 0.1572734999936074,
+          "rss_at_stage_start_bytes": 52903936
         },
         {
           "stage": "Generate",
-          "elapsed_seconds": 0.586865899967961,
-          "rss_at_stage_start_bytes": 79560704
+          "elapsed_seconds": 0.5306059999857098,
+          "rss_at_stage_start_bytes": 79122432
         },
         {
           "stage": "Critic",
-          "elapsed_seconds": 1.1156224999576807,
-          "rss_at_stage_start_bytes": 80789504
+          "elapsed_seconds": 1.0692085000919178,
+          "rss_at_stage_start_bytes": 80691200
         },
         {
           "stage": "Export",
-          "elapsed_seconds": 1.1231701999204233,
-          "rss_at_stage_start_bytes": 80789504
+          "elapsed_seconds": 1.0772150000557303,
+          "rss_at_stage_start_bytes": 80695296
         }
       ],
-      "seconds": 1.955932200071402,
+      "seconds": 1.8875797999789938,
       "engine_environment": {
         "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
         "engine": "0.1.0",
-        "engineHash": "6ebe3b46a834324b22a5c2e0fed50799b5ffd3b1ff8c7dcdb72174846eaa5da6",
+        "engineHash": "706b21c95fda01b1b13157315bfc64aa7c5e419cfdeb3e0d3d5e17635f65ef8a",
         "lockHash": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48"
       },
       "resolved_input": {
@@ -4128,6 +4184,7 @@
         "OK decoration_density={'house#1.facade.north.floor#1:north': {'value': 34.61538461538461, 'numerator': 9, 'denominator': 26}, 'house#1.facade.south.floor#1:south': {'value': 30.76923076923077, 'numerator': 8, 'denominator': 26}, 'house#1.facade.west.floor#1:west': {'value': 32.142857142857146, 'numerator': 9, 'denominator': 28}, 'house#1.facade.east.floor#1:east': {'value': 30.76923076923077, 'numerator': 8, 'denominator': 26}, 'house#1.facade.north.floor#2:north': {'value': 30.76923076923077, 'numerator': 8, 'denominator': 26}, 'house#1.facade.south.floor#2:south': {'value': 30.76923076923077, 'numerator': 8, 'denominator': 26}, 'house#1.facade.west.floor#2:west': {'value': 32.142857142857146, 'numerator': 9, 'denominator': 28}, 'house#1.facade.east.floor#2:east': {'value': 30.76923076923077, 'numerator': 8, 'denominator': 26}} evaluation/cases/structure-detail/single-house-26.2-schem.yaml house#1",
         "OK facade_surface_missing=0 evaluation/cases/structure-detail/single-house-26.2-schem.yaml house#1",
         "OK palette_relation=True evaluation/cases/structure-detail/single-house-26.2-schem.yaml house#1",
+        "WARN opening_recess_blocked opening_recess=0 expected=1 config.decoration.depth house#1.opening#1.6 → config.decoration.depth",
         "INFO preview=not-run (表示はCLIが実行)",
         "STATUS passed"
       ],
@@ -4513,6 +4570,19 @@
           "repairPaths": [],
           "severity": "ok",
           "source": "evaluation/cases/structure-detail/single-house-26.2-schem.yaml"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "house#1.opening#1.6",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
         }
       ],
       "blueprint_sha256": "0c6a80ff5a578bb7210e6584bc13a8dc1cfc09f9b43fe59f0dcd8452558848db",
@@ -4746,45 +4816,45 @@
         "sha256": "f0da68d7c5e871098d049f00eb2b4ee741b1656847f47a49f6a29274f533baea"
       },
       "code": 0,
-      "make_runtime_seconds": 1.1983727000188082,
-      "process_peak_rss_bytes": 83881984,
+      "make_runtime_seconds": 1.1330473999259993,
+      "process_peak_rss_bytes": 83857408,
       "stage_hook_samples": [
         {
           "stage": "Resolve",
-          "elapsed_seconds": 0.0009451999794691801,
-          "rss_at_stage_start_bytes": 51724288
+          "elapsed_seconds": 0.0009606999810785055,
+          "rss_at_stage_start_bytes": 51732480
         },
         {
           "stage": "Site/Massing/Detail",
-          "elapsed_seconds": 0.046428399975411594,
-          "rss_at_stage_start_bytes": 51933184
+          "elapsed_seconds": 0.04708399996161461,
+          "rss_at_stage_start_bytes": 52015104
         },
         {
           "stage": "Materialize",
-          "elapsed_seconds": 0.15373899997211993,
-          "rss_at_stage_start_bytes": 52961280
+          "elapsed_seconds": 0.17853909998666495,
+          "rss_at_stage_start_bytes": 53489664
         },
         {
           "stage": "Generate",
-          "elapsed_seconds": 0.587724499986507,
-          "rss_at_stage_start_bytes": 79040512
+          "elapsed_seconds": 0.5552119999192655,
+          "rss_at_stage_start_bytes": 79015936
         },
         {
           "stage": "Critic",
-          "elapsed_seconds": 1.1153885999228805,
-          "rss_at_stage_start_bytes": 80695296
+          "elapsed_seconds": 1.0918010999448597,
+          "rss_at_stage_start_bytes": 80670720
         },
         {
           "stage": "Export",
-          "elapsed_seconds": 1.1226627000141889,
-          "rss_at_stage_start_bytes": 80695296
+          "elapsed_seconds": 1.0994541000109166,
+          "rss_at_stage_start_bytes": 80674816
         }
       ],
-      "seconds": 1.958718099980615,
+      "seconds": 1.8926303999032825,
       "engine_environment": {
         "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
         "engine": "0.1.0",
-        "engineHash": "6ebe3b46a834324b22a5c2e0fed50799b5ffd3b1ff8c7dcdb72174846eaa5da6",
+        "engineHash": "706b21c95fda01b1b13157315bfc64aa7c5e419cfdeb3e0d3d5e17635f65ef8a",
         "lockHash": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48"
       },
       "resolved_input": {
@@ -5066,6 +5136,7 @@
         "OK decoration_density={'house#1.facade.north.floor#1:north': {'value': 34.61538461538461, 'numerator': 9, 'denominator': 26}, 'house#1.facade.south.floor#1:south': {'value': 30.76923076923077, 'numerator': 8, 'denominator': 26}, 'house#1.facade.west.floor#1:west': {'value': 32.142857142857146, 'numerator': 9, 'denominator': 28}, 'house#1.facade.east.floor#1:east': {'value': 30.76923076923077, 'numerator': 8, 'denominator': 26}, 'house#1.facade.north.floor#2:north': {'value': 30.76923076923077, 'numerator': 8, 'denominator': 26}, 'house#1.facade.south.floor#2:south': {'value': 30.76923076923077, 'numerator': 8, 'denominator': 26}, 'house#1.facade.west.floor#2:west': {'value': 32.142857142857146, 'numerator': 9, 'denominator': 28}, 'house#1.facade.east.floor#2:east': {'value': 30.76923076923077, 'numerator': 8, 'denominator': 26}} evaluation/cases/structure-detail/single-house-26.2-litematic.yaml house#1",
         "OK facade_surface_missing=0 evaluation/cases/structure-detail/single-house-26.2-litematic.yaml house#1",
         "OK palette_relation=True evaluation/cases/structure-detail/single-house-26.2-litematic.yaml house#1",
+        "WARN opening_recess_blocked opening_recess=0 expected=1 config.decoration.depth house#1.opening#1.6 → config.decoration.depth",
         "INFO preview=not-run (表示はCLIが実行)",
         "STATUS passed"
       ],
@@ -5451,6 +5522,19 @@
           "repairPaths": [],
           "severity": "ok",
           "source": "evaluation/cases/structure-detail/single-house-26.2-litematic.yaml"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "house#1.opening#1.6",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
         }
       ],
       "blueprint_sha256": "d34f134b7d1e2cc86a9dbeb45c25b972aef5b2042b0a72e49bad6f4350f16d7d",
@@ -5684,45 +5768,45 @@
         "sha256": "cb2c9b8fa285d288f762bf0613fbc3c0e1bbd4a363e29db731da6a616ffc6c38"
       },
       "code": 0,
-      "make_runtime_seconds": 1.2319805000443012,
-      "process_peak_rss_bytes": 84033536,
+      "make_runtime_seconds": 1.0882809999166057,
+      "process_peak_rss_bytes": 84361216,
       "stage_hook_samples": [
         {
           "stage": "Resolve",
-          "elapsed_seconds": 0.000961500103585422,
-          "rss_at_stage_start_bytes": 51773440
+          "elapsed_seconds": 0.0009534999262541533,
+          "rss_at_stage_start_bytes": 52330496
         },
         {
           "stage": "Site/Massing/Detail",
-          "elapsed_seconds": 0.04625460004899651,
-          "rss_at_stage_start_bytes": 52121600
+          "elapsed_seconds": 0.047457599896006286,
+          "rss_at_stage_start_bytes": 52563968
         },
         {
           "stage": "Materialize",
-          "elapsed_seconds": 0.177356900065206,
-          "rss_at_stage_start_bytes": 53018624
+          "elapsed_seconds": 0.1527849999256432,
+          "rss_at_stage_start_bytes": 52166656
         },
         {
           "stage": "Generate",
-          "elapsed_seconds": 0.6218577000545338,
-          "rss_at_stage_start_bytes": 79220736
+          "elapsed_seconds": 0.5230981999775395,
+          "rss_at_stage_start_bytes": 79937536
         },
         {
           "stage": "Critic",
-          "elapsed_seconds": 1.1506235001143068,
-          "rss_at_stage_start_bytes": 80850944
+          "elapsed_seconds": 1.0487723998958245,
+          "rss_at_stage_start_bytes": 81174528
         },
         {
           "stage": "Export",
-          "elapsed_seconds": 1.158230600063689,
-          "rss_at_stage_start_bytes": 80850944
+          "elapsed_seconds": 1.0562031998997554,
+          "rss_at_stage_start_bytes": 81178624
         }
       ],
-      "seconds": 1.9912481000646949,
+      "seconds": 1.849634600104764,
       "engine_environment": {
         "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
         "engine": "0.1.0",
-        "engineHash": "6ebe3b46a834324b22a5c2e0fed50799b5ffd3b1ff8c7dcdb72174846eaa5da6",
+        "engineHash": "706b21c95fda01b1b13157315bfc64aa7c5e419cfdeb3e0d3d5e17635f65ef8a",
         "lockHash": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48"
       },
       "resolved_input": {
@@ -6004,6 +6088,7 @@
         "OK decoration_density={'house#1.facade.north.floor#1:north': {'value': 34.61538461538461, 'numerator': 9, 'denominator': 26}, 'house#1.facade.south.floor#1:south': {'value': 30.76923076923077, 'numerator': 8, 'denominator': 26}, 'house#1.facade.west.floor#1:west': {'value': 32.142857142857146, 'numerator': 9, 'denominator': 28}, 'house#1.facade.east.floor#1:east': {'value': 30.76923076923077, 'numerator': 8, 'denominator': 26}, 'house#1.facade.north.floor#2:north': {'value': 30.76923076923077, 'numerator': 8, 'denominator': 26}, 'house#1.facade.south.floor#2:south': {'value': 30.76923076923077, 'numerator': 8, 'denominator': 26}, 'house#1.facade.west.floor#2:west': {'value': 32.142857142857146, 'numerator': 9, 'denominator': 28}, 'house#1.facade.east.floor#2:east': {'value': 30.76923076923077, 'numerator': 8, 'denominator': 26}} evaluation/cases/structure-detail/single-house-26.3-schem.yaml house#1",
         "OK facade_surface_missing=0 evaluation/cases/structure-detail/single-house-26.3-schem.yaml house#1",
         "OK palette_relation=True evaluation/cases/structure-detail/single-house-26.3-schem.yaml house#1",
+        "WARN opening_recess_blocked opening_recess=0 expected=1 config.decoration.depth house#1.opening#1.6 → config.decoration.depth",
         "INFO preview=not-run (表示はCLIが実行)",
         "STATUS passed"
       ],
@@ -6389,6 +6474,19 @@
           "repairPaths": [],
           "severity": "ok",
           "source": "evaluation/cases/structure-detail/single-house-26.3-schem.yaml"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "house#1.opening#1.6",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
         }
       ],
       "blueprint_sha256": "374cb6b2b18c658840767853c737e600ed68bdfea85b6c6f7c25bc6353eac8e6",
@@ -6622,45 +6720,45 @@
         "sha256": "e140f9c7c6bfdc511bf41ac0758144396b65677884132f42245b9326c65afe2c"
       },
       "code": 0,
-      "make_runtime_seconds": 1.2003449000185356,
-      "process_peak_rss_bytes": 83398656,
+      "make_runtime_seconds": 1.1075395999941975,
+      "process_peak_rss_bytes": 83755008,
       "stage_hook_samples": [
         {
           "stage": "Resolve",
-          "elapsed_seconds": 0.0009734999621286988,
-          "rss_at_stage_start_bytes": 50892800
+          "elapsed_seconds": 0.0014386000111699104,
+          "rss_at_stage_start_bytes": 52883456
         },
         {
           "stage": "Site/Massing/Detail",
-          "elapsed_seconds": 0.04778309992980212,
-          "rss_at_stage_start_bytes": 51486720
+          "elapsed_seconds": 0.049502700101584196,
+          "rss_at_stage_start_bytes": 51068928
         },
         {
           "stage": "Materialize",
-          "elapsed_seconds": 0.1565602000337094,
-          "rss_at_stage_start_bytes": 51900416
+          "elapsed_seconds": 0.15439889999106526,
+          "rss_at_stage_start_bytes": 52072448
         },
         {
           "stage": "Generate",
-          "elapsed_seconds": 0.5918098000111058,
-          "rss_at_stage_start_bytes": 78229504
+          "elapsed_seconds": 0.5235208000522107,
+          "rss_at_stage_start_bytes": 78430208
         },
         {
           "stage": "Critic",
-          "elapsed_seconds": 1.117753200000152,
-          "rss_at_stage_start_bytes": 80207872
+          "elapsed_seconds": 1.067212300025858,
+          "rss_at_stage_start_bytes": 80564224
         },
         {
           "stage": "Export",
-          "elapsed_seconds": 1.1255751999560744,
-          "rss_at_stage_start_bytes": 80207872
+          "elapsed_seconds": 1.0748655000934377,
+          "rss_at_stage_start_bytes": 80564224
         }
       ],
-      "seconds": 1.958175199921243,
+      "seconds": 1.87070870003663,
       "engine_environment": {
         "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
         "engine": "0.1.0",
-        "engineHash": "6ebe3b46a834324b22a5c2e0fed50799b5ffd3b1ff8c7dcdb72174846eaa5da6",
+        "engineHash": "706b21c95fda01b1b13157315bfc64aa7c5e419cfdeb3e0d3d5e17635f65ef8a",
         "lockHash": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48"
       },
       "resolved_input": {
@@ -6942,6 +7040,7 @@
         "OK decoration_density={'house#1.facade.north.floor#1:north': {'value': 34.61538461538461, 'numerator': 9, 'denominator': 26}, 'house#1.facade.south.floor#1:south': {'value': 30.76923076923077, 'numerator': 8, 'denominator': 26}, 'house#1.facade.west.floor#1:west': {'value': 32.142857142857146, 'numerator': 9, 'denominator': 28}, 'house#1.facade.east.floor#1:east': {'value': 30.76923076923077, 'numerator': 8, 'denominator': 26}, 'house#1.facade.north.floor#2:north': {'value': 30.76923076923077, 'numerator': 8, 'denominator': 26}, 'house#1.facade.south.floor#2:south': {'value': 30.76923076923077, 'numerator': 8, 'denominator': 26}, 'house#1.facade.west.floor#2:west': {'value': 32.142857142857146, 'numerator': 9, 'denominator': 28}, 'house#1.facade.east.floor#2:east': {'value': 30.76923076923077, 'numerator': 8, 'denominator': 26}} evaluation/cases/structure-detail/single-house-26.3-litematic.yaml house#1",
         "OK facade_surface_missing=0 evaluation/cases/structure-detail/single-house-26.3-litematic.yaml house#1",
         "OK palette_relation=True evaluation/cases/structure-detail/single-house-26.3-litematic.yaml house#1",
+        "WARN opening_recess_blocked opening_recess=0 expected=1 config.decoration.depth house#1.opening#1.6 → config.decoration.depth",
         "INFO preview=not-run (表示はCLIが実行)",
         "STATUS passed"
       ],
@@ -7327,6 +7426,19 @@
           "repairPaths": [],
           "severity": "ok",
           "source": "evaluation/cases/structure-detail/single-house-26.3-litematic.yaml"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "house#1.opening#1.6",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
         }
       ],
       "blueprint_sha256": "f84a54e04db1b9d6593bc0969e5acba6c881c6c99d0f6acd99c305666419b9fb",
@@ -7560,45 +7672,45 @@
         "sha256": "350b0969681551f114a68681e9a0e89af38e55956b4672bfcb22402da4f729f4"
       },
       "code": 0,
-      "make_runtime_seconds": 1.264125799993053,
-      "process_peak_rss_bytes": 85712896,
+      "make_runtime_seconds": 1.1139942000154406,
+      "process_peak_rss_bytes": 85442560,
       "stage_hook_samples": [
         {
           "stage": "Resolve",
-          "elapsed_seconds": 0.0009463999886065722,
-          "rss_at_stage_start_bytes": 51896320
+          "elapsed_seconds": 0.0009867999469861388,
+          "rss_at_stage_start_bytes": 51662848
         },
         {
           "stage": "Site/Massing/Detail",
-          "elapsed_seconds": 0.04667820001486689,
-          "rss_at_stage_start_bytes": 52162560
+          "elapsed_seconds": 0.046785400016233325,
+          "rss_at_stage_start_bytes": 52084736
         },
         {
           "stage": "Materialize",
-          "elapsed_seconds": 0.21952550008427352,
-          "rss_at_stage_start_bytes": 53145600
+          "elapsed_seconds": 0.19134100002702326,
+          "rss_at_stage_start_bytes": 52666368
         },
         {
           "stage": "Generate",
-          "elapsed_seconds": 0.6773302999790758,
-          "rss_at_stage_start_bytes": 78663680
+          "elapsed_seconds": 0.6081664999946952,
+          "rss_at_stage_start_bytes": 78950400
         },
         {
           "stage": "Critic",
-          "elapsed_seconds": 1.11611130007077,
-          "rss_at_stage_start_bytes": 80916480
+          "elapsed_seconds": 1.0472359999548644,
+          "rss_at_stage_start_bytes": 80699392
         },
         {
           "stage": "Export",
-          "elapsed_seconds": 1.1398705000756308,
-          "rss_at_stage_start_bytes": 80994304
+          "elapsed_seconds": 1.0711543000070378,
+          "rss_at_stage_start_bytes": 80785408
         }
       ],
-      "seconds": 2.034112000023015,
+      "seconds": 1.888613500050269,
       "engine_environment": {
         "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
         "engine": "0.1.0",
-        "engineHash": "6ebe3b46a834324b22a5c2e0fed50799b5ffd3b1ff8c7dcdb72174846eaa5da6",
+        "engineHash": "706b21c95fda01b1b13157315bfc64aa7c5e419cfdeb3e0d3d5e17635f65ef8a",
         "lockHash": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48"
       },
       "resolved_input": {
@@ -8009,6 +8121,7 @@
         "OK decoration_density={'tower#1.facade.segment#1.floor#1:north': {'value': 30.0, 'numerator': 6, 'denominator': 20}, 'tower#1.facade.segment#1.floor#2:north': {'value': 30.0, 'numerator': 6, 'denominator': 20}, 'tower#1.facade.segment#1.floor#3:north': {'value': 33.333333333333336, 'numerator': 5, 'denominator': 15}, 'tower#1.facade.segment#2.floor#1:north': {'value': 28.571428571428573, 'numerator': 4, 'denominator': 14}, 'tower#1.facade.segment#2.floor#2:north': {'value': 33.333333333333336, 'numerator': 5, 'denominator': 15}, 'tower#1.facade.segment#2.floor#3:north': {'value': 36.36363636363637, 'numerator': 4, 'denominator': 11}, 'tower#1.facade.segment#3.floor#1:east': {'value': 31.57894736842105, 'numerator': 6, 'denominator': 19}, 'tower#1.facade.segment#3.floor#2:east': {'value': 31.57894736842105, 'numerator': 6, 'denominator': 19}, 'tower#1.facade.segment#3.floor#3:east': {'value': 28.571428571428573, 'numerator': 4, 'denominator': 14}, 'tower#1.facade.segment#4.floor#1:south': {'value': 30.0, 'numerator': 6, 'denominator': 20}, 'tower#1.facade.segment#4.floor#2:south': {'value': 30.0, 'numerator': 6, 'denominator': 20}, 'tower#1.facade.segment#4.floor#3:south': {'value': 33.333333333333336, 'numerator': 5, 'denominator': 15}, 'tower#1.facade.segment#5.floor#1:south': {'value': 33.333333333333336, 'numerator': 5, 'denominator': 15}, 'tower#1.facade.segment#5.floor#2:south': {'value': 33.333333333333336, 'numerator': 5, 'denominator': 15}, 'tower#1.facade.segment#5.floor#3:south': {'value': 36.36363636363637, 'numerator': 4, 'denominator': 11}, 'tower#1.facade.segment#6.floor#1:west': {'value': 31.57894736842105, 'numerator': 6, 'denominator': 19}, 'tower#1.facade.segment#6.floor#2:west': {'value': 31.57894736842105, 'numerator': 6, 'denominator': 19}, 'tower#1.facade.segment#6.floor#3:west': {'value': 28.571428571428573, 'numerator': 4, 'denominator': 14}} evaluation/cases/structure-detail/standalone-tower-1.21.11-schem.yaml tower#1",
         "OK facade_surface_missing=0 evaluation/cases/structure-detail/standalone-tower-1.21.11-schem.yaml tower#1",
         "OK palette_relation=True evaluation/cases/structure-detail/standalone-tower-1.21.11-schem.yaml tower#1",
+        "WARN opening_recess_blocked opening_recess=0 expected=1 config.decoration.depth tower#1.opening#32 → config.decoration.depth",
         "INFO preview=not-run (表示はCLIが実行)",
         "STATUS passed"
       ],
@@ -8756,6 +8869,19 @@
           "repairPaths": [],
           "severity": "ok",
           "source": "evaluation/cases/structure-detail/standalone-tower-1.21.11-schem.yaml"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "tower#1.opening#32",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
         }
       ],
       "blueprint_sha256": "e8cf7f85c7af0ce54b60b9fc0986681d3e9a5a678bfd0984ff25c34e80f1baf0",
@@ -8989,45 +9115,45 @@
         "sha256": "88f302c19597551b3e26edbd1568175f66093b56e503417e71b4bf4c0b95be3c"
       },
       "code": 0,
-      "make_runtime_seconds": 1.2721709000179544,
-      "process_peak_rss_bytes": 85630976,
+      "make_runtime_seconds": 1.1614065999165177,
+      "process_peak_rss_bytes": 85696512,
       "stage_hook_samples": [
         {
           "stage": "Resolve",
-          "elapsed_seconds": 0.0009386999299749732,
-          "rss_at_stage_start_bytes": 52129792
+          "elapsed_seconds": 0.0009739999659359455,
+          "rss_at_stage_start_bytes": 52215808
         },
         {
           "stage": "Site/Massing/Detail",
-          "elapsed_seconds": 0.04661089996807277,
-          "rss_at_stage_start_bytes": 52461568
+          "elapsed_seconds": 0.04698139999527484,
+          "rss_at_stage_start_bytes": 52424704
         },
         {
           "stage": "Materialize",
-          "elapsed_seconds": 0.21673320000991225,
-          "rss_at_stage_start_bytes": 54104064
+          "elapsed_seconds": 0.20597409992478788,
+          "rss_at_stage_start_bytes": 53911552
         },
         {
           "stage": "Generate",
-          "elapsed_seconds": 0.6705608000047505,
-          "rss_at_stage_start_bytes": 78671872
+          "elapsed_seconds": 0.6503952000057325,
+          "rss_at_stage_start_bytes": 79015936
         },
         {
           "stage": "Critic",
-          "elapsed_seconds": 1.125614000018686,
-          "rss_at_stage_start_bytes": 80838656
+          "elapsed_seconds": 1.099821399897337,
+          "rss_at_stage_start_bytes": 80928768
         },
         {
           "stage": "Export",
-          "elapsed_seconds": 1.1492638000054285,
-          "rss_at_stage_start_bytes": 80924672
+          "elapsed_seconds": 1.1230478999204934,
+          "rss_at_stage_start_bytes": 81002496
         }
       ],
-      "seconds": 2.0311899000080302,
+      "seconds": 1.939460099907592,
       "engine_environment": {
         "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
         "engine": "0.1.0",
-        "engineHash": "6ebe3b46a834324b22a5c2e0fed50799b5ffd3b1ff8c7dcdb72174846eaa5da6",
+        "engineHash": "706b21c95fda01b1b13157315bfc64aa7c5e419cfdeb3e0d3d5e17635f65ef8a",
         "lockHash": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48"
       },
       "resolved_input": {
@@ -9438,6 +9564,7 @@
         "OK decoration_density={'tower#1.facade.segment#1.floor#1:north': {'value': 30.0, 'numerator': 6, 'denominator': 20}, 'tower#1.facade.segment#1.floor#2:north': {'value': 30.0, 'numerator': 6, 'denominator': 20}, 'tower#1.facade.segment#1.floor#3:north': {'value': 33.333333333333336, 'numerator': 5, 'denominator': 15}, 'tower#1.facade.segment#2.floor#1:north': {'value': 28.571428571428573, 'numerator': 4, 'denominator': 14}, 'tower#1.facade.segment#2.floor#2:north': {'value': 33.333333333333336, 'numerator': 5, 'denominator': 15}, 'tower#1.facade.segment#2.floor#3:north': {'value': 36.36363636363637, 'numerator': 4, 'denominator': 11}, 'tower#1.facade.segment#3.floor#1:east': {'value': 31.57894736842105, 'numerator': 6, 'denominator': 19}, 'tower#1.facade.segment#3.floor#2:east': {'value': 31.57894736842105, 'numerator': 6, 'denominator': 19}, 'tower#1.facade.segment#3.floor#3:east': {'value': 28.571428571428573, 'numerator': 4, 'denominator': 14}, 'tower#1.facade.segment#4.floor#1:south': {'value': 30.0, 'numerator': 6, 'denominator': 20}, 'tower#1.facade.segment#4.floor#2:south': {'value': 30.0, 'numerator': 6, 'denominator': 20}, 'tower#1.facade.segment#4.floor#3:south': {'value': 33.333333333333336, 'numerator': 5, 'denominator': 15}, 'tower#1.facade.segment#5.floor#1:south': {'value': 33.333333333333336, 'numerator': 5, 'denominator': 15}, 'tower#1.facade.segment#5.floor#2:south': {'value': 33.333333333333336, 'numerator': 5, 'denominator': 15}, 'tower#1.facade.segment#5.floor#3:south': {'value': 36.36363636363637, 'numerator': 4, 'denominator': 11}, 'tower#1.facade.segment#6.floor#1:west': {'value': 31.57894736842105, 'numerator': 6, 'denominator': 19}, 'tower#1.facade.segment#6.floor#2:west': {'value': 31.57894736842105, 'numerator': 6, 'denominator': 19}, 'tower#1.facade.segment#6.floor#3:west': {'value': 28.571428571428573, 'numerator': 4, 'denominator': 14}} evaluation/cases/structure-detail/standalone-tower-1.21.11-litematic.yaml tower#1",
         "OK facade_surface_missing=0 evaluation/cases/structure-detail/standalone-tower-1.21.11-litematic.yaml tower#1",
         "OK palette_relation=True evaluation/cases/structure-detail/standalone-tower-1.21.11-litematic.yaml tower#1",
+        "WARN opening_recess_blocked opening_recess=0 expected=1 config.decoration.depth tower#1.opening#32 → config.decoration.depth",
         "INFO preview=not-run (表示はCLIが実行)",
         "STATUS passed"
       ],
@@ -10185,6 +10312,19 @@
           "repairPaths": [],
           "severity": "ok",
           "source": "evaluation/cases/structure-detail/standalone-tower-1.21.11-litematic.yaml"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "tower#1.opening#32",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
         }
       ],
       "blueprint_sha256": "115c51e46d83f01efda602114995ac1df508bf931beb35120114671394f1bbb4",
@@ -10418,45 +10558,45 @@
         "sha256": "d825ab6d5142729c1ba242199de94d43d905ce7b3d4cba6e1fede59dd64e636a"
       },
       "code": 0,
-      "make_runtime_seconds": 1.269731199950911,
-      "process_peak_rss_bytes": 85708800,
+      "make_runtime_seconds": 1.1308212999720126,
+      "process_peak_rss_bytes": 85762048,
       "stage_hook_samples": [
         {
           "stage": "Resolve",
-          "elapsed_seconds": 0.0009485000045970082,
-          "rss_at_stage_start_bytes": 50917376
+          "elapsed_seconds": 0.00096879992634058,
+          "rss_at_stage_start_bytes": 52129792
         },
         {
           "stage": "Site/Massing/Detail",
-          "elapsed_seconds": 0.04784269991796464,
-          "rss_at_stage_start_bytes": 51363840
+          "elapsed_seconds": 0.047883299994282424,
+          "rss_at_stage_start_bytes": 52404224
         },
         {
           "stage": "Materialize",
-          "elapsed_seconds": 0.22235499997623265,
-          "rss_at_stage_start_bytes": 54861824
+          "elapsed_seconds": 0.19484909996390343,
+          "rss_at_stage_start_bytes": 53354496
         },
         {
           "stage": "Generate",
-          "elapsed_seconds": 0.6783720999956131,
-          "rss_at_stage_start_bytes": 78553088
+          "elapsed_seconds": 0.6085394999245182,
+          "rss_at_stage_start_bytes": 78680064
         },
         {
           "stage": "Critic",
-          "elapsed_seconds": 1.1224202999146655,
-          "rss_at_stage_start_bytes": 80904192
+          "elapsed_seconds": 1.0656999999191612,
+          "rss_at_stage_start_bytes": 80969728
         },
         {
           "stage": "Export",
-          "elapsed_seconds": 1.1452793999342248,
-          "rss_at_stage_start_bytes": 80982016
+          "elapsed_seconds": 1.089144599973224,
+          "rss_at_stage_start_bytes": 81047552
         }
       ],
-      "seconds": 2.0372409999836236,
+      "seconds": 1.921045899973251,
       "engine_environment": {
         "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
         "engine": "0.1.0",
-        "engineHash": "6ebe3b46a834324b22a5c2e0fed50799b5ffd3b1ff8c7dcdb72174846eaa5da6",
+        "engineHash": "706b21c95fda01b1b13157315bfc64aa7c5e419cfdeb3e0d3d5e17635f65ef8a",
         "lockHash": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48"
       },
       "resolved_input": {
@@ -10867,6 +11007,7 @@
         "OK decoration_density={'tower#1.facade.segment#1.floor#1:north': {'value': 30.0, 'numerator': 6, 'denominator': 20}, 'tower#1.facade.segment#1.floor#2:north': {'value': 30.0, 'numerator': 6, 'denominator': 20}, 'tower#1.facade.segment#1.floor#3:north': {'value': 33.333333333333336, 'numerator': 5, 'denominator': 15}, 'tower#1.facade.segment#2.floor#1:north': {'value': 28.571428571428573, 'numerator': 4, 'denominator': 14}, 'tower#1.facade.segment#2.floor#2:north': {'value': 33.333333333333336, 'numerator': 5, 'denominator': 15}, 'tower#1.facade.segment#2.floor#3:north': {'value': 36.36363636363637, 'numerator': 4, 'denominator': 11}, 'tower#1.facade.segment#3.floor#1:east': {'value': 31.57894736842105, 'numerator': 6, 'denominator': 19}, 'tower#1.facade.segment#3.floor#2:east': {'value': 31.57894736842105, 'numerator': 6, 'denominator': 19}, 'tower#1.facade.segment#3.floor#3:east': {'value': 28.571428571428573, 'numerator': 4, 'denominator': 14}, 'tower#1.facade.segment#4.floor#1:south': {'value': 30.0, 'numerator': 6, 'denominator': 20}, 'tower#1.facade.segment#4.floor#2:south': {'value': 30.0, 'numerator': 6, 'denominator': 20}, 'tower#1.facade.segment#4.floor#3:south': {'value': 33.333333333333336, 'numerator': 5, 'denominator': 15}, 'tower#1.facade.segment#5.floor#1:south': {'value': 33.333333333333336, 'numerator': 5, 'denominator': 15}, 'tower#1.facade.segment#5.floor#2:south': {'value': 33.333333333333336, 'numerator': 5, 'denominator': 15}, 'tower#1.facade.segment#5.floor#3:south': {'value': 36.36363636363637, 'numerator': 4, 'denominator': 11}, 'tower#1.facade.segment#6.floor#1:west': {'value': 31.57894736842105, 'numerator': 6, 'denominator': 19}, 'tower#1.facade.segment#6.floor#2:west': {'value': 31.57894736842105, 'numerator': 6, 'denominator': 19}, 'tower#1.facade.segment#6.floor#3:west': {'value': 28.571428571428573, 'numerator': 4, 'denominator': 14}} evaluation/cases/structure-detail/standalone-tower-26.1.2-schem.yaml tower#1",
         "OK facade_surface_missing=0 evaluation/cases/structure-detail/standalone-tower-26.1.2-schem.yaml tower#1",
         "OK palette_relation=True evaluation/cases/structure-detail/standalone-tower-26.1.2-schem.yaml tower#1",
+        "WARN opening_recess_blocked opening_recess=0 expected=1 config.decoration.depth tower#1.opening#32 → config.decoration.depth",
         "INFO preview=not-run (表示はCLIが実行)",
         "STATUS passed"
       ],
@@ -11614,6 +11755,19 @@
           "repairPaths": [],
           "severity": "ok",
           "source": "evaluation/cases/structure-detail/standalone-tower-26.1.2-schem.yaml"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "tower#1.opening#32",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
         }
       ],
       "blueprint_sha256": "335a64b897ad007c50c5b9d8051e3908b5cc001e2e40b7f81d8bb5488fb66a2a",
@@ -11847,45 +12001,45 @@
         "sha256": "d186c4d6159fce108d360ff5191ccd05e459121a886a2e789c26197ea959c368"
       },
       "code": 0,
-      "make_runtime_seconds": 1.2573755999328569,
-      "process_peak_rss_bytes": 85745664,
+      "make_runtime_seconds": 1.1156139000086114,
+      "process_peak_rss_bytes": 85532672,
       "stage_hook_samples": [
         {
           "stage": "Resolve",
-          "elapsed_seconds": 0.0009728999575600028,
-          "rss_at_stage_start_bytes": 51896320
+          "elapsed_seconds": 0.00284620001912117,
+          "rss_at_stage_start_bytes": 51503104
         },
         {
           "stage": "Site/Massing/Detail",
-          "elapsed_seconds": 0.046754200011491776,
-          "rss_at_stage_start_bytes": 52224000
+          "elapsed_seconds": 0.05565039999783039,
+          "rss_at_stage_start_bytes": 51752960
         },
         {
           "stage": "Materialize",
-          "elapsed_seconds": 0.2189711999380961,
-          "rss_at_stage_start_bytes": 54493184
+          "elapsed_seconds": 0.2027576999971643,
+          "rss_at_stage_start_bytes": 53620736
         },
         {
           "stage": "Generate",
-          "elapsed_seconds": 0.6738510000286624,
-          "rss_at_stage_start_bytes": 78483456
+          "elapsed_seconds": 0.6202436999883503,
+          "rss_at_stage_start_bytes": 79216640
         },
         {
           "stage": "Critic",
-          "elapsed_seconds": 1.1104187000310048,
-          "rss_at_stage_start_bytes": 80945152
+          "elapsed_seconds": 1.0545115999411792,
+          "rss_at_stage_start_bytes": 80756736
         },
         {
           "stage": "Export",
-          "elapsed_seconds": 1.1340983000118285,
-          "rss_at_stage_start_bytes": 81031168
+          "elapsed_seconds": 1.0777596000116318,
+          "rss_at_stage_start_bytes": 80830464
         }
       ],
-      "seconds": 2.0125816999934614,
+      "seconds": 1.9111728999996558,
       "engine_environment": {
         "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
         "engine": "0.1.0",
-        "engineHash": "6ebe3b46a834324b22a5c2e0fed50799b5ffd3b1ff8c7dcdb72174846eaa5da6",
+        "engineHash": "706b21c95fda01b1b13157315bfc64aa7c5e419cfdeb3e0d3d5e17635f65ef8a",
         "lockHash": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48"
       },
       "resolved_input": {
@@ -12296,6 +12450,7 @@
         "OK decoration_density={'tower#1.facade.segment#1.floor#1:north': {'value': 30.0, 'numerator': 6, 'denominator': 20}, 'tower#1.facade.segment#1.floor#2:north': {'value': 30.0, 'numerator': 6, 'denominator': 20}, 'tower#1.facade.segment#1.floor#3:north': {'value': 33.333333333333336, 'numerator': 5, 'denominator': 15}, 'tower#1.facade.segment#2.floor#1:north': {'value': 28.571428571428573, 'numerator': 4, 'denominator': 14}, 'tower#1.facade.segment#2.floor#2:north': {'value': 33.333333333333336, 'numerator': 5, 'denominator': 15}, 'tower#1.facade.segment#2.floor#3:north': {'value': 36.36363636363637, 'numerator': 4, 'denominator': 11}, 'tower#1.facade.segment#3.floor#1:east': {'value': 31.57894736842105, 'numerator': 6, 'denominator': 19}, 'tower#1.facade.segment#3.floor#2:east': {'value': 31.57894736842105, 'numerator': 6, 'denominator': 19}, 'tower#1.facade.segment#3.floor#3:east': {'value': 28.571428571428573, 'numerator': 4, 'denominator': 14}, 'tower#1.facade.segment#4.floor#1:south': {'value': 30.0, 'numerator': 6, 'denominator': 20}, 'tower#1.facade.segment#4.floor#2:south': {'value': 30.0, 'numerator': 6, 'denominator': 20}, 'tower#1.facade.segment#4.floor#3:south': {'value': 33.333333333333336, 'numerator': 5, 'denominator': 15}, 'tower#1.facade.segment#5.floor#1:south': {'value': 33.333333333333336, 'numerator': 5, 'denominator': 15}, 'tower#1.facade.segment#5.floor#2:south': {'value': 33.333333333333336, 'numerator': 5, 'denominator': 15}, 'tower#1.facade.segment#5.floor#3:south': {'value': 36.36363636363637, 'numerator': 4, 'denominator': 11}, 'tower#1.facade.segment#6.floor#1:west': {'value': 31.57894736842105, 'numerator': 6, 'denominator': 19}, 'tower#1.facade.segment#6.floor#2:west': {'value': 31.57894736842105, 'numerator': 6, 'denominator': 19}, 'tower#1.facade.segment#6.floor#3:west': {'value': 28.571428571428573, 'numerator': 4, 'denominator': 14}} evaluation/cases/structure-detail/standalone-tower-26.1.2-litematic.yaml tower#1",
         "OK facade_surface_missing=0 evaluation/cases/structure-detail/standalone-tower-26.1.2-litematic.yaml tower#1",
         "OK palette_relation=True evaluation/cases/structure-detail/standalone-tower-26.1.2-litematic.yaml tower#1",
+        "WARN opening_recess_blocked opening_recess=0 expected=1 config.decoration.depth tower#1.opening#32 → config.decoration.depth",
         "INFO preview=not-run (表示はCLIが実行)",
         "STATUS passed"
       ],
@@ -13043,6 +13198,19 @@
           "repairPaths": [],
           "severity": "ok",
           "source": "evaluation/cases/structure-detail/standalone-tower-26.1.2-litematic.yaml"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "tower#1.opening#32",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
         }
       ],
       "blueprint_sha256": "aceff98c01bf1df76a3993927c7538e846dada5c7a1d7c6f0a27afa1496de582",
@@ -13276,45 +13444,45 @@
         "sha256": "aef508c3081529da4a8b08a3f9ee52660fdd9b403ba04061902b2745d8ca0446"
       },
       "code": 0,
-      "make_runtime_seconds": 1.265404999954626,
-      "process_peak_rss_bytes": 85962752,
+      "make_runtime_seconds": 1.1097258999943733,
+      "process_peak_rss_bytes": 85680128,
       "stage_hook_samples": [
         {
           "stage": "Resolve",
-          "elapsed_seconds": 0.0010176999494433403,
-          "rss_at_stage_start_bytes": 51224576
+          "elapsed_seconds": 0.0009464999893680215,
+          "rss_at_stage_start_bytes": 52277248
         },
         {
           "stage": "Site/Massing/Detail",
-          "elapsed_seconds": 0.04757269995752722,
-          "rss_at_stage_start_bytes": 51646464
+          "elapsed_seconds": 0.047217899933457375,
+          "rss_at_stage_start_bytes": 52609024
         },
         {
           "stage": "Materialize",
-          "elapsed_seconds": 0.21714199997950345,
-          "rss_at_stage_start_bytes": 53342208
+          "elapsed_seconds": 0.1935236999997869,
+          "rss_at_stage_start_bytes": 53198848
         },
         {
           "stage": "Generate",
-          "elapsed_seconds": 0.6768336999230087,
-          "rss_at_stage_start_bytes": 78655488
+          "elapsed_seconds": 0.6108728999970481,
+          "rss_at_stage_start_bytes": 79429632
         },
         {
           "stage": "Critic",
-          "elapsed_seconds": 1.1201149999396876,
-          "rss_at_stage_start_bytes": 81174528
+          "elapsed_seconds": 1.0466374999377877,
+          "rss_at_stage_start_bytes": 80900096
         },
         {
           "stage": "Export",
-          "elapsed_seconds": 1.1429862999357283,
-          "rss_at_stage_start_bytes": 81268736
+          "elapsed_seconds": 1.069934899918735,
+          "rss_at_stage_start_bytes": 80977920
         }
       ],
-      "seconds": 2.043800099985674,
+      "seconds": 1.8732699999818578,
       "engine_environment": {
         "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
         "engine": "0.1.0",
-        "engineHash": "6ebe3b46a834324b22a5c2e0fed50799b5ffd3b1ff8c7dcdb72174846eaa5da6",
+        "engineHash": "706b21c95fda01b1b13157315bfc64aa7c5e419cfdeb3e0d3d5e17635f65ef8a",
         "lockHash": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48"
       },
       "resolved_input": {
@@ -13725,6 +13893,7 @@
         "OK decoration_density={'tower#1.facade.segment#1.floor#1:north': {'value': 30.0, 'numerator': 6, 'denominator': 20}, 'tower#1.facade.segment#1.floor#2:north': {'value': 30.0, 'numerator': 6, 'denominator': 20}, 'tower#1.facade.segment#1.floor#3:north': {'value': 33.333333333333336, 'numerator': 5, 'denominator': 15}, 'tower#1.facade.segment#2.floor#1:north': {'value': 28.571428571428573, 'numerator': 4, 'denominator': 14}, 'tower#1.facade.segment#2.floor#2:north': {'value': 33.333333333333336, 'numerator': 5, 'denominator': 15}, 'tower#1.facade.segment#2.floor#3:north': {'value': 36.36363636363637, 'numerator': 4, 'denominator': 11}, 'tower#1.facade.segment#3.floor#1:east': {'value': 31.57894736842105, 'numerator': 6, 'denominator': 19}, 'tower#1.facade.segment#3.floor#2:east': {'value': 31.57894736842105, 'numerator': 6, 'denominator': 19}, 'tower#1.facade.segment#3.floor#3:east': {'value': 28.571428571428573, 'numerator': 4, 'denominator': 14}, 'tower#1.facade.segment#4.floor#1:south': {'value': 30.0, 'numerator': 6, 'denominator': 20}, 'tower#1.facade.segment#4.floor#2:south': {'value': 30.0, 'numerator': 6, 'denominator': 20}, 'tower#1.facade.segment#4.floor#3:south': {'value': 33.333333333333336, 'numerator': 5, 'denominator': 15}, 'tower#1.facade.segment#5.floor#1:south': {'value': 33.333333333333336, 'numerator': 5, 'denominator': 15}, 'tower#1.facade.segment#5.floor#2:south': {'value': 33.333333333333336, 'numerator': 5, 'denominator': 15}, 'tower#1.facade.segment#5.floor#3:south': {'value': 36.36363636363637, 'numerator': 4, 'denominator': 11}, 'tower#1.facade.segment#6.floor#1:west': {'value': 31.57894736842105, 'numerator': 6, 'denominator': 19}, 'tower#1.facade.segment#6.floor#2:west': {'value': 31.57894736842105, 'numerator': 6, 'denominator': 19}, 'tower#1.facade.segment#6.floor#3:west': {'value': 28.571428571428573, 'numerator': 4, 'denominator': 14}} evaluation/cases/structure-detail/standalone-tower-26.2-schem.yaml tower#1",
         "OK facade_surface_missing=0 evaluation/cases/structure-detail/standalone-tower-26.2-schem.yaml tower#1",
         "OK palette_relation=True evaluation/cases/structure-detail/standalone-tower-26.2-schem.yaml tower#1",
+        "WARN opening_recess_blocked opening_recess=0 expected=1 config.decoration.depth tower#1.opening#32 → config.decoration.depth",
         "INFO preview=not-run (表示はCLIが実行)",
         "STATUS passed"
       ],
@@ -14472,6 +14641,19 @@
           "repairPaths": [],
           "severity": "ok",
           "source": "evaluation/cases/structure-detail/standalone-tower-26.2-schem.yaml"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "tower#1.opening#32",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
         }
       ],
       "blueprint_sha256": "5c69f962dbfc3cea4876ad3bf5ad87a648aa13c3660391a2fa26996e125e9c95",
@@ -14705,45 +14887,45 @@
         "sha256": "7a5fc18134e5a43c9dd5aa2140290aa5f7fb77864f4cf8d2a6d4560b9f235dde"
       },
       "code": 0,
-      "make_runtime_seconds": 1.2617364000761881,
-      "process_peak_rss_bytes": 86810624,
+      "make_runtime_seconds": 1.1129394000163302,
+      "process_peak_rss_bytes": 85164032,
       "stage_hook_samples": [
         {
           "stage": "Resolve",
-          "elapsed_seconds": 0.0009625999955460429,
-          "rss_at_stage_start_bytes": 51142656
+          "elapsed_seconds": 0.0011860000668093562,
+          "rss_at_stage_start_bytes": 51875840
         },
         {
           "stage": "Site/Massing/Detail",
-          "elapsed_seconds": 0.04702060006093234,
-          "rss_at_stage_start_bytes": 51765248
+          "elapsed_seconds": 0.04769860010128468,
+          "rss_at_stage_start_bytes": 52183040
         },
         {
           "stage": "Materialize",
-          "elapsed_seconds": 0.2188315000385046,
-          "rss_at_stage_start_bytes": 54194176
+          "elapsed_seconds": 0.19545200001448393,
+          "rss_at_stage_start_bytes": 52785152
         },
         {
           "stage": "Generate",
-          "elapsed_seconds": 0.6733959000557661,
-          "rss_at_stage_start_bytes": 80359424
+          "elapsed_seconds": 0.6094642000971362,
+          "rss_at_stage_start_bytes": 78262272
         },
         {
           "stage": "Critic",
-          "elapsed_seconds": 1.1135423000669107,
-          "rss_at_stage_start_bytes": 82018304
+          "elapsed_seconds": 1.0516212000511587,
+          "rss_at_stage_start_bytes": 80441344
         },
         {
           "stage": "Export",
-          "elapsed_seconds": 1.1371082999976352,
-          "rss_at_stage_start_bytes": 82108416
+          "elapsed_seconds": 1.0752105000428855,
+          "rss_at_stage_start_bytes": 80478208
         }
       ],
-      "seconds": 2.0396766000194475,
+      "seconds": 1.8724734999705106,
       "engine_environment": {
         "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
         "engine": "0.1.0",
-        "engineHash": "6ebe3b46a834324b22a5c2e0fed50799b5ffd3b1ff8c7dcdb72174846eaa5da6",
+        "engineHash": "706b21c95fda01b1b13157315bfc64aa7c5e419cfdeb3e0d3d5e17635f65ef8a",
         "lockHash": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48"
       },
       "resolved_input": {
@@ -15154,6 +15336,7 @@
         "OK decoration_density={'tower#1.facade.segment#1.floor#1:north': {'value': 30.0, 'numerator': 6, 'denominator': 20}, 'tower#1.facade.segment#1.floor#2:north': {'value': 30.0, 'numerator': 6, 'denominator': 20}, 'tower#1.facade.segment#1.floor#3:north': {'value': 33.333333333333336, 'numerator': 5, 'denominator': 15}, 'tower#1.facade.segment#2.floor#1:north': {'value': 28.571428571428573, 'numerator': 4, 'denominator': 14}, 'tower#1.facade.segment#2.floor#2:north': {'value': 33.333333333333336, 'numerator': 5, 'denominator': 15}, 'tower#1.facade.segment#2.floor#3:north': {'value': 36.36363636363637, 'numerator': 4, 'denominator': 11}, 'tower#1.facade.segment#3.floor#1:east': {'value': 31.57894736842105, 'numerator': 6, 'denominator': 19}, 'tower#1.facade.segment#3.floor#2:east': {'value': 31.57894736842105, 'numerator': 6, 'denominator': 19}, 'tower#1.facade.segment#3.floor#3:east': {'value': 28.571428571428573, 'numerator': 4, 'denominator': 14}, 'tower#1.facade.segment#4.floor#1:south': {'value': 30.0, 'numerator': 6, 'denominator': 20}, 'tower#1.facade.segment#4.floor#2:south': {'value': 30.0, 'numerator': 6, 'denominator': 20}, 'tower#1.facade.segment#4.floor#3:south': {'value': 33.333333333333336, 'numerator': 5, 'denominator': 15}, 'tower#1.facade.segment#5.floor#1:south': {'value': 33.333333333333336, 'numerator': 5, 'denominator': 15}, 'tower#1.facade.segment#5.floor#2:south': {'value': 33.333333333333336, 'numerator': 5, 'denominator': 15}, 'tower#1.facade.segment#5.floor#3:south': {'value': 36.36363636363637, 'numerator': 4, 'denominator': 11}, 'tower#1.facade.segment#6.floor#1:west': {'value': 31.57894736842105, 'numerator': 6, 'denominator': 19}, 'tower#1.facade.segment#6.floor#2:west': {'value': 31.57894736842105, 'numerator': 6, 'denominator': 19}, 'tower#1.facade.segment#6.floor#3:west': {'value': 28.571428571428573, 'numerator': 4, 'denominator': 14}} evaluation/cases/structure-detail/standalone-tower-26.2-litematic.yaml tower#1",
         "OK facade_surface_missing=0 evaluation/cases/structure-detail/standalone-tower-26.2-litematic.yaml tower#1",
         "OK palette_relation=True evaluation/cases/structure-detail/standalone-tower-26.2-litematic.yaml tower#1",
+        "WARN opening_recess_blocked opening_recess=0 expected=1 config.decoration.depth tower#1.opening#32 → config.decoration.depth",
         "INFO preview=not-run (表示はCLIが実行)",
         "STATUS passed"
       ],
@@ -15901,6 +16084,19 @@
           "repairPaths": [],
           "severity": "ok",
           "source": "evaluation/cases/structure-detail/standalone-tower-26.2-litematic.yaml"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "tower#1.opening#32",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
         }
       ],
       "blueprint_sha256": "79c1ea6b368b547afc63741e283c67068a1896dc221e9aec5047088ccb89a373",
@@ -16134,45 +16330,45 @@
         "sha256": "a9782a8f8720d5ef20f1a3485bacbdf467971681c2bedc4b5481a09269cf85f8"
       },
       "code": 0,
-      "make_runtime_seconds": 1.2542056000092998,
-      "process_peak_rss_bytes": 85897216,
+      "make_runtime_seconds": 1.0948777999728918,
+      "process_peak_rss_bytes": 85463040,
       "stage_hook_samples": [
         {
           "stage": "Resolve",
-          "elapsed_seconds": 0.0012605000520125031,
-          "rss_at_stage_start_bytes": 51757056
+          "elapsed_seconds": 0.0009476999985054135,
+          "rss_at_stage_start_bytes": 50671616
         },
         {
           "stage": "Site/Massing/Detail",
-          "elapsed_seconds": 0.04616720008198172,
-          "rss_at_stage_start_bytes": 52117504
+          "elapsed_seconds": 0.04695640003774315,
+          "rss_at_stage_start_bytes": 51163136
         },
         {
           "stage": "Materialize",
-          "elapsed_seconds": 0.21770160004962236,
-          "rss_at_stage_start_bytes": 52375552
+          "elapsed_seconds": 0.18907930003479123,
+          "rss_at_stage_start_bytes": 54571008
         },
         {
           "stage": "Generate",
-          "elapsed_seconds": 0.67015550006181,
-          "rss_at_stage_start_bytes": 78680064
+          "elapsed_seconds": 0.600468400050886,
+          "rss_at_stage_start_bytes": 78462976
         },
         {
           "stage": "Critic",
-          "elapsed_seconds": 1.1056132999947295,
-          "rss_at_stage_start_bytes": 81108992
+          "elapsed_seconds": 1.0339940000558272,
+          "rss_at_stage_start_bytes": 80654336
         },
         {
           "stage": "Export",
-          "elapsed_seconds": 1.128826200030744,
-          "rss_at_stage_start_bytes": 81186816
+          "elapsed_seconds": 1.057617999962531,
+          "rss_at_stage_start_bytes": 80785408
         }
       ],
-      "seconds": 2.0105706999311224,
+      "seconds": 1.8719033000525087,
       "engine_environment": {
         "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
         "engine": "0.1.0",
-        "engineHash": "6ebe3b46a834324b22a5c2e0fed50799b5ffd3b1ff8c7dcdb72174846eaa5da6",
+        "engineHash": "706b21c95fda01b1b13157315bfc64aa7c5e419cfdeb3e0d3d5e17635f65ef8a",
         "lockHash": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48"
       },
       "resolved_input": {
@@ -16583,6 +16779,7 @@
         "OK decoration_density={'tower#1.facade.segment#1.floor#1:north': {'value': 30.0, 'numerator': 6, 'denominator': 20}, 'tower#1.facade.segment#1.floor#2:north': {'value': 30.0, 'numerator': 6, 'denominator': 20}, 'tower#1.facade.segment#1.floor#3:north': {'value': 33.333333333333336, 'numerator': 5, 'denominator': 15}, 'tower#1.facade.segment#2.floor#1:north': {'value': 28.571428571428573, 'numerator': 4, 'denominator': 14}, 'tower#1.facade.segment#2.floor#2:north': {'value': 33.333333333333336, 'numerator': 5, 'denominator': 15}, 'tower#1.facade.segment#2.floor#3:north': {'value': 36.36363636363637, 'numerator': 4, 'denominator': 11}, 'tower#1.facade.segment#3.floor#1:east': {'value': 31.57894736842105, 'numerator': 6, 'denominator': 19}, 'tower#1.facade.segment#3.floor#2:east': {'value': 31.57894736842105, 'numerator': 6, 'denominator': 19}, 'tower#1.facade.segment#3.floor#3:east': {'value': 28.571428571428573, 'numerator': 4, 'denominator': 14}, 'tower#1.facade.segment#4.floor#1:south': {'value': 30.0, 'numerator': 6, 'denominator': 20}, 'tower#1.facade.segment#4.floor#2:south': {'value': 30.0, 'numerator': 6, 'denominator': 20}, 'tower#1.facade.segment#4.floor#3:south': {'value': 33.333333333333336, 'numerator': 5, 'denominator': 15}, 'tower#1.facade.segment#5.floor#1:south': {'value': 33.333333333333336, 'numerator': 5, 'denominator': 15}, 'tower#1.facade.segment#5.floor#2:south': {'value': 33.333333333333336, 'numerator': 5, 'denominator': 15}, 'tower#1.facade.segment#5.floor#3:south': {'value': 36.36363636363637, 'numerator': 4, 'denominator': 11}, 'tower#1.facade.segment#6.floor#1:west': {'value': 31.57894736842105, 'numerator': 6, 'denominator': 19}, 'tower#1.facade.segment#6.floor#2:west': {'value': 31.57894736842105, 'numerator': 6, 'denominator': 19}, 'tower#1.facade.segment#6.floor#3:west': {'value': 28.571428571428573, 'numerator': 4, 'denominator': 14}} evaluation/cases/structure-detail/standalone-tower-26.3-schem.yaml tower#1",
         "OK facade_surface_missing=0 evaluation/cases/structure-detail/standalone-tower-26.3-schem.yaml tower#1",
         "OK palette_relation=True evaluation/cases/structure-detail/standalone-tower-26.3-schem.yaml tower#1",
+        "WARN opening_recess_blocked opening_recess=0 expected=1 config.decoration.depth tower#1.opening#32 → config.decoration.depth",
         "INFO preview=not-run (表示はCLIが実行)",
         "STATUS passed"
       ],
@@ -17330,6 +17527,19 @@
           "repairPaths": [],
           "severity": "ok",
           "source": "evaluation/cases/structure-detail/standalone-tower-26.3-schem.yaml"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "tower#1.opening#32",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
         }
       ],
       "blueprint_sha256": "267119e88c0dc4f9ab58a0eb5b85af80fa6a48d8199a64eb9257a8e351d14022",
@@ -17563,45 +17773,45 @@
         "sha256": "9349c79e1bccecf5a88286af897e1813cc1b0f05ce12990a1d2228d6ec34902f"
       },
       "code": 0,
-      "make_runtime_seconds": 1.270541200065054,
-      "process_peak_rss_bytes": 86724608,
+      "make_runtime_seconds": 1.1002003999892622,
+      "process_peak_rss_bytes": 85688320,
       "stage_hook_samples": [
         {
           "stage": "Resolve",
-          "elapsed_seconds": 0.0010209999745711684,
-          "rss_at_stage_start_bytes": 52015104
+          "elapsed_seconds": 0.0009544999338686466,
+          "rss_at_stage_start_bytes": 52412416
         },
         {
           "stage": "Site/Massing/Detail",
-          "elapsed_seconds": 0.04633180005475879,
-          "rss_at_stage_start_bytes": 52334592
+          "elapsed_seconds": 0.04626929992809892,
+          "rss_at_stage_start_bytes": 52539392
         },
         {
           "stage": "Materialize",
-          "elapsed_seconds": 0.21875940007157624,
-          "rss_at_stage_start_bytes": 53936128
+          "elapsed_seconds": 0.19208660000003874,
+          "rss_at_stage_start_bytes": 54501376
         },
         {
           "stage": "Generate",
-          "elapsed_seconds": 0.6825872000772506,
-          "rss_at_stage_start_bytes": 80035840
+          "elapsed_seconds": 0.6046328999800608,
+          "rss_at_stage_start_bytes": 78581760
         },
         {
           "stage": "Critic",
-          "elapsed_seconds": 1.126184800057672,
-          "rss_at_stage_start_bytes": 81932288
+          "elapsed_seconds": 1.0394560999702662,
+          "rss_at_stage_start_bytes": 80883712
         },
         {
           "stage": "Export",
-          "elapsed_seconds": 1.1491519999690354,
-          "rss_at_stage_start_bytes": 82001920
+          "elapsed_seconds": 1.0626313999528065,
+          "rss_at_stage_start_bytes": 81014784
         }
       ],
-      "seconds": 2.0496112999971956,
+      "seconds": 1.8733659000135958,
       "engine_environment": {
         "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
         "engine": "0.1.0",
-        "engineHash": "6ebe3b46a834324b22a5c2e0fed50799b5ffd3b1ff8c7dcdb72174846eaa5da6",
+        "engineHash": "706b21c95fda01b1b13157315bfc64aa7c5e419cfdeb3e0d3d5e17635f65ef8a",
         "lockHash": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48"
       },
       "resolved_input": {
@@ -18012,6 +18222,7 @@
         "OK decoration_density={'tower#1.facade.segment#1.floor#1:north': {'value': 30.0, 'numerator': 6, 'denominator': 20}, 'tower#1.facade.segment#1.floor#2:north': {'value': 30.0, 'numerator': 6, 'denominator': 20}, 'tower#1.facade.segment#1.floor#3:north': {'value': 33.333333333333336, 'numerator': 5, 'denominator': 15}, 'tower#1.facade.segment#2.floor#1:north': {'value': 28.571428571428573, 'numerator': 4, 'denominator': 14}, 'tower#1.facade.segment#2.floor#2:north': {'value': 33.333333333333336, 'numerator': 5, 'denominator': 15}, 'tower#1.facade.segment#2.floor#3:north': {'value': 36.36363636363637, 'numerator': 4, 'denominator': 11}, 'tower#1.facade.segment#3.floor#1:east': {'value': 31.57894736842105, 'numerator': 6, 'denominator': 19}, 'tower#1.facade.segment#3.floor#2:east': {'value': 31.57894736842105, 'numerator': 6, 'denominator': 19}, 'tower#1.facade.segment#3.floor#3:east': {'value': 28.571428571428573, 'numerator': 4, 'denominator': 14}, 'tower#1.facade.segment#4.floor#1:south': {'value': 30.0, 'numerator': 6, 'denominator': 20}, 'tower#1.facade.segment#4.floor#2:south': {'value': 30.0, 'numerator': 6, 'denominator': 20}, 'tower#1.facade.segment#4.floor#3:south': {'value': 33.333333333333336, 'numerator': 5, 'denominator': 15}, 'tower#1.facade.segment#5.floor#1:south': {'value': 33.333333333333336, 'numerator': 5, 'denominator': 15}, 'tower#1.facade.segment#5.floor#2:south': {'value': 33.333333333333336, 'numerator': 5, 'denominator': 15}, 'tower#1.facade.segment#5.floor#3:south': {'value': 36.36363636363637, 'numerator': 4, 'denominator': 11}, 'tower#1.facade.segment#6.floor#1:west': {'value': 31.57894736842105, 'numerator': 6, 'denominator': 19}, 'tower#1.facade.segment#6.floor#2:west': {'value': 31.57894736842105, 'numerator': 6, 'denominator': 19}, 'tower#1.facade.segment#6.floor#3:west': {'value': 28.571428571428573, 'numerator': 4, 'denominator': 14}} evaluation/cases/structure-detail/standalone-tower-26.3-litematic.yaml tower#1",
         "OK facade_surface_missing=0 evaluation/cases/structure-detail/standalone-tower-26.3-litematic.yaml tower#1",
         "OK palette_relation=True evaluation/cases/structure-detail/standalone-tower-26.3-litematic.yaml tower#1",
+        "WARN opening_recess_blocked opening_recess=0 expected=1 config.decoration.depth tower#1.opening#32 → config.decoration.depth",
         "INFO preview=not-run (表示はCLIが実行)",
         "STATUS passed"
       ],
@@ -18759,6 +18970,19 @@
           "repairPaths": [],
           "severity": "ok",
           "source": "evaluation/cases/structure-detail/standalone-tower-26.3-litematic.yaml"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "tower#1.opening#32",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
         }
       ],
       "blueprint_sha256": "9b2edd8a3f7d353ae1c273ef184c660d6e1105177beb4d4ae62a40ee2618867a",
@@ -19435,6 +19659,19 @@
             "repairPaths": [],
             "severity": "ok",
             "source": "rotated.yaml"
+          },
+          {
+            "actual": 0,
+            "code": "opening_recess_blocked",
+            "element": "house#1.opening#1.6",
+            "expected": 1,
+            "metric": "opening_recess",
+            "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+            "repairPaths": [
+              "config.decoration.depth"
+            ],
+            "severity": "warn",
+            "source": "config.decoration.depth"
           }
         ]
       }
@@ -20222,6 +20459,19 @@
             "repairPaths": [],
             "severity": "ok",
             "source": "rotated.yaml"
+          },
+          {
+            "actual": 0,
+            "code": "opening_recess_blocked",
+            "element": "tower#1.opening#32",
+            "expected": 1,
+            "metric": "opening_recess",
+            "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+            "repairPaths": [
+              "config.decoration.depth"
+            ],
+            "severity": "warn",
+            "source": "config.decoration.depth"
           }
         ]
       }
@@ -20449,6 +20699,19 @@
             "repairPaths": [],
             "severity": "ok",
             "source": "functional.yaml"
+          },
+          {
+            "actual": 0,
+            "code": "opening_recess_blocked",
+            "element": "house#1.opening#1.6",
+            "expected": 1,
+            "metric": "opening_recess",
+            "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+            "repairPaths": [
+              "config.decoration.depth"
+            ],
+            "severity": "warn",
+            "source": "config.decoration.depth"
           }
         ]
       },
@@ -20660,6 +20923,45 @@
             "repairPaths": [],
             "severity": "ok",
             "source": "functional.yaml"
+          },
+          {
+            "actual": 0,
+            "code": "opening_recess_blocked",
+            "element": "house#1.opening#1.5",
+            "expected": 1,
+            "metric": "opening_recess",
+            "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+            "repairPaths": [
+              "config.decoration.depth"
+            ],
+            "severity": "warn",
+            "source": "config.decoration.depth"
+          },
+          {
+            "actual": 0,
+            "code": "opening_recess_blocked",
+            "element": "house#1.opening#1.6",
+            "expected": 1,
+            "metric": "opening_recess",
+            "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+            "repairPaths": [
+              "config.decoration.depth"
+            ],
+            "severity": "warn",
+            "source": "config.decoration.depth"
+          },
+          {
+            "actual": 0,
+            "code": "opening_recess_blocked",
+            "element": "house#1.opening#2.5",
+            "expected": 1,
+            "metric": "opening_recess",
+            "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+            "repairPaths": [
+              "config.decoration.depth"
+            ],
+            "severity": "warn",
+            "source": "config.decoration.depth"
           }
         ]
       },
@@ -20885,6 +21187,19 @@
             "repairPaths": [],
             "severity": "ok",
             "source": "functional.yaml"
+          },
+          {
+            "actual": 0,
+            "code": "opening_recess_blocked",
+            "element": "house#1.opening#1.6",
+            "expected": 1,
+            "metric": "opening_recess",
+            "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+            "repairPaths": [
+              "config.decoration.depth"
+            ],
+            "severity": "warn",
+            "source": "config.decoration.depth"
           }
         ]
       },
@@ -21283,6 +21598,19 @@
             "repairPaths": [],
             "severity": "ok",
             "source": "functional.yaml"
+          },
+          {
+            "actual": 0,
+            "code": "opening_recess_blocked",
+            "element": "tower#1.opening#32",
+            "expected": 1,
+            "metric": "opening_recess",
+            "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+            "repairPaths": [
+              "config.decoration.depth"
+            ],
+            "severity": "warn",
+            "source": "config.decoration.depth"
           }
         ]
       },
@@ -21713,6 +22041,19 @@
             "repairPaths": [],
             "severity": "ok",
             "source": "functional.yaml"
+          },
+          {
+            "actual": 0,
+            "code": "opening_recess_blocked",
+            "element": "tower#1.opening#38",
+            "expected": 1,
+            "metric": "opening_recess",
+            "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+            "repairPaths": [
+              "config.decoration.depth"
+            ],
+            "severity": "warn",
+            "source": "config.decoration.depth"
           }
         ]
       },
@@ -22111,6 +22452,19 @@
             "repairPaths": [],
             "severity": "ok",
             "source": "functional.yaml"
+          },
+          {
+            "actual": 0,
+            "code": "opening_recess_blocked",
+            "element": "tower#1.opening#32",
+            "expected": 1,
+            "metric": "opening_recess",
+            "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+            "repairPaths": [
+              "config.decoration.depth"
+            ],
+            "severity": "warn",
+            "source": "config.decoration.depth"
           }
         ]
       },
@@ -22541,6 +22895,19 @@
             "repairPaths": [],
             "severity": "ok",
             "source": "functional.yaml"
+          },
+          {
+            "actual": 0,
+            "code": "opening_recess_blocked",
+            "element": "tower#1.opening#38",
+            "expected": 1,
+            "metric": "opening_recess",
+            "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+            "repairPaths": [
+              "config.decoration.depth"
+            ],
+            "severity": "warn",
+            "source": "config.decoration.depth"
           }
         ]
       },
@@ -22939,6 +23306,19 @@
             "repairPaths": [],
             "severity": "ok",
             "source": "functional.yaml"
+          },
+          {
+            "actual": 0,
+            "code": "opening_recess_blocked",
+            "element": "tower#1.opening#32",
+            "expected": 1,
+            "metric": "opening_recess",
+            "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+            "repairPaths": [
+              "config.decoration.depth"
+            ],
+            "severity": "warn",
+            "source": "config.decoration.depth"
           }
         ]
       },
@@ -23369,6 +23749,19 @@
             "repairPaths": [],
             "severity": "ok",
             "source": "functional.yaml"
+          },
+          {
+            "actual": 0,
+            "code": "opening_recess_blocked",
+            "element": "tower#1.opening#38",
+            "expected": 1,
+            "metric": "opening_recess",
+            "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+            "repairPaths": [
+              "config.decoration.depth"
+            ],
+            "severity": "warn",
+            "source": "config.decoration.depth"
           }
         ]
       }

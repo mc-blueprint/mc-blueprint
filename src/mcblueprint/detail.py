@@ -6,7 +6,6 @@ import copy
 import json
 import math
 import random
-import warnings
 
 from mcblueprint import components
 from mcblueprint.critic import plan_from_metadata
@@ -37,12 +36,12 @@ def _recess_openings(style, strength, root, body, detail, contract):
         maximum = maximum[-1]
     depth = math.floor(strength * maximum + 0.5)
     if not depth:
-        return
+        return []
     structure = [AABB.of(Vec3.from_seq(item["from"]), Vec3.from_seq(item["to"]))
                  for item in (*contract["columns"], *contract["beams"])]
     passages = [(op, build_operation(op, root).bounds()) for op in body + detail
                 if op.get("reserved") == "circulation"]
-    recessed = []
+    recessed, diagnostics = [], []
     for op in detail:
         if op["type"] not in ("window", "doorway"):
             continue
@@ -64,7 +63,7 @@ def _recess_openings(style, strength, root, body, detail, contract):
                           "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
                           "repairPaths": ["config.decoration.depth"]}
             op["comment"] = json.dumps(diagnostic, ensure_ascii=False)
-            warnings.warn(op["comment"], stacklevel=2)
+            diagnostics.append(diagnostic)
             continue
         # 基準面の開口は投影の正本として残し、機能ブロックだけを内側へ移す。
         if op["type"] == "window":
@@ -80,6 +79,7 @@ def _recess_openings(style, strength, root, body, detail, contract):
                             "to": bounds.max.to_list(), "block": "air"}, moved],
         })
     detail.extend(recessed)
+    return diagnostics
 
 
 def _module(name):
@@ -156,7 +156,7 @@ def _depth_operations(raw, style, strength):
 
 
 def plan_detail(params, style, config, root, body, detail, contract, projected_contract):
-    """予約を守る任意装飾と、最終セルのOperation IDに対応する装飾計画を返す。"""
+    """detailへ装飾・開口後退を反映し、装飾計画・Palette・診断を返す。"""
     settings = config["decoration"]
     modules = style["modules"]
     required = ("bay", "entrance", "roof_edge")
@@ -280,10 +280,10 @@ def plan_detail(params, style, config, root, body, detail, contract, projected_c
     )
     used_palettes = {op["palette"] for wrapper in placed for op in wrapper["operations"]
                      if "palette" in op}
-    _recess_openings(style, settings["depth"], root, body, detail, contract)
+    diagnostics = _recess_openings(style, settings["depth"], root, body, detail, contract)
     detail[:] = placed + detail
     return decorations, {name: entries for name, entries in palettes.items()
-                         if name in used_palettes}
+                         if name in used_palettes}, diagnostics
 
 
 def _facade_selection(placed, params, style, config, root, body, contract, modules, target,
