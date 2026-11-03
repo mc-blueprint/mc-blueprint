@@ -160,7 +160,14 @@ Weatherの遷移診断はコードごとの件数をWARNとして返します。
 終了コードは合格 `0`、入力・構造予約の違反 `1`、引数・I/O・資源不足 `2`、生成後の評価不合格 `3`。
 `3` でも成果物を保存します。隣の `<出力名>.run.json` に合否・診断・合成設定・出所・seed・
 入力hash・engine版/hash・データlock/hashを記録します。出力は既存の原子的Exporterを使い、
-完成まで既存ファイルを置き換えません。3D表示・ブラウザ起動は行わず、`preview=not-run` を返します。
+完成まで既存ファイルを置き換えません。Pythonの `make` はsceneを保存し、表示せず
+`preview=not-run` を返します。CLIは生成後に `preview.enabled`・`preview.mode` に従い、
+既定で3D viewerを起動します。`preview.open_browser=false` はブラウザを開かずURLを表示し、
+Ctrl+Cまでサーバーを保持します。終了後に生成結果の `0` または `3` を返します。
+`--set preview.enabled=false` で表示を省略し、`--set preview.mode=2d` で
+出力先の `preview/` に既存の4視点PNGを保存します（preview extraが必要）。
+表示失敗は生成済み成果を残して終了 `2` とし、runの評価 `status` と別に
+`preview`（`disabled` / `2d` / `3d` / `failed`）と失敗時の `previewError` を記録します。
 
 ## 中間出力と再開
 
