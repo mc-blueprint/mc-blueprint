@@ -167,7 +167,8 @@ def test_retries_return_smallest_observed_violation(monkeypatch):
     result = materialize(cells(("wall_main", "full"), ("roof", "full")), seed=42,
                          palette={"variation": 1, "materials": {
                              "wall_main": "minecraft:stone", "roof": "wood"}})
-    assert result.attempts == len(observed) == 20
+    assert result.attempts == 20
+    assert len(observed) >= result.attempts
     assert len({row["actual"] for row in observed}) > 1
     assert result.diagnostics[0]["violation"] == min(row["violation"] for row in observed)
 

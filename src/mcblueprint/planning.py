@@ -134,6 +134,11 @@ def _plan_contract(root, body, detail, transform, params, layout):
                          if op["type"] == "fill" and op["from"][0] == op["to"][0]
                          and op["from"][2] == op["to"][2]},
                         key=lambda p: math.atan2(p[1], p[0]))
+        if params["shape"] == "square":
+            radius = params["radius"]
+            points = sorted(set(points) | {(x, z) for x in (-radius, radius)
+                                           for z in (-radius, radius)},
+                            key=lambda p: math.atan2(p[1], p[0]))
         for index, start in enumerate(points):
             end = points[(index + 1) % len(points)]
             dx, dz = end[0] - start[0], end[1] - start[1]
@@ -142,9 +147,9 @@ def _plan_contract(root, body, detail, transform, params, layout):
                 scale = max(1, math.gcd(abs(nx), abs(nz)))
                 normal = Vec3(nx // scale, 0, nz // scale)
             elif dx:
-                normal = Vec3(0, 0, 1 if (start[0] + end[0]) // 2 > 0 else -1)
+                normal = Vec3(0, 0, 1 if (start[1] + end[1]) // 2 > 0 else -1)
             else:
-                normal = Vec3(1 if (start[1] + end[1]) // 2 > 0 else -1, 0, 0)
+                normal = Vec3(1 if (start[0] + end[0]) // 2 > 0 else -1, 0, 0)
             for level in range(params["floors"]):
                 lo = Vec3(start[0], level * params["floor_height"] + 1, start[1])
                 hi = Vec3(end[0], min((level + 1) * params["floor_height"],
