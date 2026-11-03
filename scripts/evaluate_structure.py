@@ -7,7 +7,6 @@ import contextlib
 import hashlib
 import io
 import json
-import re
 import statistics
 import sys
 import tempfile
@@ -34,10 +33,13 @@ PERFORMANCE = ROOT / "evaluation/records/structure-detail-performance.json"
 METHOD = "structure-detail-v1"
 
 
-def write_json(path, value):
+def write_json(path, value, extra_inputs=()):
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(repository_relative(value), ensure_ascii=False, indent=2) + "\n",
-                    encoding="utf-8", newline="\n")
+    inputs = [ROOT / item["input"]["path"]
+              for item in json.loads(PLAN.read_bytes())["inputs"]] if PLAN.exists() else []
+    inputs.extend(extra_inputs)
+    content = json.dumps(repository_relative(value, inputs), ensure_ascii=False, indent=2) + "\n"
+    path.write_text(content, encoding="utf-8", newline="\n")
 
 
 def digest(path):
@@ -48,18 +50,25 @@ def reference(path):
     return {"path": path.relative_to(ROOT).as_posix(), "sha256": digest(path)}
 
 
-def repository_relative(value):
+def repository_relative(value, inputs=(), key=None):
     if isinstance(value, str):
-        value = value.replace("\\", "/")
-        value = re.sub(r"(?:[A-Za-z]:)?(?:/[^/]+)*/mc-blueprint/", "", value,
-                       flags=re.IGNORECASE)
-        value = re.sub(r"(?<![A-Za-z0-9])(?:[A-Za-z]:/)(?:[^/\s\"']*/)*([^/\s\"']+)",
-                       r"\1", value)
-        return re.sub(r"(?<![A-Za-z0-9:])/(?:[^/\s\"']*/)*([^/\s\"']+)", r"\1", value)
+        for source in inputs:
+            try:
+                relative = source.resolve().relative_to(ROOT).as_posix()
+            except ValueError:
+                relative = source.name
+            value = value.replace(str(source), relative)
+            value = value.replace(source.as_posix(), relative)
+        if key in ("path", "basePath", "base_path") and Path(value).is_absolute():
+            try:
+                return Path(value).resolve().relative_to(ROOT).as_posix()
+            except ValueError:
+                return value
+        return value
     if isinstance(value, list):
-        return [repository_relative(item) for item in value]
+        return [repository_relative(item, inputs, key) for item in value]
     if isinstance(value, dict):
-        return {key: repository_relative(item) for key, item in value.items()}
+        return {name: repository_relative(item, inputs, name) for name, item in value.items()}
     return value
 
 
@@ -211,6 +220,7 @@ def run_matrix(plan):
     cases = json.loads((ROOT / "evaluation/cases/fixed-cases.json").read_bytes())["cases"]
     record = {"schema_version": 1, "record_type": "structure-detail-evaluation",
               **metadata(), "results": []}
+    extra_inputs = []
     with tempfile.TemporaryDirectory(prefix="structure-detail-") as temporary:
         folder = Path(temporary)
         for entry in plan["inputs"]:
@@ -252,9 +262,10 @@ def run_matrix(plan):
             write_json(RECORD, record)
             print(f"{entry['case']} {entry['version']} {entry['format']}: {checks}", flush=True)
         record["regression_checks"] = regressions(plan, folder)
+        extra_inputs = list(folder.glob("*.yaml"))
     record["completion_passed"] = all(r["completion_passed"] for r in record["results"])
     record["quality_passed"] = all(r["quality_passed"] for r in record["results"])
-    write_json(RECORD, record)
+    write_json(RECORD, record, extra_inputs)
 
 
 def regressions(plan, folder):
