@@ -24,6 +24,7 @@ from mcblueprint.model import AABB, Vec3
 from mcblueprint.operations.box_like import iter_box
 from mcblueprint.planning import plan_buildspec
 from mcblueprint.region_export import export_generated_regions
+from mcblueprint.scene import capture_sources, write_scene
 from mcblueprint.support import check_support
 from mcblueprint.traversal import check_route
 from mcblueprint.validator import validate_and_load
@@ -309,6 +310,8 @@ def make(
     source = Path(source).resolve()
     stage = "Resolve"
     staged_out = None
+    staged_scene = None
+    staged_scene_meta = None
     try:
         if stage_hook:
             stage_hook(stage)
@@ -405,16 +408,29 @@ def make(
         with tempfile.NamedTemporaryFile(dir=out.parent, prefix=f".{out.name}-", delete=False) as f:
             staged_out = Path(f.name)
         staged_out.unlink()
+        with tempfile.NamedTemporaryFile(
+            dir=out.parent, prefix=f".{out.name}-scene-", delete=False,
+        ) as f:
+            staged_scene = Path(f.name)
+        staged_scene.unlink()
+        with tempfile.NamedTemporaryFile(
+            dir=out.parent, prefix=f".{out.name}-scene-meta-", delete=False,
+        ) as f:
+            staged_scene_meta = Path(f.name)
+        staged_scene_meta.unlink()
         with tempfile.TemporaryDirectory(prefix=f".{out.name}-pipeline-", dir=out.parent) as tmp:
             temporary_dir = Path(tmp)
             spool = RegionSpool(temporary_dir / "cells", bounds)
+            source_spool = temporary_dir / "sources"
+            scene_sources: dict[int, dict] = {}
             weather_counts: dict[str, int] = {}
 
             def weather_diagnostic(diagnostic):
                 code = diagnostic["code"]
                 weather_counts[code] = weather_counts.get(code, 0) + 1
 
-            spool.write(generated_blueprint_regions(blueprint, on_diagnostic=weather_diagnostic))
+            regions = generated_blueprint_regions(blueprint, on_diagnostic=weather_diagnostic)
+            spool.write(capture_sources(regions, bounds, source_spool, context, scene_sources))
             stage = "Critic"
             if stage_hook:
                 stage_hook(stage)
@@ -431,6 +447,27 @@ def make(
                     stage_hook(stage)
                 export_generated_regions(_spool_regions(window, config["limits"]), blueprint,
                                          staged_out, format=fmt)
+            input_kind = "spec" if source.suffix.lower() in (".yaml", ".yml") else "blueprint"
+            scene_input = {"kind": input_kind, "path": str(source),
+                           "sha256": expected["input"]["sha256"]}
+            view = config["preview"]
+            scene_preview = {"enabled": view["enabled"], "shader": view["shader"],
+                             "shadows": view["shadows"], "brightness": view["brightness"],
+                             "timeOfDay": view["time_of_day"], "blockLight": view["block_light"],
+                             "quality": view["quality"]}
+            scene_hash = write_scene(
+                staged_scene, source_spool, spool, scene_sources, blueprint, context,
+                scene_input, scene_preview,
+                view["biome"] or context["resolved"]["buildspec"]["site"]["biome"],
+            )
+            _atomic_json(staged_scene_meta, {
+                "formatVersion": 1,
+                "inputSha256": expected["input"]["sha256"],
+                "resolvedHash": expected["input"]["resolvedHash"],
+                "configHash": _hash(config),
+                "environment": expected["environment"],
+                "sceneSha256": scene_hash,
+            })
         lines.append("INFO preview=not-run (3D表示はFで接続)")
         status = "failed" if failed else "passed"
         lines.append(f"STATUS {status}")
@@ -443,7 +480,9 @@ def make(
                                          "config": config, "sources": resolved.origins,
                                          "output": str(out), "diagnostics": lines})
             backups = {}
-            for target in (out, record):
+            scene_out = out.with_name(f"{out.stem}.scene.json.gz")
+            scene_meta_out = scene_out.with_suffix(scene_out.suffix + ".meta.json")
+            for target in (out, record, scene_out, scene_meta_out):
                 backup = temporary_dir / f"{target.name}.backup"
                 if target.exists():
                     shutil.copy2(target, backup)
@@ -451,8 +490,10 @@ def make(
             try:
                 os.replace(staged_out, out)
                 os.replace(staged_record, record)
+                os.replace(staged_scene, scene_out)
+                os.replace(staged_scene_meta, scene_meta_out)
             except OSError:
-                for target in (out, record):
+                for target in (out, record, scene_out, scene_meta_out):
                     if target in backups:
                         os.replace(backups[target], target)
                     else:
@@ -473,3 +514,7 @@ def make(
     finally:
         if staged_out is not None:
             staged_out.unlink(missing_ok=True)
+        if staged_scene is not None:
+            staged_scene.unlink(missing_ok=True)
+        if staged_scene_meta is not None:
+            staged_scene_meta.unlink(missing_ok=True)

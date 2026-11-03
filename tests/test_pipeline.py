@@ -1,8 +1,12 @@
 """makeの固定課題、再開、旧build互換と段階失敗。"""
 
+import base64
+import gzip
+import hashlib
 import json
 from pathlib import Path
 
+import numpy as np
 import pytest
 import yaml
 
@@ -37,6 +41,28 @@ def cells(path):
             if state.id != "minecraft:air"}
 
 
+def scene_cells(path):
+    scene_path = path.with_name(f"{path.stem}.scene.json.gz")
+    scene = json.loads(gzip.decompress(scene_path.read_bytes()))
+    result = {}
+    for chunk in scene["chunks"]:
+        x0, y0, z0 = chunk["at"]
+        sx, sy, sz = (min(16, scene["size"][i] - chunk["at"][i]) for i in range(3))
+        dtype = "<u2" if scene["indexWidth"] == 16 else "<u4"
+        indexes = np.frombuffer(base64.b64decode(chunk["blocks"]), dtype=dtype)
+        for index, palette_index in enumerate(indexes):
+            if palette_index:
+                x = index % sx
+                z = index // sx % sz
+                y = index // (sx * sz)
+                pos = tuple(scene["origin"][i] + (x, y, z)[i] + (x0, y0, z0)[i]
+                            for i in range(3))
+                state = scene["palette"][int(palette_index)]["state"]
+                if state != "minecraft:air":
+                    result[pos] = state
+    return result
+
+
 @pytest.mark.parametrize("version", VERSIONS)
 @pytest.mark.parametrize("format", ("schem", "litematic"))
 @pytest.mark.parametrize("archetype", ("house", "tower"))
@@ -46,6 +72,13 @@ def test_fixed_cases_make_matrix(tmp_path, capsys, version, format, archetype):
     code = main(["make", str(spec), "--format", format, "-o", str(path)])
     assert code == 0, capsys.readouterr().out
     assert cells(path)
+    expected = {tuple(pos): state for pos, state in cells(path).items()}
+    scene_path = path.with_name(f"{path.stem}.scene.json.gz")
+    scene_bytes = gzip.decompress(scene_path.read_bytes())
+    assert scene_cells(path) == expected
+    scene_meta = json.loads(Path(f"{scene_path}.meta.json").read_text(encoding="utf-8"))
+    assert scene_meta["sceneSha256"] == hashlib.sha256(scene_bytes).hexdigest()
+    assert scene_meta["inputSha256"] == hashlib.sha256(spec.read_bytes()).hexdigest()
     record = json.loads(path.with_suffix(path.suffix + ".run.json").read_text(encoding="utf-8"))
     assert record["status"] == "passed"
     assert record["preview"] == "not-run"
@@ -69,6 +102,7 @@ def test_emit_build_and_every_resume_generate_once(tmp_path, monkeypatch, archet
     monkeypatch.setattr(pipeline, "generate_regions", counted)
     first = pipeline.make(source, output=tmp_path / "first.schem", emit=["blueprint"])
     expected = cells(first.output)
+    expected_scene = (tmp_path / "first.scene.json.gz").read_bytes()
     assert any("mossy_stone_bricks" in state for state in expected.values())
     concrete = tmp_path / "first.blueprint.json"
     assert main(["validate", str(concrete)]) == 0
@@ -81,6 +115,7 @@ def test_emit_build_and_every_resume_generate_once(tmp_path, monkeypatch, archet
                                resume=tmp_path / f"first.{stage}.json")
         assert len(calls) == before + 1
         assert cells(result.output) == expected
+        assert (tmp_path / f"{stage}.scene.json.gz").read_bytes() == expected_scene
         assert result.code == first.code
     materialized = json.loads(concrete.read_text(encoding="utf-8"))
     assert materialized["metadata"]["planning"]["element"] == f"{archetype}#1"
@@ -142,6 +177,9 @@ def test_seed_variation_fixed_ids_and_region_invariance(tmp_path):
         "limits.region=[3,3,3]", "limits.halo=0",
     ])
     assert cells(first.output) == cells(split.output)
+    assert (tmp_path / "first.scene.json.gz").read_bytes() == (
+        tmp_path / "split.scene.json.gz"
+    ).read_bytes()
     fixed = {"wall_main": "minecraft:stone_bricks", "frame": "minecraft:oak_log",
              "roof": "minecraft:oak_planks", "floor": "minecraft:oak_planks"}
     source = spec_file(tmp_path, materials=fixed,
