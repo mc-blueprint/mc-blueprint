@@ -1,0 +1,4869 @@
+{
+  "schema_version": 1,
+  "record_type": "make-performance-210",
+  "base_commit": "3261ea9",
+  "environment": {
+    "os": "Windows-11-10.0.26200-SP0",
+    "cpu": "AMD Ryzen 7 5700X 8-Core Processor",
+    "cpu_reason": null,
+    "logical_cpu_count": 16,
+    "memory_total_bytes": 68640256000,
+    "memory_reason": null,
+    "gpu": "NVIDIA GeForce RTX 4070 SUPER",
+    "gpu_reason": null,
+    "python": "3.12.15 (main, Oct 21 2026, 17:48:33) [MSC v.1944 64 bit (AMD64)]",
+    "python_version": "3.12.15"
+  },
+  "comparison_limits": [
+    "Cはscene追加前、Dは#209前。本記録のbeforeは#209適用後。",
+    "時間は子プロセス起動からworker JSON出力まで。hash検査は計時外。",
+    "段開始の累積時間とRSS。隣接差分は段の時間で、段単独ピークではない。",
+    "各実行は直列。別担当の読み取りreviewのCPU負荷は制御していない。",
+    "NFR2達成判定はHの範囲であり、本記録では行わない。"
+  ],
+  "before": [
+    {
+      "case": "tower-medium",
+      "input_sha256": "f4391589c22710d842e9289fd7dc032a8081ecd8b58a7cb6703596e3888a42c0",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 69.59560929995496,
+          "process_peak_rss_bytes": 200159232,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.006948999944142997,
+              "rss_at_stage_start_bytes": 51089408
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.22855109989177436,
+              "rss_at_stage_start_bytes": 51273728
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 3.448374099913053,
+              "rss_at_stage_start_bytes": 75804672
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 18.571843699901365,
+              "rss_at_stage_start_bytes": 96124928
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 56.45057889993768,
+              "rss_at_stage_start_bytes": 110456832
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 63.259542399900965,
+              "rss_at_stage_start_bytes": 111521792
+            }
+          ],
+          "seconds": 70.51165480003692
+        }
+      ],
+      "seconds_median": 70.51165480003692,
+      "signature": {
+        "placement_sha256": "1da201aba3ad635da94056237e2a58163a1e454e90a93132456bb46de406062b",
+        "metrics_sha256": "7b522bca53c36c3d107fac5962fde61714fda72e546cb79b9bf4b133d1ace7a8",
+        "structured_diagnostics_sha256": "ae3eeaf8314dda638e92ae752ecde79cc8f1c466a67e623beb1e2b5cea76d01d",
+        "scene_json_sha256": "a73ab1adb3188e349fd3ec9027e441c0950b13376417085d0d75a50102e76fab"
+      },
+      "c_seconds_median": 21.37432380003156,
+      "input_identical_to_c": false,
+      "d_seconds_median": 144.40541050001048,
+      "input_identical_to_d": true,
+      "stage_seconds_median": {
+        "Resolve": 0.22160209994763136,
+        "Site/Massing/Detail": 3.219823000021279,
+        "Materialize": 15.123469599988312,
+        "Generate": 37.87873520003632,
+        "Critic": 6.8089634999632835,
+        "Export": 6.336066900053993
+      },
+      "process_peak_rss_bytes_median": 200159232
+    },
+    {
+      "case": "house-medium",
+      "input_sha256": "5aae28387110c6a8fc46fd103bb8ab0575da4171aa738e90f48081b67d965447",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 60.60825400007889,
+          "process_peak_rss_bytes": 201228288,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0010332000674679875,
+              "rss_at_stage_start_bytes": 50450432
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04410579998511821,
+              "rss_at_stage_start_bytes": 50987008
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.6936208000406623,
+              "rss_at_stage_start_bytes": 55083008
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 4.050757199991494,
+              "rss_at_stage_start_bytes": 82264064
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 58.31709949998185,
+              "rss_at_stage_start_bytes": 86798336
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 58.811106499983,
+              "rss_at_stage_start_bytes": 87015424
+            }
+          ],
+          "seconds": 61.5114683000138
+        }
+      ],
+      "seconds_median": 61.5114683000138,
+      "signature": {
+        "placement_sha256": "d5e800a305354217a75addf406cdbf8f59c8a8307a067eee6ee0250355144d13",
+        "metrics_sha256": "b0c378a1b5f143f10229a9c433e82998c6fd2647d054f2cc94ae07bde4757671",
+        "structured_diagnostics_sha256": "5cc9b47cbca66ae5c362e2058d3bffaff34afe05b32e75335fb8ab65873c5847",
+        "scene_json_sha256": "0f482659dfc9e119445540408570ccb1dd989700b89d7ce3a16a7af7f9253068"
+      },
+      "c_seconds_median": 29.682383200037293,
+      "input_identical_to_c": false,
+      "d_seconds_median": 68.90396789996885,
+      "input_identical_to_d": true,
+      "stage_seconds_median": {
+        "Resolve": 0.04307259991765022,
+        "Site/Massing/Detail": 0.6495150000555441,
+        "Materialize": 3.357136399950832,
+        "Generate": 54.266342299990356,
+        "Critic": 0.4940070000011474,
+        "Export": 1.797147500095889
+      },
+      "process_peak_rss_bytes_median": 201228288
+    },
+    {
+      "case": "tower-large",
+      "input_sha256": "cd2e1cf461a97e26b211d40a10229b68630d4c8bb54e63843edb4a54a6317ba8",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 398.773068999988,
+          "process_peak_rss_bytes": 337842176,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.00133200001437217,
+              "rss_at_stage_start_bytes": 50946048
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04618029994890094,
+              "rss_at_stage_start_bytes": 51302400
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 36.24049200001173,
+              "rss_at_stage_start_bytes": 146976768
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 109.0500448999228,
+              "rss_at_stage_start_bytes": 159473664
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 298.25791089993436,
+              "rss_at_stage_start_bytes": 221659136
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 363.2758630999597,
+              "rss_at_stage_start_bytes": 224706560
+            }
+          ],
+          "seconds": 399.66480160003994
+        }
+      ],
+      "seconds_median": 399.66480160003994,
+      "signature": {
+        "placement_sha256": "3938d6adcd7b623d754d56b806862aa29b376682afe9b0c5380e5d35b23413af",
+        "metrics_sha256": "ecaf26fda939dd0ac73b9877cd35ae3748e9cc1807dddede17fd9eadbad230c6",
+        "structured_diagnostics_sha256": "f93d28098c884ba3118099acdabac72b83723ee32016c09713e0cd1b79145714",
+        "scene_json_sha256": "0708ea32d9268a8c8b91377e1f5c3bdfb49b5f56551dd3074c358e1633819e6f"
+      },
+      "c_seconds_median": 155.7362677999772,
+      "input_identical_to_c": false,
+      "d_seconds_median": 1019.3773640000727,
+      "input_identical_to_d": true,
+      "stage_seconds_median": {
+        "Resolve": 0.04484829993452877,
+        "Site/Massing/Detail": 36.194311700062826,
+        "Materialize": 72.80955289991107,
+        "Generate": 189.20786600001156,
+        "Critic": 65.01795220002532,
+        "Export": 35.49720590002835
+      },
+      "process_peak_rss_bytes_median": 337842176
+    },
+    {
+      "case": "house-large",
+      "input_sha256": "25ba7157ff2ffd25ccffee7a11ea94f7e79c26b3a12ff617e2746aa9310739f1",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 228.61183459998574,
+          "process_peak_rss_bytes": 216272896,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.001205399981699884,
+              "rss_at_stage_start_bytes": 52051968
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04628040001261979,
+              "rss_at_stage_start_bytes": 52322304
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 2.2617007000371814,
+              "rss_at_stage_start_bytes": 59555840
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 8.426541000022553,
+              "rss_at_stage_start_bytes": 87744512
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 221.03565269999672,
+              "rss_at_stage_start_bytes": 93458432
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 223.05692480003927,
+              "rss_at_stage_start_bytes": 94466048
+            }
+          ],
+          "seconds": 229.4532433000859
+        }
+      ],
+      "seconds_median": 229.4532433000859,
+      "signature": {
+        "placement_sha256": "20b0e0f34346c40e6b5bc358c1a47d75651ea599675acf59a3ffcd7dd228a3f8",
+        "metrics_sha256": "9419735a250f08a571b87e61dba891f4c9cfc055dd8e731348c37ac87a3cee64",
+        "structured_diagnostics_sha256": "168c56cd12b8627d2a667a3e78e5c1fc275f04b4880e425daa23efbd79a956c2",
+        "scene_json_sha256": "85bf417831039a6a8dac92285d82e168ab3464ca0e21f1c05fc134edc3af178e"
+      },
+      "c_seconds_median": 183.59484330000123,
+      "input_identical_to_c": false,
+      "d_seconds_median": 290.55328300001565,
+      "input_identical_to_d": true,
+      "stage_seconds_median": {
+        "Resolve": 0.04507500003091991,
+        "Site/Massing/Detail": 2.2154203000245616,
+        "Materialize": 6.1648402999853715,
+        "Generate": 212.60911169997416,
+        "Critic": 2.0212721000425518,
+        "Export": 5.554909799946472
+      },
+      "process_peak_rss_bytes_median": 216272896
+    }
+  ],
+  "updated_at": "2026-11-03T18:45:49.314353+00:00",
+  "profile_provenance": {
+    "commit": "3261ea9427e2fabb6297f0844756664ab1611e66",
+    "engine_sha256": "ca52e925768a7bb884178d97485184cbca8c83fa8f1316cdd3db8b3338acc41c",
+    "lock_sha256": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48",
+    "default_config_sha256": "17f5c240ead94ebb8c410f045b3344f07d07ec9c29a8a769645f853b5ea28d64"
+  },
+  "dependencies": {
+    "numpy": "2.5.4",
+    "nbtlib": "2.0.4",
+    "jsonschema": "4.26.0",
+    "PyYAML": "6.0.3"
+  },
+  "profile": [
+    {
+      "case": "tower-medium",
+      "input_sha256": "f4391589c22710d842e9289fd7dc032a8081ecd8b58a7cb6703596e3888a42c0",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 109.38127959996928,
+          "process_peak_rss_bytes": 202231808,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.001627699937671423,
+              "rss_at_stage_start_bytes": 52920320
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.0775599000044167,
+              "rss_at_stage_start_bytes": 53198848
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 9.192740899976343,
+              "rss_at_stage_start_bytes": 77377536
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 40.26443779992405,
+              "rss_at_stage_start_bytes": 97722368
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 86.19327809999231,
+              "rss_at_stage_start_bytes": 112717824
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 98.11868920002598,
+              "rss_at_stage_start_bytes": 113672192
+            }
+          ],
+          "seconds": 110.3705238000257,
+          "signature": {
+            "placement_sha256": "1da201aba3ad635da94056237e2a58163a1e454e90a93132456bb46de406062b",
+            "metrics_sha256": "7b522bca53c36c3d107fac5962fde61714fda72e546cb79b9bf4b133d1ace7a8",
+            "structured_diagnostics_sha256": "ae3eeaf8314dda638e92ae752ecde79cc8f1c466a67e623beb1e2b5cea76d01d",
+            "scene_json_sha256": "a73ab1adb3188e349fd3ec9027e441c0950b13376417085d0d75a50102e76fab"
+          }
+        }
+      ],
+      "seconds_median": 110.3705238000257,
+      "signature": {
+        "placement_sha256": "1da201aba3ad635da94056237e2a58163a1e454e90a93132456bb46de406062b",
+        "metrics_sha256": "7b522bca53c36c3d107fac5962fde61714fda72e546cb79b9bf4b133d1ace7a8",
+        "structured_diagnostics_sha256": "ae3eeaf8314dda638e92ae752ecde79cc8f1c466a67e623beb1e2b5cea76d01d",
+        "scene_json_sha256": "a73ab1adb3188e349fd3ec9027e441c0950b13376417085d0d75a50102e76fab"
+      },
+      "profile": {
+        "total_seconds": 97.32318380000031,
+        "total_calls": 180379446,
+        "focus_functions": [
+          {
+            "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\pathlib.py",
+            "line": 1228,
+            "function": "resolve",
+            "primitive_calls": 7,
+            "calls": 7,
+            "own_seconds": 3.9500000000000005e-05,
+            "cumulative_seconds": 0.0021483
+          },
+          {
+            "file": ".\\src\\mcblueprint\\scene.py",
+            "line": 83,
+            "function": "write_scene",
+            "primitive_calls": 1,
+            "calls": 1,
+            "own_seconds": 0.0011751,
+            "cumulative_seconds": 0.25042210000000004
+          },
+          {
+            "file": ".\\src\\mcblueprint\\detail.py",
+            "line": 97,
+            "function": "plan_detail",
+            "primitive_calls": 2,
+            "calls": 2,
+            "own_seconds": 0.0247519,
+            "cumulative_seconds": 7.6725319
+          },
+          {
+            "file": "H:\\mc-blueprint\\worktrees\\mcb-210\\.venv\\Lib\\site-packages\\referencing\\jsonschema.py",
+            "line": 604,
+            "function": "resolve",
+            "primitive_calls": 182,
+            "calls": 182,
+            "own_seconds": 0.0004942,
+            "cumulative_seconds": 0.0016148
+          },
+          {
+            "file": ".\\src\\mcblueprint\\components.py",
+            "line": 69,
+            "function": "resolve",
+            "primitive_calls": 10,
+            "calls": 10,
+            "own_seconds": 6.330000000000001e-05,
+            "cumulative_seconds": 0.0011925
+          },
+          {
+            "file": ".\\src\\mcblueprint\\critic.py",
+            "line": 248,
+            "function": "consume",
+            "primitive_calls": 1,
+            "calls": 1,
+            "own_seconds": 0.3156587,
+            "cumulative_seconds": 1.1116361000000001
+          },
+          {
+            "file": ".\\src\\mcblueprint\\planning.py",
+            "line": 88,
+            "function": "_plan_contract",
+            "primitive_calls": 6,
+            "calls": 6,
+            "own_seconds": 0.5708687,
+            "cumulative_seconds": 8.1316839
+          },
+          {
+            "file": ".\\src\\mcblueprint\\scene.py",
+            "line": 21,
+            "function": "capture_sources",
+            "primitive_calls": 2,
+            "calls": 2,
+            "own_seconds": 0.0805068,
+            "cumulative_seconds": 45.6319226
+          },
+          {
+            "file": ".\\src\\mcblueprint\\viewer_input.py",
+            "line": 163,
+            "function": "_spec_sources",
+            "primitive_calls": 1,
+            "calls": 1,
+            "own_seconds": 0.0033152000000000004,
+            "cumulative_seconds": 9.1130393
+          },
+          {
+            "file": ".\\src\\mcblueprint\\detail.py",
+            "line": 226,
+            "function": "_facade_selection",
+            "primitive_calls": 2,
+            "calls": 2,
+            "own_seconds": 0.44653400000000004,
+            "cumulative_seconds": 3.8408727000000003
+          },
+          {
+            "file": "H:\\mc-blueprint\\worktrees\\mcb-210\\.venv\\Lib\\site-packages\\yaml\\resolver.py",
+            "line": 143,
+            "function": "resolve",
+            "primitive_calls": 494,
+            "calls": 494,
+            "own_seconds": 0.0005475,
+            "cumulative_seconds": 0.0008568
+          },
+          {
+            "file": ".\\src\\mcblueprint\\materialize.py",
+            "line": 226,
+            "function": "materialize",
+            "primitive_calls": 1,
+            "calls": 1,
+            "own_seconds": 0.46824390000000005,
+            "cumulative_seconds": 14.4083544
+          },
+          {
+            "file": ".\\src\\mcblueprint\\operations\\base.py",
+            "line": 139,
+            "function": "resolve",
+            "primitive_calls": 10,
+            "calls": 10,
+            "own_seconds": 1.6000000000000001e-06,
+            "cumulative_seconds": 1.6000000000000001e-06
+          },
+          {
+            "file": ".\\src\\mcblueprint\\planning.py",
+            "line": 386,
+            "function": "plan_buildspec",
+            "primitive_calls": 2,
+            "calls": 2,
+            "own_seconds": 0.0181294,
+            "cumulative_seconds": 18.223303100000003
+          },
+          {
+            "file": ".\\src\\mcblueprint\\materialize.py",
+            "line": 411,
+            "function": "resolve",
+            "primitive_calls": 1,
+            "calls": 88596,
+            "own_seconds": 0.2232047,
+            "cumulative_seconds": 10.6474928
+          },
+          {
+            "file": ".\\src\\mcblueprint\\pipeline.py",
+            "line": 301,
+            "function": "_spool_regions",
+            "primitive_calls": 13,
+            "calls": 13,
+            "own_seconds": 0.094138,
+            "cumulative_seconds": 1.6614936
+          },
+          {
+            "file": ".\\src\\mcblueprint\\materialize.py",
+            "line": 179,
+            "function": "_distance",
+            "primitive_calls": 899050,
+            "calls": 899050,
+            "own_seconds": 0.43189370000000005,
+            "cumulative_seconds": 9.7464125
+          }
+        ],
+        "top_cumulative": [
+          {
+            "file": ".\\src\\mcblueprint\\pipeline.py",
+            "line": 433,
+            "function": "make",
+            "primitive_calls": 1,
+            "calls": 1,
+            "own_seconds": 0.0094064,
+            "cumulative_seconds": 109.3622277
+          },
+          {
+            "file": "~",
+            "line": 0,
+            "function": "<built-in method builtins.next>",
+            "primitive_calls": 525782,
+            "calls": 525855,
+            "own_seconds": 0.11209000000000001,
+            "cumulative_seconds": 54.50301880000001
+          },
+          {
+            "file": ".\\src\\mcblueprint\\exporters\\_spool.py",
+            "line": 24,
+            "function": "write",
+            "primitive_calls": 2,
+            "calls": 2,
+            "own_seconds": 0.0213115,
+            "cumulative_seconds": 47.380086600000006
+          },
+          {
+            "file": ".\\src\\mcblueprint\\scene.py",
+            "line": 21,
+            "function": "capture_sources",
+            "primitive_calls": 2,
+            "calls": 2,
+            "own_seconds": 0.0805068,
+            "cumulative_seconds": 45.6319226
+          },
+          {
+            "file": ".\\src\\mcblueprint\\pipeline.py",
+            "line": 592,
+            "function": "consume_regions",
+            "primitive_calls": 2,
+            "calls": 2,
+            "own_seconds": 2.3800000000000003e-05,
+            "cumulative_seconds": 45.3457194
+          },
+          {
+            "file": ".\\src\\mcblueprint\\pipeline.py",
+            "line": 217,
+            "function": "generated_blueprint_regions",
+            "primitive_calls": 2,
+            "calls": 2,
+            "own_seconds": 0.006897400000000001,
+            "cumulative_seconds": 44.2340595
+          },
+          {
+            "file": ".\\src\\mcblueprint\\generator.py",
+            "line": 88,
+            "function": "generate_regions",
+            "primitive_calls": 2,
+            "calls": 2,
+            "own_seconds": 6.25e-05,
+            "cumulative_seconds": 25.0238398
+          },
+          {
+            "file": ".\\src\\mcblueprint\\operations\\base.py",
+            "line": 113,
+            "function": "execute",
+            "primitive_calls": 1,
+            "calls": 8930,
+            "own_seconds": 0.040843000000000004,
+            "cumulative_seconds": 24.9410099
+          },
+          {
+            "file": ".\\src\\mcblueprint\\operations\\translate.py",
+            "line": 41,
+            "function": "apply",
+            "primitive_calls": 1,
+            "calls": 2355,
+            "own_seconds": 0.0021576,
+            "cumulative_seconds": 24.8653657
+          },
+          {
+            "file": ".\\src\\mcblueprint\\operations\\nested.py",
+            "line": 30,
+            "function": "apply_with",
+            "primitive_calls": 1,
+            "calls": 2355,
+            "own_seconds": 0.0060323,
+            "cumulative_seconds": 24.8653626
+          },
+          {
+            "file": ".\\src\\mcblueprint\\operations\\fill.py",
+            "line": 26,
+            "function": "apply",
+            "primitive_calls": 228,
+            "calls": 228,
+            "own_seconds": 0.0006318000000000001,
+            "cumulative_seconds": 22.0886551
+          },
+          {
+            "file": ".\\src\\mcblueprint\\operations\\base.py",
+            "line": 176,
+            "function": "fill",
+            "primitive_calls": 228,
+            "calls": 228,
+            "own_seconds": 0.0076822,
+            "cumulative_seconds": 22.0880233
+          },
+          {
+            "file": ".\\src\\mcblueprint\\operations\\randomness.py",
+            "line": 100,
+            "function": "tiles",
+            "primitive_calls": 345,
+            "calls": 345,
+            "own_seconds": 0.0395239,
+            "cumulative_seconds": 22.0099275
+          },
+          {
+            "file": ".\\src\\mcblueprint\\operations\\randomness.py",
+            "line": 123,
+            "function": "_sample",
+            "primitive_calls": 207,
+            "calls": 207,
+            "own_seconds": 0.0595515,
+            "cumulative_seconds": 21.9612379
+          },
+          {
+            "file": ".\\src\\mcblueprint\\weather.py",
+            "line": 81,
+            "function": "apply_weather",
+            "primitive_calls": 1,
+            "calls": 1,
+            "own_seconds": 2.3221856,
+            "cumulative_seconds": 19.1987409
+          },
+          {
+            "file": ".\\src\\mcblueprint\\planning.py",
+            "line": 386,
+            "function": "plan_buildspec",
+            "primitive_calls": 2,
+            "calls": 2,
+            "own_seconds": 0.0181294,
+            "cumulative_seconds": 18.223303100000003
+          },
+          {
+            "file": ".\\src\\mcblueprint\\validator.py",
+            "line": 98,
+            "function": "validate_and_load",
+            "primitive_calls": 1,
+            "calls": 1,
+            "own_seconds": 1.86e-05,
+            "cumulative_seconds": 16.5740261
+          },
+          {
+            "file": "H:\\mc-blueprint\\worktrees\\mcb-210\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+            "line": 349,
+            "function": "iter_errors",
+            "primitive_calls": 9,
+            "calls": 560460,
+            "own_seconds": 0.4753413,
+            "cumulative_seconds": 16.2548982
+          },
+          {
+            "file": "H:\\mc-blueprint\\worktrees\\mcb-210\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+            "line": 396,
+            "function": "descend",
+            "primitive_calls": 47,
+            "calls": 1013478,
+            "own_seconds": 2.0701091000000003,
+            "cumulative_seconds": 16.254598
+          },
+          {
+            "file": "H:\\mc-blueprint\\worktrees\\mcb-210\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+            "line": 290,
+            "function": "properties",
+            "primitive_calls": 13,
+            "calls": 578395,
+            "own_seconds": 0.4482413,
+            "cumulative_seconds": 16.254594
+          },
+          {
+            "file": "H:\\mc-blueprint\\worktrees\\mcb-210\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+            "line": 274,
+            "function": "ref",
+            "primitive_calls": 141,
+            "calls": 60842,
+            "own_seconds": 0.0601527,
+            "cumulative_seconds": 16.248832200000003
+          },
+          {
+            "file": ".\\src\\mcblueprint\\validator.py",
+            "line": 121,
+            "function": "validate_schema",
+            "primitive_calls": 1,
+            "calls": 1,
+            "own_seconds": 1.4900000000000001e-05,
+            "cumulative_seconds": 16.2458437
+          },
+          {
+            "file": "H:\\mc-blueprint\\worktrees\\mcb-210\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+            "line": 59,
+            "function": "items",
+            "primitive_calls": 72,
+            "calls": 11539,
+            "own_seconds": 0.0466265,
+            "cumulative_seconds": 16.241834100000002
+          },
+          {
+            "file": "H:\\mc-blueprint\\worktrees\\mcb-210\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+            "line": 332,
+            "function": "allOf",
+            "primitive_calls": 2,
+            "calls": 8897,
+            "own_seconds": 0.1713656,
+            "cumulative_seconds": 16.0135899
+          },
+          {
+            "file": "H:\\mc-blueprint\\worktrees\\mcb-210\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+            "line": 382,
+            "function": "if_",
+            "primitive_calls": 34,
+            "calls": 284674,
+            "own_seconds": 0.34959880000000004,
+            "cumulative_seconds": 16.0132657
+          },
+          {
+            "file": ".\\src\\mcblueprint\\materialize.py",
+            "line": 226,
+            "function": "materialize",
+            "primitive_calls": 1,
+            "calls": 1,
+            "own_seconds": 0.46824390000000005,
+            "cumulative_seconds": 14.4083544
+          },
+          {
+            "file": ".\\src\\mcblueprint\\operations\\randomness.py",
+            "line": 23,
+            "function": "first_draws",
+            "primitive_calls": 207,
+            "calls": 207,
+            "own_seconds": 0.6026374,
+            "cumulative_seconds": 14.3270555
+          },
+          {
+            "file": ".\\src\\mcblueprint\\operations\\randomness.py",
+            "line": 39,
+            "function": "_first_draws",
+            "primitive_calls": 207,
+            "calls": 207,
+            "own_seconds": 13.5051199,
+            "cumulative_seconds": 13.534743500000001
+          },
+          {
+            "file": ".\\src\\mcblueprint\\pipeline.py",
+            "line": 348,
+            "function": "_evaluate",
+            "primitive_calls": 1,
+            "calls": 1,
+            "own_seconds": 0.0005807000000000001,
+            "cumulative_seconds": 11.889025400000001
+          },
+          {
+            "file": ".\\src\\mcblueprint\\weather.py",
+            "line": 31,
+            "function": "_random",
+            "primitive_calls": 419238,
+            "calls": 419238,
+            "own_seconds": 0.8687062000000001,
+            "cumulative_seconds": 11.1609847
+          },
+          {
+            "file": ".\\src\\mcblueprint\\traversal.py",
+            "line": 226,
+            "function": "check_route",
+            "primitive_calls": 9,
+            "calls": 9,
+            "own_seconds": 0.013344700000000001,
+            "cumulative_seconds": 10.7884954
+          },
+          {
+            "file": ".\\src\\mcblueprint\\traversal.py",
+            "line": 159,
+            "function": "route",
+            "primitive_calls": 9,
+            "calls": 9,
+            "own_seconds": 1.0010272,
+            "cumulative_seconds": 10.775062700000001
+          },
+          {
+            "file": ".\\src\\mcblueprint\\materialize.py",
+            "line": 411,
+            "function": "resolve",
+            "primitive_calls": 1,
+            "calls": 88596,
+            "own_seconds": 0.2232047,
+            "cumulative_seconds": 10.6474928
+          },
+          {
+            "file": "~",
+            "line": 0,
+            "function": "<built-in method builtins.sum>",
+            "primitive_calls": 1350407,
+            "calls": 5845657,
+            "own_seconds": 3.594177,
+            "cumulative_seconds": 10.614241100000001
+          },
+          {
+            "file": "~",
+            "line": 0,
+            "function": "<method 'sort' of 'list' objects>",
+            "primitive_calls": 6418,
+            "calls": 6418,
+            "own_seconds": 0.2720406,
+            "cumulative_seconds": 10.330359900000001
+          }
+        ],
+        "top_own": [
+          {
+            "file": ".\\src\\mcblueprint\\operations\\randomness.py",
+            "line": 39,
+            "function": "_first_draws",
+            "primitive_calls": 207,
+            "calls": 207,
+            "own_seconds": 13.5051199,
+            "cumulative_seconds": 13.534743500000001
+          },
+          {
+            "file": "~",
+            "line": 0,
+            "function": "<built-in method builtins.sum>",
+            "primitive_calls": 1350407,
+            "calls": 5845657,
+            "own_seconds": 3.594177,
+            "cumulative_seconds": 10.614241100000001
+          },
+          {
+            "file": ".\\src\\mcblueprint\\materialize.py",
+            "line": 180,
+            "function": "<genexpr>",
+            "primitive_calls": 17981000,
+            "calls": 17981000,
+            "own_seconds": 2.9489982,
+            "cumulative_seconds": 2.9489982
+          },
+          {
+            "file": ".\\src\\mcblueprint\\operations\\randomness.py",
+            "line": 137,
+            "function": "_hashes",
+            "primitive_calls": 4522903,
+            "calls": 4522903,
+            "own_seconds": 2.7532520000000003,
+            "cumulative_seconds": 6.869440900000001
+          },
+          {
+            "file": "~",
+            "line": 0,
+            "function": "<method 'digest' of '_hashlib.HASH' objects>",
+            "primitive_calls": 5429808,
+            "calls": 5429808,
+            "own_seconds": 2.7201778,
+            "cumulative_seconds": 2.7201778
+          },
+          {
+            "file": ".\\src\\mcblueprint\\weather.py",
+            "line": 81,
+            "function": "apply_weather",
+            "primitive_calls": 1,
+            "calls": 1,
+            "own_seconds": 2.3221856,
+            "cumulative_seconds": 19.1987409
+          },
+          {
+            "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\json\\encoder.py",
+            "line": 205,
+            "function": "iterencode",
+            "primitive_calls": 1332651,
+            "calls": 1332651,
+            "own_seconds": 2.1900959,
+            "cumulative_seconds": 2.190108
+          },
+          {
+            "file": "H:\\mc-blueprint\\worktrees\\mcb-210\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+            "line": 396,
+            "function": "descend",
+            "primitive_calls": 47,
+            "calls": 1013478,
+            "own_seconds": 2.0701091000000003,
+            "cumulative_seconds": 16.254598
+          },
+          {
+            "file": "H:\\mc-blueprint\\worktrees\\mcb-210\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+            "line": 339,
+            "function": "evolve",
+            "primitive_calls": 1022267,
+            "calls": 1022267,
+            "own_seconds": 1.9769847,
+            "cumulative_seconds": 4.2000042
+          },
+          {
+            "file": "~",
+            "line": 0,
+            "function": "<method 'get' of 'dict' objects>",
+            "primitive_calls": 11347738,
+            "calls": 11347738,
+            "own_seconds": 1.8181623,
+            "cumulative_seconds": 2.0041466000000003
+          },
+          {
+            "file": ".\\src\\mcblueprint\\pipeline.py",
+            "line": 265,
+            "function": "get",
+            "primitive_calls": 1744516,
+            "calls": 1744516,
+            "own_seconds": 1.7221192,
+            "cumulative_seconds": 4.7565724000000005
+          },
+          {
+            "file": ".\\src\\mcblueprint\\model\\vec.py",
+            "line": 109,
+            "function": "contains",
+            "primitive_calls": 6555814,
+            "calls": 6555814,
+            "own_seconds": 1.5973357000000001,
+            "cumulative_seconds": 1.5973357000000001
+          },
+          {
+            "file": ".\\src\\mcblueprint\\model\\vec.py",
+            "line": 34,
+            "function": "__add__",
+            "primitive_calls": 3839447,
+            "calls": 3839447,
+            "own_seconds": 1.5489912000000001,
+            "cumulative_seconds": 3.7085577
+          },
+          {
+            "file": "~",
+            "line": 0,
+            "function": "<function Random.seed at 0x000001A45D022E80>",
+            "primitive_calls": 470169,
+            "calls": 470169,
+            "own_seconds": 1.4825562,
+            "cumulative_seconds": 1.4825562
+          },
+          {
+            "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\json\\__init__.py",
+            "line": 183,
+            "function": "dumps",
+            "primitive_calls": 1381665,
+            "calls": 1381665,
+            "own_seconds": 1.4484717,
+            "cumulative_seconds": 5.7299265
+          },
+          {
+            "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\copy.py",
+            "line": 118,
+            "function": "deepcopy",
+            "primitive_calls": 26126,
+            "calls": 1388754,
+            "own_seconds": 1.2443993,
+            "cumulative_seconds": 2.7089818
+          },
+          {
+            "file": "~",
+            "line": 0,
+            "function": "<built-in method builtins.isinstance>",
+            "primitive_calls": 8122496,
+            "calls": 8122496,
+            "own_seconds": 1.2377206,
+            "cumulative_seconds": 1.6988564000000002
+          },
+          {
+            "file": "~",
+            "line": 0,
+            "function": "<method 'copy' of '_hashlib.HASH' objects>",
+            "primitive_calls": 4571696,
+            "calls": 4571696,
+            "own_seconds": 1.2199628,
+            "cumulative_seconds": 1.2199628
+          },
+          {
+            "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\json\\encoder.py",
+            "line": 183,
+            "function": "encode",
+            "primitive_calls": 1381665,
+            "calls": 1381665,
+            "own_seconds": 1.2094764,
+            "cumulative_seconds": 3.9711122000000003
+          },
+          {
+            "file": ".\\src\\mcblueprint\\operations\\base.py",
+            "line": 39,
+            "function": "derive_seed",
+            "primitive_calls": 846848,
+            "calls": 846848,
+            "own_seconds": 1.1636201000000002,
+            "cumulative_seconds": 6.1850934
+          }
+        ]
+      }
+    },
+    {
+      "case": "tower-large",
+      "input_sha256": "cd2e1cf461a97e26b211d40a10229b68630d4c8bb54e63843edb4a54a6317ba8",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 907.4571269999724,
+          "process_peak_rss_bytes": 336355328,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0012811999768018723,
+              "rss_at_stage_start_bytes": 52654080
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.0672601000405848,
+              "rss_at_stage_start_bytes": 51757056
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 72.75185460003559,
+              "rss_at_stage_start_bytes": 150679552
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 211.18965870002285,
+              "rss_at_stage_start_bytes": 162013184
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 599.2031110000098,
+              "rss_at_stage_start_bytes": 222978048
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 791.8495008000173,
+              "rss_at_stage_start_bytes": 226095104
+            }
+          ],
+          "seconds": 908.4376261000289,
+          "signature": {
+            "placement_sha256": "3938d6adcd7b623d754d56b806862aa29b376682afe9b0c5380e5d35b23413af",
+            "metrics_sha256": "ecaf26fda939dd0ac73b9877cd35ae3748e9cc1807dddede17fd9eadbad230c6",
+            "structured_diagnostics_sha256": "f93d28098c884ba3118099acdabac72b83723ee32016c09713e0cd1b79145714",
+            "scene_json_sha256": "0708ea32d9268a8c8b91377e1f5c3bdfb49b5f56551dd3074c358e1633819e6f"
+          }
+        }
+      ],
+      "seconds_median": 908.4376261000289,
+      "signature": {
+        "placement_sha256": "3938d6adcd7b623d754d56b806862aa29b376682afe9b0c5380e5d35b23413af",
+        "metrics_sha256": "ecaf26fda939dd0ac73b9877cd35ae3748e9cc1807dddede17fd9eadbad230c6",
+        "structured_diagnostics_sha256": "f93d28098c884ba3118099acdabac72b83723ee32016c09713e0cd1b79145714",
+        "scene_json_sha256": "0708ea32d9268a8c8b91377e1f5c3bdfb49b5f56551dd3074c358e1633819e6f"
+      },
+      "profile": {
+        "total_seconds": 780.6816022000006,
+        "total_calls": 1223733402,
+        "focus_functions": [
+          {
+            "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\pathlib.py",
+            "line": 1228,
+            "function": "resolve",
+            "primitive_calls": 7,
+            "calls": 7,
+            "own_seconds": 2.51e-05,
+            "cumulative_seconds": 0.0018001
+          },
+          {
+            "file": ".\\src\\mcblueprint\\materialize.py",
+            "line": 226,
+            "function": "materialize",
+            "primitive_calls": 1,
+            "calls": 1,
+            "own_seconds": 2.1352100000000003,
+            "cumulative_seconds": 65.27100010000001
+          },
+          {
+            "file": ".\\src\\mcblueprint\\planning.py",
+            "line": 88,
+            "function": "_plan_contract",
+            "primitive_calls": 6,
+            "calls": 6,
+            "own_seconds": 8.910346500000001,
+            "cumulative_seconds": 89.7011669
+          },
+          {
+            "file": ".\\src\\mcblueprint\\materialize.py",
+            "line": 411,
+            "function": "resolve",
+            "primitive_calls": 1,
+            "calls": 391067,
+            "own_seconds": 0.9804462,
+            "cumulative_seconds": 50.7268515
+          },
+          {
+            "file": "H:\\mc-blueprint\\worktrees\\mcb-210\\.venv\\Lib\\site-packages\\referencing\\jsonschema.py",
+            "line": 604,
+            "function": "resolve",
+            "primitive_calls": 362,
+            "calls": 362,
+            "own_seconds": 0.0008860000000000001,
+            "cumulative_seconds": 0.0028607000000000003
+          },
+          {
+            "file": "H:\\mc-blueprint\\worktrees\\mcb-210\\.venv\\Lib\\site-packages\\yaml\\resolver.py",
+            "line": 143,
+            "function": "resolve",
+            "primitive_calls": 494,
+            "calls": 494,
+            "own_seconds": 0.0005255,
+            "cumulative_seconds": 0.0007994
+          },
+          {
+            "file": ".\\src\\mcblueprint\\scene.py",
+            "line": 83,
+            "function": "write_scene",
+            "primitive_calls": 1,
+            "calls": 1,
+            "own_seconds": 0.0072592,
+            "cumulative_seconds": 2.436386
+          },
+          {
+            "file": ".\\src\\mcblueprint\\detail.py",
+            "line": 97,
+            "function": "plan_detail",
+            "primitive_calls": 2,
+            "calls": 2,
+            "own_seconds": 0.1449572,
+            "cumulative_seconds": 60.006003500000006
+          },
+          {
+            "file": ".\\src\\mcblueprint\\components.py",
+            "line": 69,
+            "function": "resolve",
+            "primitive_calls": 10,
+            "calls": 10,
+            "own_seconds": 7.33e-05,
+            "cumulative_seconds": 0.0015751
+          },
+          {
+            "file": ".\\src\\mcblueprint\\detail.py",
+            "line": 226,
+            "function": "_facade_selection",
+            "primitive_calls": 2,
+            "calls": 2,
+            "own_seconds": 2.7210129000000003,
+            "cumulative_seconds": 23.909670400000003
+          },
+          {
+            "file": ".\\src\\mcblueprint\\viewer_input.py",
+            "line": 163,
+            "function": "_spec_sources",
+            "primitive_calls": 1,
+            "calls": 1,
+            "own_seconds": 0.0216925,
+            "cumulative_seconds": 89.39544740000001
+          },
+          {
+            "file": ".\\src\\mcblueprint\\scene.py",
+            "line": 21,
+            "function": "capture_sources",
+            "primitive_calls": 5,
+            "calls": 5,
+            "own_seconds": 0.6890577,
+            "cumulative_seconds": 386.509345
+          },
+          {
+            "file": ".\\src\\mcblueprint\\planning.py",
+            "line": 386,
+            "function": "plan_buildspec",
+            "primitive_calls": 2,
+            "calls": 2,
+            "own_seconds": 0.09372660000000001,
+            "cumulative_seconds": 162.0551054
+          },
+          {
+            "file": ".\\src\\mcblueprint\\operations\\base.py",
+            "line": 139,
+            "function": "resolve",
+            "primitive_calls": 38,
+            "calls": 38,
+            "own_seconds": 6.7e-06,
+            "cumulative_seconds": 6.7e-06
+          },
+          {
+            "file": ".\\src\\mcblueprint\\critic.py",
+            "line": 248,
+            "function": "consume",
+            "primitive_calls": 4,
+            "calls": 4,
+            "own_seconds": 3.0201114000000002,
+            "cumulative_seconds": 11.976395700000001
+          },
+          {
+            "file": ".\\src\\mcblueprint\\pipeline.py",
+            "line": 301,
+            "function": "_spool_regions",
+            "primitive_calls": 97,
+            "calls": 97,
+            "own_seconds": 1.0726492,
+            "cumulative_seconds": 19.197402200000003
+          },
+          {
+            "file": ".\\src\\mcblueprint\\materialize.py",
+            "line": 179,
+            "function": "_distance",
+            "primitive_calls": 4130541,
+            "calls": 4130541,
+            "own_seconds": 2.0544793,
+            "cumulative_seconds": 46.6122269
+          }
+        ],
+        "top_cumulative": [
+          {
+            "file": ".\\src\\mcblueprint\\pipeline.py",
+            "line": 433,
+            "function": "make",
+            "primitive_calls": 1,
+            "calls": 1,
+            "own_seconds": 0.040582400000000005,
+            "cumulative_seconds": 907.3687754
+          },
+          {
+            "file": "~",
+            "line": 0,
+            "function": "<built-in method builtins.next>",
+            "primitive_calls": 2331086,
+            "calls": 2331159,
+            "own_seconds": 0.5148634000000001,
+            "cumulative_seconds": 440.2649589
+          },
+          {
+            "file": ".\\src\\mcblueprint\\exporters\\_spool.py",
+            "line": 24,
+            "function": "write",
+            "primitive_calls": 2,
+            "calls": 2,
+            "own_seconds": 0.2492763,
+            "cumulative_seconds": 406.69058700000005
+          },
+          {
+            "file": ".\\src\\mcblueprint\\scene.py",
+            "line": 21,
+            "function": "capture_sources",
+            "primitive_calls": 5,
+            "calls": 5,
+            "own_seconds": 0.6890577,
+            "cumulative_seconds": 386.509345
+          },
+          {
+            "file": ".\\src\\mcblueprint\\pipeline.py",
+            "line": 592,
+            "function": "consume_regions",
+            "primitive_calls": 5,
+            "calls": 5,
+            "own_seconds": 0.0001,
+            "cumulative_seconds": 383.8048852
+          },
+          {
+            "file": ".\\src\\mcblueprint\\pipeline.py",
+            "line": 217,
+            "function": "generated_blueprint_regions",
+            "primitive_calls": 5,
+            "calls": 5,
+            "own_seconds": 0.1136221,
+            "cumulative_seconds": 371.8283895
+          },
+          {
+            "file": ".\\src\\mcblueprint\\weather.py",
+            "line": 81,
+            "function": "apply_weather",
+            "primitive_calls": 4,
+            "calls": 4,
+            "own_seconds": 25.5155709,
+            "cumulative_seconds": 214.8263192
+          },
+          {
+            "file": ".\\src\\mcblueprint\\pipeline.py",
+            "line": 348,
+            "function": "_evaluate",
+            "primitive_calls": 1,
+            "calls": 1,
+            "own_seconds": 0.0028722,
+            "cumulative_seconds": 192.3835338
+          },
+          {
+            "file": ".\\src\\mcblueprint\\traversal.py",
+            "line": 226,
+            "function": "check_route",
+            "primitive_calls": 18,
+            "calls": 18,
+            "own_seconds": 0.28191330000000003,
+            "cumulative_seconds": 182.28231830000001
+          },
+          {
+            "file": ".\\src\\mcblueprint\\traversal.py",
+            "line": 159,
+            "function": "route",
+            "primitive_calls": 18,
+            "calls": 18,
+            "own_seconds": 16.313070500000002,
+            "cumulative_seconds": 182.0000865
+          },
+          {
+            "file": ".\\src\\mcblueprint\\planning.py",
+            "line": 386,
+            "function": "plan_buildspec",
+            "primitive_calls": 2,
+            "calls": 2,
+            "own_seconds": 0.09372660000000001,
+            "cumulative_seconds": 162.0551054
+          },
+          {
+            "file": ".\\src\\mcblueprint\\generator.py",
+            "line": 88,
+            "function": "generate_regions",
+            "primitive_calls": 5,
+            "calls": 5,
+            "own_seconds": 0.00018020000000000002,
+            "cumulative_seconds": 156.8829216
+          },
+          {
+            "file": ".\\src\\mcblueprint\\operations\\base.py",
+            "line": 113,
+            "function": "execute",
+            "primitive_calls": 4,
+            "calls": 76802,
+            "own_seconds": 0.2706831,
+            "cumulative_seconds": 156.4494147
+          },
+          {
+            "file": ".\\src\\mcblueprint\\operations\\translate.py",
+            "line": 41,
+            "function": "apply",
+            "primitive_calls": 4,
+            "calls": 11914,
+            "own_seconds": 0.0119629,
+            "cumulative_seconds": 154.85806630000002
+          },
+          {
+            "file": ".\\src\\mcblueprint\\operations\\nested.py",
+            "line": 30,
+            "function": "apply_with",
+            "primitive_calls": 4,
+            "calls": 11914,
+            "own_seconds": 0.0423353,
+            "cumulative_seconds": 154.8580569
+          },
+          {
+            "file": ".\\src\\mcblueprint\\weather.py",
+            "line": 31,
+            "function": "_random",
+            "primitive_calls": 3845894,
+            "calls": 3845894,
+            "own_seconds": 9.417210200000001,
+            "cumulative_seconds": 123.37165820000001
+          },
+          {
+            "file": ".\\src\\mcblueprint\\operations\\fill.py",
+            "line": 26,
+            "function": "apply",
+            "primitive_calls": 874,
+            "calls": 874,
+            "own_seconds": 0.0024957,
+            "cumulative_seconds": 120.67611660000001
+          },
+          {
+            "file": ".\\src\\mcblueprint\\operations\\base.py",
+            "line": 176,
+            "function": "fill",
+            "primitive_calls": 874,
+            "calls": 874,
+            "own_seconds": 0.0289083,
+            "cumulative_seconds": 120.6736209
+          },
+          {
+            "file": ".\\src\\mcblueprint\\operations\\randomness.py",
+            "line": 100,
+            "function": "tiles",
+            "primitive_calls": 1220,
+            "calls": 1220,
+            "own_seconds": 0.09154580000000001,
+            "cumulative_seconds": 120.40348220000001
+          },
+          {
+            "file": ".\\src\\mcblueprint\\operations\\randomness.py",
+            "line": 123,
+            "function": "_sample",
+            "primitive_calls": 728,
+            "calls": 728,
+            "own_seconds": 0.18970730000000002,
+            "cumulative_seconds": 120.2798695
+          },
+          {
+            "file": ".\\src\\mcblueprint\\traversal.py",
+            "line": 137,
+            "function": "stand",
+            "primitive_calls": 4242407,
+            "calls": 4242407,
+            "own_seconds": 8.4053986,
+            "cumulative_seconds": 99.3951093
+          },
+          {
+            "file": ".\\src\\mcblueprint\\planning.py",
+            "line": 88,
+            "function": "_plan_contract",
+            "primitive_calls": 6,
+            "calls": 6,
+            "own_seconds": 8.910346500000001,
+            "cumulative_seconds": 89.7011669
+          },
+          {
+            "file": ".\\src\\mcblueprint\\viewer_input.py",
+            "line": 163,
+            "function": "_spec_sources",
+            "primitive_calls": 1,
+            "calls": 1,
+            "own_seconds": 0.0216925,
+            "cumulative_seconds": 89.39544740000001
+          },
+          {
+            "file": ".\\src\\mcblueprint\\pipeline.py",
+            "line": 265,
+            "function": "get",
+            "primitive_calls": 20125252,
+            "calls": 20125252,
+            "own_seconds": 25.710626700000002,
+            "cumulative_seconds": 80.0310626
+          },
+          {
+            "file": ".\\src\\mcblueprint\\operations\\randomness.py",
+            "line": 23,
+            "function": "first_draws",
+            "primitive_calls": 728,
+            "calls": 728,
+            "own_seconds": 3.5608921000000002,
+            "cumulative_seconds": 76.8492147
+          },
+          {
+            "file": ".\\src\\mcblueprint\\validator.py",
+            "line": 98,
+            "function": "validate_and_load",
+            "primitive_calls": 1,
+            "calls": 1,
+            "own_seconds": 2.2100000000000002e-05,
+            "cumulative_seconds": 72.7456987
+          },
+          {
+            "file": ".\\src\\mcblueprint\\operations\\randomness.py",
+            "line": 39,
+            "function": "_first_draws",
+            "primitive_calls": 728,
+            "calls": 728,
+            "own_seconds": 72.2107215,
+            "cumulative_seconds": 72.34599440000001
+          },
+          {
+            "file": "H:\\mc-blueprint\\worktrees\\mcb-210\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+            "line": 349,
+            "function": "iter_errors",
+            "primitive_calls": 9,
+            "calls": 2489457,
+            "own_seconds": 2.0975743000000002,
+            "cumulative_seconds": 71.2280149
+          },
+          {
+            "file": "H:\\mc-blueprint\\worktrees\\mcb-210\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+            "line": 290,
+            "function": "properties",
+            "primitive_calls": 13,
+            "calls": 2568702,
+            "own_seconds": 2.0022785,
+            "cumulative_seconds": 71.2277469
+          },
+          {
+            "file": "H:\\mc-blueprint\\worktrees\\mcb-210\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+            "line": 396,
+            "function": "descend",
+            "primitive_calls": 47,
+            "calls": 4494878,
+            "own_seconds": 9.1671519,
+            "cumulative_seconds": 71.22773570000001
+          },
+          {
+            "file": "H:\\mc-blueprint\\worktrees\\mcb-210\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+            "line": 274,
+            "function": "ref",
+            "primitive_calls": 177,
+            "calls": 269097,
+            "own_seconds": 0.2589535,
+            "cumulative_seconds": 71.2210615
+          },
+          {
+            "file": ".\\src\\mcblueprint\\validator.py",
+            "line": 121,
+            "function": "validate_schema",
+            "primitive_calls": 1,
+            "calls": 1,
+            "own_seconds": 1.32e-05,
+            "cumulative_seconds": 71.2186073
+          },
+          {
+            "file": "H:\\mc-blueprint\\worktrees\\mcb-210\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+            "line": 59,
+            "function": "items",
+            "primitive_calls": 108,
+            "calls": 50506,
+            "own_seconds": 0.2017172,
+            "cumulative_seconds": 71.21250280000001
+          },
+          {
+            "file": "H:\\mc-blueprint\\worktrees\\mcb-210\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+            "line": 332,
+            "function": "allOf",
+            "primitive_calls": 2,
+            "calls": 39516,
+            "own_seconds": 0.7561734,
+            "cumulative_seconds": 70.8057632
+          },
+          {
+            "file": "H:\\mc-blueprint\\worktrees\\mcb-210\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+            "line": 382,
+            "function": "if_",
+            "primitive_calls": 34,
+            "calls": 1264482,
+            "own_seconds": 1.528504,
+            "cumulative_seconds": 70.8054068
+          }
+        ],
+        "top_own": [
+          {
+            "file": ".\\src\\mcblueprint\\operations\\randomness.py",
+            "line": 39,
+            "function": "_first_draws",
+            "primitive_calls": 728,
+            "calls": 728,
+            "own_seconds": 72.2107215,
+            "cumulative_seconds": 72.34599440000001
+          },
+          {
+            "file": ".\\src\\mcblueprint\\pipeline.py",
+            "line": 265,
+            "function": "get",
+            "primitive_calls": 20125252,
+            "calls": 20125252,
+            "own_seconds": 25.710626700000002,
+            "cumulative_seconds": 80.0310626
+          },
+          {
+            "file": ".\\src\\mcblueprint\\weather.py",
+            "line": 81,
+            "function": "apply_weather",
+            "primitive_calls": 4,
+            "calls": 4,
+            "own_seconds": 25.5155709,
+            "cumulative_seconds": 214.8263192
+          },
+          {
+            "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\json\\encoder.py",
+            "line": 205,
+            "function": "iterencode",
+            "primitive_calls": 12114964,
+            "calls": 12114964,
+            "own_seconds": 25.302969500000003,
+            "cumulative_seconds": 25.302981300000003
+          },
+          {
+            "file": ".\\src\\mcblueprint\\model\\vec.py",
+            "line": 34,
+            "function": "__add__",
+            "primitive_calls": 41254386,
+            "calls": 41254386,
+            "own_seconds": 20.640403900000003,
+            "cumulative_seconds": 52.323969600000005
+          },
+          {
+            "file": ".\\src\\mcblueprint\\model\\vec.py",
+            "line": 109,
+            "function": "contains",
+            "primitive_calls": 66170049,
+            "calls": 66170049,
+            "own_seconds": 19.9665596,
+            "cumulative_seconds": 19.9665596
+          },
+          {
+            "file": "~",
+            "line": 0,
+            "function": "<method 'digest' of '_hashlib.HASH' objects>",
+            "primitive_calls": 29307348,
+            "calls": 29307348,
+            "own_seconds": 18.9684521,
+            "cumulative_seconds": 18.9684521
+          },
+          {
+            "file": "~",
+            "line": 0,
+            "function": "<built-in method builtins.sum>",
+            "primitive_calls": 7263902,
+            "calls": 27916607,
+            "own_seconds": 17.9985906,
+            "cumulative_seconds": 53.0041791
+          },
+          {
+            "file": ".\\src\\mcblueprint\\traversal.py",
+            "line": 159,
+            "function": "route",
+            "primitive_calls": 18,
+            "calls": 18,
+            "own_seconds": 16.313070500000002,
+            "cumulative_seconds": 182.0000865
+          },
+          {
+            "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\json\\__init__.py",
+            "line": 183,
+            "function": "dumps",
+            "primitive_calls": 12551560,
+            "calls": 12551560,
+            "own_seconds": 15.815161000000002,
+            "cumulative_seconds": 63.978384500000004
+          },
+          {
+            "file": ".\\src\\mcblueprint\\operations\\randomness.py",
+            "line": 137,
+            "function": "_hashes",
+            "primitive_calls": 21071185,
+            "calls": 21071185,
+            "own_seconds": 15.593972,
+            "cumulative_seconds": 39.3730284
+          },
+          {
+            "file": ".\\src\\mcblueprint\\model\\vec.py",
+            "line": 37,
+            "function": "__sub__",
+            "primitive_calls": 28010567,
+            "calls": 28010567,
+            "own_seconds": 14.486518400000001,
+            "cumulative_seconds": 34.8700154
+          },
+          {
+            "file": "~",
+            "line": 0,
+            "function": "<method 'get' of 'dict' objects>",
+            "primitive_calls": 73051606,
+            "calls": 73051606,
+            "own_seconds": 13.9292317,
+            "cumulative_seconds": 14.9418748
+          },
+          {
+            "file": "~",
+            "line": 0,
+            "function": "<function Random.seed at 0x000002C8CBFB2E80>",
+            "primitive_calls": 4290922,
+            "calls": 4290922,
+            "own_seconds": 13.897219600000001,
+            "cumulative_seconds": 13.897219600000001
+          },
+          {
+            "file": ".\\src\\mcblueprint\\materialize.py",
+            "line": 180,
+            "function": "<genexpr>",
+            "primitive_calls": 82610820,
+            "calls": 82610820,
+            "own_seconds": 13.815683300000002,
+            "cumulative_seconds": 13.815683300000002
+          },
+          {
+            "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\json\\encoder.py",
+            "line": 183,
+            "function": "encode",
+            "primitive_calls": 12551560,
+            "calls": 12551560,
+            "own_seconds": 13.203979400000001,
+            "cumulative_seconds": 44.751348400000005
+          },
+          {
+            "file": ".\\src\\mcblueprint\\operations\\base.py",
+            "line": 39,
+            "function": "derive_seed",
+            "primitive_calls": 7732767,
+            "calls": 7732767,
+            "own_seconds": 12.7753545,
+            "cumulative_seconds": 69.5465393
+          },
+          {
+            "file": "~",
+            "line": 0,
+            "function": "<built-in method builtins.isinstance>",
+            "primitive_calls": 59209447,
+            "calls": 59209447,
+            "own_seconds": 10.6708537,
+            "cumulative_seconds": 14.4929325
+          },
+          {
+            "file": ".\\src\\mcblueprint\\weather.py",
+            "line": 31,
+            "function": "_random",
+            "primitive_calls": 3845894,
+            "calls": 3845894,
+            "own_seconds": 9.417210200000001,
+            "cumulative_seconds": 123.37165820000001
+          },
+          {
+            "file": ".\\src\\mcblueprint\\volume.py",
+            "line": 205,
+            "function": "get",
+            "primitive_calls": 9722266,
+            "calls": 9722266,
+            "own_seconds": 9.3423599,
+            "cumulative_seconds": 27.990666100000002
+          }
+        ]
+      }
+    }
+  ],
+  "fixed-before_provenance": {
+    "commit": "3261ea9427e2fabb6297f0844756664ab1611e66",
+    "engine_sha256": "ca52e925768a7bb884178d97485184cbca8c83fa8f1316cdd3db8b3338acc41c",
+    "lock_sha256": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48",
+    "default_config_sha256": "17f5c240ead94ebb8c410f045b3344f07d07ec9c29a8a769645f853b5ea28d64"
+  },
+  "fixed-before": [
+    {
+      "case": "single-house-1.21.11-schem",
+      "input_sha256": "cb0c67dbee9a083b80c20e4cdb5d2fe249685cede48be1c722a77e7cc8d1547a",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 1.2200577000621706,
+          "process_peak_rss_bytes": 84197376,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0012217999901622534,
+              "rss_at_stage_start_bytes": 52109312
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.046302500064484775,
+              "rss_at_stage_start_bytes": 52502528
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.08859479997772723,
+              "rss_at_stage_start_bytes": 52527104
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.5062553000170738,
+              "rss_at_stage_start_bytes": 78573568
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 1.1341461000265554,
+              "rss_at_stage_start_bytes": 81018880
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 1.1419579000212252,
+              "rss_at_stage_start_bytes": 81051648
+            }
+          ],
+          "seconds": 2.1774625000543892,
+          "signature": {
+            "placement_sha256": "f749ec168027d2fe893c8675daa4b956aca3622a7af195600d8b784dd9bf7ee3",
+            "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+            "structured_diagnostics_sha256": "0c2e29534177b305f168790a36dda9ba985a11bc86827f87a2ad1392fa1e4966",
+            "scene_json_sha256": "76670012a4e62c09e384a4b41aeca997d84dfc7ae6bb732734dd57a24063b346"
+          }
+        }
+      ],
+      "seconds_median": 2.1774625000543892,
+      "signature": {
+        "placement_sha256": "f749ec168027d2fe893c8675daa4b956aca3622a7af195600d8b784dd9bf7ee3",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "0c2e29534177b305f168790a36dda9ba985a11bc86827f87a2ad1392fa1e4966",
+        "scene_json_sha256": "76670012a4e62c09e384a4b41aeca997d84dfc7ae6bb732734dd57a24063b346"
+      },
+      "stage_seconds_median": {
+        "Resolve": 0.04508070007432252,
+        "Site/Massing/Detail": 0.04229229991324246,
+        "Materialize": 0.4176605000393465,
+        "Generate": 0.6278908000094816,
+        "Critic": 0.007811799994669855,
+        "Export": 0.07809980004094541
+      },
+      "process_peak_rss_bytes_median": 84197376
+    },
+    {
+      "case": "single-house-1.21.11-litematic",
+      "input_sha256": "b8784023efc3867850a115134a72c1cadc7a2733772595ce79bc2bf0b9c242d1",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 1.1802931000711396,
+          "process_peak_rss_bytes": 84619264,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0010381999891251326,
+              "rss_at_stage_start_bytes": 53014528
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04559680004604161,
+              "rss_at_stage_start_bytes": 53227520
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.09057480003684759,
+              "rss_at_stage_start_bytes": 53252096
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.5193876000121236,
+              "rss_at_stage_start_bytes": 79106048
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 1.1026978000300005,
+              "rss_at_stage_start_bytes": 81440768
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 1.1104718000860885,
+              "rss_at_stage_start_bytes": 81465344
+            }
+          ],
+          "seconds": 2.1265187999233603,
+          "signature": {
+            "placement_sha256": "f749ec168027d2fe893c8675daa4b956aca3622a7af195600d8b784dd9bf7ee3",
+            "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+            "structured_diagnostics_sha256": "17865874f29dd361eccee02f5249bd2130b3ac7e932cb6151a6e2c8f714deab0",
+            "scene_json_sha256": "0c9f658e9ba0f16c3bc6774810c09218c183824f7dd8fdbeb18e2365b40fdae0"
+          }
+        }
+      ],
+      "seconds_median": 2.1265187999233603,
+      "signature": {
+        "placement_sha256": "f749ec168027d2fe893c8675daa4b956aca3622a7af195600d8b784dd9bf7ee3",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "17865874f29dd361eccee02f5249bd2130b3ac7e932cb6151a6e2c8f714deab0",
+        "scene_json_sha256": "0c9f658e9ba0f16c3bc6774810c09218c183824f7dd8fdbeb18e2365b40fdae0"
+      },
+      "stage_seconds_median": {
+        "Resolve": 0.044558600056916475,
+        "Site/Massing/Detail": 0.044977999990805984,
+        "Materialize": 0.428812799975276,
+        "Generate": 0.5833102000178769,
+        "Critic": 0.007774000056087971,
+        "Export": 0.06982129998505116
+      },
+      "process_peak_rss_bytes_median": 84619264
+    },
+    {
+      "case": "single-house-26.1.2-schem",
+      "input_sha256": "c5855684a5f0e4e8d809808105e53ec5bdf8d38f3b869d048d9319ea3db58ab3",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 1.1453928999835625,
+          "process_peak_rss_bytes": 83898368,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0011005999986082315,
+              "rss_at_stage_start_bytes": 52363264
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04595060006249696,
+              "rss_at_stage_start_bytes": 52592640
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.0938128000125289,
+              "rss_at_stage_start_bytes": 52617216
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.510479100048542,
+              "rss_at_stage_start_bytes": 78577664
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 1.0665902000619099,
+              "rss_at_stage_start_bytes": 80719872
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 1.0741171999834478,
+              "rss_at_stage_start_bytes": 80752640
+            }
+          ],
+          "seconds": 2.0513155000517145,
+          "signature": {
+            "placement_sha256": "f749ec168027d2fe893c8675daa4b956aca3622a7af195600d8b784dd9bf7ee3",
+            "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+            "structured_diagnostics_sha256": "0dcaaae375bf5c28e8b2e469488f3e9e6a57412b9098b8a9b16e29978174aaea",
+            "scene_json_sha256": "77e83f88c648c2925d4bfaaaa4d33c05f55699411fa8ab8d76a59ae171c0ac7b"
+          }
+        }
+      ],
+      "seconds_median": 2.0513155000517145,
+      "signature": {
+        "placement_sha256": "f749ec168027d2fe893c8675daa4b956aca3622a7af195600d8b784dd9bf7ee3",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "0dcaaae375bf5c28e8b2e469488f3e9e6a57412b9098b8a9b16e29978174aaea",
+        "scene_json_sha256": "77e83f88c648c2925d4bfaaaa4d33c05f55699411fa8ab8d76a59ae171c0ac7b"
+      },
+      "stage_seconds_median": {
+        "Resolve": 0.04485000006388873,
+        "Site/Massing/Detail": 0.047862199950031936,
+        "Materialize": 0.4166663000360131,
+        "Generate": 0.5561111000133678,
+        "Critic": 0.007526999921537936,
+        "Export": 0.07127570000011474
+      },
+      "process_peak_rss_bytes_median": 83898368
+    },
+    {
+      "case": "single-house-26.1.2-litematic",
+      "input_sha256": "4eeded49b37c742f5758fbcc0417450b5ce19369fef7bbc694fa7720cd0682a9",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 1.1336278000380844,
+          "process_peak_rss_bytes": 83714048,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.000999300042167306,
+              "rss_at_stage_start_bytes": 52174848
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.044399800011888146,
+              "rss_at_stage_start_bytes": 51650560
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.08665030007250607,
+              "rss_at_stage_start_bytes": 51675136
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.505762999993749,
+              "rss_at_stage_start_bytes": 77750272
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 1.0503225000575185,
+              "rss_at_stage_start_bytes": 80531456
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 1.0579646000405774,
+              "rss_at_stage_start_bytes": 80556032
+            }
+          ],
+          "seconds": 2.049099599942565,
+          "signature": {
+            "placement_sha256": "f749ec168027d2fe893c8675daa4b956aca3622a7af195600d8b784dd9bf7ee3",
+            "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+            "structured_diagnostics_sha256": "4a84afb8c94349de527c969d9f71b9358d62f5b9338e8c9d03749290b20bdba0",
+            "scene_json_sha256": "ccd8b8cda7b29107ad44d76c74e9ec0d8e92db7bd48ce20c3ac3e2a02c4571f8"
+          }
+        }
+      ],
+      "seconds_median": 2.049099599942565,
+      "signature": {
+        "placement_sha256": "f749ec168027d2fe893c8675daa4b956aca3622a7af195600d8b784dd9bf7ee3",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "4a84afb8c94349de527c969d9f71b9358d62f5b9338e8c9d03749290b20bdba0",
+        "scene_json_sha256": "ccd8b8cda7b29107ad44d76c74e9ec0d8e92db7bd48ce20c3ac3e2a02c4571f8"
+      },
+      "stage_seconds_median": {
+        "Resolve": 0.04340049996972084,
+        "Site/Massing/Detail": 0.042250500060617924,
+        "Materialize": 0.4191126999212429,
+        "Generate": 0.5445595000637695,
+        "Critic": 0.00764209998305887,
+        "Export": 0.07566319999750704
+      },
+      "process_peak_rss_bytes_median": 83714048
+    },
+    {
+      "case": "single-house-26.2-schem",
+      "input_sha256": "73412c7599e63914e410a66bddcd2f553727017588cc499f128d2c90560361bf",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 1.281948000076227,
+          "process_peak_rss_bytes": 83656704,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0010683999862521887,
+              "rss_at_stage_start_bytes": 52441088
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04870330006815493,
+              "rss_at_stage_start_bytes": 51654656
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.09370279998984188,
+              "rss_at_stage_start_bytes": 51679232
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.5946354999905452,
+              "rss_at_stage_start_bytes": 77651968
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 1.2004370000213385,
+              "rss_at_stage_start_bytes": 80465920
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 1.207765300059691,
+              "rss_at_stage_start_bytes": 80494592
+            }
+          ],
+          "seconds": 2.2947931999806315,
+          "signature": {
+            "placement_sha256": "f749ec168027d2fe893c8675daa4b956aca3622a7af195600d8b784dd9bf7ee3",
+            "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+            "structured_diagnostics_sha256": "3dbe814e8cd4adf89ffb02e7e11314ecbee489abb03df8e93da02769f4732206",
+            "scene_json_sha256": "cd58e6374776ecd5088945f212e2195c3d21652dc49631d347e9ebebe8e1ee8e"
+          }
+        }
+      ],
+      "seconds_median": 2.2947931999806315,
+      "signature": {
+        "placement_sha256": "f749ec168027d2fe893c8675daa4b956aca3622a7af195600d8b784dd9bf7ee3",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "3dbe814e8cd4adf89ffb02e7e11314ecbee489abb03df8e93da02769f4732206",
+        "scene_json_sha256": "cd58e6374776ecd5088945f212e2195c3d21652dc49631d347e9ebebe8e1ee8e"
+      },
+      "stage_seconds_median": {
+        "Resolve": 0.04763490008190274,
+        "Site/Massing/Detail": 0.04499949992168695,
+        "Materialize": 0.5009327000007033,
+        "Generate": 0.6058015000307932,
+        "Critic": 0.007328300038352609,
+        "Export": 0.07418270001653582
+      },
+      "process_peak_rss_bytes_median": 83656704
+    },
+    {
+      "case": "single-house-26.2-litematic",
+      "input_sha256": "f0da68d7c5e871098d049f00eb2b4ee741b1656847f47a49f6a29274f533baea",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 1.169825499993749,
+          "process_peak_rss_bytes": 83935232,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0010164999403059483,
+              "rss_at_stage_start_bytes": 52871168
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04729859996587038,
+              "rss_at_stage_start_bytes": 51662848
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.10018619999755174,
+              "rss_at_stage_start_bytes": 51687424
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.5320854999590665,
+              "rss_at_stage_start_bytes": 77733888
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 1.0902619999833405,
+              "rss_at_stage_start_bytes": 80818176
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 1.0984036999288946,
+              "rss_at_stage_start_bytes": 80822272
+            }
+          ],
+          "seconds": 2.1534294999437407,
+          "signature": {
+            "placement_sha256": "f749ec168027d2fe893c8675daa4b956aca3622a7af195600d8b784dd9bf7ee3",
+            "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+            "structured_diagnostics_sha256": "fd83321dee6786fa0072cc0a7062ae93eaae321a550a3d1eefa0cde0afa0fe9f",
+            "scene_json_sha256": "6e044506c811e04e61b789b21912e432095882156aa8f586db540b2372c7c8f5"
+          }
+        }
+      ],
+      "seconds_median": 2.1534294999437407,
+      "signature": {
+        "placement_sha256": "f749ec168027d2fe893c8675daa4b956aca3622a7af195600d8b784dd9bf7ee3",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "fd83321dee6786fa0072cc0a7062ae93eaae321a550a3d1eefa0cde0afa0fe9f",
+        "scene_json_sha256": "6e044506c811e04e61b789b21912e432095882156aa8f586db540b2372c7c8f5"
+      },
+      "stage_seconds_median": {
+        "Resolve": 0.04628210002556443,
+        "Site/Massing/Detail": 0.05288760003168136,
+        "Materialize": 0.43189929996151477,
+        "Generate": 0.558176500024274,
+        "Critic": 0.008141699945554137,
+        "Export": 0.07142180006485432
+      },
+      "process_peak_rss_bytes_median": 83935232
+    },
+    {
+      "case": "single-house-26.3-schem",
+      "input_sha256": "cb2c9b8fa285d288f762bf0613fbc3c0e1bbd4a363e29db731da6a616ffc6c38",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 1.143463300075382,
+          "process_peak_rss_bytes": 83742720,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0012262000236660242,
+              "rss_at_stage_start_bytes": 52719616
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04554279998410493,
+              "rss_at_stage_start_bytes": 51490816
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.08960589999333024,
+              "rss_at_stage_start_bytes": 51515392
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.5175625999690965,
+              "rss_at_stage_start_bytes": 77410304
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 1.0619400000432506,
+              "rss_at_stage_start_bytes": 80568320
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 1.0696997999912128,
+              "rss_at_stage_start_bytes": 80580608
+            }
+          ],
+          "seconds": 2.067765999934636,
+          "signature": {
+            "placement_sha256": "02e2b41c1a4957924248b7bfb8a8d0ddcf583ccad2dc41eaf9ac5e95ab2fbb2a",
+            "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+            "structured_diagnostics_sha256": "badbb785f5467aa362aba9085ea3ad1794f230e9a5ad3d1d2c29aee1a49cf0ca",
+            "scene_json_sha256": "745d521eaee242f4e0a68ab675eaff32119f147a7e828c670e63a53961888de2"
+          }
+        }
+      ],
+      "seconds_median": 2.067765999934636,
+      "signature": {
+        "placement_sha256": "02e2b41c1a4957924248b7bfb8a8d0ddcf583ccad2dc41eaf9ac5e95ab2fbb2a",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "badbb785f5467aa362aba9085ea3ad1794f230e9a5ad3d1d2c29aee1a49cf0ca",
+        "scene_json_sha256": "745d521eaee242f4e0a68ab675eaff32119f147a7e828c670e63a53961888de2"
+      },
+      "stage_seconds_median": {
+        "Resolve": 0.04431659996043891,
+        "Site/Massing/Detail": 0.04406310000922531,
+        "Materialize": 0.42795669997576624,
+        "Generate": 0.5443774000741541,
+        "Critic": 0.007759799947962165,
+        "Export": 0.07376350008416921
+      },
+      "process_peak_rss_bytes_median": 83742720
+    },
+    {
+      "case": "single-house-26.3-litematic",
+      "input_sha256": "e140f9c7c6bfdc511bf41ac0758144396b65677884132f42245b9326c65afe2c",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 1.2117340000113472,
+          "process_peak_rss_bytes": 84148224,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0011283999774605036,
+              "rss_at_stage_start_bytes": 52355072
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.0533286000136286,
+              "rss_at_stage_start_bytes": 52535296
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.10421919997315854,
+              "rss_at_stage_start_bytes": 52559872
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.5565662999870256,
+              "rss_at_stage_start_bytes": 78725120
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 1.1311468000058085,
+              "rss_at_stage_start_bytes": 80969728
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 1.138576600002125,
+              "rss_at_stage_start_bytes": 80973824
+            }
+          ],
+          "seconds": 2.121658300049603,
+          "signature": {
+            "placement_sha256": "02e2b41c1a4957924248b7bfb8a8d0ddcf583ccad2dc41eaf9ac5e95ab2fbb2a",
+            "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+            "structured_diagnostics_sha256": "bb8f4aff35e94c1e68d87f97b1aaa95180afd914052014ea8293b2f109781626",
+            "scene_json_sha256": "0847117ab7256744037ff8777cc57009a200cd170f48ce8897aca1fa1897c58d"
+          }
+        }
+      ],
+      "seconds_median": 2.121658300049603,
+      "signature": {
+        "placement_sha256": "02e2b41c1a4957924248b7bfb8a8d0ddcf583ccad2dc41eaf9ac5e95ab2fbb2a",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "bb8f4aff35e94c1e68d87f97b1aaa95180afd914052014ea8293b2f109781626",
+        "scene_json_sha256": "0847117ab7256744037ff8777cc57009a200cd170f48ce8897aca1fa1897c58d"
+      },
+      "stage_seconds_median": {
+        "Resolve": 0.0522002000361681,
+        "Site/Massing/Detail": 0.050890599959529936,
+        "Materialize": 0.452347100013867,
+        "Generate": 0.5745805000187829,
+        "Critic": 0.007429799996316433,
+        "Export": 0.07315740000922233
+      },
+      "process_peak_rss_bytes_median": 84148224
+    },
+    {
+      "case": "standalone-tower-1.21.11-schem",
+      "input_sha256": "350b0969681551f114a68681e9a0e89af38e55956b4672bfcb22402da4f729f4",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 1.1287938999012113,
+          "process_peak_rss_bytes": 85610496,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0010413998970761895,
+              "rss_at_stage_start_bytes": 52699136
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04530529992189258,
+              "rss_at_stage_start_bytes": 51609600
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.1251288999337703,
+              "rss_at_stage_start_bytes": 51814400
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.5368190999142826,
+              "rss_at_stage_start_bytes": 77811712
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 0.9902096999576315,
+              "rss_at_stage_start_bytes": 80818176
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 1.0136488999705762,
+              "rss_at_stage_start_bytes": 80891904
+            }
+          ],
+          "seconds": 2.0908118000952527,
+          "signature": {
+            "placement_sha256": "1fa188ce49e6e9b0a27ddb42bdab7c94e499c26dd0090c91cefa3d3b516bffea",
+            "metrics_sha256": "79c100e8b6b778fe8e3801a9ed8990c8a46b2c236625647c561c8789a38e3482",
+            "structured_diagnostics_sha256": "25a0781a22cc2a97591d815d35a628407cd5d8e10645310cd14b23d131e0638f",
+            "scene_json_sha256": "d15d852e35469e8e48fa7d58e8d792c105b9f5ed4ce60019ae76ea4352315a3c"
+          }
+        }
+      ],
+      "seconds_median": 2.0908118000952527,
+      "signature": {
+        "placement_sha256": "1fa188ce49e6e9b0a27ddb42bdab7c94e499c26dd0090c91cefa3d3b516bffea",
+        "metrics_sha256": "79c100e8b6b778fe8e3801a9ed8990c8a46b2c236625647c561c8789a38e3482",
+        "structured_diagnostics_sha256": "25a0781a22cc2a97591d815d35a628407cd5d8e10645310cd14b23d131e0638f",
+        "scene_json_sha256": "d15d852e35469e8e48fa7d58e8d792c105b9f5ed4ce60019ae76ea4352315a3c"
+      },
+      "stage_seconds_median": {
+        "Resolve": 0.044263900024816394,
+        "Site/Massing/Detail": 0.07982360001187772,
+        "Materialize": 0.41169019998051226,
+        "Generate": 0.45339060004334897,
+        "Critic": 0.02343920001294464,
+        "Export": 0.1151449999306351
+      },
+      "process_peak_rss_bytes_median": 85610496
+    },
+    {
+      "case": "standalone-tower-1.21.11-litematic",
+      "input_sha256": "88f302c19597551b3e26edbd1568175f66093b56e503417e71b4bf4c0b95be3c",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 1.1128670000471175,
+          "process_peak_rss_bytes": 86118400,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0009774999925866723,
+              "rss_at_stage_start_bytes": 52056064
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04356520005967468,
+              "rss_at_stage_start_bytes": 52387840
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.12396750005427748,
+              "rss_at_stage_start_bytes": 52576256
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.5211187000386417,
+              "rss_at_stage_start_bytes": 78516224
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 0.9725754000246525,
+              "rss_at_stage_start_bytes": 81321984
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 0.9956330000422895,
+              "rss_at_stage_start_bytes": 81383424
+            }
+          ],
+          "seconds": 2.0317176000680774,
+          "signature": {
+            "placement_sha256": "1fa188ce49e6e9b0a27ddb42bdab7c94e499c26dd0090c91cefa3d3b516bffea",
+            "metrics_sha256": "79c100e8b6b778fe8e3801a9ed8990c8a46b2c236625647c561c8789a38e3482",
+            "structured_diagnostics_sha256": "c6613364e3f05c651be089d89a3ab91ffe51d55db3570a3e46646be6670865e7",
+            "scene_json_sha256": "d8adaddf08afd7824e934dd34484bdcca83f6930b21085c644bfcddd826a8d85"
+          }
+        }
+      ],
+      "seconds_median": 2.0317176000680774,
+      "signature": {
+        "placement_sha256": "1fa188ce49e6e9b0a27ddb42bdab7c94e499c26dd0090c91cefa3d3b516bffea",
+        "metrics_sha256": "79c100e8b6b778fe8e3801a9ed8990c8a46b2c236625647c561c8789a38e3482",
+        "structured_diagnostics_sha256": "c6613364e3f05c651be089d89a3ab91ffe51d55db3570a3e46646be6670865e7",
+        "scene_json_sha256": "d8adaddf08afd7824e934dd34484bdcca83f6930b21085c644bfcddd826a8d85"
+      },
+      "stage_seconds_median": {
+        "Resolve": 0.04258770006708801,
+        "Site/Massing/Detail": 0.0804022999946028,
+        "Materialize": 0.3971511999843642,
+        "Generate": 0.4514566999860108,
+        "Critic": 0.023057600017637014,
+        "Export": 0.11723400000482798
+      },
+      "process_peak_rss_bytes_median": 86118400
+    },
+    {
+      "case": "standalone-tower-26.1.2-schem",
+      "input_sha256": "d825ab6d5142729c1ba242199de94d43d905ce7b3d4cba6e1fede59dd64e636a",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 1.1509916000068188,
+          "process_peak_rss_bytes": 85798912,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0011230000527575612,
+              "rss_at_stage_start_bytes": 51322880
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.045659600058570504,
+              "rss_at_stage_start_bytes": 51126272
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.12984170007985085,
+              "rss_at_stage_start_bytes": 51326976
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.5446626000339165,
+              "rss_at_stage_start_bytes": 77475840
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 1.0120128000853583,
+              "rss_at_stage_start_bytes": 81010688
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 1.035545299993828,
+              "rss_at_stage_start_bytes": 81084416
+            }
+          ],
+          "seconds": 2.10592669993639,
+          "signature": {
+            "placement_sha256": "1fa188ce49e6e9b0a27ddb42bdab7c94e499c26dd0090c91cefa3d3b516bffea",
+            "metrics_sha256": "79c100e8b6b778fe8e3801a9ed8990c8a46b2c236625647c561c8789a38e3482",
+            "structured_diagnostics_sha256": "104ce606c3ce99e2c22a7809246feac1f51a1182d42b1240538db49c58133438",
+            "scene_json_sha256": "7c330328d07fb2ca32e9992920529238b07b74e2d1374acc46f44a7f4c4c08ed"
+          }
+        }
+      ],
+      "seconds_median": 2.10592669993639,
+      "signature": {
+        "placement_sha256": "1fa188ce49e6e9b0a27ddb42bdab7c94e499c26dd0090c91cefa3d3b516bffea",
+        "metrics_sha256": "79c100e8b6b778fe8e3801a9ed8990c8a46b2c236625647c561c8789a38e3482",
+        "structured_diagnostics_sha256": "104ce606c3ce99e2c22a7809246feac1f51a1182d42b1240538db49c58133438",
+        "scene_json_sha256": "7c330328d07fb2ca32e9992920529238b07b74e2d1374acc46f44a7f4c4c08ed"
+      },
+      "stage_seconds_median": {
+        "Resolve": 0.04453660000581294,
+        "Site/Massing/Detail": 0.08418210002128035,
+        "Materialize": 0.4148208999540657,
+        "Generate": 0.4673502000514418,
+        "Critic": 0.023532499908469617,
+        "Export": 0.11544630001299083
+      },
+      "process_peak_rss_bytes_median": 85798912
+    },
+    {
+      "case": "standalone-tower-26.1.2-litematic",
+      "input_sha256": "d186c4d6159fce108d360ff5191ccd05e459121a886a2e789c26197ea959c368",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 1.1374333000276238,
+          "process_peak_rss_bytes": 85766144,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0010392999975010753,
+              "rss_at_stage_start_bytes": 51724288
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04561849997844547,
+              "rss_at_stage_start_bytes": 52015104
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.12695710000116378,
+              "rss_at_stage_start_bytes": 52215808
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.5486789999995381,
+              "rss_at_stage_start_bytes": 78176256
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 1.0029122000560164,
+              "rss_at_stage_start_bytes": 80973824
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 1.0250872999895364,
+              "rss_at_stage_start_bytes": 81047552
+            }
+          ],
+          "seconds": 2.0890809000702575,
+          "signature": {
+            "placement_sha256": "1fa188ce49e6e9b0a27ddb42bdab7c94e499c26dd0090c91cefa3d3b516bffea",
+            "metrics_sha256": "79c100e8b6b778fe8e3801a9ed8990c8a46b2c236625647c561c8789a38e3482",
+            "structured_diagnostics_sha256": "7cc4eceaaf4eb303e353ee0de1ad424f79d7b64b998709e2e9253c281af3196e",
+            "scene_json_sha256": "6b7a2cbfcdd6514a7e21984d3362816d25763f0ad5d55ced13539e7781113578"
+          }
+        }
+      ],
+      "seconds_median": 2.0890809000702575,
+      "signature": {
+        "placement_sha256": "1fa188ce49e6e9b0a27ddb42bdab7c94e499c26dd0090c91cefa3d3b516bffea",
+        "metrics_sha256": "79c100e8b6b778fe8e3801a9ed8990c8a46b2c236625647c561c8789a38e3482",
+        "structured_diagnostics_sha256": "7cc4eceaaf4eb303e353ee0de1ad424f79d7b64b998709e2e9253c281af3196e",
+        "scene_json_sha256": "6b7a2cbfcdd6514a7e21984d3362816d25763f0ad5d55ced13539e7781113578"
+      },
+      "stage_seconds_median": {
+        "Resolve": 0.044579199980944395,
+        "Site/Massing/Detail": 0.08133860002271831,
+        "Materialize": 0.4217218999983743,
+        "Generate": 0.4542332000564784,
+        "Critic": 0.02217509993351996,
+        "Export": 0.11234600003808737
+      },
+      "process_peak_rss_bytes_median": 85766144
+    },
+    {
+      "case": "standalone-tower-26.2-schem",
+      "input_sha256": "aef508c3081529da4a8b08a3f9ee52660fdd9b403ba04061902b2745d8ca0446",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 1.1239304000046104,
+          "process_peak_rss_bytes": 85901312,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0010313000530004501,
+              "rss_at_stage_start_bytes": 52281344
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04404629999771714,
+              "rss_at_stage_start_bytes": 52498432
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.13127440004609525,
+              "rss_at_stage_start_bytes": 52699136
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.539112800033763,
+              "rss_at_stage_start_bytes": 78757888
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 0.9879232000093907,
+              "rss_at_stage_start_bytes": 81100800
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 1.0100658000446856,
+              "rss_at_stage_start_bytes": 81129472
+            }
+          ],
+          "seconds": 2.0450703999958932,
+          "signature": {
+            "placement_sha256": "1fa188ce49e6e9b0a27ddb42bdab7c94e499c26dd0090c91cefa3d3b516bffea",
+            "metrics_sha256": "79c100e8b6b778fe8e3801a9ed8990c8a46b2c236625647c561c8789a38e3482",
+            "structured_diagnostics_sha256": "8e92432dd119491de1f0ed6af8d7a8e3700924cd4a54ebf520f20851e03661c8",
+            "scene_json_sha256": "9f2558ff57d324b1a3122f833cdfd360e353754ace520e944e0a446bb420f66e"
+          }
+        }
+      ],
+      "seconds_median": 2.0450703999958932,
+      "signature": {
+        "placement_sha256": "1fa188ce49e6e9b0a27ddb42bdab7c94e499c26dd0090c91cefa3d3b516bffea",
+        "metrics_sha256": "79c100e8b6b778fe8e3801a9ed8990c8a46b2c236625647c561c8789a38e3482",
+        "structured_diagnostics_sha256": "8e92432dd119491de1f0ed6af8d7a8e3700924cd4a54ebf520f20851e03661c8",
+        "scene_json_sha256": "9f2558ff57d324b1a3122f833cdfd360e353754ace520e944e0a446bb420f66e"
+      },
+      "stage_seconds_median": {
+        "Resolve": 0.04301499994471669,
+        "Site/Massing/Detail": 0.08722810004837811,
+        "Materialize": 0.4078383999876678,
+        "Generate": 0.44881039997562766,
+        "Critic": 0.02214260003529489,
+        "Export": 0.11386459995992482
+      },
+      "process_peak_rss_bytes_median": 85901312
+    },
+    {
+      "case": "standalone-tower-26.2-litematic",
+      "input_sha256": "7a5fc18134e5a43c9dd5aa2140290aa5f7fb77864f4cf8d2a6d4560b9f235dde",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 1.1245279000140727,
+          "process_peak_rss_bytes": 85553152,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0009609999833628535,
+              "rss_at_stage_start_bytes": 52789248
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04434769996441901,
+              "rss_at_stage_start_bytes": 51290112
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.12537939997855574,
+              "rss_at_stage_start_bytes": 51490816
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.5351285999640822,
+              "rss_at_stage_start_bytes": 77545472
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 0.9859909999649972,
+              "rss_at_stage_start_bytes": 80752640
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 1.0084319999441504,
+              "rss_at_stage_start_bytes": 80797696
+            }
+          ],
+          "seconds": 2.0340797000098974,
+          "signature": {
+            "placement_sha256": "1fa188ce49e6e9b0a27ddb42bdab7c94e499c26dd0090c91cefa3d3b516bffea",
+            "metrics_sha256": "79c100e8b6b778fe8e3801a9ed8990c8a46b2c236625647c561c8789a38e3482",
+            "structured_diagnostics_sha256": "5dc5fb3f878bfb3051f5fdd18f8102e95dd11e88910a6d72adf815c2152efdd7",
+            "scene_json_sha256": "d03580eba53960e128010dec2ee6963d723b30ff158db358efef5019b2d2d8df"
+          }
+        }
+      ],
+      "seconds_median": 2.0340797000098974,
+      "signature": {
+        "placement_sha256": "1fa188ce49e6e9b0a27ddb42bdab7c94e499c26dd0090c91cefa3d3b516bffea",
+        "metrics_sha256": "79c100e8b6b778fe8e3801a9ed8990c8a46b2c236625647c561c8789a38e3482",
+        "structured_diagnostics_sha256": "5dc5fb3f878bfb3051f5fdd18f8102e95dd11e88910a6d72adf815c2152efdd7",
+        "scene_json_sha256": "d03580eba53960e128010dec2ee6963d723b30ff158db358efef5019b2d2d8df"
+      },
+      "stage_seconds_median": {
+        "Resolve": 0.043386699981056154,
+        "Site/Massing/Detail": 0.08103170001413673,
+        "Materialize": 0.4097491999855265,
+        "Generate": 0.45086240000091493,
+        "Critic": 0.022440999979153275,
+        "Export": 0.11609590006992221
+      },
+      "process_peak_rss_bytes_median": 85553152
+    },
+    {
+      "case": "standalone-tower-26.3-schem",
+      "input_sha256": "a9782a8f8720d5ef20f1a3485bacbdf467971681c2bedc4b5481a09269cf85f8",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 1.1612584999529645,
+          "process_peak_rss_bytes": 86085632,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0010432000271975994,
+              "rss_at_stage_start_bytes": 51507200
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.0471667000092566,
+              "rss_at_stage_start_bytes": 51916800
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.12919549993239343,
+              "rss_at_stage_start_bytes": 52117504
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.5730680000269786,
+              "rss_at_stage_start_bytes": 78225408
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 1.0274704999756068,
+              "rss_at_stage_start_bytes": 81301504
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 1.0493968999944627,
+              "rss_at_stage_start_bytes": 81371136
+            }
+          ],
+          "seconds": 2.1670869000954553,
+          "signature": {
+            "placement_sha256": "5d3c84fae933efe5b108a4bb1e5025ddab5b9ad246301f408de1535d32bbdaa6",
+            "metrics_sha256": "79c100e8b6b778fe8e3801a9ed8990c8a46b2c236625647c561c8789a38e3482",
+            "structured_diagnostics_sha256": "95e44723839e0550d5a6782e35eeea3f17d5a6eafdb8b034a112dfe1f6df0f5e",
+            "scene_json_sha256": "02595d0dfa755ebdf41638c35a97833caea23df84b80005512ddfefe51c39717"
+          }
+        }
+      ],
+      "seconds_median": 2.1670869000954553,
+      "signature": {
+        "placement_sha256": "5d3c84fae933efe5b108a4bb1e5025ddab5b9ad246301f408de1535d32bbdaa6",
+        "metrics_sha256": "79c100e8b6b778fe8e3801a9ed8990c8a46b2c236625647c561c8789a38e3482",
+        "structured_diagnostics_sha256": "95e44723839e0550d5a6782e35eeea3f17d5a6eafdb8b034a112dfe1f6df0f5e",
+        "scene_json_sha256": "02595d0dfa755ebdf41638c35a97833caea23df84b80005512ddfefe51c39717"
+      },
+      "stage_seconds_median": {
+        "Resolve": 0.046123499982059,
+        "Site/Massing/Detail": 0.08202879992313683,
+        "Materialize": 0.4438725000945851,
+        "Generate": 0.45440249994862825,
+        "Critic": 0.02192640001885593,
+        "Export": 0.11186159995850176
+      },
+      "process_peak_rss_bytes_median": 86085632
+    },
+    {
+      "case": "standalone-tower-26.3-litematic",
+      "input_sha256": "9349c79e1bccecf5a88286af897e1813cc1b0f05ce12990a1d2228d6ec34902f",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 1.1163008000003174,
+          "process_peak_rss_bytes": 85970944,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.001095699961297214,
+              "rss_at_stage_start_bytes": 52469760
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.045152599923312664,
+              "rss_at_stage_start_bytes": 51818496
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.13197049999143928,
+              "rss_at_stage_start_bytes": 52023296
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.5354575999081135,
+              "rss_at_stage_start_bytes": 78045184
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 0.9809447999577969,
+              "rss_at_stage_start_bytes": 81170432
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 1.0037516999291256,
+              "rss_at_stage_start_bytes": 81244160
+            }
+          ],
+          "seconds": 2.000785299926065,
+          "signature": {
+            "placement_sha256": "5d3c84fae933efe5b108a4bb1e5025ddab5b9ad246301f408de1535d32bbdaa6",
+            "metrics_sha256": "79c100e8b6b778fe8e3801a9ed8990c8a46b2c236625647c561c8789a38e3482",
+            "structured_diagnostics_sha256": "e49f6cae5f092a2d8a92dcee2fec30967b4188b2ea71f2be6c4e7a82847d0a5a",
+            "scene_json_sha256": "636e25cc39489fee0dd05be0a2ae8565c8e217a89115850a8106b8b2206bdbca"
+          }
+        }
+      ],
+      "seconds_median": 2.000785299926065,
+      "signature": {
+        "placement_sha256": "5d3c84fae933efe5b108a4bb1e5025ddab5b9ad246301f408de1535d32bbdaa6",
+        "metrics_sha256": "79c100e8b6b778fe8e3801a9ed8990c8a46b2c236625647c561c8789a38e3482",
+        "structured_diagnostics_sha256": "e49f6cae5f092a2d8a92dcee2fec30967b4188b2ea71f2be6c4e7a82847d0a5a",
+        "scene_json_sha256": "636e25cc39489fee0dd05be0a2ae8565c8e217a89115850a8106b8b2206bdbca"
+      },
+      "stage_seconds_median": {
+        "Resolve": 0.04405689996201545,
+        "Site/Massing/Detail": 0.08681790006812662,
+        "Materialize": 0.4034870999166742,
+        "Generate": 0.44548720004968345,
+        "Critic": 0.022806899971328676,
+        "Export": 0.11254910007119179
+      },
+      "process_peak_rss_bytes_median": 85970944
+    }
+  ],
+  "fixed-after_provenance": {
+    "commit": "3261ea9427e2fabb6297f0844756664ab1611e66",
+    "engine_sha256": "cf0e5e5141e8120a7bf8ea7018965edc606151f984a8dd29e596f36598f1371d",
+    "lock_sha256": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48",
+    "default_config_sha256": "17f5c240ead94ebb8c410f045b3344f07d07ec9c29a8a769645f853b5ea28d64"
+  },
+  "fixed-after": [
+    {
+      "case": "single-house-1.21.11-schem",
+      "input_sha256": "cb0c67dbee9a083b80c20e4cdb5d2fe249685cede48be1c722a77e7cc8d1547a",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 1.0126718999817967,
+          "process_peak_rss_bytes": 83595264,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0010292999213561416,
+              "rss_at_stage_start_bytes": 52273152
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04623530001845211,
+              "rss_at_stage_start_bytes": 52428800
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.08605049992911518,
+              "rss_at_stage_start_bytes": 52453376
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.4369066000217572,
+              "rss_at_stage_start_bytes": 78172160
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 0.9753814999712631,
+              "rss_at_stage_start_bytes": 80412672
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 0.9834477999247611,
+              "rss_at_stage_start_bytes": 80449536
+            }
+          ],
+          "seconds": 1.9194025000324473,
+          "signature": {
+            "placement_sha256": "f749ec168027d2fe893c8675daa4b956aca3622a7af195600d8b784dd9bf7ee3",
+            "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+            "structured_diagnostics_sha256": "0c2e29534177b305f168790a36dda9ba985a11bc86827f87a2ad1392fa1e4966",
+            "scene_json_sha256": "76670012a4e62c09e384a4b41aeca997d84dfc7ae6bb732734dd57a24063b346"
+          }
+        }
+      ],
+      "seconds_median": 1.9194025000324473,
+      "signature": {
+        "placement_sha256": "f749ec168027d2fe893c8675daa4b956aca3622a7af195600d8b784dd9bf7ee3",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "0c2e29534177b305f168790a36dda9ba985a11bc86827f87a2ad1392fa1e4966",
+        "scene_json_sha256": "76670012a4e62c09e384a4b41aeca997d84dfc7ae6bb732734dd57a24063b346"
+      },
+      "matches_before": true,
+      "stage_seconds_median": {
+        "Resolve": 0.045206000097095966,
+        "Site/Massing/Detail": 0.03981519991066307,
+        "Materialize": 0.350856100092642,
+        "Generate": 0.5384748999495059,
+        "Critic": 0.008066299953497946,
+        "Export": 0.029224100057035685
+      },
+      "process_peak_rss_bytes_median": 83595264
+    },
+    {
+      "case": "single-house-1.21.11-litematic",
+      "input_sha256": "b8784023efc3867850a115134a72c1cadc7a2733772595ce79bc2bf0b9c242d1",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 1.001780099933967,
+          "process_peak_rss_bytes": 83709952,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0010231999913230538,
+              "rss_at_stage_start_bytes": 51527680
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04380939994007349,
+              "rss_at_stage_start_bytes": 51924992
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.08154299994930625,
+              "rss_at_stage_start_bytes": 51953664
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.42394589993637055,
+              "rss_at_stage_start_bytes": 77799424
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 0.9666073999833316,
+              "rss_at_stage_start_bytes": 80535552
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 0.9741239999420941,
+              "rss_at_stage_start_bytes": 80560128
+            }
+          ],
+          "seconds": 1.9473544999491423,
+          "signature": {
+            "placement_sha256": "f749ec168027d2fe893c8675daa4b956aca3622a7af195600d8b784dd9bf7ee3",
+            "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+            "structured_diagnostics_sha256": "17865874f29dd361eccee02f5249bd2130b3ac7e932cb6151a6e2c8f714deab0",
+            "scene_json_sha256": "0c9f658e9ba0f16c3bc6774810c09218c183824f7dd8fdbeb18e2365b40fdae0"
+          }
+        }
+      ],
+      "seconds_median": 1.9473544999491423,
+      "signature": {
+        "placement_sha256": "f749ec168027d2fe893c8675daa4b956aca3622a7af195600d8b784dd9bf7ee3",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "17865874f29dd361eccee02f5249bd2130b3ac7e932cb6151a6e2c8f714deab0",
+        "scene_json_sha256": "0c9f658e9ba0f16c3bc6774810c09218c183824f7dd8fdbeb18e2365b40fdae0"
+      },
+      "matches_before": true,
+      "stage_seconds_median": {
+        "Resolve": 0.042786199948750436,
+        "Site/Massing/Detail": 0.03773360000923276,
+        "Materialize": 0.3424028999870643,
+        "Generate": 0.542661500046961,
+        "Critic": 0.0075165999587625265,
+        "Export": 0.027656099991872907
+      },
+      "process_peak_rss_bytes_median": 83709952
+    },
+    {
+      "case": "single-house-26.1.2-schem",
+      "input_sha256": "c5855684a5f0e4e8d809808105e53ec5bdf8d38f3b869d048d9319ea3db58ab3",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 1.0035282999742776,
+          "process_peak_rss_bytes": 84467712,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0010565000120550394,
+              "rss_at_stage_start_bytes": 52928512
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04327889997512102,
+              "rss_at_stage_start_bytes": 53030912
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.0816243999870494,
+              "rss_at_stage_start_bytes": 53055488
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.4250284999143332,
+              "rss_at_stage_start_bytes": 78782464
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 0.9676480999914929,
+              "rss_at_stage_start_bytes": 81285120
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 0.9749873999971896,
+              "rss_at_stage_start_bytes": 81321984
+            }
+          ],
+          "seconds": 1.8850634000264108,
+          "signature": {
+            "placement_sha256": "f749ec168027d2fe893c8675daa4b956aca3622a7af195600d8b784dd9bf7ee3",
+            "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+            "structured_diagnostics_sha256": "0dcaaae375bf5c28e8b2e469488f3e9e6a57412b9098b8a9b16e29978174aaea",
+            "scene_json_sha256": "77e83f88c648c2925d4bfaaaa4d33c05f55699411fa8ab8d76a59ae171c0ac7b"
+          }
+        }
+      ],
+      "seconds_median": 1.8850634000264108,
+      "signature": {
+        "placement_sha256": "f749ec168027d2fe893c8675daa4b956aca3622a7af195600d8b784dd9bf7ee3",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "0dcaaae375bf5c28e8b2e469488f3e9e6a57412b9098b8a9b16e29978174aaea",
+        "scene_json_sha256": "77e83f88c648c2925d4bfaaaa4d33c05f55699411fa8ab8d76a59ae171c0ac7b"
+      },
+      "matches_before": true,
+      "stage_seconds_median": {
+        "Resolve": 0.04222239996306598,
+        "Site/Massing/Detail": 0.03834550001192838,
+        "Materialize": 0.3434040999272838,
+        "Generate": 0.5426196000771597,
+        "Critic": 0.007339300005696714,
+        "Export": 0.028540899977087975
+      },
+      "process_peak_rss_bytes_median": 84467712
+    },
+    {
+      "case": "single-house-26.1.2-litematic",
+      "input_sha256": "4eeded49b37c742f5758fbcc0417450b5ce19369fef7bbc694fa7720cd0682a9",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 1.021151899942197,
+          "process_peak_rss_bytes": 83808256,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0009640000062063336,
+              "rss_at_stage_start_bytes": 52297728
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.044177799951285124,
+              "rss_at_stage_start_bytes": 52490240
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.0835658999858424,
+              "rss_at_stage_start_bytes": 52514816
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.44014389999210835,
+              "rss_at_stage_start_bytes": 78348288
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 0.9827942999545485,
+              "rss_at_stage_start_bytes": 80633856
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 0.9904458000091836,
+              "rss_at_stage_start_bytes": 80658432
+            }
+          ],
+          "seconds": 1.9197753000771627,
+          "signature": {
+            "placement_sha256": "f749ec168027d2fe893c8675daa4b956aca3622a7af195600d8b784dd9bf7ee3",
+            "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+            "structured_diagnostics_sha256": "4a84afb8c94349de527c969d9f71b9358d62f5b9338e8c9d03749290b20bdba0",
+            "scene_json_sha256": "ccd8b8cda7b29107ad44d76c74e9ec0d8e92db7bd48ce20c3ac3e2a02c4571f8"
+          }
+        }
+      ],
+      "seconds_median": 1.9197753000771627,
+      "signature": {
+        "placement_sha256": "f749ec168027d2fe893c8675daa4b956aca3622a7af195600d8b784dd9bf7ee3",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "4a84afb8c94349de527c969d9f71b9358d62f5b9338e8c9d03749290b20bdba0",
+        "scene_json_sha256": "ccd8b8cda7b29107ad44d76c74e9ec0d8e92db7bd48ce20c3ac3e2a02c4571f8"
+      },
+      "matches_before": true,
+      "stage_seconds_median": {
+        "Resolve": 0.04321379994507879,
+        "Site/Massing/Detail": 0.03938810003455728,
+        "Materialize": 0.35657800000626594,
+        "Generate": 0.5426503999624401,
+        "Critic": 0.0076515000546351075,
+        "Export": 0.03070609993301332
+      },
+      "process_peak_rss_bytes_median": 83808256
+    },
+    {
+      "case": "single-house-26.2-schem",
+      "input_sha256": "73412c7599e63914e410a66bddcd2f553727017588cc499f128d2c90560361bf",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 1.0262494999915361,
+          "process_peak_rss_bytes": 84209664,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.001184699940495193,
+              "rss_at_stage_start_bytes": 51916800
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.044033999904058874,
+              "rss_at_stage_start_bytes": 52494336
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.08261429995764047,
+              "rss_at_stage_start_bytes": 52518912
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.42618289997335523,
+              "rss_at_stage_start_bytes": 78340096
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 0.9910852999892086,
+              "rss_at_stage_start_bytes": 81031168
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 0.9986949999583885,
+              "rss_at_stage_start_bytes": 81104896
+            }
+          ],
+          "seconds": 1.8967353999614716,
+          "signature": {
+            "placement_sha256": "f749ec168027d2fe893c8675daa4b956aca3622a7af195600d8b784dd9bf7ee3",
+            "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+            "structured_diagnostics_sha256": "3dbe814e8cd4adf89ffb02e7e11314ecbee489abb03df8e93da02769f4732206",
+            "scene_json_sha256": "cd58e6374776ecd5088945f212e2195c3d21652dc49631d347e9ebebe8e1ee8e"
+          }
+        }
+      ],
+      "seconds_median": 1.8967353999614716,
+      "signature": {
+        "placement_sha256": "f749ec168027d2fe893c8675daa4b956aca3622a7af195600d8b784dd9bf7ee3",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "3dbe814e8cd4adf89ffb02e7e11314ecbee489abb03df8e93da02769f4732206",
+        "scene_json_sha256": "cd58e6374776ecd5088945f212e2195c3d21652dc49631d347e9ebebe8e1ee8e"
+      },
+      "matches_before": true,
+      "stage_seconds_median": {
+        "Resolve": 0.04284929996356368,
+        "Site/Massing/Detail": 0.038580300053581595,
+        "Materialize": 0.34356860001571476,
+        "Generate": 0.5649024000158533,
+        "Critic": 0.007609699969179928,
+        "Export": 0.027554500033147633
+      },
+      "process_peak_rss_bytes_median": 84209664
+    },
+    {
+      "case": "single-house-26.2-litematic",
+      "input_sha256": "f0da68d7c5e871098d049f00eb2b4ee741b1656847f47a49f6a29274f533baea",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 1.013666900107637,
+          "process_peak_rss_bytes": 83931136,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.001039800001308322,
+              "rss_at_stage_start_bytes": 51642368
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04377900005783886,
+              "rss_at_stage_start_bytes": 52031488
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.08130660001188517,
+              "rss_at_stage_start_bytes": 52056064
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.4272161000408232,
+              "rss_at_stage_start_bytes": 78110720
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 0.9755121000343934,
+              "rss_at_stage_start_bytes": 80814080
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 0.9832141000078991,
+              "rss_at_stage_start_bytes": 80818176
+            }
+          ],
+          "seconds": 1.8932210999773815,
+          "signature": {
+            "placement_sha256": "f749ec168027d2fe893c8675daa4b956aca3622a7af195600d8b784dd9bf7ee3",
+            "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+            "structured_diagnostics_sha256": "fd83321dee6786fa0072cc0a7062ae93eaae321a550a3d1eefa0cde0afa0fe9f",
+            "scene_json_sha256": "6e044506c811e04e61b789b21912e432095882156aa8f586db540b2372c7c8f5"
+          }
+        }
+      ],
+      "seconds_median": 1.8932210999773815,
+      "signature": {
+        "placement_sha256": "f749ec168027d2fe893c8675daa4b956aca3622a7af195600d8b784dd9bf7ee3",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "fd83321dee6786fa0072cc0a7062ae93eaae321a550a3d1eefa0cde0afa0fe9f",
+        "scene_json_sha256": "6e044506c811e04e61b789b21912e432095882156aa8f586db540b2372c7c8f5"
+      },
+      "matches_before": true,
+      "stage_seconds_median": {
+        "Resolve": 0.042739200056530535,
+        "Site/Massing/Detail": 0.03752759995404631,
+        "Materialize": 0.34590950002893806,
+        "Generate": 0.5482959999935701,
+        "Critic": 0.007701999973505735,
+        "Export": 0.030452800099737942
+      },
+      "process_peak_rss_bytes_median": 83931136
+    },
+    {
+      "case": "single-house-26.3-schem",
+      "input_sha256": "cb2c9b8fa285d288f762bf0613fbc3c0e1bbd4a363e29db731da6a616ffc6c38",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 0.988734099897556,
+          "process_peak_rss_bytes": 84135936,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0010091998847201467,
+              "rss_at_stage_start_bytes": 52289536
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.043750899960286915,
+              "rss_at_stage_start_bytes": 52637696
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.08170769992284477,
+              "rss_at_stage_start_bytes": 52662272
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.4137036999454722,
+              "rss_at_stage_start_bytes": 78757888
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 0.9486984999384731,
+              "rss_at_stage_start_bytes": 80957440
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 0.9589605999644846,
+              "rss_at_stage_start_bytes": 80961536
+            }
+          ],
+          "seconds": 1.9079605999868363,
+          "signature": {
+            "placement_sha256": "02e2b41c1a4957924248b7bfb8a8d0ddcf583ccad2dc41eaf9ac5e95ab2fbb2a",
+            "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+            "structured_diagnostics_sha256": "badbb785f5467aa362aba9085ea3ad1794f230e9a5ad3d1d2c29aee1a49cf0ca",
+            "scene_json_sha256": "745d521eaee242f4e0a68ab675eaff32119f147a7e828c670e63a53961888de2"
+          }
+        }
+      ],
+      "seconds_median": 1.9079605999868363,
+      "signature": {
+        "placement_sha256": "02e2b41c1a4957924248b7bfb8a8d0ddcf583ccad2dc41eaf9ac5e95ab2fbb2a",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "badbb785f5467aa362aba9085ea3ad1794f230e9a5ad3d1d2c29aee1a49cf0ca",
+        "scene_json_sha256": "745d521eaee242f4e0a68ab675eaff32119f147a7e828c670e63a53961888de2"
+      },
+      "matches_before": true,
+      "stage_seconds_median": {
+        "Resolve": 0.04274170007556677,
+        "Site/Massing/Detail": 0.03795679996255785,
+        "Materialize": 0.3319960000226274,
+        "Generate": 0.5349947999930009,
+        "Critic": 0.010262100026011467,
+        "Export": 0.029773499933071434
+      },
+      "process_peak_rss_bytes_median": 84135936
+    },
+    {
+      "case": "single-house-26.3-litematic",
+      "input_sha256": "e140f9c7c6bfdc511bf41ac0758144396b65677884132f42245b9326c65afe2c",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 1.0406954999780282,
+          "process_peak_rss_bytes": 83972096,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.00098690006416291,
+              "rss_at_stage_start_bytes": 52277248
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.045493600075133145,
+              "rss_at_stage_start_bytes": 52592640
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.08439109998289496,
+              "rss_at_stage_start_bytes": 52617216
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.46449939999729395,
+              "rss_at_stage_start_bytes": 78536704
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 1.0051978999981657,
+              "rss_at_stage_start_bytes": 80793600
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 1.012981600011699,
+              "rss_at_stage_start_bytes": 80801792
+            }
+          ],
+          "seconds": 1.9885273999534547,
+          "signature": {
+            "placement_sha256": "02e2b41c1a4957924248b7bfb8a8d0ddcf583ccad2dc41eaf9ac5e95ab2fbb2a",
+            "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+            "structured_diagnostics_sha256": "bb8f4aff35e94c1e68d87f97b1aaa95180afd914052014ea8293b2f109781626",
+            "scene_json_sha256": "0847117ab7256744037ff8777cc57009a200cd170f48ce8897aca1fa1897c58d"
+          }
+        }
+      ],
+      "seconds_median": 1.9885273999534547,
+      "signature": {
+        "placement_sha256": "02e2b41c1a4957924248b7bfb8a8d0ddcf583ccad2dc41eaf9ac5e95ab2fbb2a",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "bb8f4aff35e94c1e68d87f97b1aaa95180afd914052014ea8293b2f109781626",
+        "scene_json_sha256": "0847117ab7256744037ff8777cc57009a200cd170f48ce8897aca1fa1897c58d"
+      },
+      "matches_before": true,
+      "stage_seconds_median": {
+        "Resolve": 0.044506700010970235,
+        "Site/Massing/Detail": 0.03889749990776181,
+        "Materialize": 0.380108300014399,
+        "Generate": 0.5406985000008717,
+        "Critic": 0.007783700013533235,
+        "Export": 0.027713899966329336
+      },
+      "process_peak_rss_bytes_median": 83972096
+    },
+    {
+      "case": "standalone-tower-1.21.11-schem",
+      "input_sha256": "350b0969681551f114a68681e9a0e89af38e55956b4672bfcb22402da4f729f4",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 0.964331499999389,
+          "process_peak_rss_bytes": 85962752,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.001097499975003302,
+              "rss_at_stage_start_bytes": 51757056
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04517599998507649,
+              "rss_at_stage_start_bytes": 52047872
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.10461350006517023,
+              "rss_at_stage_start_bytes": 52240384
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.46473340003285557,
+              "rss_at_stage_start_bytes": 78098432
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 0.90975910006091,
+              "rss_at_stage_start_bytes": 81170432
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 0.931858399999328,
+              "rss_at_stage_start_bytes": 81244160
+            }
+          ],
+          "seconds": 1.884521899977699,
+          "signature": {
+            "placement_sha256": "1fa188ce49e6e9b0a27ddb42bdab7c94e499c26dd0090c91cefa3d3b516bffea",
+            "metrics_sha256": "79c100e8b6b778fe8e3801a9ed8990c8a46b2c236625647c561c8789a38e3482",
+            "structured_diagnostics_sha256": "25a0781a22cc2a97591d815d35a628407cd5d8e10645310cd14b23d131e0638f",
+            "scene_json_sha256": "d15d852e35469e8e48fa7d58e8d792c105b9f5ed4ce60019ae76ea4352315a3c"
+          }
+        }
+      ],
+      "seconds_median": 1.884521899977699,
+      "signature": {
+        "placement_sha256": "1fa188ce49e6e9b0a27ddb42bdab7c94e499c26dd0090c91cefa3d3b516bffea",
+        "metrics_sha256": "79c100e8b6b778fe8e3801a9ed8990c8a46b2c236625647c561c8789a38e3482",
+        "structured_diagnostics_sha256": "25a0781a22cc2a97591d815d35a628407cd5d8e10645310cd14b23d131e0638f",
+        "scene_json_sha256": "d15d852e35469e8e48fa7d58e8d792c105b9f5ed4ce60019ae76ea4352315a3c"
+      },
+      "matches_before": true,
+      "stage_seconds_median": {
+        "Resolve": 0.044078500010073185,
+        "Site/Massing/Detail": 0.05943750008009374,
+        "Materialize": 0.36011989996768534,
+        "Generate": 0.4450257000280544,
+        "Critic": 0.02209929993841797,
+        "Export": 0.032473100000061095
+      },
+      "process_peak_rss_bytes_median": 85962752
+    },
+    {
+      "case": "standalone-tower-1.21.11-litematic",
+      "input_sha256": "88f302c19597551b3e26edbd1568175f66093b56e503417e71b4bf4c0b95be3c",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 0.9851759999291971,
+          "process_peak_rss_bytes": 85827584,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.001003399956971407,
+              "rss_at_stage_start_bytes": 52473856
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04453559999819845,
+              "rss_at_stage_start_bytes": 52637696
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.09959809994325042,
+              "rss_at_stage_start_bytes": 52850688
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.4760081999702379,
+              "rss_at_stage_start_bytes": 78692352
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 0.9286637000041083,
+              "rss_at_stage_start_bytes": 81039360
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 0.950443199952133,
+              "rss_at_stage_start_bytes": 81113088
+            }
+          ],
+          "seconds": 1.8896607001079246,
+          "signature": {
+            "placement_sha256": "1fa188ce49e6e9b0a27ddb42bdab7c94e499c26dd0090c91cefa3d3b516bffea",
+            "metrics_sha256": "79c100e8b6b778fe8e3801a9ed8990c8a46b2c236625647c561c8789a38e3482",
+            "structured_diagnostics_sha256": "c6613364e3f05c651be089d89a3ab91ffe51d55db3570a3e46646be6670865e7",
+            "scene_json_sha256": "d8adaddf08afd7824e934dd34484bdcca83f6930b21085c644bfcddd826a8d85"
+          }
+        }
+      ],
+      "seconds_median": 1.8896607001079246,
+      "signature": {
+        "placement_sha256": "1fa188ce49e6e9b0a27ddb42bdab7c94e499c26dd0090c91cefa3d3b516bffea",
+        "metrics_sha256": "79c100e8b6b778fe8e3801a9ed8990c8a46b2c236625647c561c8789a38e3482",
+        "structured_diagnostics_sha256": "c6613364e3f05c651be089d89a3ab91ffe51d55db3570a3e46646be6670865e7",
+        "scene_json_sha256": "d8adaddf08afd7824e934dd34484bdcca83f6930b21085c644bfcddd826a8d85"
+      },
+      "matches_before": true,
+      "stage_seconds_median": {
+        "Resolve": 0.04353220004122704,
+        "Site/Massing/Detail": 0.05506249994505197,
+        "Materialize": 0.3764101000269875,
+        "Generate": 0.45265550003387034,
+        "Critic": 0.02177949994802475,
+        "Export": 0.03473279997706413
+      },
+      "process_peak_rss_bytes_median": 85827584
+    },
+    {
+      "case": "standalone-tower-26.1.2-schem",
+      "input_sha256": "d825ab6d5142729c1ba242199de94d43d905ce7b3d4cba6e1fede59dd64e636a",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 1.0145346999634057,
+          "process_peak_rss_bytes": 85766144,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0011233999393880367,
+              "rss_at_stage_start_bytes": 51675136
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04438179999124259,
+              "rss_at_stage_start_bytes": 52121600
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.09931059996597469,
+              "rss_at_stage_start_bytes": 52314112
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.48030269995797426,
+              "rss_at_stage_start_bytes": 78094336
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 0.9595471000066027,
+              "rss_at_stage_start_bytes": 80982016
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 0.9813565999502316,
+              "rss_at_stage_start_bytes": 81055744
+            }
+          ],
+          "seconds": 1.9857702000299469,
+          "signature": {
+            "placement_sha256": "1fa188ce49e6e9b0a27ddb42bdab7c94e499c26dd0090c91cefa3d3b516bffea",
+            "metrics_sha256": "79c100e8b6b778fe8e3801a9ed8990c8a46b2c236625647c561c8789a38e3482",
+            "structured_diagnostics_sha256": "104ce606c3ce99e2c22a7809246feac1f51a1182d42b1240538db49c58133438",
+            "scene_json_sha256": "7c330328d07fb2ca32e9992920529238b07b74e2d1374acc46f44a7f4c4c08ed"
+          }
+        }
+      ],
+      "seconds_median": 1.9857702000299469,
+      "signature": {
+        "placement_sha256": "1fa188ce49e6e9b0a27ddb42bdab7c94e499c26dd0090c91cefa3d3b516bffea",
+        "metrics_sha256": "79c100e8b6b778fe8e3801a9ed8990c8a46b2c236625647c561c8789a38e3482",
+        "structured_diagnostics_sha256": "104ce606c3ce99e2c22a7809246feac1f51a1182d42b1240538db49c58133438",
+        "scene_json_sha256": "7c330328d07fb2ca32e9992920529238b07b74e2d1374acc46f44a7f4c4c08ed"
+      },
+      "matches_before": true,
+      "stage_seconds_median": {
+        "Resolve": 0.04325840005185455,
+        "Site/Massing/Detail": 0.0549287999747321,
+        "Materialize": 0.38099209999199957,
+        "Generate": 0.47924440004862845,
+        "Critic": 0.021809499943628907,
+        "Export": 0.03317810001317412
+      },
+      "process_peak_rss_bytes_median": 85766144
+    },
+    {
+      "case": "standalone-tower-26.1.2-litematic",
+      "input_sha256": "d186c4d6159fce108d360ff5191ccd05e459121a886a2e789c26197ea959c368",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 0.9783878000453115,
+          "process_peak_rss_bytes": 85512192,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0010839999886229634,
+              "rss_at_stage_start_bytes": 52211712
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04602800006978214,
+              "rss_at_stage_start_bytes": 52428800
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.10059960000216961,
+              "rss_at_stage_start_bytes": 52621312
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.48000750003848225,
+              "rss_at_stage_start_bytes": 78381056
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 0.9249262000666931,
+              "rss_at_stage_start_bytes": 80715776
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 0.9464019000297412,
+              "rss_at_stage_start_bytes": 80777216
+            }
+          ],
+          "seconds": 1.9887730000773445,
+          "signature": {
+            "placement_sha256": "1fa188ce49e6e9b0a27ddb42bdab7c94e499c26dd0090c91cefa3d3b516bffea",
+            "metrics_sha256": "79c100e8b6b778fe8e3801a9ed8990c8a46b2c236625647c561c8789a38e3482",
+            "structured_diagnostics_sha256": "7cc4eceaaf4eb303e353ee0de1ad424f79d7b64b998709e2e9253c281af3196e",
+            "scene_json_sha256": "6b7a2cbfcdd6514a7e21984d3362816d25763f0ad5d55ced13539e7781113578"
+          }
+        }
+      ],
+      "seconds_median": 1.9887730000773445,
+      "signature": {
+        "placement_sha256": "1fa188ce49e6e9b0a27ddb42bdab7c94e499c26dd0090c91cefa3d3b516bffea",
+        "metrics_sha256": "79c100e8b6b778fe8e3801a9ed8990c8a46b2c236625647c561c8789a38e3482",
+        "structured_diagnostics_sha256": "7cc4eceaaf4eb303e353ee0de1ad424f79d7b64b998709e2e9253c281af3196e",
+        "scene_json_sha256": "6b7a2cbfcdd6514a7e21984d3362816d25763f0ad5d55ced13539e7781113578"
+      },
+      "matches_before": true,
+      "stage_seconds_median": {
+        "Resolve": 0.044944000081159174,
+        "Site/Massing/Detail": 0.05457159993238747,
+        "Materialize": 0.37940790003631264,
+        "Generate": 0.4449187000282109,
+        "Critic": 0.0214756999630481,
+        "Export": 0.03198590001557022
+      },
+      "process_peak_rss_bytes_median": 85512192
+    },
+    {
+      "case": "standalone-tower-26.2-schem",
+      "input_sha256": "aef508c3081529da4a8b08a3f9ee52660fdd9b403ba04061902b2745d8ca0446",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 0.9611093000276014,
+          "process_peak_rss_bytes": 85983232,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0009925999911502004,
+              "rss_at_stage_start_bytes": 52326400
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.044462400022894144,
+              "rss_at_stage_start_bytes": 51556352
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.10129929997492582,
+              "rss_at_stage_start_bytes": 51748864
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.4566461000358686,
+              "rss_at_stage_start_bytes": 77783040
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 0.9056358999805525,
+              "rss_at_stage_start_bytes": 81182720
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 0.9272480000508949,
+              "rss_at_stage_start_bytes": 81195008
+            }
+          ],
+          "seconds": 1.867194600054063,
+          "signature": {
+            "placement_sha256": "1fa188ce49e6e9b0a27ddb42bdab7c94e499c26dd0090c91cefa3d3b516bffea",
+            "metrics_sha256": "79c100e8b6b778fe8e3801a9ed8990c8a46b2c236625647c561c8789a38e3482",
+            "structured_diagnostics_sha256": "8e92432dd119491de1f0ed6af8d7a8e3700924cd4a54ebf520f20851e03661c8",
+            "scene_json_sha256": "9f2558ff57d324b1a3122f833cdfd360e353754ace520e944e0a446bb420f66e"
+          }
+        }
+      ],
+      "seconds_median": 1.867194600054063,
+      "signature": {
+        "placement_sha256": "1fa188ce49e6e9b0a27ddb42bdab7c94e499c26dd0090c91cefa3d3b516bffea",
+        "metrics_sha256": "79c100e8b6b778fe8e3801a9ed8990c8a46b2c236625647c561c8789a38e3482",
+        "structured_diagnostics_sha256": "8e92432dd119491de1f0ed6af8d7a8e3700924cd4a54ebf520f20851e03661c8",
+        "scene_json_sha256": "9f2558ff57d324b1a3122f833cdfd360e353754ace520e944e0a446bb420f66e"
+      },
+      "matches_before": true,
+      "stage_seconds_median": {
+        "Resolve": 0.043469800031743944,
+        "Site/Massing/Detail": 0.05683689995203167,
+        "Materialize": 0.35534680006094277,
+        "Generate": 0.4489897999446839,
+        "Critic": 0.02161210007034242,
+        "Export": 0.033861299976706505
+      },
+      "process_peak_rss_bytes_median": 85983232
+    },
+    {
+      "case": "standalone-tower-26.2-litematic",
+      "input_sha256": "7a5fc18134e5a43c9dd5aa2140290aa5f7fb77864f4cf8d2a6d4560b9f235dde",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 0.9555896000238135,
+          "process_peak_rss_bytes": 85852160,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0009957000147551298,
+              "rss_at_stage_start_bytes": 52977664
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04428209993056953,
+              "rss_at_stage_start_bytes": 51486720
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.1035859000403434,
+              "rss_at_stage_start_bytes": 51679232
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.4599530999548733,
+              "rss_at_stage_start_bytes": 77877248
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 0.8984669999917969,
+              "rss_at_stage_start_bytes": 81051648
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 0.922727599972859,
+              "rss_at_stage_start_bytes": 81108992
+            }
+          ],
+          "seconds": 1.8600572999566793,
+          "signature": {
+            "placement_sha256": "1fa188ce49e6e9b0a27ddb42bdab7c94e499c26dd0090c91cefa3d3b516bffea",
+            "metrics_sha256": "79c100e8b6b778fe8e3801a9ed8990c8a46b2c236625647c561c8789a38e3482",
+            "structured_diagnostics_sha256": "5dc5fb3f878bfb3051f5fdd18f8102e95dd11e88910a6d72adf815c2152efdd7",
+            "scene_json_sha256": "d03580eba53960e128010dec2ee6963d723b30ff158db358efef5019b2d2d8df"
+          }
+        }
+      ],
+      "seconds_median": 1.8600572999566793,
+      "signature": {
+        "placement_sha256": "1fa188ce49e6e9b0a27ddb42bdab7c94e499c26dd0090c91cefa3d3b516bffea",
+        "metrics_sha256": "79c100e8b6b778fe8e3801a9ed8990c8a46b2c236625647c561c8789a38e3482",
+        "structured_diagnostics_sha256": "5dc5fb3f878bfb3051f5fdd18f8102e95dd11e88910a6d72adf815c2152efdd7",
+        "scene_json_sha256": "d03580eba53960e128010dec2ee6963d723b30ff158db358efef5019b2d2d8df"
+      },
+      "matches_before": true,
+      "stage_seconds_median": {
+        "Resolve": 0.0432863999158144,
+        "Site/Massing/Detail": 0.059303800109773874,
+        "Materialize": 0.3563671999145299,
+        "Generate": 0.4385139000369236,
+        "Critic": 0.024260599981062114,
+        "Export": 0.03286200005095452
+      },
+      "process_peak_rss_bytes_median": 85852160
+    },
+    {
+      "case": "standalone-tower-26.3-schem",
+      "input_sha256": "a9782a8f8720d5ef20f1a3485bacbdf467971681c2bedc4b5481a09269cf85f8",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 0.9893930000253022,
+          "process_peak_rss_bytes": 86216704,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0010512999724596739,
+              "rss_at_stage_start_bytes": 51548160
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04440500005148351,
+              "rss_at_stage_start_bytes": 51937280
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.0999236999778077,
+              "rss_at_stage_start_bytes": 52129792
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.48574310005642474,
+              "rss_at_stage_start_bytes": 78266368
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 0.9339413000270724,
+              "rss_at_stage_start_bytes": 81465344
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 0.9568356999661773,
+              "rss_at_stage_start_bytes": 81534976
+            }
+          ],
+          "seconds": 1.8979718999471515,
+          "signature": {
+            "placement_sha256": "5d3c84fae933efe5b108a4bb1e5025ddab5b9ad246301f408de1535d32bbdaa6",
+            "metrics_sha256": "79c100e8b6b778fe8e3801a9ed8990c8a46b2c236625647c561c8789a38e3482",
+            "structured_diagnostics_sha256": "95e44723839e0550d5a6782e35eeea3f17d5a6eafdb8b034a112dfe1f6df0f5e",
+            "scene_json_sha256": "02595d0dfa755ebdf41638c35a97833caea23df84b80005512ddfefe51c39717"
+          }
+        }
+      ],
+      "seconds_median": 1.8979718999471515,
+      "signature": {
+        "placement_sha256": "5d3c84fae933efe5b108a4bb1e5025ddab5b9ad246301f408de1535d32bbdaa6",
+        "metrics_sha256": "79c100e8b6b778fe8e3801a9ed8990c8a46b2c236625647c561c8789a38e3482",
+        "structured_diagnostics_sha256": "95e44723839e0550d5a6782e35eeea3f17d5a6eafdb8b034a112dfe1f6df0f5e",
+        "scene_json_sha256": "02595d0dfa755ebdf41638c35a97833caea23df84b80005512ddfefe51c39717"
+      },
+      "matches_before": true,
+      "stage_seconds_median": {
+        "Resolve": 0.04335370007902384,
+        "Site/Massing/Detail": 0.05551869992632419,
+        "Materialize": 0.38581940007861704,
+        "Generate": 0.4481981999706477,
+        "Critic": 0.022894399939104915,
+        "Export": 0.03255730005912483
+      },
+      "process_peak_rss_bytes_median": 86216704
+    },
+    {
+      "case": "standalone-tower-26.3-litematic",
+      "input_sha256": "9349c79e1bccecf5a88286af897e1813cc1b0f05ce12990a1d2228d6ec34902f",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 1.0026810000417754,
+          "process_peak_rss_bytes": 86192128,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0012506999773904681,
+              "rss_at_stage_start_bytes": 53227520
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04463190003298223,
+              "rss_at_stage_start_bytes": 51974144
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.10064189997501671,
+              "rss_at_stage_start_bytes": 52166656
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 0.48636460001580417,
+              "rss_at_stage_start_bytes": 78254080
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 0.9355065999552608,
+              "rss_at_stage_start_bytes": 81395712
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 0.9600936999777332,
+              "rss_at_stage_start_bytes": 81465344
+            }
+          ],
+          "seconds": 1.9489505999954417,
+          "signature": {
+            "placement_sha256": "5d3c84fae933efe5b108a4bb1e5025ddab5b9ad246301f408de1535d32bbdaa6",
+            "metrics_sha256": "79c100e8b6b778fe8e3801a9ed8990c8a46b2c236625647c561c8789a38e3482",
+            "structured_diagnostics_sha256": "e49f6cae5f092a2d8a92dcee2fec30967b4188b2ea71f2be6c4e7a82847d0a5a",
+            "scene_json_sha256": "636e25cc39489fee0dd05be0a2ae8565c8e217a89115850a8106b8b2206bdbca"
+          }
+        }
+      ],
+      "seconds_median": 1.9489505999954417,
+      "signature": {
+        "placement_sha256": "5d3c84fae933efe5b108a4bb1e5025ddab5b9ad246301f408de1535d32bbdaa6",
+        "metrics_sha256": "79c100e8b6b778fe8e3801a9ed8990c8a46b2c236625647c561c8789a38e3482",
+        "structured_diagnostics_sha256": "e49f6cae5f092a2d8a92dcee2fec30967b4188b2ea71f2be6c4e7a82847d0a5a",
+        "scene_json_sha256": "636e25cc39489fee0dd05be0a2ae8565c8e217a89115850a8106b8b2206bdbca"
+      },
+      "matches_before": true,
+      "stage_seconds_median": {
+        "Resolve": 0.04338120005559176,
+        "Site/Massing/Detail": 0.05600999994203448,
+        "Materialize": 0.38572270004078746,
+        "Generate": 0.4491419999394566,
+        "Critic": 0.02458710002247244,
+        "Export": 0.04258730006404221
+      },
+      "process_peak_rss_bytes_median": 86192128
+    }
+  ],
+  "before_provenance": {
+    "commit": "3261ea9427e2fabb6297f0844756664ab1611e66",
+    "engine_sha256": "ca52e925768a7bb884178d97485184cbca8c83fa8f1316cdd3db8b3338acc41c",
+    "lock_sha256": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48",
+    "default_config_sha256": "17f5c240ead94ebb8c410f045b3344f07d07ec9c29a8a769645f853b5ea28d64"
+  },
+  "script": {
+    "path": "scripts/evaluate_make_performance.py",
+    "sha256": "55bf8ab6e0ee6e0c9f1c8c71a2969d5f3490fd861c18bbbfbb7f8963c14d20f6"
+  },
+  "after_provenance": {
+    "commit": "3261ea9427e2fabb6297f0844756664ab1611e66",
+    "engine_sha256": "cf0e5e5141e8120a7bf8ea7018965edc606151f984a8dd29e596f36598f1371d",
+    "lock_sha256": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48",
+    "default_config_sha256": "17f5c240ead94ebb8c410f045b3344f07d07ec9c29a8a769645f853b5ea28d64"
+  },
+  "after": [
+    {
+      "case": "tower-medium",
+      "input_sha256": "f4391589c22710d842e9289fd7dc032a8081ecd8b58a7cb6703596e3888a42c0",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 57.655218699947,
+          "process_peak_rss_bytes": 201359360,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0012088000075891614,
+              "rss_at_stage_start_bytes": 53096448
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04807829996570945,
+              "rss_at_stage_start_bytes": 53243904
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 1.5557816999498755,
+              "rss_at_stage_start_bytes": 76423168
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 10.491579599911347,
+              "rss_at_stage_start_bytes": 95444992
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 49.15695189998951,
+              "rss_at_stage_start_bytes": 111861760
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 56.2898070999654,
+              "rss_at_stage_start_bytes": 113516544
+            }
+          ],
+          "seconds": 58.57350109994877,
+          "signature": {
+            "placement_sha256": "1da201aba3ad635da94056237e2a58163a1e454e90a93132456bb46de406062b",
+            "metrics_sha256": "7b522bca53c36c3d107fac5962fde61714fda72e546cb79b9bf4b133d1ace7a8",
+            "structured_diagnostics_sha256": "ae3eeaf8314dda638e92ae752ecde79cc8f1c466a67e623beb1e2b5cea76d01d",
+            "scene_json_sha256": "a73ab1adb3188e349fd3ec9027e441c0950b13376417085d0d75a50102e76fab"
+          }
+        },
+        {
+          "code": 0,
+          "make_runtime_seconds": 57.341525799944066,
+          "process_peak_rss_bytes": 201641984,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.001065799966454506,
+              "rss_at_stage_start_bytes": 52404224
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04681999993044883,
+              "rss_at_stage_start_bytes": 51580928
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 1.5446983999572694,
+              "rss_at_stage_start_bytes": 76451840
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 10.449545499985106,
+              "rss_at_stage_start_bytes": 95432704
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 49.175286400015466,
+              "rss_at_stage_start_bytes": 112377856
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 55.995461000013165,
+              "rss_at_stage_start_bytes": 112709632
+            }
+          ],
+          "seconds": 58.26407430006657,
+          "signature": {
+            "placement_sha256": "1da201aba3ad635da94056237e2a58163a1e454e90a93132456bb46de406062b",
+            "metrics_sha256": "7b522bca53c36c3d107fac5962fde61714fda72e546cb79b9bf4b133d1ace7a8",
+            "structured_diagnostics_sha256": "ae3eeaf8314dda638e92ae752ecde79cc8f1c466a67e623beb1e2b5cea76d01d",
+            "scene_json_sha256": "a73ab1adb3188e349fd3ec9027e441c0950b13376417085d0d75a50102e76fab"
+          }
+        },
+        {
+          "code": 0,
+          "make_runtime_seconds": 57.00394810002763,
+          "process_peak_rss_bytes": 201519104,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0010634999489411712,
+              "rss_at_stage_start_bytes": 52858880
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04782209999393672,
+              "rss_at_stage_start_bytes": 53141504
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 1.5240672000218183,
+              "rss_at_stage_start_bytes": 76431360
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 10.529699399950914,
+              "rss_at_stage_start_bytes": 96948224
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 49.68724100000691,
+              "rss_at_stage_start_bytes": 111259648
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 56.02295899996534,
+              "rss_at_stage_start_bytes": 112861184
+            }
+          ],
+          "seconds": 57.945115500013344,
+          "signature": {
+            "placement_sha256": "1da201aba3ad635da94056237e2a58163a1e454e90a93132456bb46de406062b",
+            "metrics_sha256": "7b522bca53c36c3d107fac5962fde61714fda72e546cb79b9bf4b133d1ace7a8",
+            "structured_diagnostics_sha256": "ae3eeaf8314dda638e92ae752ecde79cc8f1c466a67e623beb1e2b5cea76d01d",
+            "scene_json_sha256": "a73ab1adb3188e349fd3ec9027e441c0950b13376417085d0d75a50102e76fab"
+          }
+        }
+      ],
+      "seconds_median": 58.26407430006657,
+      "signature": {
+        "placement_sha256": "1da201aba3ad635da94056237e2a58163a1e454e90a93132456bb46de406062b",
+        "metrics_sha256": "7b522bca53c36c3d107fac5962fde61714fda72e546cb79b9bf4b133d1ace7a8",
+        "structured_diagnostics_sha256": "ae3eeaf8314dda638e92ae752ecde79cc8f1c466a67e623beb1e2b5cea76d01d",
+        "scene_json_sha256": "a73ab1adb3188e349fd3ec9027e441c0950b13376417085d0d75a50102e76fab"
+      },
+      "matches_before": true,
+      "c_seconds_median": 21.37432380003156,
+      "input_identical_to_c": false,
+      "input_matches_c_with_crlf": true,
+      "d_seconds_median": 144.40541050001048,
+      "input_identical_to_d": true,
+      "stage_seconds_median": {
+        "Resolve": 0.046758600044995546,
+        "Site/Massing/Detail": 1.4978784000268206,
+        "Materialize": 8.935797899961472,
+        "Generate": 38.72574090003036,
+        "Critic": 6.820174599997699,
+        "Export": 1.3460647999309003
+      },
+      "process_peak_rss_bytes_median": 201519104
+    },
+    {
+      "case": "house-medium",
+      "input_sha256": "5aae28387110c6a8fc46fd103bb8ab0575da4171aa738e90f48081b67d965447",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 46.00693399994634,
+          "process_peak_rss_bytes": 203481088,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.000978900003246963,
+              "rss_at_stage_start_bytes": 52162560
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.043698999914340675,
+              "rss_at_stage_start_bytes": 51343360
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.6560249999165535,
+              "rss_at_stage_start_bytes": 55599104
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 2.2495095999911427,
+              "rss_at_stage_start_bytes": 82984960
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 44.870772899943404,
+              "rss_at_stage_start_bytes": 87760896
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 45.38746919995174,
+              "rss_at_stage_start_bytes": 87998464
+            }
+          ],
+          "seconds": 46.93888249993324,
+          "signature": {
+            "placement_sha256": "d5e800a305354217a75addf406cdbf8f59c8a8307a067eee6ee0250355144d13",
+            "metrics_sha256": "b0c378a1b5f143f10229a9c433e82998c6fd2647d054f2cc94ae07bde4757671",
+            "structured_diagnostics_sha256": "5cc9b47cbca66ae5c362e2058d3bffaff34afe05b32e75335fb8ab65873c5847",
+            "scene_json_sha256": "0f482659dfc9e119445540408570ccb1dd989700b89d7ce3a16a7af7f9253068"
+          }
+        },
+        {
+          "code": 0,
+          "make_runtime_seconds": 51.87343899998814,
+          "process_peak_rss_bytes": 201670656,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0009865000611171126,
+              "rss_at_stage_start_bytes": 52015104
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04360640002414584,
+              "rss_at_stage_start_bytes": 51482624
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.6665655000833794,
+              "rss_at_stage_start_bytes": 55746560
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 2.2152742000762373,
+              "rss_at_stage_start_bytes": 83320832
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 50.977451400016434,
+              "rss_at_stage_start_bytes": 87863296
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 51.324757800088264,
+              "rss_at_stage_start_bytes": 88072192
+            }
+          ],
+          "seconds": 52.775438599986956,
+          "signature": {
+            "placement_sha256": "d5e800a305354217a75addf406cdbf8f59c8a8307a067eee6ee0250355144d13",
+            "metrics_sha256": "b0c378a1b5f143f10229a9c433e82998c6fd2647d054f2cc94ae07bde4757671",
+            "structured_diagnostics_sha256": "5cc9b47cbca66ae5c362e2058d3bffaff34afe05b32e75335fb8ab65873c5847",
+            "scene_json_sha256": "0f482659dfc9e119445540408570ccb1dd989700b89d7ce3a16a7af7f9253068"
+          }
+        },
+        {
+          "code": 0,
+          "make_runtime_seconds": 43.18310040002689,
+          "process_peak_rss_bytes": 204640256,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.001002600067295134,
+              "rss_at_stage_start_bytes": 52191232
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04396200005430728,
+              "rss_at_stage_start_bytes": 51433472
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.6569815999828279,
+              "rss_at_stage_start_bytes": 55590912
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 2.202827100059949,
+              "rss_at_stage_start_bytes": 83107840
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 42.3054346999852,
+              "rss_at_stage_start_bytes": 87130112
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 42.680884000030346,
+              "rss_at_stage_start_bytes": 87789568
+            }
+          ],
+          "seconds": 44.05470169999171,
+          "signature": {
+            "placement_sha256": "d5e800a305354217a75addf406cdbf8f59c8a8307a067eee6ee0250355144d13",
+            "metrics_sha256": "b0c378a1b5f143f10229a9c433e82998c6fd2647d054f2cc94ae07bde4757671",
+            "structured_diagnostics_sha256": "5cc9b47cbca66ae5c362e2058d3bffaff34afe05b32e75335fb8ab65873c5847",
+            "scene_json_sha256": "0f482659dfc9e119445540408570ccb1dd989700b89d7ce3a16a7af7f9253068"
+          }
+        }
+      ],
+      "seconds_median": 46.93888249993324,
+      "signature": {
+        "placement_sha256": "d5e800a305354217a75addf406cdbf8f59c8a8307a067eee6ee0250355144d13",
+        "metrics_sha256": "b0c378a1b5f143f10229a9c433e82998c6fd2647d054f2cc94ae07bde4757671",
+        "structured_diagnostics_sha256": "5cc9b47cbca66ae5c362e2058d3bffaff34afe05b32e75335fb8ab65873c5847",
+        "scene_json_sha256": "0f482659dfc9e119445540408570ccb1dd989700b89d7ce3a16a7af7f9253068"
+      },
+      "matches_before": true,
+      "c_seconds_median": 29.682383200037293,
+      "input_identical_to_c": false,
+      "input_matches_c_with_crlf": true,
+      "d_seconds_median": 68.90396789996885,
+      "input_identical_to_d": true,
+      "stage_seconds_median": {
+        "Resolve": 0.04272009991109371,
+        "Site/Massing/Detail": 0.6130195999285206,
+        "Materialize": 1.5487086999928579,
+        "Generate": 42.62126329995226,
+        "Critic": 0.37544930004514754,
+        "Export": 0.5486811998998746
+      },
+      "process_peak_rss_bytes_median": 203481088
+    },
+    {
+      "case": "tower-large",
+      "input_sha256": "cd2e1cf461a97e26b211d40a10229b68630d4c8bb54e63843edb4a54a6317ba8",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 332.1019223999465,
+          "process_peak_rss_bytes": 334061568,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0010109998984262347,
+              "rss_at_stage_start_bytes": 52154368
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.044093300006352365,
+              "rss_at_stage_start_bytes": 51318784
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 9.940672399941832,
+              "rss_at_stage_start_bytes": 151670784
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 39.56915759993717,
+              "rss_at_stage_start_bytes": 161755136
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 235.4576808999991,
+              "rss_at_stage_start_bytes": 222441472
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 322.0916738999076,
+              "rss_at_stage_start_bytes": 225505280
+            }
+          ],
+          "seconds": 333.0652667999966,
+          "signature": {
+            "placement_sha256": "3938d6adcd7b623d754d56b806862aa29b376682afe9b0c5380e5d35b23413af",
+            "metrics_sha256": "ecaf26fda939dd0ac73b9877cd35ae3748e9cc1807dddede17fd9eadbad230c6",
+            "structured_diagnostics_sha256": "f93d28098c884ba3118099acdabac72b83723ee32016c09713e0cd1b79145714",
+            "scene_json_sha256": "0708ea32d9268a8c8b91377e1f5c3bdfb49b5f56551dd3074c358e1633819e6f"
+          }
+        },
+        {
+          "code": 0,
+          "make_runtime_seconds": 381.01060349994805,
+          "process_peak_rss_bytes": 335663104,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0010492999572306871,
+              "rss_at_stage_start_bytes": 51961856
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.043721499969251454,
+              "rss_at_stage_start_bytes": 51310592
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 12.507548399968073,
+              "rss_at_stage_start_bytes": 150106112
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 52.73352839995641,
+              "rss_at_stage_start_bytes": 162082816
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 284.4845267999917,
+              "rss_at_stage_start_bytes": 223002624
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 369.92725039995275,
+              "rss_at_stage_start_bytes": 225386496
+            }
+          ],
+          "seconds": 381.9480190000031,
+          "signature": {
+            "placement_sha256": "3938d6adcd7b623d754d56b806862aa29b376682afe9b0c5380e5d35b23413af",
+            "metrics_sha256": "ecaf26fda939dd0ac73b9877cd35ae3748e9cc1807dddede17fd9eadbad230c6",
+            "structured_diagnostics_sha256": "f93d28098c884ba3118099acdabac72b83723ee32016c09713e0cd1b79145714",
+            "scene_json_sha256": "0708ea32d9268a8c8b91377e1f5c3bdfb49b5f56551dd3074c358e1633819e6f"
+          }
+        },
+        {
+          "code": 0,
+          "make_runtime_seconds": 337.4524534000084,
+          "process_peak_rss_bytes": 333586432,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0010096000041812658,
+              "rss_at_stage_start_bytes": 51912704
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04479529999662191,
+              "rss_at_stage_start_bytes": 52256768
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 12.934538800036535,
+              "rss_at_stage_start_bytes": 153235456
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 54.053695200011134,
+              "rss_at_stage_start_bytes": 162357248
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 270.7326552000595,
+              "rss_at_stage_start_bytes": 222289920
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 330.18109850003384,
+              "rss_at_stage_start_bytes": 226054144
+            }
+          ],
+          "seconds": 338.32889200001955,
+          "signature": {
+            "placement_sha256": "3938d6adcd7b623d754d56b806862aa29b376682afe9b0c5380e5d35b23413af",
+            "metrics_sha256": "ecaf26fda939dd0ac73b9877cd35ae3748e9cc1807dddede17fd9eadbad230c6",
+            "structured_diagnostics_sha256": "f93d28098c884ba3118099acdabac72b83723ee32016c09713e0cd1b79145714",
+            "scene_json_sha256": "0708ea32d9268a8c8b91377e1f5c3bdfb49b5f56551dd3074c358e1633819e6f"
+          }
+        }
+      ],
+      "seconds_median": 338.32889200001955,
+      "signature": {
+        "placement_sha256": "3938d6adcd7b623d754d56b806862aa29b376682afe9b0c5380e5d35b23413af",
+        "metrics_sha256": "ecaf26fda939dd0ac73b9877cd35ae3748e9cc1807dddede17fd9eadbad230c6",
+        "structured_diagnostics_sha256": "f93d28098c884ba3118099acdabac72b83723ee32016c09713e0cd1b79145714",
+        "scene_json_sha256": "0708ea32d9268a8c8b91377e1f5c3bdfb49b5f56551dd3074c358e1633819e6f"
+      },
+      "matches_before": true,
+      "c_seconds_median": 155.7362677999772,
+      "input_identical_to_c": false,
+      "input_matches_c_with_crlf": true,
+      "d_seconds_median": 1019.3773640000727,
+      "input_identical_to_d": true,
+      "stage_seconds_median": {
+        "Resolve": 0.04308230010792613,
+        "Site/Massing/Detail": 12.463826899998821,
+        "Materialize": 40.22597999998834,
+        "Generate": 216.6789600000484,
+        "Critic": 85.44272359996103,
+        "Export": 10.01024850003887
+      },
+      "process_peak_rss_bytes_median": 334061568
+    },
+    {
+      "case": "house-large",
+      "input_sha256": "25ba7157ff2ffd25ccffee7a11ea94f7e79c26b3a12ff617e2746aa9310739f1",
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 207.857325399993,
+          "process_peak_rss_bytes": 217931776,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0009468999924138188,
+              "rss_at_stage_start_bytes": 51777536
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04399909998755902,
+              "rss_at_stage_start_bytes": 52293632
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 2.33853970002383,
+              "rss_at_stage_start_bytes": 60522496
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 5.471255799988285,
+              "rss_at_stage_start_bytes": 88973312
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 203.1870039999485,
+              "rss_at_stage_start_bytes": 94367744
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 205.12113729992416,
+              "rss_at_stage_start_bytes": 95305728
+            }
+          ],
+          "seconds": 208.7119396000635,
+          "signature": {
+            "placement_sha256": "20b0e0f34346c40e6b5bc358c1a47d75651ea599675acf59a3ffcd7dd228a3f8",
+            "metrics_sha256": "9419735a250f08a571b87e61dba891f4c9cfc055dd8e731348c37ac87a3cee64",
+            "structured_diagnostics_sha256": "168c56cd12b8627d2a667a3e78e5c1fc275f04b4880e425daa23efbd79a956c2",
+            "scene_json_sha256": "85bf417831039a6a8dac92285d82e168ab3464ca0e21f1c05fc134edc3af178e"
+          }
+        },
+        {
+          "code": 0,
+          "make_runtime_seconds": 205.33974530000705,
+          "process_peak_rss_bytes": 218636288,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0009825999150052667,
+              "rss_at_stage_start_bytes": 52174848
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04286259994842112,
+              "rss_at_stage_start_bytes": 52486144
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 2.1987741999328136,
+              "rss_at_stage_start_bytes": 61739008
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 5.368388999952003,
+              "rss_at_stage_start_bytes": 88227840
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 200.76061949995346,
+              "rss_at_stage_start_bytes": 94388224
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 202.60909239994362,
+              "rss_at_stage_start_bytes": 95412224
+            }
+          ],
+          "seconds": 206.1523709000321,
+          "signature": {
+            "placement_sha256": "20b0e0f34346c40e6b5bc358c1a47d75651ea599675acf59a3ffcd7dd228a3f8",
+            "metrics_sha256": "9419735a250f08a571b87e61dba891f4c9cfc055dd8e731348c37ac87a3cee64",
+            "structured_diagnostics_sha256": "168c56cd12b8627d2a667a3e78e5c1fc275f04b4880e425daa23efbd79a956c2",
+            "scene_json_sha256": "85bf417831039a6a8dac92285d82e168ab3464ca0e21f1c05fc134edc3af178e"
+          }
+        },
+        {
+          "code": 0,
+          "make_runtime_seconds": 206.32679479999933,
+          "process_peak_rss_bytes": 218390528,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0009568000677973032,
+              "rss_at_stage_start_bytes": 52006912
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.0438154999865219,
+              "rss_at_stage_start_bytes": 52305920
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 2.1828445000573993,
+              "rss_at_stage_start_bytes": 61382656
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 5.216731199994683,
+              "rss_at_stage_start_bytes": 88899584
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 201.65351340000052,
+              "rss_at_stage_start_bytes": 93921280
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 203.50996799999848,
+              "rss_at_stage_start_bytes": 94932992
+            }
+          ],
+          "seconds": 207.14222089992836,
+          "signature": {
+            "placement_sha256": "20b0e0f34346c40e6b5bc358c1a47d75651ea599675acf59a3ffcd7dd228a3f8",
+            "metrics_sha256": "9419735a250f08a571b87e61dba891f4c9cfc055dd8e731348c37ac87a3cee64",
+            "structured_diagnostics_sha256": "168c56cd12b8627d2a667a3e78e5c1fc275f04b4880e425daa23efbd79a956c2",
+            "scene_json_sha256": "85bf417831039a6a8dac92285d82e168ab3464ca0e21f1c05fc134edc3af178e"
+          }
+        }
+      ],
+      "seconds_median": 207.14222089992836,
+      "signature": {
+        "placement_sha256": "20b0e0f34346c40e6b5bc358c1a47d75651ea599675acf59a3ffcd7dd228a3f8",
+        "metrics_sha256": "9419735a250f08a571b87e61dba891f4c9cfc055dd8e731348c37ac87a3cee64",
+        "structured_diagnostics_sha256": "168c56cd12b8627d2a667a3e78e5c1fc275f04b4880e425daa23efbd79a956c2",
+        "scene_json_sha256": "85bf417831039a6a8dac92285d82e168ab3464ca0e21f1c05fc134edc3af178e"
+      },
+      "matches_before": true,
+      "c_seconds_median": 183.59484330000123,
+      "input_identical_to_c": false,
+      "input_matches_c_with_crlf": true,
+      "d_seconds_median": 290.55328300001565,
+      "input_identical_to_d": true,
+      "stage_seconds_median": {
+        "Resolve": 0.042858699918724597,
+        "Site/Massing/Detail": 2.1559115999843925,
+        "Materialize": 3.1327160999644548,
+        "Generate": 196.43678220000584,
+        "Critic": 1.85645459999796,
+        "Export": 2.73618810006883
+      },
+      "process_peak_rss_bytes_median": 218390528
+    }
+  ],
+  "references": [
+    {
+      "path": "benchmarks/make-baseline.json",
+      "sha256": "35a521b0581a182a72f1e60d89aba5e146c7643ef1d1ae59611a46904ae096bc"
+    },
+    {
+      "path": "evaluation/records/structure-detail-performance.json",
+      "sha256": "3dc7c5ed6a1120d2b9cb1aa9e4217847125cf1d683f6140a5e868ee118fe1f0c"
+    }
+  ],
+  "recommended_targets_seconds": {
+    "tower-medium": 65,
+    "tower-large": 350
+  },
+  "summary": [
+    {
+      "case": "tower-medium",
+      "c_seconds": 21.37432380003156,
+      "d_seconds": 144.40541050001048,
+      "before_seconds": 70.51165480003692,
+      "after_seconds": 58.26407430006657,
+      "current_reduction_fraction": 0.17369583134452182,
+      "d_regression_removed_fraction": 0.7001591102743521,
+      "recommended_target_seconds": 65
+    },
+    {
+      "case": "house-medium",
+      "c_seconds": 29.682383200037293,
+      "d_seconds": 68.90396789996885,
+      "before_seconds": 61.5114683000138,
+      "after_seconds": 46.93888249993324,
+      "current_reduction_fraction": 0.23690843679758644,
+      "d_regression_removed_fraction": 0.5600254443588032,
+      "recommended_target_seconds": null
+    },
+    {
+      "case": "tower-large",
+      "c_seconds": 155.7362677999772,
+      "d_seconds": 1019.3773640000727,
+      "before_seconds": 399.66480160003994,
+      "after_seconds": 338.32889200001955,
+      "current_reduction_fraction": 0.1534683798885087,
+      "d_regression_removed_fraction": 0.7885781200044494,
+      "recommended_target_seconds": 350
+    },
+    {
+      "case": "house-large",
+      "c_seconds": 183.59484330000123,
+      "d_seconds": 290.55328300001565,
+      "before_seconds": 229.4532433000859,
+      "after_seconds": 207.14222089992836,
+      "current_reduction_fraction": 0.09723559396795489,
+      "d_regression_removed_fraction": 0.7798455393892217,
+      "recommended_target_seconds": null
+    }
+  ],
+  "validation": {
+    "python": "3.12.15",
+    "ruff": "成功",
+    "pytest": {
+      "passed": 2474,
+      "skipped": 1,
+      "skip_reason": "任意のtiktoken未導入",
+      "seconds": 558.22,
+      "command": "python -m pytest -x -q"
+    },
+    "check_strict": {
+      "files": 22,
+      "errors": 0,
+      "warnings": 0
+    },
+    "wheel": {
+      "path": "output/issue-210/wheel/mc_blueprint-0.1.0-py3-none-any.whl",
+      "sha256": "4342b72e0e57897ad5fd1ce524d3946ceaacca485748295242503167501fb047"
+    },
+    "fixed_cases": 16,
+    "performance_cases": 4,
+    "all_four_result_hashes_match": true,
+    "publication_fixed_cases": 16,
+    "nfr2_achievement_assessed": false,
+    "git_diff_check": true,
+    "utf8_bomless_lf": true
+  },
+  "measurement_notes": [
+    "修正前は各1回、修正後は各3回。中央値差は観測値であり統計的な保証ではない。",
+    "塔largeは333.1〜381.9秒。GenerateやCriticにも試行間変動があり、その原因は未確定。",
+    "別担当の読み取りreviewを含む端末全体のCPU負荷・クロックは統制していない。"
+  ],
+  "completed_at": "2026-11-03T19:05:33.479584+00:00",
+  "lf_normalization": [
+    {
+      "path": ".gitignore",
+      "before_sha256": "c89e3aa36ecaf303c99a9ccfa0380932b0705e7a494995e20033f10180ef62f5",
+      "after_sha256": "56a354551f579316c848e457ec09b984599ed477bebc7b504667aea7bf05e459",
+      "python_ast_unchanged": null
+    },
+    {
+      "path": "docs/EVALUATION.md",
+      "before_sha256": "71d0d1a03598d8aeb208e6b96b444dff04ee5e9e89d5c9a077e0ea9c6d2f2e74",
+      "after_sha256": "3f58d86d70be695a28f2a9f224d76cee394c8fd882e040cc0a5562d7e3837a97",
+      "python_ast_unchanged": null
+    },
+    {
+      "path": "docs/PERFORMANCE.md",
+      "before_sha256": "f1e46c666a4b8e2bdc5b6e402b7e5ab187dfd3448e9cde3b72f202bd1bfbedb1",
+      "after_sha256": "7d73f67399e3a98277b421a705167bc1d1101d0ccc3356ef6a514f93849d1b01",
+      "python_ast_unchanged": null
+    },
+    {
+      "path": "src/mcblueprint/detail.py",
+      "before_sha256": "9d1f30f8ccdd8ca6e314a0cf1a4f084f2bbca32ca289f31c910618180b1a44e6",
+      "after_sha256": "fdf28c2ef683ff1ea3c761c5fe350362c574ee91791db97a004e3b721e55e538",
+      "python_ast_unchanged": true
+    },
+    {
+      "path": "src/mcblueprint/materialize.py",
+      "before_sha256": "a95dc16d91fb39720c2a3d9ab25c26755acdea06678d86320c6a2e971879c084",
+      "after_sha256": "a7474901c9f56ac546b6f43663358892665b207006816bd93a5268015e3c4785",
+      "python_ast_unchanged": true
+    },
+    {
+      "path": "src/mcblueprint/pipeline.py",
+      "before_sha256": "9bad2e8febabf4c1272abdeb7d39b761bff9eeb71392bb390267ee537a17e351",
+      "after_sha256": "52a7f024608ceed3ee2d128dbb236449399c90b09706b84ed84a3745d74f7610",
+      "python_ast_unchanged": true
+    },
+    {
+      "path": "src/mcblueprint/planning.py",
+      "before_sha256": "875585d838430ee9820199079415e8d6a43701610bb3c4b70205d735e7ae4ae5",
+      "after_sha256": "fb84c4f6eac1c088532f5f5aea50a554850e6cdb0cb7a219b41b316377bccfc6",
+      "python_ast_unchanged": true
+    },
+    {
+      "path": "src/mcblueprint/viewer_input.py",
+      "before_sha256": "09f645d167b387cca801ecc8dea8428a207e5801a23dcd28017c0bc1166a6a04",
+      "after_sha256": "e8d5606109d5c5d6465ca64129539f9d46cf6e0473228fffbb96b9ea16ca6054",
+      "python_ast_unchanged": true
+    },
+    {
+      "path": "tests/test_materialize.py",
+      "before_sha256": "d71a37981c0fba1be5793e7b518b94f0e2194ab6c27371194cb01f429632b5b3",
+      "after_sha256": "52d5e9d029440592e1bc7dc7cb2fb2368b699a65fb786a56b263d872154098d1",
+      "python_ast_unchanged": true
+    },
+    {
+      "path": "tests/test_pipeline.py",
+      "before_sha256": "af7576e46cd2d7a8e5bc6eb3defd6f096dc1679d6fceff616b3e90ed73039aa4",
+      "after_sha256": "846f88203f26113da11b1f020695e8311cde090e47af9aa7fd2705207e357cf3",
+      "python_ast_unchanged": true
+    }
+  ],
+  "publication_provenance": {
+    "commit": "3261ea9427e2fabb6297f0844756664ab1611e66",
+    "engine_sha256": "486de47da230f245c979ed056d4e3aac2c4741f270c9f8c5d6cdae4c3e832e3a",
+    "lock_sha256": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48",
+    "default_config_sha256": "17f5c240ead94ebb8c410f045b3344f07d07ec9c29a8a769645f853b5ea28d64"
+  },
+  "publication_fixed_cases": [
+    {
+      "case": "single-house-1.21.11-schem",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "f749ec168027d2fe893c8675daa4b956aca3622a7af195600d8b784dd9bf7ee3",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "0c2e29534177b305f168790a36dda9ba985a11bc86827f87a2ad1392fa1e4966",
+        "scene_json_sha256": "76670012a4e62c09e384a4b41aeca997d84dfc7ae6bb732734dd57a24063b346"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "single-house-1.21.11-litematic",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "f749ec168027d2fe893c8675daa4b956aca3622a7af195600d8b784dd9bf7ee3",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "17865874f29dd361eccee02f5249bd2130b3ac7e932cb6151a6e2c8f714deab0",
+        "scene_json_sha256": "0c9f658e9ba0f16c3bc6774810c09218c183824f7dd8fdbeb18e2365b40fdae0"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "single-house-26.1.2-schem",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "f749ec168027d2fe893c8675daa4b956aca3622a7af195600d8b784dd9bf7ee3",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "0dcaaae375bf5c28e8b2e469488f3e9e6a57412b9098b8a9b16e29978174aaea",
+        "scene_json_sha256": "77e83f88c648c2925d4bfaaaa4d33c05f55699411fa8ab8d76a59ae171c0ac7b"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "single-house-26.1.2-litematic",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "f749ec168027d2fe893c8675daa4b956aca3622a7af195600d8b784dd9bf7ee3",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "4a84afb8c94349de527c969d9f71b9358d62f5b9338e8c9d03749290b20bdba0",
+        "scene_json_sha256": "ccd8b8cda7b29107ad44d76c74e9ec0d8e92db7bd48ce20c3ac3e2a02c4571f8"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "single-house-26.2-schem",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "f749ec168027d2fe893c8675daa4b956aca3622a7af195600d8b784dd9bf7ee3",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "3dbe814e8cd4adf89ffb02e7e11314ecbee489abb03df8e93da02769f4732206",
+        "scene_json_sha256": "cd58e6374776ecd5088945f212e2195c3d21652dc49631d347e9ebebe8e1ee8e"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "single-house-26.2-litematic",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "f749ec168027d2fe893c8675daa4b956aca3622a7af195600d8b784dd9bf7ee3",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "fd83321dee6786fa0072cc0a7062ae93eaae321a550a3d1eefa0cde0afa0fe9f",
+        "scene_json_sha256": "6e044506c811e04e61b789b21912e432095882156aa8f586db540b2372c7c8f5"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "single-house-26.3-schem",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "02e2b41c1a4957924248b7bfb8a8d0ddcf583ccad2dc41eaf9ac5e95ab2fbb2a",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "badbb785f5467aa362aba9085ea3ad1794f230e9a5ad3d1d2c29aee1a49cf0ca",
+        "scene_json_sha256": "745d521eaee242f4e0a68ab675eaff32119f147a7e828c670e63a53961888de2"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "single-house-26.3-litematic",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "02e2b41c1a4957924248b7bfb8a8d0ddcf583ccad2dc41eaf9ac5e95ab2fbb2a",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "bb8f4aff35e94c1e68d87f97b1aaa95180afd914052014ea8293b2f109781626",
+        "scene_json_sha256": "0847117ab7256744037ff8777cc57009a200cd170f48ce8897aca1fa1897c58d"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "standalone-tower-1.21.11-schem",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "1fa188ce49e6e9b0a27ddb42bdab7c94e499c26dd0090c91cefa3d3b516bffea",
+        "metrics_sha256": "79c100e8b6b778fe8e3801a9ed8990c8a46b2c236625647c561c8789a38e3482",
+        "structured_diagnostics_sha256": "25a0781a22cc2a97591d815d35a628407cd5d8e10645310cd14b23d131e0638f",
+        "scene_json_sha256": "d15d852e35469e8e48fa7d58e8d792c105b9f5ed4ce60019ae76ea4352315a3c"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "standalone-tower-1.21.11-litematic",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "1fa188ce49e6e9b0a27ddb42bdab7c94e499c26dd0090c91cefa3d3b516bffea",
+        "metrics_sha256": "79c100e8b6b778fe8e3801a9ed8990c8a46b2c236625647c561c8789a38e3482",
+        "structured_diagnostics_sha256": "c6613364e3f05c651be089d89a3ab91ffe51d55db3570a3e46646be6670865e7",
+        "scene_json_sha256": "d8adaddf08afd7824e934dd34484bdcca83f6930b21085c644bfcddd826a8d85"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "standalone-tower-26.1.2-schem",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "1fa188ce49e6e9b0a27ddb42bdab7c94e499c26dd0090c91cefa3d3b516bffea",
+        "metrics_sha256": "79c100e8b6b778fe8e3801a9ed8990c8a46b2c236625647c561c8789a38e3482",
+        "structured_diagnostics_sha256": "104ce606c3ce99e2c22a7809246feac1f51a1182d42b1240538db49c58133438",
+        "scene_json_sha256": "7c330328d07fb2ca32e9992920529238b07b74e2d1374acc46f44a7f4c4c08ed"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "standalone-tower-26.1.2-litematic",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "1fa188ce49e6e9b0a27ddb42bdab7c94e499c26dd0090c91cefa3d3b516bffea",
+        "metrics_sha256": "79c100e8b6b778fe8e3801a9ed8990c8a46b2c236625647c561c8789a38e3482",
+        "structured_diagnostics_sha256": "7cc4eceaaf4eb303e353ee0de1ad424f79d7b64b998709e2e9253c281af3196e",
+        "scene_json_sha256": "6b7a2cbfcdd6514a7e21984d3362816d25763f0ad5d55ced13539e7781113578"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "standalone-tower-26.2-schem",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "1fa188ce49e6e9b0a27ddb42bdab7c94e499c26dd0090c91cefa3d3b516bffea",
+        "metrics_sha256": "79c100e8b6b778fe8e3801a9ed8990c8a46b2c236625647c561c8789a38e3482",
+        "structured_diagnostics_sha256": "8e92432dd119491de1f0ed6af8d7a8e3700924cd4a54ebf520f20851e03661c8",
+        "scene_json_sha256": "9f2558ff57d324b1a3122f833cdfd360e353754ace520e944e0a446bb420f66e"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "standalone-tower-26.2-litematic",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "1fa188ce49e6e9b0a27ddb42bdab7c94e499c26dd0090c91cefa3d3b516bffea",
+        "metrics_sha256": "79c100e8b6b778fe8e3801a9ed8990c8a46b2c236625647c561c8789a38e3482",
+        "structured_diagnostics_sha256": "5dc5fb3f878bfb3051f5fdd18f8102e95dd11e88910a6d72adf815c2152efdd7",
+        "scene_json_sha256": "d03580eba53960e128010dec2ee6963d723b30ff158db358efef5019b2d2d8df"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "standalone-tower-26.3-schem",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "5d3c84fae933efe5b108a4bb1e5025ddab5b9ad246301f408de1535d32bbdaa6",
+        "metrics_sha256": "79c100e8b6b778fe8e3801a9ed8990c8a46b2c236625647c561c8789a38e3482",
+        "structured_diagnostics_sha256": "95e44723839e0550d5a6782e35eeea3f17d5a6eafdb8b034a112dfe1f6df0f5e",
+        "scene_json_sha256": "02595d0dfa755ebdf41638c35a97833caea23df84b80005512ddfefe51c39717"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "standalone-tower-26.3-litematic",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "5d3c84fae933efe5b108a4bb1e5025ddab5b9ad246301f408de1535d32bbdaa6",
+        "metrics_sha256": "79c100e8b6b778fe8e3801a9ed8990c8a46b2c236625647c561c8789a38e3482",
+        "structured_diagnostics_sha256": "e49f6cae5f092a2d8a92dcee2fec30967b4188b2ea71f2be6c4e7a82847d0a5a",
+        "scene_json_sha256": "636e25cc39489fee0dd05be0a2ae8565c8e217a89115850a8106b8b2206bdbca"
+      },
+      "matches_before": true
+    }
+  ],
+  "validation_notes": [
+    "追加Palette試験で検出したキー変数名の衝突は修正し、関連3件と全件pytestで成功。",
+    "既存ファイルのCRLF保持はLFへ統一し、Python構文木と公開用固定16入力の結果を照合。",
+    "追加文書リンクのアンカーを既存検証に合わせて除去し、当該1件と最終全件pytestで成功。"
+  ]
+}

@@ -261,7 +261,9 @@ def materialize(
         role, shape = ref["role"], ref["shape"]
         if role not in materials:
             raise BlueprintError(f"Materialize: 未知のrole {role!r}")
-        required.setdefault(role, {}).setdefault(shape, []).append(ref["state"])
+        states = required.setdefault(role, {}).setdefault(shape, [])
+        if ref["state"] not in states:
+            states.append(ref["state"])
     chosen_seed = blueprint.get("seed", 0) if seed is None else seed
     output["seed"] = chosen_seed
     candidates: dict[str, list[tuple]] = {}
@@ -411,6 +413,9 @@ def materialize(
     def resolve(value: Any) -> Any:
         if _reference(value):
             role, shape = value["role"], value["shape"]
+            palette_key = role, shape, tuple(sorted(value["state"].items()))
+            if palette_key in palette_names:
+                return {"palette": palette_names[palette_key]}
             state = roles[role][shape]
             for key, item in value["state"].items():
                 state = state.with_property(key, item)
@@ -428,14 +433,11 @@ def materialize(
                 {"block": state.to_string(), "weight": 1 - mix},
                 {"block": secondary.to_string(), "weight": mix},
             ) if entry["weight"] > 0]
-            key = role, shape, tuple(sorted(value["state"].items()))
-            if key not in palette_names:
-                name = f"materialize_{role}_{shape}_{len(palettes)}"
-                while name in palettes:
-                    name += "_"
-                palette_names[key] = name
-                palettes[name] = entries
-            name = palette_names[key]
+            name = f"materialize_{role}_{shape}_{len(palettes)}"
+            while name in palettes:
+                name += "_"
+            palette_names[palette_key] = name
+            palettes[name] = entries
             return {"palette": name}
         if isinstance(value, dict):
             result = {}
