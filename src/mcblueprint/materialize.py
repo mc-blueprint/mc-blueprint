@@ -35,6 +35,7 @@ class MaterializeResult:
     diagnostics: tuple[dict[str, Any], ...]
     attempts: int
     max_area_ratios: dict[str, float] = field(default_factory=dict)
+    fixed_roles: frozenset[str] = frozenset()
 
 
 def _reference(value: Any) -> bool:
@@ -461,4 +462,4 @@ def materialize(
                          "candidates": {r: len(candidates[r]) for r in e["pair"]}}
                         for e in best_errors)
     return MaterializeResult(output, roles, diagnostics, attempts,
-                             {"accent": 0.08 * settings["accent"]})
+                             {"accent": 0.08 * settings["accent"]}, frozenset(fixed))
