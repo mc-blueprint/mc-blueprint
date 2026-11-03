@@ -8,8 +8,8 @@
     "randomness": {"type": "number", "minimum": 0, "maximum": 1},
     "weathering": {"type": "object", "additionalProperties": false, "properties": {
       "age": {"$ref": "#/$defs/unit"}, "moss": {"type": "object", "additionalProperties": false, "properties": {
-        "amount": {"$ref": "#/$defs/unit"}, "water_proximity": {"type": "object", "additionalProperties": false, "properties": {"weight": {"$ref": "#/$defs/unit"}, "radius": {"type": "number", "minimum": 0}}},
-        "ground_proximity": {"type": "object", "additionalProperties": false, "properties": {"weight": {"$ref": "#/$defs/unit"}, "height": {"type": "number", "minimum": 0}}}, "north_facing": {"$ref": "#/$defs/unit"}}},
+        "amount": {"$ref": "#/$defs/unit"}, "water_proximity": {"type": "object", "additionalProperties": false, "properties": {"weight": {"$ref": "#/$defs/unit"}, "radius": {"type": "integer", "minimum": 0}}},
+        "ground_proximity": {"type": "object", "additionalProperties": false, "properties": {"weight": {"$ref": "#/$defs/unit"}, "height": {"type": "integer", "minimum": 0}}}, "north_facing": {"$ref": "#/$defs/unit"}}},
       "cracks": {"type": "object", "additionalProperties": false, "properties": {"amount": {"$ref": "#/$defs/unit"}, "exposure": {"$ref": "#/$defs/unit"}}}, "missing_blocks": {"$ref": "#/$defs/unit"}, "vegetation": {"$ref": "#/$defs/unit"}}},
     "decoration": {"$ref": "#/$defs/unitObject"},
     "palette": {"type": "object", "additionalProperties": false, "properties": {"variation": {"$ref": "#/$defs/unit"}, "contrast": {"$ref": "#/$defs/unit"}, "saturation": {"$ref": "#/$defs/unit"}, "accent": {"$ref": "#/$defs/unit"}, "mix": {"$ref": "#/$defs/unit"}, "materials": {"type": "object", "additionalProperties": {"oneOf": [{"$ref": "#/$defs/material"}, {"type": "array", "minItems": 1, "items": {"type": "string"}}]}}}},
