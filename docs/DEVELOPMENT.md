@@ -70,7 +70,7 @@ mcblueprint components
 
 `check [PATH ...]` はデザインプリセット（`*.md` の ```json ブロック）と部品（`*.json`）を検証する。`patterns/`（`styles/` を含むディレクトリ）を1つ指定した場合はパターン v1 の様式 YAML・モジュール JSON・`sources.yaml` をスキーマと相互参照で検証する。様式名とファイル名、モジュール名と配置の一致、参照先モジュールの存在を確認する。役割参照を含むモジュールは Materialize 前のため検証エラーとなる。終了コードは成功 `0`、データ検証エラー `1`、引数・入出力エラー `2`。既定では最も古い同梱バージョンのブロックデータで検証する（`--minecraft-version` で変更）。`components` は探索パス上の部品の名前・大きさ・説明を一覧する（`--json` 可）。
 
-`preview` は既定で `preview/<名前>-top.png` / `-north.png` / `-east.png` / `-isometric.png` を出力する。`--views` で面を選び、`--layer 3`（複数可）や `--layers 1..5` / `--layers all` で高さごとの水平断面（`-y03.png` など。1 つ下の段を薄く重ねる）を出力する。断面だけ欲しいときは `--views` を省略する。`--grid 5` で 5 ブロックごとの罫線と座標ラベル、`origin` の赤い印を付ける。色が登録されていないブロックは灰色になり、ID を `WARNING` で表示する（`src/mcblueprint/data/colors.json` に追加する）。
+`preview` は既定で `preview/<名前>-top.png` / `-north.png` / `-east.png` / `-isometric.png` を出力する。`--views` で面を選び、`--layer 3`（複数可）や `--layers 1..5` / `--layers all` で高さごとの水平断面（`-y03.png` など。1 つ下の段を薄く重ねる）を出力する。断面だけ欲しいときは `--views` を省略する。`--grid 5` で 5 ブロックごとの罫線と座標ラベル、`origin` の赤い印を付ける。色は入力の Minecraft 版の blockdata の面色中央値を使い、草・葉・水は plains の着色（固定色の葉などは fixed）を適用する。面色欠損は別面、水の着色値、同版・同材質の中央値で補完する。全方面欠損の非空気IDは `WARNING` に表示する。色の解決規則と制限は [ARCHITECTURE.md §9.5](ARCHITECTURE.md#95-previewpreviewpy) を参照。
 
 局所確認は `mcblueprint preview blueprints/house.json --from 3 0 -1 --to 7 4 2 --views isometric,north --grid 1` のように指定する。`-region-` の画像と座標情報 JSON が全体画像と別に出る。生成処理は全体のままで、切口の扱いと API は [PREVIEW_REGIONS.md](PREVIEW_REGIONS.md) を参照する。
 

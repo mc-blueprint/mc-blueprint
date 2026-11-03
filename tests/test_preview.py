@@ -6,6 +6,7 @@ from typing import Any
 import pytest
 from PIL import Image
 
+from mcblueprint.blockdata import BlockData, BlockInfo, load_block_data, supported_versions
 from mcblueprint.cli import EXIT_OK, EXIT_USAGE_ERROR, main
 from mcblueprint.errors import BlueprintError
 from mcblueprint.model import AABB, BlockState, Vec3
@@ -14,10 +15,12 @@ from mcblueprint.preview import (
     ORIGIN,
     VIEWS,
     Options,
+    _face_linear,
     _isometric_faces,
+    _oklab_to_linear,
     _shape_cells,
+    _srgb,
     block_color,
-    color_keyword,
     layer_name,
     render,
     render_layer,
@@ -41,28 +44,68 @@ class TestColors:
     @pytest.mark.parametrize(
         ("block", "expected"),
         [
-            ("air", None),
-            ("cave_air", None),
-            ("void_air", None),
-            ("oak_stairs", (180, 145, 85)),
-            ("stone", (125, 125, 125)),
-            ("mossy_stone_bricks", (100, 120, 90)),
-            ("oak_planks", (180, 145, 85)),
-            ("dark_oak_stairs[facing=north]", (70, 45, 25)),
-            ("white_concrete", (235, 235, 235)),
-            ("light_gray_concrete", (150, 150, 145)),
-            ("some_unknown_block", (150, 150, 150)),
+            ("air", None), ("cave_air", None), ("void_air", None),
+            ("stone", (127, 127, 127)), ("gold_block", (255, 216, 62)),
+            ("grass_block", (80, 106, 47)), ("oak_leaves", (68, 101, 24)),
+            ("spruce_leaves", (49, 80, 49)), ("water", (63, 118, 228)),
         ],
     )
     def test_block_color(self, block: str, expected: Any) -> None:
         assert block_color(B(block)) == expected
 
-    def test_dyed_terracotta_and_glass_are_tinted(self) -> None:
-        white = block_color(B("white_terracotta"))
-        assert white is not None and white != (235, 235, 235)
-        assert white[0] > white[2]  # warm tint
-        glass = block_color(B("red_stained_glass"))
-        assert glass is not None and glass[0] > glass[1]
+    def test_unknown_block_is_an_error(self) -> None:
+        with pytest.raises(BlueprintError, match="Unknown block id"):
+            block_color(B("some_unknown_block"))
+
+    @pytest.mark.parametrize("version", supported_versions())
+    def test_all_bundled_blocks_have_colours(self, version: str) -> None:
+        data = load_block_data(version)
+        for info in data.blocks():
+            for face in ("top", "side", "bottom"):
+                color = block_color(B(info.id), version, face)
+                if info.id in ("minecraft:air", "minecraft:cave_air", "minecraft:void_air"):
+                    assert color is None
+                else:
+                    assert color is not None
+                    assert all(0 <= channel <= 255 for channel in color)
+
+    @pytest.mark.parametrize(
+        ("lab", "rgb"),
+        [
+            ((0, 0, 0), (0, 0, 0)), ((1, 0, 0), (255, 255, 255)),
+            ((0.62795536, 0.22486306, 0.1258463), (255, 0, 0)),
+            ((0.86643961, -0.23388757, 0.17949848), (0, 255, 0)),
+            ((0.45201372, -0.03245698, -0.31152815), (0, 0, 255)),
+        ],
+    )
+    def test_oklab_reference_colours(self, lab: tuple[float, ...], rgb: Any) -> None:
+        assert _srgb(_oklab_to_linear(lab)) == rgb
+
+    def test_tint_is_linear_and_only_applied_to_tinted_layers(self) -> None:
+        def quantiles(lightness: float) -> dict[str, list[float]]:
+            return {"L": [lightness] * 5, "a": [0] * 5, "b": [0] * 5}
+
+        info = BlockInfo("minecraft:test", {}, {}, tint="grass")
+        data = BlockData("test", {}, {"grass": {"plains": [0.5, 0, 0]}})
+        face = {"oklab": quantiles(1), "tintedOklab": quantiles(0.5)}
+        assert _face_linear(info, face, data) == pytest.approx((0.015625,) * 3)
+        face["untintedOklab"] = quantiles(1)
+        assert _face_linear(info, face, data) == pytest.approx((0.5078125,) * 3)
+        info = BlockInfo("minecraft:test", {}, {}, tint="none")
+        assert _face_linear(info, face, data) == pytest.approx((1,) * 3)
+
+    def test_views_use_top_and_side_faces(self) -> None:
+        volume = volume_with(((0, 0, 0), "grass_block"))
+        top = block_color(B("grass_block"))
+        side = block_color(B("grass_block"), face="side")
+        assert top is not None and side is not None and top != side
+        assert render(volume, "top", scale=4).getpixel((1, 1)) == shade(top, 0.6)
+        assert render_layer(volume, 0, scale=4).getpixel((1, 1)) == top
+        for view in ("north", "south", "east", "west"):
+            assert render(volume, view, scale=4).getpixel((1, 2)) == shade(side, 0.9)
+        assert {factor: color for _, color, factor in _isometric_faces(volume)} == {
+            1.05: top, 0.75: side, 0.6: side,
+        }
 
     def test_shade(self) -> None:
         assert shade((100, 200, 250), 0.5) == (50, 100, 125)
@@ -82,8 +125,8 @@ class TestRender:
         north = render(volume, "north", scale=4)
         south = render(volume, "south", scale=4)
         assert north.size == (4, 4) and south.size == (4, 4)
-        assert north.getpixel((1, 2)) == shade((250, 220, 70), 0.9)  # row 1 is the top highlight
-        assert south.getpixel((1, 2)) == shade((125, 125, 125), 0.9)
+        assert north.getpixel((1, 2)) == shade((255, 216, 62), 0.9)  # row 1 is the top highlight
+        assert south.getpixel((1, 2)) == shade((127, 127, 127), 0.9)
         east = render(volume, "east", scale=4)
         assert east.size == (6 * 4, 4)
 
@@ -120,6 +163,38 @@ class TestCli:
         "name": "p",
         "operations": [{"type": "fill", "from": [0, 0, 0], "to": [3, 2, 3], "block": "stone"}],
     }
+
+    def test_version_override_reaches_colours(self, tmp_path: Path) -> None:
+        old = load_block_data("1.21.11")
+        info = next(info for info in load_block_data("26.3").blocks() if info.id not in old)
+        data = {
+            **self.DATA,
+            "operations": [{"type": "set", "position": [0, 0, 0], "block": info.id}],
+        }
+        path = tmp_path / "new.json"
+        path.write_text(json.dumps(data), encoding="utf-8")
+        assert main([
+            "preview", str(path), "-o", str(tmp_path), "--minecraft-version", "26.3",
+            "--views", ",".join(VIEWS), "--layer", "0", "--scale", "8",
+        ]) == EXIT_OK
+        color = block_color(B(info.id), "26.3")
+        assert Image.open(tmp_path / "new-y0.png").getpixel((2, 4)) == color
+
+    def test_missing_faces_warn_and_still_render(
+        self, tmp_path: Path, capsys: pytest.CaptureFixture[str],
+    ) -> None:
+        path = tmp_path / "fallback.json"
+        path.write_text(json.dumps({
+            **self.DATA,
+            "operations": [{"type": "set", "position": [0, 0, 0], "block": "water"}],
+        }), encoding="utf-8")
+        assert main([
+            "preview", str(path), "-o", str(tmp_path), "--layer", "0", "--scale", "8",
+        ]) == EXIT_OK
+        output = capsys.readouterr().out
+        assert "WARNING: no blockdata face colour for minecraft:water" in output
+        assert "using plains water tint or same-material median" in output
+        assert Image.open(tmp_path / "fallback-y0.png").getpixel((2, 4)) == (63, 118, 228)
 
     def test_default_views(self, tmp_path: Path, capsys: pytest.CaptureFixture[str]) -> None:
         path = tmp_path / "p.json"
@@ -168,9 +243,9 @@ class TestLayersAndShading:
         volume = volume_with(((0, 0, 0), "gold_block"), ((2, 0, 1), "stone"), ((2, 1, 1), "stone"))
         image = render_layer(volume, 1, scale=4)
         assert image.size == (3 * 4, 2 * 4)
-        assert image.getpixel((2 * 4 + 1, 1 * 4 + 1)) == (125, 125, 125)  # stone at y=1
+        assert image.getpixel((2 * 4 + 1, 1 * 4 + 1)) == (127, 127, 127)  # stone at y=1
         ghost = image.getpixel((1, 1))  # gold block one level below, faded
-        assert ghost != BACKGROUND and ghost != (250, 220, 70)
+        assert ghost != BACKGROUND and ghost != (255, 216, 62)
         assert ghost[0] > ghost[2]  # still yellowish
         assert image.getpixel((1 * 4 + 1, 1)) == BACKGROUND
 
@@ -193,18 +268,18 @@ class TestLayersAndShading:
         image = render(volume, "south", scale=8)
         # column 0 (x=0): top block's top edge is lighter than its body
         body = image.getpixel((3, 4))
-        assert image.getpixel((3, 1)) == shade((125, 125, 125), 1.25)
-        assert body == shade((125, 125, 125), 0.9)
+        assert image.getpixel((3, 1)) == shade((127, 127, 127), 1.25)
+        assert body == shade((127, 127, 127), 0.9)
         # the right edge of x=1 (nothing beyond) is darker, the right edge of x=0 at y=0 is not
-        assert image.getpixel((15, 12)) == shade((125, 125, 125), 0.55)
+        assert image.getpixel((15, 12)) == shade((127, 127, 127), 0.55)
         assert image.getpixel((7, 12)) == body
 
     def test_top_view_marks_steps(self) -> None:
         volume = volume_with(((0, 1, 0), "stone"), ((1, 0, 0), "stone"))
         image = render(volume, "top", scale=8)
         # x=0 is higher than x=1: its right edge is dark; x=1's right edge is dark (nothing)
-        assert image.getpixel((7, 3)) == shade((125, 125, 125), 0.55)
-        assert image.getpixel((15, 3)) == shade((125, 125, 125), 0.55)
+        assert image.getpixel((7, 3)) == shade((127, 127, 127), 0.55)
+        assert image.getpixel((15, 3)) == shade((127, 127, 127), 0.55)
 
     def test_grid_adds_margin_labels_and_origin(self) -> None:
         volume = volume_with(*(((x, 0, z), "stone") for x in range(6) for z in range(6)))
@@ -235,7 +310,7 @@ class TestLayersAndShading:
         volume = volume_with(((0, 0, 0), "stone"))
         image = render(volume, "isometric", scale=8)
         assert any(
-            image.getpixel((x, y)) == shade((125, 125, 125), 0.45)
+            image.getpixel((x, y)) == shade((127, 127, 127), 0.45)
             for x in range(image.width)
             for y in range(image.height)
         )
@@ -244,10 +319,10 @@ class TestLayersAndShading:
         volume = volume_with(
             ((0, 0, 0), "stone"), ((1, 0, 0), "minecraft:sniffer_egg"), ((2, 0, 0), "air")
         )
-        assert uncoloured_blocks(volume) == ["minecraft:sniffer_egg"]
-        assert color_keyword(B("white_wool")) == "white"
-        assert color_keyword(B("mossy_stone_bricks")) == "mossy_stone_brick"
-        assert color_keyword(B("sniffer_egg")) is None
+        assert uncoloured_blocks(volume) == []
+        volume.set(Vec3(3, 0, 0), B("water"))
+        volume.set(Vec3(4, 0, 0), B("chest"))
+        assert uncoloured_blocks(volume) == ["minecraft:chest", "minecraft:water"]
 
     def test_write_layers(self, tmp_path: Path) -> None:
         volume = volume_with(((0, 0, 0), "stone"), ((0, 3, 0), "stone"))
@@ -282,7 +357,7 @@ class TestCliLayers:
             if line.startswith("Wrote")
         ]
         assert names == ["p-y0.png", "p-y1.png", "p-y2.png", "p-y3.png"]
-        assert "WARNING: no preview colour for minecraft:sniffer_egg" in out
+        assert "WARNING:" not in out
 
     def test_layer_range_and_single_with_views(
         self, tmp_path: Path, capsys: pytest.CaptureFixture[str]
@@ -453,11 +528,11 @@ class TestIsometricShapes:
     @pytest.mark.parametrize(
         ("scale", "expected"),
         [
-            (8, "d5629153b1a3e9f456e10b00f5546794699af16e43c0585f78ff147601e23be8"),
-            (16, "7a6ef20e519722599ca377db9bd79962274038240d99904571c97ae8593b78c4"),
+            (8, "6d12ac8876d00955bf8a5ad847dacc4d66baa03fe87ee60c235b71bc335b8f32"),
+            (16, "f4e053b7d7b5de9bb5fe143f78cdbbdc616acdf85c1aca60ad6b0c4c38a21c2e"),
         ],
     )
-    def test_single_cube_preserves_original_pixels(self, scale: int, expected: str) -> None:
+    def test_single_cube_pixels(self, scale: int, expected: str) -> None:
         image = render(volume_with(((0, 0, 0), "stone")), "isometric", scale=scale)
         assert hashlib.sha256(image.tobytes()).hexdigest() == expected
 

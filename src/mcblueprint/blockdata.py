@@ -3,10 +3,11 @@
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from functools import cache
 from importlib import resources
 from importlib.resources.abc import Traversable
+from typing import Any
 
 from mcblueprint.errors import BlueprintError
 from mcblueprint.model.block import BlockState
@@ -17,14 +18,25 @@ class BlockInfo:
     id: str
     properties: dict[str, tuple[str, ...]]
     default: dict[str, str]
+    material: str = "other"
+    tint: str = "none"
+    faces: dict[str, dict[str, Any]] = field(default_factory=dict)
 
 
 class BlockData:
     """Block registry of one Minecraft version."""
 
-    def __init__(self, version: str, blocks: dict[str, BlockInfo]) -> None:
+    def __init__(
+        self, version: str, blocks: dict[str, BlockInfo],
+        tints: dict[str, dict[str, list[float]]] | None = None,
+    ) -> None:
         self.version = version
         self._blocks = blocks
+        self.tints = tints if tints is not None else {}
+
+    def blocks(self) -> tuple[BlockInfo, ...]:
+        """この版の全ブロック情報を登録順で返す。"""
+        return tuple(self._blocks.values())
 
     def __contains__(self, block_id: str) -> bool:
         return block_id in self._blocks
@@ -64,14 +76,17 @@ def _data_root() -> Traversable:
 
 
 @cache
+def _read_block_data(filename: str) -> dict[str, Any]:
+    return json.loads(_data_root().joinpath("blockdata", filename).read_text(encoding="utf-8"))
+
+
+@cache
 def _versions() -> dict[str, dict[str, int]]:
     lock = json.loads(_data_root().joinpath("lock.json").read_text(encoding="utf-8"))
     versions = {}
     for filename in lock["blockdata"]["sha256"]:
         if filename.startswith("blockdata-") and filename.endswith(".json"):
-            raw = json.loads(
-                _data_root().joinpath("blockdata", filename).read_text(encoding="utf-8")
-            )
+            raw = _read_block_data(filename)
             versions[raw["minecraftVersion"]] = {"dataVersion": raw["dataVersion"]}
     return dict(sorted(versions.items(), key=lambda item: item[1]["dataVersion"]))
 
@@ -113,19 +128,19 @@ def load_block_data(version: str) -> BlockData:
     """Load (once) the block registry for ``version``."""
     if not is_supported(version):
         raise BlueprintError(_unsupported_message(version))
-    text = (
-        _data_root().joinpath("blockdata", f"blockdata-{version}.json").read_text(encoding="utf-8")
-    )
-    raw = json.loads(text)
+    raw = _read_block_data(f"blockdata-{version}.json")
     blocks = {
         block_id: BlockInfo(
             id=block_id,
             properties={name: tuple(values) for name, values in entry["properties"].items()},
             default=dict(entry["default"]),
+            material=entry["material"],
+            tint=entry["tint"],
+            faces=entry.get("faces", {}),
         )
         for block_id, entry in raw["blocks"].items()
     }
-    return BlockData(version, blocks)
+    return BlockData(version, blocks, raw["tints"])
 
 
 def _unsupported_message(version: str) -> str:

@@ -732,16 +732,16 @@ def _run_preview(args: argparse.Namespace, out: TextIO) -> int:
             f"Layer(s) {', '.join(map(str, outside))} are outside the preview bounds "
             f"(y {bounds.min.y}..{bounds.max.y})"
         )
-    missing = uncoloured_blocks(volume)
+    missing = uncoloured_blocks(volume, blueprint.minecraft_version)
     if missing:
         print(
-            f"WARNING: no preview colour for {', '.join(missing)} (drawn grey; add them to "
-            "src/mcblueprint/data/colors.json)",
+            f"WARNING: no blockdata face colour for {', '.join(missing)} "
+            "(using plains water tint or same-material median)",
             file=out,
         )
     options = PreviewOptions(
         scale=args.scale, grid=args.grid, origin=blueprint.origin,
-        region=region, source=str(args.blueprint.resolve()),
+        region=region, source=str(args.blueprint.resolve()), version=blueprint.minecraft_version,
     )
     out_dir = Path(args.output) if args.output else DEFAULT_PREVIEW_DIR
     for path in write_previews(

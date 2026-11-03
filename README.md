@@ -23,7 +23,7 @@ mcblueprint build      …… Operation を実行して .schem / .litematic を�
 - **宣言的な Blueprint JSON**: `fill` / `wall` / `cylinder` / `sphere` / `repeat` / `mirror` などの高レベルな Operation を組み合わせて建築を記述する。1 ブロックずつ座標を並べない。
 - **Palette**: 複数ブロックの重み付きランダム配置で壁面に質感を付ける。`seed` で結果を再現できる。
 - **AI が読める検証結果**: JSON パスと原因と値を 1 エラー 1 ブロックで全件表示し、AI が自分で修正できる。支えのないランタン・松明・ドアなどは警告として検出する。
-- **プレビュー画像**: 上面・立面・アイソメトリックの PNG を出力し、人間も AI も貼り付け前に形を確認できる。
+- **プレビュー画像**: 上面・立面・アイソメトリックの PNG を出力し、人間も AI も貼り付け前に形を確認できる。色は入力版の blockdata の面色中央値と plains の着色値を使用する。面色がない特殊描画などは blockdata の水の着色値・材質色で補完し、警告を表示する（[色の規則と制限](docs/ARCHITECTURE.md#95-previewpreviewpy)）。
 - **Import と diff**: 既存の `.schem` / `.litematic` を Blueprint に変換でき、2 つの Blueprint の生成結果を比較できる。
 - **AI 非依存**: Core は Codex / Claude Code に依存しない。両方に同じ Skill を同梱し、他のエージェントからも同じ CLI で使える。
 - **デザインプリセット**: 様式・材質・寸法規則を `designs/` のファイルにまとめ、名前で参照できる。

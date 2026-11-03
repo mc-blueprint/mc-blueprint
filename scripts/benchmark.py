@@ -167,7 +167,10 @@ def _measure(data: dict[str, Any], stage: str, memory: bool) -> tuple[float, int
         elif stage == "support":
             action = partial(check_support, volume)
         elif stage == "render":
-            action = partial(render, volume, "top", scale=1)
+            action = partial(
+                render, volume, "top",
+                options=Options(scale=1, version=blueprint.minecraft_version),
+            )
         else:
             action = partial(SchemExporter().export, volume, blueprint, output_path)
     elif stage in {"cli_validate", "cli_preview", "cli_build", "single_pass"}:
@@ -216,8 +219,10 @@ def _reset_caches() -> None:
     from mcblueprint import blockdata, preview, schema
 
     blockdata._versions.cache_clear()
+    blockdata._read_block_data.cache_clear()
     blockdata.load_block_data.cache_clear()
-    preview._color_table.cache_clear()
+    preview._block_color.cache_clear()
+    preview._material_colors.cache_clear()
     schema.load_schema.cache_clear()
     schema.load_component_schema.cache_clear()
 
@@ -231,7 +236,9 @@ def _single_pass(path: Path, output_dir: Path) -> None:
     volume = generate(blueprint)
     check_support(volume)
     image = render(
-        volume, "top", scale=1, options=Options(scale=1, origin=blueprint.origin)
+        volume, "top", options=Options(
+            scale=1, origin=blueprint.origin, version=blueprint.minecraft_version,
+        ),
     )
     output_dir.mkdir(parents=True, exist_ok=True)
     image.save(output_dir / f"{blueprint.name}-top.png")
