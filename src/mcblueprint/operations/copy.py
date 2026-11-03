@@ -3,12 +3,14 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
+from dataclasses import replace
 from typing import Any, Self
 
 from mcblueprint.model.vec import AABB, Vec3
 from mcblueprint.operations.base import ExecutionContext, Operation, parse_vec
 from mcblueprint.operations.box_like import iter_box
 from mcblueprint.operations.registry import register
+from mcblueprint.volume import EMPTY_ATTRIBUTES
 
 
 @register
@@ -37,6 +39,21 @@ class CopyOperation(Operation):
         for local in iter_box(self.box):
             state = ctx.volume.get(ctx.transform.apply(local))
             if state is not None:
-                snapshot.append((local, state))
-        for local, state in snapshot:
-            ctx.volume.set(ctx.transform.apply(local + self.offset), state)
+                snapshot.append((local, state, ctx.volume.attributes(ctx.transform.apply(local))))
+        for local, state, attributes in snapshot:
+            world = ctx.transform.apply(local + self.offset)
+            incoming = ctx.attributes
+            attributes = replace(
+                attributes, role=incoming.role or attributes.role,
+                element=incoming.element or attributes.element,
+                face=(ctx.transform.apply_direction(incoming.face)
+                      if incoming.face else attributes.face),
+                reserved=incoming.reserved or attributes.reserved,
+                owner=incoming.owner or attributes.owner,
+                source=incoming.source or attributes.source,
+                operation=incoming.operation or attributes.operation,
+            )
+            if attributes == EMPTY_ATTRIBUTES and ctx.on_conflict == "error":
+                ctx.volume.set(world, state)
+            else:
+                ctx.volume.set(world, state, attributes, on_conflict=ctx.on_conflict)

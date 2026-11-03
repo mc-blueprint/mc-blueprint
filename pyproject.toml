@@ -19,6 +19,7 @@ classifiers = [
   "Topic :: Games/Entertainment",
 ]
 dependencies = [
+  "numpy>=1.26",
   "nbtlib>=2.0",
   "jsonschema>=4.18",
   "PyYAML>=6.0",

@@ -72,7 +72,10 @@ class ReplaceOperation(Operation):
 
     def apply(self, ctx: ExecutionContext) -> None:
         # unset cells inside the box count as air so "replace air" fills holes
-        for local in iter_box(self.box):
+        box = ctx.clip_box(self.box)
+        if box is None:
+            return
+        for local in iter_box(box):
             world = ctx.transform.apply(local)
             current = ctx.volume.get(world) or AIR
             if any(matches(current, pattern) for pattern in self.patterns):

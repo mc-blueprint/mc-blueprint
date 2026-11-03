@@ -45,4 +45,4 @@ class RepeatOperation(NestedOperation):
 
     def apply(self, ctx: ExecutionContext) -> None:
         for i in range(self.count):
-            self.apply_with(ctx, Transform.translation(self.offset * i))
+            self.apply_with(ctx, Transform.translation(self.offset * i), instance=f"repeat#{i}")

@@ -27,7 +27,9 @@ class NestedOperation(Operation):
     def inner_bounds(self) -> AABB:
         return reduce(AABB.union, (op.bounds() for op in self.operations))
 
-    def apply_with(self, ctx: ExecutionContext, transform: Transform) -> None:
-        child = ctx.child(transform)
+    def apply_with(
+        self, ctx: ExecutionContext, transform: Transform, *, instance: str = "",
+    ) -> None:
+        child = ctx.child(transform, instance=instance)
         for op in self.operations:
-            op.apply(child)
+            child.execute(op)
