@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 
 import pytest
+import yaml
 
 from mcblueprint.blockdata import load_block_data, supported_versions
 from mcblueprint.colors import face_linear, linear_to_oklab, oklab_to_linear
@@ -14,6 +15,43 @@ from mcblueprint.loader import load_blueprint_dict
 from mcblueprint.materialize import materialize
 from mcblueprint.model.vec import Vec3
 from mcblueprint.validator import validate
+
+
+@pytest.mark.parametrize("version", supported_versions())
+@pytest.mark.parametrize("format", ("schem", "litematic"))
+@pytest.mark.parametrize("fixture", ("single-house", "standalone-tower"))
+def test_fixed_cases_make_palette_relation(tmp_path, version, format, fixture):
+    from mcblueprint.pipeline import make
+
+    source = Path(__file__).parent / "data/buildspec" / f"{fixture}.yaml"
+    spec = yaml.safe_load(source.read_text(encoding="utf-8"))
+    spec["minecraftVersion"] = version
+    path = tmp_path / "spec.yaml"
+    path.write_text(yaml.safe_dump(spec, allow_unicode=True), encoding="utf-8")
+    result = make(path, output=tmp_path / f"result.{format}",
+                  overrides=[f"output.format={format}"], project_dir=tmp_path,
+                  user_config=tmp_path / "missing.yaml")
+    record = json.loads(result.record.read_text(encoding="utf-8"))
+    assert record["metrics"]["palette_relation"]["value"], record["structuredDiagnostics"]
+    assert result.code == 0, result.diagnostics
+
+
+def test_fixed_house_retry_seed_reproduction_and_variation(tmp_path):
+    from mcblueprint.buildspec import resolve_buildspec
+    from mcblueprint.planning import plan_buildspec
+
+    source = Path(__file__).parent / "data/buildspec/single-house.yaml"
+    spec = yaml.safe_load(source.read_text(encoding="utf-8"))
+    spec["minecraftVersion"] = "26.3"
+    planned = plan_buildspec(resolve_buildspec(
+        spec, project_dir=tmp_path, user_config=tmp_path / "missing.yaml",
+    ))
+    result = materialize(planned.blueprint, palette=planned.palette, seed=42)
+    assert 1 < result.attempts <= 20
+    assert not result.diagnostics
+    assert result == materialize(planned.blueprint, palette=planned.palette, seed=42)
+    other = materialize(planned.blueprint, palette=planned.palette, seed=99)
+    assert result.roles != other.roles
 
 
 def ref(role, shape="full", **state):
