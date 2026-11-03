@@ -136,8 +136,13 @@ def apply_edits(scene: dict[str, Any], edits: dict[str, Any], source: dict[str, 
 
 
 def apply_edits_file(scene_path: Path, edits_path: Path, source_path: Path,
-                     output_path: Path, *, notes: list[dict[str, Any]] | None = None) -> Path:
-    """世代を検証して候補を保存する。成功時にnotesへ対象付きメモを追加する。"""
+                     output_path: Path, *, notes: list[dict[str, Any]] | None = None,
+                     overrides: list[str] | None = None) -> Path:
+    """世代を検証して候補を保存する。成功時にnotesへ対象付きメモを追加する。
+
+    overridesはmakeと同じkey=valueの指定。BuildSpecでは生成時のCLI指定と
+    合成設定を照合し、省略・変更時はBlueprintErrorを送出して保存しない。
+    """
     scene_path, edits_path, source_path, output_path = map(
         Path, (scene_path, edits_path, source_path, output_path),
     )
@@ -150,7 +155,7 @@ def apply_edits_file(scene_path: Path, edits_path: Path, source_path: Path,
             from mcblueprint.buildspec import load_buildspec, resolve_buildspec
 
             source = load_buildspec(source_path)
-            resolved = resolve_buildspec(source_path)
+            resolved = resolve_buildspec(source_path, overrides=overrides)
             config = resolved.config
         else:
             source = json.loads(original)
@@ -163,10 +168,20 @@ def apply_edits_file(scene_path: Path, edits_path: Path, source_path: Path,
             raise _fail("scene生成後に入力が変更されています")
         if scene.get("source", {}).get("sha256") != meta.get("inputSha256"):
             raise _fail("sceneとsidecarの入力世代が一致しません")
-        from mcblueprint.pipeline import _environment, _hash
+        from mcblueprint.pipeline import _cli_overrides, _environment, _hash
 
         if meta.get("environment") != _environment():
             raise _fail("scene生成後にengineまたはdataが変更されています")
+        if config is not None:
+            if "cliOverrides" not in meta:
+                raise _fail("sidecarにCLI指定の記録がありません。sceneを再生成してください")
+            expected = meta["cliOverrides"]
+            actual = _cli_overrides(resolved)
+            differences = [path for path in sorted(expected.keys() | actual.keys())
+                           if path not in expected or path not in actual
+                           or expected[path] != actual[path]]
+            if differences:
+                raise _fail(f"scene生成時のCLI指定と一致しません: {', '.join(differences)}")
         if config is not None and (
                 _hash(resolved.buildspec) != meta.get("resolvedHash")
                 or _hash(config) != meta.get("configHash")):
