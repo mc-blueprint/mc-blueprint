@@ -119,13 +119,25 @@ def _hash(value) -> str:
 
 def _cli_overrides(resolved: ResolveResult) -> dict:
     result = {}
-    for path, origin in resolved.origins.items():
-        if origin == "cli":
-            value = resolved.config
-            for key in path.split("."):
-                value = value[key]
+    pending = list(resolved.config.items())
+    while pending:
+        path, value = pending.pop()
+        if resolved.origins.get(path) == "cli":
             result[path] = value
+        elif isinstance(value, dict):
+            pending.extend((f"{path}.{key}", item) for key, item in value.items())
     return result
+
+
+def _check_cli_overrides(meta: dict, resolved: ResolveResult) -> None:
+    if "cliOverrides" not in meta:
+        raise BlueprintError("sidecarにCLI指定の記録がありません。sceneを再生成してください")
+    expected = meta["cliOverrides"]
+    actual = _cli_overrides(resolved)
+    differences = [path for path in sorted(expected.keys() | actual.keys())
+                   if path not in expected or path not in actual or expected[path] != actual[path]]
+    if differences:
+        raise BlueprintError(f"scene生成時のCLI指定と一致しません: {', '.join(differences)}")
 
 
 def _atomic_json(path: Path, value) -> None:
@@ -431,6 +443,7 @@ def make(
     stage_hookは段開始の計測用。成功0、評価不合格3を返し、それ以外は
     PipelineError（検証1、I/O・資源不足2）を送出する。3D表示は実行しない。
     入力と出力stemを非待機で排他し、競合はPipelineError(code=2)とする。
+    解決後の再ロック時と公開直前に入力の変更を検出した場合も競合として拒否する。
     """
     from mcblueprint.output_lock import lock_paths
 
@@ -443,8 +456,10 @@ def make(
     try:
         if stage_hook:
             stage_hook(stage)
-        resolved = resolve_buildspec(source, project_dir=project_dir, user_config=user_config,
-                                     overrides=overrides)
+        with lock_paths(source):
+            original = source.read_bytes()
+            resolved = resolve_buildspec(source, project_dir=project_dir, user_config=user_config,
+                                         overrides=overrides)
         config = resolved.config
         fmt = config["output"]["format"]
         out = Path(output) if output is not None else Path(config["output"]["directory"])
@@ -452,10 +467,13 @@ def make(
             out = out / (source.stem + EXPORTERS[fmt].extension)
         if out.resolve() == source:
             raise PipelineError(stage, "入力と出力は別のパスにしてください", 2)
+        # 出力先は解決後に分かるため、入力と合わせて一定順で取り直す。
         locks.enter_context(lock_paths(source, out))
+        if source.read_bytes() != original:
+            raise PipelineError(stage, "ロック取得中に入力が変更されています", 2)
         expected = {"environment": _environment(), "input": {
             "path": str(source), "basePath": str(source.parent),
-            "sha256": sha256(source.read_bytes()).hexdigest(),
+            "sha256": sha256(original).hexdigest(),
             "resolvedHash": _hash(resolved.buildspec),
         }}
         context = {"resolved": {"buildspec": resolved.buildspec,
@@ -647,6 +665,8 @@ def make(
                     shutil.copy2(target, backup)
                     backups[target] = backup
             try:
+                if source.read_bytes() != original:
+                    raise PipelineError(stage, "公開直前に入力が変更されています", 2)
                 os.replace(staged_out, out)
                 os.replace(staged_record, record)
                 os.replace(staged_scene, scene_out)

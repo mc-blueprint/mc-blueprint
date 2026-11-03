@@ -1,12 +1,14 @@
 import json
+from types import SimpleNamespace
 
 import pytest
 import yaml
 
+from mcblueprint import viewer_input
 from mcblueprint.cli import build_parser, main
 from mcblueprint.edits import apply_edits_file
 from mcblueprint.errors import BlueprintError
-from mcblueprint.viewer_input import apply_input_edits, prepare_input
+from mcblueprint.viewer_input import EditConflict, ViewerInput, apply_input_edits, prepare_input
 
 
 @pytest.fixture
@@ -38,6 +40,48 @@ def test_apply_edits_parser_accepts_generation_options():
 
 def test_make_records_normalized_cli_overrides(generation):
     assert generation[3]["cliOverrides"] == {"seed": 42, "weathering.age": 0}
+
+
+@pytest.mark.parametrize("entry", ["viewer", "startup", "apply-edits"])
+@pytest.mark.parametrize("change", ["changed", "missing", "extra", "absent"])
+def test_generation_rejects_tampered_cli_overrides(
+    generation, tmp_path, monkeypatch, entry, change,
+):
+    source, scene, edits, meta = generation
+    if change == "changed":
+        meta["cliOverrides"]["seed"] = 41
+    elif change == "missing":
+        del meta["cliOverrides"]["seed"]
+    elif change == "extra":
+        meta["cliOverrides"]["preview.enabled"] = False
+    else:
+        del meta["cliOverrides"]
+    scene.with_suffix(".gz.meta.json").write_text(json.dumps(meta), encoding="utf-8")
+    before = source.read_bytes()
+    target = tmp_path / "updated.yaml"
+    target.write_bytes(b"existing")
+    difference = "preview.enabled" if change == "extra" else "seed"
+    message = "CLI指定.*再生成" if change == "absent" else f"CLI指定.*{difference}"
+    options = ["seed=42", "weathering.age=0"]
+    if entry == "viewer":
+        from mcblueprint.viewer_input import read_scene
+
+        raw, data = read_scene(scene)
+        prepared = ViewerInput(source, target, scene, edits, target, {}, options,
+                               True, before, raw, data, meta)
+        with pytest.raises(EditConflict, match=message):
+            prepared.check_generation()
+    elif entry == "startup":
+        monkeypatch.setattr(viewer_input, "make", lambda *a, **kw: SimpleNamespace(
+            output=scene.with_name("tower.schem"),
+        ))
+        with pytest.raises(EditConflict, match=message):
+            prepare_input(source, output=tmp_path / "tower.schem", overrides=options)
+    else:
+        with pytest.raises(BlueprintError, match=message):
+            apply_edits_file(scene, edits, source, target, overrides=options)
+    assert source.read_bytes() == before
+    assert target.read_bytes() == b"existing"
 
 
 def test_apply_edits_file_reproduces_generation_options(generation, tmp_path):
