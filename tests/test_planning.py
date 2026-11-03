@@ -81,11 +81,11 @@ def test_tower_fixed_case_all_versions(tmp_path, version, style, shape):
         assert check_route(volume, start, end, version).status == "reachable"
         assert volume.attributes(end).reserved == "circulation"
         assert volume.get(end - Vec3(0, 1, 0)) is not None
-    # 各階の開口が外壁を貫き、内部から外を見られる。
+    # 各階の開口が外壁を貫き、機能ガラスは内側へ1セル後退する。
     offset = Vec3.from_seq(result.site["offset"])
     for y in (2, 6, 10):
-        assert volume.get(offset + Vec3(4, y, 0)).id == "minecraft:glass"
-        assert volume.get(offset + Vec3(3, y, 0)).id == "minecraft:air"
+        assert volume.get(offset + Vec3(4, y, 0)).id == "minecraft:air"
+        assert volume.get(offset + Vec3(3, y, 0)).id == "minecraft:glass"
     assert any(volume.attributes(p).reserved == "structure" for p, _ in volume)
 
 
