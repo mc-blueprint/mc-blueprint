@@ -12,6 +12,10 @@ scene は gzip 展開後の UTF-8 JSON。トップレベルの `source` は入�
 
 各チャンクの `sources` は `blocks` と同じ順で `sources[].id` を並べ、各要素は符号なし uint32 のリトルエンディアン。0 は生成元不明を表す。両方の base64 データはチャンクの実寸に対応する要素数を持つ。
 
+BuildSpec の住宅・塔では、root とその子要素のセルの source は、`element` を実在する編集可能な root の ID とし、`params` を planning が定めるその root の許可パラメーター名とする。子の生成元は `spec`・`label`・`path` に残す。たとえば塔の body の選択でも `element: tower#1` の `height` を編集し、body 自身のパラメーターとは扱わない。root の配下でない要素や、BuildSpec の計画情報を持たない入力には params を付けない。schema v1 とセルごとの source ID の形式は変わらない。
+
+`.scene.json.gz` を単独入力として開く場合も非 spec 入力として扱う。元の scene は変更せず、表示用コピーの sources から params を取り除く。由来の `source.kind: spec` や `source.path` は編集権限の根拠にしない。
+
 ## edits v1
 
 `scene` は gzip を展開した後の scene JSON のバイト列の SHA-256。現在の生成結果と一致しない場合は競合として適用しない。`edits` は `replace`（領域と置換ブロック）、`delete`（`at` の単一点または `region` の範囲のどちらか一方）、`param`（要素・パラメーター・値）、`note`（要素・文章）のいずれかで、座標は scene ローカル座標。`region` は `[[x1,y1,z1],[x2,y2,z2]]` 形式で両端を含む。

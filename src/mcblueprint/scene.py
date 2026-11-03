@@ -70,9 +70,13 @@ def _source_descriptor(attr, context: dict) -> dict | None:
         descriptor["label"] = attr.source
     if attr.operation:
         descriptor["path"] = attr.operation
-    root = context.get("massing", {}).get("element")
-    if attr.element == root and context.get("massing", {}).get("params"):
-        descriptor["params"] = sorted(context["massing"]["params"])
+    massing = context.get("massing", {})
+    root = massing.get("element")
+    if (root and attr.element
+            and (attr.element == root or attr.element.startswith(root + "."))
+            and massing.get("params")):
+        descriptor["element"] = root
+        descriptor["params"] = sorted(massing["params"])
     return descriptor
 
 
