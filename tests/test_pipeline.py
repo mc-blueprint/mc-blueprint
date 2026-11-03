@@ -32,9 +32,93 @@ def spec_file(tmp_path, archetype="house", version="1.21.11", **values):
     fixture = "single-house" if archetype == "house" else "standalone-tower"
     data = yaml.safe_load((FIXTURES / f"{fixture}.yaml").read_text(encoding="utf-8"))
     data.update(minecraftVersion=version, **values)
+    data.setdefault("config", {}).setdefault("preview", {})["enabled"] = False
     path = tmp_path / "spec.yaml"
     path.write_text(yaml.safe_dump(data, allow_unicode=True), encoding="utf-8")
     return path
+
+
+@pytest.mark.parametrize("open_browser", [False, True])
+def test_cli_make_serves_completed_scene_once(tmp_path, monkeypatch, open_browser):
+    from mcblueprint import assets, viewer_server
+
+    source = spec_file(tmp_path)
+    calls = []
+    generated = pipeline.generate_regions
+
+    def counted(*args, **kwargs):
+        calls.append("generate")
+        yield from generated(*args, **kwargs)
+
+    def serve(prepared, cache, **kwargs):
+        calls.append("serve")
+        prepared.check_generation()
+        assert prepared.input == source.resolve()
+        assert prepared.spec
+        assert kwargs["open_browser"] is open_browser
+        assert any(s.get("params") for s in prepared.scene["sources"])
+        record = json.loads(prepared.output.with_suffix(".schem.run.json").read_bytes())
+        assert record["preview"] == "3d"
+        # 表示中の再生成が更新したrunを、終了時に古い記録で上書きしない。
+        record["regenerated"] = True
+        prepared.output.with_suffix(".schem.run.json").write_text(json.dumps(record))
+
+    monkeypatch.setattr(pipeline, "generate_regions", counted)
+    monkeypatch.setattr(assets, "ensure_assets", lambda *a: tmp_path)
+    monkeypatch.setattr(viewer_server, "serve", serve)
+    target = tmp_path / "result.schem"
+    assert main(["make", str(source), "-o", str(target),
+                 "--set", "preview.enabled=true", "--set",
+                 f"preview.open_browser={str(open_browser).lower()}"]) == 3
+    assert calls == ["generate", "serve"]
+    assert json.loads(target.with_suffix(".schem.run.json").read_bytes())["regenerated"]
+
+
+@pytest.mark.parametrize("fmt", ["schem", "litematic"])
+def test_cli_make_2d_without_browser_or_assets(tmp_path, monkeypatch, fmt):
+    from mcblueprint import assets, viewer_server
+
+    def unexpected(*args, **kwargs):
+        pytest.fail("2D表示で3Dの準備を呼び出した")
+
+    monkeypatch.setattr(assets, "ensure_assets", unexpected)
+    monkeypatch.setattr(viewer_server, "serve", unexpected)
+    source = spec_file(tmp_path)
+    target = tmp_path / f"result.{fmt}"
+    assert main(["make", str(source), "--format", fmt, "-o", str(target),
+                 "--set", "preview.enabled=true", "--set", "preview.mode=2d"]) == 3
+    assert len(list((tmp_path / "preview").glob("*.png"))) == 4
+    record = json.loads(target.with_suffix(f".{fmt}.run.json").read_bytes())
+    assert record["preview"] == "2d"
+
+
+def test_cli_preview_failure_preserves_generation_status(tmp_path, monkeypatch):
+    from mcblueprint import assets
+
+    def fail(*args):
+        raise BlueprintError("アセットがありません")
+
+    monkeypatch.setattr(assets, "ensure_assets", fail)
+    source = spec_file(tmp_path)
+    target = tmp_path / "result.schem"
+    assert main(["make", str(source), "-o", str(target),
+                 "--set", "preview.enabled=true"]) == 2
+    record = json.loads(target.with_suffix(".schem.run.json").read_bytes())
+    assert target.is_file()
+    assert record["status"] == "failed"
+    assert record["preview"] == "failed"
+    assert record["previewError"] == "アセットがありません"
+
+
+def test_cli_make_conflict_then_release(tmp_path):
+    from mcblueprint.output_lock import lock_paths
+
+    source = spec_file(tmp_path)
+    target = tmp_path / "result.schem"
+    with lock_paths(target):
+        assert main(["make", str(source), "-o", str(target)]) == 2
+        assert not target.exists()
+    assert main(["make", str(source), "-o", str(target)]) == 3
 
 
 def cells(path):
@@ -102,7 +186,7 @@ def test_fixed_cases_make_matrix(tmp_path, capsys, version, format, archetype):
     )
     assert not any(d["code"] in ("E201", "E202") for d in record["structuredDiagnostics"])
     assert not any(d["code"] in ("E101", "E203") for d in record["structuredDiagnostics"])
-    assert record["preview"] == "not-run"
+    assert record["preview"] == "disabled"
     routes = [line for line in record["diagnostics"] if "walkability=" in line]
     assert len(routes) == (2 if archetype == "house" else 4)
     assert all("walkability=reachable" in line for line in routes)

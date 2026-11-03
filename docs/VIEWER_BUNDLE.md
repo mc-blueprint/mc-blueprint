@@ -4,10 +4,10 @@ viewer の build 済みファイルを `mcblueprint` の wheel に同梱する�
 
 ## 更新
 
-viewer の固定 commit `7b2e0f44bc53780499fb500d1fd6c1d5b52039c1` を専用 worktree で Node.js 24 / npm 11 により build し、次を実行する。
+viewer の固定 commit `5d9c62e006c167356a88f8147f2f5d7ee47051a6` を専用 worktree で Node.js 24 / npm 11 により build し、次を実行する。
 
 ```powershell
-python scripts/update_viewer_bundle.py H:\mc-blueprint\worktrees\mcb-154\mc-blueprint-viewer
+python scripts/update_viewer_bundle.py H:\mc-blueprint\worktrees\mcb-186\mc-blueprint-viewer
 ```
 
 スクリプトは source worktree の HEAD が固定 commit と一致することを確認し、`dist/` の全ファイルを取り込む。生成される `manifest.json` は source commit と各ファイルの SHA-256 を記録する。依存 lock・viewer source・fixture・asset はコピーしない。

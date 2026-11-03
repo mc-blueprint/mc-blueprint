@@ -55,6 +55,59 @@ class MakeResult:
     diagnostics: tuple[str, ...]
 
 
+def preview_make(result: MakeResult, source: Path, *, overrides: list[str], out=None) -> None:
+    """CLIのmake成果を表示する。再生成せず読み、表示結果をrunへ記録する。
+
+    3DではCtrl+Cまでサーバーを保持する。表示失敗は生成済み成果を残して
+    PipelineError(code=2)を送出し、評価のstatusとは別にpreviewへ記録する。
+    """
+    from mcblueprint.assets import ensure_assets
+    from mcblueprint.output_lock import lock_paths
+    from mcblueprint.preview import Options, write_previews
+    from mcblueprint.viewer_input import ViewerInput, read_scene
+    from mcblueprint.viewer_server import serve
+
+    record = json.loads(result.record.read_bytes())
+    config = record["config"]
+    view = config["preview"]
+    if not view["enabled"]:
+        record["preview"] = "disabled"
+        _atomic_json(result.record, record)
+        return
+    try:
+        source, output = source.resolve(), result.output.resolve()
+        scene_path = output.with_name(output.stem + ".scene.json.gz")
+        with lock_paths(source, output):
+            raw, scene = read_scene(scene_path)
+            meta = json.loads(scene_path.with_suffix(scene_path.suffix + ".meta.json").read_bytes())
+            prepared = ViewerInput(
+                source, output, scene_path, output.with_name(output.stem + ".edits.json"),
+                output.with_name(output.stem + ".edited.json"), config, overrides, True,
+                source.read_bytes(), raw, scene, meta,
+            )
+            prepared.check_generation()
+        if view["mode"] == "2d":
+            from mcblueprint.importers import read_schematic
+
+            imported = read_schematic(output)
+            for path in write_previews(imported.volume, output.parent / "preview", output.stem,
+                                       options=Options(version=scene["minecraftVersion"])):
+                print(f"Wrote {path.as_posix()}", file=out)
+            record["preview"] = "2d"
+        else:
+            assets = ensure_assets(scene["minecraftVersion"], config["assets"])
+            record["preview"] = "3d"
+            _atomic_json(result.record, record)
+            serve(prepared, assets, open_browser=view["open_browser"], out=out)
+            return
+    except (BlueprintError, OSError, ValueError, ImportError) as exc:
+        record["preview"] = "failed"
+        record["previewError"] = str(exc)
+        _atomic_json(result.record, record)
+        raise PipelineError("Preview", str(exc), 2) from exc
+    _atomic_json(result.record, record)
+
+
 def _json(value) -> bytes:
     return (json.dumps(value, ensure_ascii=False, sort_keys=True, indent=2) + "\n").encode("utf-8")
 
@@ -537,6 +590,11 @@ def make(
                              "shadows": view["shadows"], "brightness": view["brightness"],
                              "timeOfDay": view["time_of_day"], "blockLight": view["block_light"],
                              "quality": view["quality"]}
+            from mcblueprint.viewer_input import _spec_sources
+
+            source_table = {"sources": list(scene_sources.values())}
+            _spec_sources(source_table, resolved)
+            scene_sources = {entry["id"]: entry for entry in source_table["sources"]}
             scene_hash = write_scene(
                 staged_scene, source_spool, spool, scene_sources, blueprint, context,
                 scene_input, scene_preview,
@@ -550,7 +608,7 @@ def make(
                 "environment": expected["environment"],
                 "sceneSha256": scene_hash,
             })
-        lines.append("INFO preview=not-run (3D表示はFで接続)")
+        lines.append("INFO preview=not-run (表示はCLIが実行)")
         status = "failed" if failed else "passed"
         lines.append(f"STATUS {status}")
         record = out.with_suffix(out.suffix + ".run.json")

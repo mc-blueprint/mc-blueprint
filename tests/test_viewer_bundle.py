@@ -8,7 +8,7 @@ def test_viewer_bundle_manifest_and_hashes() -> None:
     manifest = json.loads(bundle.joinpath("manifest.json").read_text(encoding="utf-8"))
 
     assert manifest["source"] == "mc-blueprint/viewer"
-    assert manifest["commit"] == "7b2e0f44bc53780499fb500d1fd6c1d5b52039c1"
+    assert manifest["commit"] == "5d9c62e006c167356a88f8147f2f5d7ee47051a6"
     assert manifest["files"]
     for entry in manifest["files"]:
         content = bundle.joinpath(*entry["path"].split("/")).read_bytes()
@@ -23,7 +23,7 @@ def test_viewer_bundle_contains_only_static_distribution() -> None:
     assert paths == {
         "THIRD_PARTY_LICENSES.txt",
         "assets/index-BFhRTilM.css",
-        "assets/index-u8M9rc8l.js",
+        "assets/index-DqfXENRo.js",
         "assets/worker-Yfb6Qb8X.js",
         "index.html",
     }

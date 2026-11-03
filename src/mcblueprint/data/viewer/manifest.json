@@ -1,14 +1,14 @@
 {
   "source": "mc-blueprint/viewer",
-  "commit": "7b2e0f44bc53780499fb500d1fd6c1d5b52039c1",
+  "commit": "5d9c62e006c167356a88f8147f2f5d7ee47051a6",
   "files": [
     {
       "path": "assets/index-BFhRTilM.css",
       "sha256": "93251f69185c3b433d84a7663acefe49143c6a266cbf4488f4b28f8e6f8c28ad"
     },
     {
-      "path": "assets/index-u8M9rc8l.js",
-      "sha256": "344db8ed0a44b0e1617632e025c55146d6c36c92de795da928f090212be05d35"
+      "path": "assets/index-DqfXENRo.js",
+      "sha256": "6a0e4e7c25caa992d5e254d631abfb6ba1b789d06db4af59b515a19d376f1d9a"
     },
     {
       "path": "assets/worker-Yfb6Qb8X.js",
@@ -16,7 +16,7 @@
     },
     {
       "path": "index.html",
-      "sha256": "5440749164c7781eb67ea89ccdabeb8f5eb1981d1ec4bf7b4a3505a5bfeaf186"
+      "sha256": "04e21b16bc84544f58c674bf8f7c3da961a521fad1bc6acaed14f75af1f09d2a"
     },
     {
       "path": "THIRD_PARTY_LICENSES.txt",
