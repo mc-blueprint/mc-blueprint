@@ -34,7 +34,7 @@
 |---|---|---|---|
 | `mirror` | `axis`, `at`, `operations` | `keepOriginal`(true) | `operations` を実行し、`axis = at` の平面で鏡像化したものも実行。`at` は `.5` 可（例 `4.5` で 4 と 5 の間）。`facing` / 接続 / `shape` / `hinge` は自動で反転 |
 | `repeat` | `count`(1〜512), `offset`, `operations` | | `operations` を `count` 回、`offset × i` ずつずらして実行 |
-| `translate` | `offset`, `operations` | | `operations` を `offset` だけ平行移動して実行 |
+| `translate` | `offset`, `operations` | `rotation`(0/90/180/270、既定0) | 原点まわりの回転後に `offset` だけ平行移動し、1段の入れ子で両変換を実行 |
 | `rotate` | `angle`(90/180/270), `center`, `operations` | | `operations` を `center` を通る鉛直軸まわりに時計回りで回転して実行。`facing` / `axis` / 接続も回る |
 
 ```json

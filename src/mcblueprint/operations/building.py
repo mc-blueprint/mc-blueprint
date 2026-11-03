@@ -10,8 +10,9 @@ from mcblueprint.errors import BlueprintError
 from mcblueprint.model.block import BlockState
 from mcblueprint.model.vec import AABB, Vec3
 from mcblueprint.operations.base import BlockSpec, ExecutionContext, parse_int, parse_vec
-from mcblueprint.operations.composite import CompositeOperation, parse_block
+from mcblueprint.operations.composite import CompositeOperation, is_stairs, parse_block, spec_json
 from mcblueprint.operations.registry import build_operation, register
+from mcblueprint.operations.room import parse_spec
 from mcblueprint.operations.transform import Transform
 
 
@@ -73,7 +74,7 @@ class BuildingOperation(CompositeOperation):
 
     def __init__(
         self, path: str, position: Vec3, width: int, depth: int, floors: int,
-        floor_height: int, angle: int, materials: Mapping[str, BlockState],
+        floor_height: int, angle: int, materials: Mapping[str, BlockState | BlockSpec],
         comment: str | None = None,
     ) -> None:
         super().__init__(path, comment)
@@ -99,6 +100,12 @@ class BuildingOperation(CompositeOperation):
             if role not in self.materials:
                 continue
             state = self.materials[role]
+            if isinstance(state, BlockSpec):
+                if not is_stairs(state) or any(
+                    key in dict(state.state) for key in ("facing", "half", "shape")
+                ):
+                    raise BlueprintError(f"{path}.{role}: 状態未指定のstairs形状が必要です")
+                continue
             if not state.id.endswith("_stairs"):
                 raise BlueprintError(f"{path}.{role}: 階段ブロックが必要です")
             if any(state.get(key) is not None for key in ("facing", "half", "shape")):
@@ -112,7 +119,11 @@ class BuildingOperation(CompositeOperation):
         floors = parse_int(data, "floors", path, minimum=1, default=1)
         materials = {}
         for role in ("wall", "floor", "roof", "stairs", "window", "door"):
-            state = parse_block(data, role, path)
+            if role in ("wall", "floor", "roof", "stairs"):
+                spec = parse_spec(data, role, path)
+                state = spec.block if spec and spec.block else spec
+            else:
+                state = parse_block(data, role, path)
             if state is None:
                 if role == "stairs" and floors == 1:
                     continue
@@ -136,9 +147,13 @@ class BuildingOperation(CompositeOperation):
         return {
             "type": "roof", "from": [0, y, 0], "to": [self.width - 1, y, self.depth - 1],
             "style": "gable", "ridge": "z", "overhang": 1,
-            "block": self.materials["roof"].to_string(),
-            "gable": self.materials["wall"].to_string(),
+            **spec_json(self.materials["roof"]),
+            "gable": self._material("wall"),
         }
+
+    def _material(self, key: str) -> Any:
+        value = spec_json(self.materials[key])
+        return value.get("block", value)
 
     def _layout(self) -> BuildingLayout:
         w, d, top = self.width - 1, self.depth - 1, self.floors * self.floor_height
@@ -177,9 +192,10 @@ class BuildingOperation(CompositeOperation):
             ops.append({
                 "type": "room", "from": [0, y, 0],
                 "to": [self.width - 1, y + self.floor_height, self.depth - 1],
-                "wall": self.materials["wall"].to_string(),
-                "floor": self.materials["floor"].to_string(),
-                "ceiling": self.materials["floor"].to_string(), "windows": windows,
+                "wall": self._material("wall"),
+                "floor": self._material("floor"),
+                "ceiling": self._material("floor"),
+                "windows": windows,
                 "doors": [{"side": "north", "offset": self._door_x,
                            "door": self.materials["door"].to_string()}] if level == 0 else [],
             })
@@ -187,8 +203,8 @@ class BuildingOperation(CompositeOperation):
             ops.append({
                 "type": "stairs", "start": [1, 1, 2], "direction": "south",
                 "height": self.floor_height, "headroom": 3,
-                "block": self.materials["stairs"].to_string(),
-                "base": self.materials["floor"].to_string(),
+                **spec_json(self.materials["stairs"]),
+                "base": self._material("floor"),
             })
         ops.append(self._roof())
         return ops

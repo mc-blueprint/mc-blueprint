@@ -19,6 +19,7 @@ from mcblueprint.operations.composite import (
     spec_json,
 )
 from mcblueprint.operations.registry import register
+from mcblueprint.operations.room import parse_spec
 
 DEFAULT_HEADROOM = 3
 
@@ -36,7 +37,7 @@ class StairsOperation(CompositeOperation):
         spec: BlockSpec,
         width: int = 1,
         headroom: int = DEFAULT_HEADROOM,
-        base: BlockState | None = None,
+        base: BlockState | BlockSpec | None = None,
         comment: str | None = None,
     ) -> None:
         super().__init__(path, comment)
@@ -58,7 +59,8 @@ class StairsOperation(CompositeOperation):
             BlockSpec.from_dict(data, path),
             parse_int(data, "width", path, minimum=1, default=1),
             parse_int(data, "headroom", path, minimum=2, default=DEFAULT_HEADROOM),
-            parse_block(data, "base", path),
+            (parse_spec(data, "base", path) if isinstance(data.get("base"), Mapping)
+             else parse_block(data, "base", path)),
             data.get("comment"),
         )
 
@@ -81,7 +83,8 @@ class StairsOperation(CompositeOperation):
                         "type": "fill",
                         "from": below.to_list(),
                         "to": (far - Vec3(0, 1, 0)).to_list(),
-                        "block": self.base.to_string(),
+                        **(spec_json(self.base) if isinstance(self.base, BlockSpec)
+                           else {"block": self.base.to_string()}),
                     }
                 )
             ops.append({"type": "fill", "from": step.to_list(), "to": far.to_list(), **step_block})

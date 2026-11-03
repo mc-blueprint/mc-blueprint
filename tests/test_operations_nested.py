@@ -33,6 +33,33 @@ def blueprint(*operations: dict[str, Any], **extra: Any) -> dict[str, Any]:
     }
 
 
+@pytest.mark.parametrize("rotation", [0, 90, 180, 270])
+def test_translate_rotation_matches_separate_transforms(rotation):
+    from mcblueprint.validator import validate
+
+    inner = [point(1, 0, 2, "oak_stairs[facing=north]")]
+    combined = blueprint({"type": "translate", "offset": [4, 2, -3],
+                          "rotation": rotation, "operations": inner})
+    rotated = [{"type": "rotate", "center": [0, 0, 0], "angle": rotation,
+                "operations": inner}] if rotation else inner
+    separate = blueprint({"type": "translate", "offset": [4, 2, -3], "operations": rotated})
+    assert validate(combined) == validate(separate) == []
+    a, b = load_blueprint_dict(combined), load_blueprint_dict(separate)
+    assert a.operations[0].bounds() == b.operations[0].bounds()
+    assert dict(generate(a)) == dict(generate(b))
+
+
+@pytest.mark.parametrize("rotation", [True, 45])
+def test_translate_rejects_invalid_rotation(rotation):
+    from mcblueprint.validator import validate
+
+    operation = {"type": "translate", "offset": [0, 0, 0],
+                 "rotation": rotation, "operations": [point(0, 0, 0)]}
+    assert validate(blueprint(operation))
+    with pytest.raises(BlueprintError, match="rotation"):
+        build_operation(operation, "operations[0]")
+
+
 class TestMirrorState:
     @pytest.mark.parametrize(
         ("axis", "text", "expected"),

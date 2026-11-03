@@ -22,7 +22,9 @@ from pathlib import Path
 from statistics import median
 from typing import Any
 
-from mcblueprint.blockdata import BlockData, BlockInfo, load_block_data
+from mcblueprint.blockdata import load_block_data
+from mcblueprint.colors import face_linear as _face_linear
+from mcblueprint.colors import oklab_to_linear as _oklab_to_linear
 from mcblueprint.errors import BlueprintError
 from mcblueprint.model.block import BlockState
 from mcblueprint.model.vec import AABB, Vec3
@@ -53,19 +55,6 @@ def _pil() -> Any:
 # --- colours ------------------------------------------------------------------
 
 
-def _oklab_to_linear(lab: Iterable[float]) -> tuple[float, float, float]:
-    # https://bottosson.github.io/posts/oklab/ の逆変換。
-    lightness, a, b = lab
-    long = (lightness + 0.3963377774 * a + 0.2158037573 * b) ** 3
-    m = (lightness - 0.1055613458 * a - 0.0638541728 * b) ** 3
-    s = (lightness - 0.0894841775 * a - 1.2914855480 * b) ** 3
-    return (
-        4.0767416621 * long - 3.3077115913 * m + 0.2309699292 * s,
-        -1.2684380046 * long + 2.6097574011 * m - 0.3413193965 * s,
-        -0.0041960863 * long - 0.7034186147 * m + 1.7076147010 * s,
-    )
-
-
 def _srgb(linear: Iterable[float]) -> RGB:
     def encode(value: float) -> int:
         value = max(0.0, min(1.0, value))
@@ -73,24 +62,6 @@ def _srgb(linear: Iterable[float]) -> RGB:
         return round(value * 255)
 
     return tuple(encode(value) for value in linear)  # type: ignore[return-value]
-
-
-def _face_linear(info: BlockInfo, face: dict[str, Any], data: BlockData) -> tuple[float, ...]:
-    def median_color(key: str) -> tuple[float, float, float]:
-        return _oklab_to_linear(face[key][axis][2] for axis in ("L", "a", "b"))
-
-    if info.tint == "none" or "tintedOklab" not in face:
-        return median_color("oklab")
-    tint = data.tints[info.tint][info.id if info.tint == "fixed" else "plains"]
-    color = tuple(
-        x * y for x, y in zip(median_color("tintedOklab"), _oklab_to_linear(tint), strict=True)
-    )
-    if "untintedOklab" in face:
-        # 面積比はデータにないため、着色層と未着色層を等しい重みで合成する。
-        color = tuple(
-            (x + y) / 2 for x, y in zip(color, median_color("untintedOklab"), strict=True)
-        )
-    return color
 
 
 @cache

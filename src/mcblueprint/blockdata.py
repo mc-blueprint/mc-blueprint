@@ -21,6 +21,9 @@ class BlockInfo:
     material: str = "other"
     tint: str = "none"
     faces: dict[str, dict[str, Any]] = field(default_factory=dict)
+    family: str | None = None
+    shape: str = "full"
+    weathering: dict[str, str] = field(default_factory=dict)
 
 
 class BlockData:
@@ -29,10 +32,12 @@ class BlockData:
     def __init__(
         self, version: str, blocks: dict[str, BlockInfo],
         tints: dict[str, dict[str, list[float]]] | None = None,
+        families: dict[str, dict[str, str]] | None = None,
     ) -> None:
         self.version = version
         self._blocks = blocks
         self.tints = tints if tints is not None else {}
+        self.families = families if families is not None else {}
 
     def blocks(self) -> tuple[BlockInfo, ...]:
         """この版の全ブロック情報を登録順で返す。"""
@@ -137,10 +142,13 @@ def load_block_data(version: str) -> BlockData:
             material=entry["material"],
             tint=entry["tint"],
             faces=entry.get("faces", {}),
+            family=entry.get("family"),
+            shape=entry["shape"],
+            weathering=entry.get("weathering", {}),
         )
         for block_id, entry in raw["blocks"].items()
     }
-    return BlockData(version, blocks, raw["tints"])
+    return BlockData(version, blocks, raw["tints"], raw["families"])
 
 
 def _unsupported_message(version: str) -> str:

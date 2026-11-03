@@ -158,8 +158,8 @@ class ArchOperation(CompositeOperation):
         spec: BlockSpec,
         style: str = "round",
         depth: int = 1,
-        trim: BlockState | None = None,
-        fill: BlockState | None = None,
+        trim: BlockState | BlockSpec | None = None,
+        fill: BlockState | BlockSpec | None = None,
         hollow: bool = True,
         thickness: int = 1,
         comment: str | None = None,
@@ -215,13 +215,23 @@ class ArchOperation(CompositeOperation):
             return {"type": "set", "position": a.to_list(), **block}
         return {"type": "fill", "from": a.to_list(), "to": b.to_list(), **block}
 
-    def _trim_state(self, kind: str, side: int) -> BlockState:
+    def _trim_state(self, kind: str, side: int) -> BlockState | dict[str, Any]:
         """Trim block for a step: stairs get ``facing`` (full side towards the centre
         for outer steps, away from it for inner ones) and ``half``; slabs get ``type``."""
         assert self.trim is not None
         state = self.trim
         towards_centre = -side  # +1 = +u
         direction = towards_centre if kind == "outer" else -towards_centre
+        if isinstance(state, BlockSpec):
+            from mcblueprint.operations.composite import oriented
+
+            if state.shape == "stairs":
+                facing = ("east" if direction > 0 else "west") if self.axis == "x" else (
+                    "south" if direction > 0 else "north")
+                return oriented(state, facing=facing, half="bottom" if kind == "outer" else "top")
+            if state.shape == "slab":
+                return oriented(state, type="bottom" if kind == "outer" else "top")
+            return spec_json(state)
         if state.id.endswith("_stairs"):
             if self.axis == "x":
                 facing = "east" if direction > 0 else "west"
@@ -238,11 +248,12 @@ class ArchOperation(CompositeOperation):
     def expand(self) -> list[dict[str, Any]]:
         ops = [self._fill_op(v, a, b, spec_json(self.spec)) for v, a, b in runs(self.ring)]
         if self.fill is not None:
-            block = {"block": self.fill.to_string()}
+            block = spec_json(self.fill)
             ops.extend(self._fill_op(v, a, b, block) for v, a, b in runs(self.opening))
         if self.trim is not None:
             for (u, v), kind, side in ring_steps(self.opening, self.ring, self.width):
-                block = {"block": self._trim_state(kind, side).to_string()}
+                state = self._trim_state(kind, side)
+                block = state if isinstance(state, dict) else spec_json(state)
                 ops.append(self._fill_op(v, u, u, block))
         return ops
 
@@ -254,7 +265,7 @@ class ArchSpec:
 
     style: str
     spec: BlockSpec
-    trim: BlockState | None = None
+    trim: BlockState | BlockSpec | None = None
     thickness: int = 1
 
     def rise(self, width: int) -> int:
@@ -288,7 +299,7 @@ class ArchSpec:
     def to_json(self) -> dict[str, Any]:
         result: dict[str, Any] = {"style": self.style, **spec_json(self.spec)}
         if self.trim is not None:
-            result["trim"] = self.trim.to_string()
+            result["trim"] = spec_json(self.trim)["block"]
         if self.thickness != 1:
             result["thickness"] = self.thickness
         return result

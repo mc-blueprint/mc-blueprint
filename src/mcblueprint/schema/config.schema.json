@@ -25,7 +25,7 @@
     "unitObject": {"type": "object", "additionalProperties": false, "properties": {"density": {"$ref": "#/$defs/unit"}, "depth": {"$ref": "#/$defs/unit"}, "symmetry": {"$ref": "#/$defs/unit"}}},
     "material": {"oneOf": [
       {"type": "string", "minLength": 1},
-      {"type": "object", "required": ["color", "material"], "additionalProperties": false, "properties": {
+      {"type": "object", "anyOf": [{"required": ["color"]}, {"required": ["material"]}], "additionalProperties": false, "properties": {
         "color": {"type": "array", "prefixItems": [{"type": "number", "minimum": 0, "maximum": 1}, {"type": "number", "minimum": -0.4, "maximum": 0.4}, {"type": "number", "minimum": -0.4, "maximum": 0.4}], "minItems": 3, "maxItems": 3},
         "material": {"type": "string", "minLength": 1}
       }}

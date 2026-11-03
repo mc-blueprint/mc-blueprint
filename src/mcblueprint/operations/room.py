@@ -40,6 +40,8 @@ def parse_spec(data: Mapping[str, Any], key: str, path: str) -> BlockSpec | None
         except BlueprintError as exc:
             raise BlueprintError(f"{path}.{key}: {exc}") from None
     if isinstance(value, Mapping):
+        if "role" in value:
+            return BlockSpec.from_dict({"block": value}, f"{path}.{key}")
         return BlockSpec.from_dict(value, f"{path}.{key}")
     raise BlueprintError(f"{path}.{key}: must be a block string or an object with 'palette'")
 

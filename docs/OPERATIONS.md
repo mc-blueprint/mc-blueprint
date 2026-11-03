@@ -5,6 +5,57 @@ Operation は Blueprint JSON の `operations` 配列に並べる建築の単位�
 
 本書が Operation の正本である。
 
+## Materialize 前の役割入力
+
+生成計画では、ブロック値を `{"role": "wall_main", "shape": "full", "state": {}}` として指定できる。
+`mcblueprint.materialize.materialize()` が必要形状を先に収集し、具体ブロックと既存の重み付き Palette に変換する。
+戻り値の `blueprint` を通常の検証器・loaderへ渡す。役割参照入りJSONを直接 `build` する形式ではない。
+
+対象は基本配置の `block`、`room` の `wall/floor/ceiling/corners`、`building` の `wall/floor/roof/stairs`、
+`roof` の `block/gable/ridgeBlock`、`tower` の `wall/floor/stairs.block/battlement.block`、
+`stairs.base`、`spiral_stairs.column`、`arch` の `block/trim/fill`、`pillar` の `block/base/cap`。
+開口の窓・ドアには従来の具体ブロック値を指定する。`building.roof` は `stairs` 形状を指定し、
+棟用の `slab` も同一familyへ要求する。向き・上下・接続状態は各Operationが付与してから具体値へ解決する。
+`building`・`roof` は基本配置へ展開するため、壁・屋根の混色は単一ブロックへ縮退しない。
+展開時も位置・回転とセル属性を保持し、配置の役割参照をセルのrole属性へ渡す。
+
+```python
+from mcblueprint.materialize import materialize
+
+result = materialize(
+    plan,  # minecraftVersion・operationsなどを持つ計画JSON
+    style="medieval", biome="plains", seed=42,
+    palette=resolved.config["palette"],  # resolve_buildspec() の結果
+)
+concrete = result.blueprint
+```
+
+`palette.materials` は役割ごとに材質名、固定ブロックID、`{"material": "stone", "color": [0.6, 0, 0]}`、
+または色のみのobjectを受け取る。色のみならその様式の当該役割の材質候補を使う。
+材質名と同じ文字列（例 `stone`）は材質指定で、固定IDは `minecraft:stone` のように書く。
+様式の役割・明示材質にない役割、必要形状の欠落、状態不整合は `BlueprintError`。
+固定IDは選び直さず、他形状だけそのfamilyから引き、混色率は0にする。
+固定指定の状態が不正なら、別形状しか要求されていなくても拒否する。
+固定IDに比較面の色がない場合もそのIDを保持し、関係規則の判定に必要なら `color_unavailable` を診断する。
+`floor/path/stairs` の役割と床・階段スロットは、既存traversalが扱える材質・状態に限定する。
+塔はwall材で作る屋上床も判定対象に含め、`stairs.column` の柱は歩行材として制限しない。
+
+候補色は用途別の面（床・道・屋根はtop、その他はside）の5分位点で比較する。
+着色層だけにバイオーム色または固定色を線形sRGBで乗算し、未着色層があれば等分する。
+`variation=0` は候補分布の中央に固定し、増加時は中央から分布全域へ目標色と再選択範囲を広げる。
+同条件・seedで同じ結果になり、役割ごとの乱数はMaterialize段のseedから導出する。
+
+Cの内部関係規則はwall_mainとroof/frameの明度差 `0.04 + 0.24 * contrast` 以上、
+wall_mainとwall_secondaryの彩度差 `0.04 + 0.12 * saturation` 以下、両者が有彩色なら色相差60度以下。
+`saturation` は目標色の彩度倍率 `0.5 + saturation` にも写し、`accent` はaccentの目標彩度と混色率、
+plannerへ返す面積比上限 `0.08 * accent` に写す。これらはCの内部規則であり、受入評価の閾値ではない。
+関係は選ばれた実ブロック色で最大20回評価し、違反規則に関わる非固定の役割だけを再選択する。
+解けなければ違反数・違反量が最小の組合せと
+`diagnostics`（規則・実測値・候補数・試行数）を返す。
+`roles` は役割×必要形状の主ブロック表、`max_area_ratios` はplannerが守る面積比上限。
+混色は主材と近色の副材の2材で、`mix` が副材の使用比率になる。
+役割参照のない既存JSONは内容を変更しない。
+
 ## 目次
 
 | 分類 | type | 概要 |
@@ -336,11 +387,12 @@ Operation は Blueprint JSON の `operations` 配列に並べる建築の単位�
 
 ### translate
 
-ネストした Operation を平行移動して配置する。
+ネストした Operation を平行移動して配置する。`rotation`指定時は原点まわりの回転を先に適用し、1段の入れ子で両変換を行う。
 
 | キー | 型 | 必須 | 説明 |
 |---|---|---|---|
 | `offset` | `[dx, dy, dz]` | ✓ | 移動量 |
+| `rotation` | 0 / 90 / 180 / 270 | | 原点まわりの回転角（既定0） |
 | `operations` | array | ✓ | ネストした Operation（1 件以上） |
 
 ```json
@@ -348,7 +400,7 @@ Operation は Blueprint JSON の `operations` 配列に並べる建築の単位�
 ```
 
 - 同じ部品を離れた場所に置くときに使う。`repeat` の `count: 1` と同じだが意図が明確になる。
-- bounds: ネストした Operation の bounds を移動したもの。
+- bounds: ネストした Operation の bounds を回転・移動したもの。
 
 ### rotate
 
