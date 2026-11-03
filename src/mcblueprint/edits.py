@@ -36,11 +36,13 @@ def _reserved_bounds(data: dict[str, Any], parents: list[dict] | None = None):
 
 
 def apply_edits(scene: dict[str, Any], edits: dict[str, Any], source: dict[str, Any], *,
-                scene_bytes: bytes | None = None) -> dict[str, Any]:
+                scene_bytes: bytes | None = None,
+                notes: list[dict[str, Any]] | None = None) -> dict[str, Any]:
     """検証済みsceneとeditsをBuildSpecまたはBlueprintのコピーへ適用する。
 
     scene_bytesを渡す場合、展開済みscene JSONのSHA-256も一致確認する。
     入力dictは変更せず、BuildSpec候補はplanningで検証する。
+    noteは候補に書かず、成功時にnotesへ対象付きメモを追加する。
     """
     validate_schema(edits, load_schema("edits.schema.json"), "edits")
     if (scene_bytes is not None
@@ -56,7 +58,7 @@ def apply_edits(scene: dict[str, Any], edits: dict[str, Any], source: dict[str, 
     seen: dict[str, dict] = {}
     overrides = result.setdefault("overrides", [])
     elements = result.setdefault("elements", {}) if spec else None
-    notes = []
+    collected_notes = []
     for edit in edits["edits"]:
         ident = edit["id"]
         if ident in seen:
@@ -100,9 +102,7 @@ def apply_edits(scene: dict[str, Any], edits: dict[str, Any], source: dict[str, 
                                if item.get("element") == edit["element"]), None)
             if descriptor is None:
                 raise _fail(f"ID {ident!r} の要素がsceneにありません")
-            notes.append({"id": ident, "element": edit["element"], "text": edit["text"]})
-    if notes:
-        result.setdefault("metadata", {}).setdefault("editNotes", []).extend(notes)
+            collected_notes.append({"id": ident, "element": edit["element"], "text": edit["text"]})
     if spec:
         from mcblueprint.buildspec import resolve_buildspec
         from mcblueprint.planning import plan_buildspec
@@ -123,12 +123,14 @@ def apply_edits(scene: dict[str, Any], edits: dict[str, Any], source: dict[str, 
                 if all(target_low[i] <= bounds_max[i]
                        and bounds_min[i] <= target_high[i] for i in range(3)):
                     raise _fail(f"要素 {element} の予約 {reservation} と重なる編集です")
+    if notes is not None:
+        notes.extend(collected_notes)
     return result
 
 
 def apply_edits_file(scene_path: Path, edits_path: Path, source_path: Path,
-                     output_path: Path) -> Path:
-    """scene世代と入力を検証し、候補を作成してから出力へ保存する。"""
+                     output_path: Path, *, notes: list[dict[str, Any]] | None = None) -> Path:
+    """世代を検証して候補を保存する。成功時にnotesへ対象付きメモを追加する。"""
     scene_path, edits_path, source_path, output_path = map(
         Path, (scene_path, edits_path, source_path, output_path),
     )
@@ -162,7 +164,8 @@ def apply_edits_file(scene_path: Path, edits_path: Path, source_path: Path,
                 _hash(resolved.buildspec) != meta.get("resolvedHash")
                 or _hash(config) != meta.get("configHash")):
             raise _fail("scene生成後にBuildSpecまたは設定が変更されています")
-        candidate = apply_edits(scene, edits, source, scene_bytes=raw_scene)
+        collected_notes = []
+        candidate = apply_edits(scene, edits, source, scene_bytes=raw_scene, notes=collected_notes)
         if config is not None:
             import yaml
 
@@ -179,4 +182,6 @@ def apply_edits_file(scene_path: Path, edits_path: Path, source_path: Path,
             os.replace(name, output_path)
         finally:
             Path(name).unlink(missing_ok=True)
+    if notes is not None:
+        notes.extend(collected_notes)
     return output_path
