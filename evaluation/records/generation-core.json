@@ -3,8 +3,8 @@
   "record_type": "generation-core-evaluation",
   "source_case_sha256": "8636cafff3ab5c5d16cfa03d14e7ab0463b2d019da20660db6091dd9f8cdc952",
   "provenance": {
-    "commit": "e495e293a1fdddcd70b7d0d9f27b5a160b47dff2",
-    "engine_sha256": "67a3afd65010db5f473f502d0851e8f5d7e1dbc25abe464798f338203ad7ed61",
+    "commit": "5bfbec088461544a212faeb3c6a936bb55254ec2",
+    "engine_sha256": "d6b30dbdbad2e936167fa65a35229b63fd4a5f1f32a3e792a7532627e6a0ad1f",
     "lock_sha256": "66b47f170d902f75de7d97796420a17319988bb32f7dc34a0fc420c07bfa02ca",
     "default_config_sha256": "4ff6ca047fd800afe93d20abd51d6bf6e56cc4dd2d09365b63c448909eeb9063"
   },

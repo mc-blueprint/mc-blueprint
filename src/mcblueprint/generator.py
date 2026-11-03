@@ -17,13 +17,19 @@ from mcblueprint.operations.randomness import PaletteSampler
 from mcblueprint.surface_path import check_surface_path
 from mcblueprint.volume import MAX_VOLUME, BlockVolume, RegionVolume
 
+WEATHER_BYTES_PER_CELL = 384
+
+
+def estimate_weather_memory(cells: int) -> int:
+    return cells * WEATHER_BYTES_PER_CELL
+
 
 @dataclass(frozen=True)
 class GenerationLimits:
     """領域生成の上限。region のNoneは全高、メモリ単位はMiB。
 
     max_memory_mb は生成用の領域・パレットと後段の作業領域の予算。
-    プロセス全体のRSS上限ではない。実効haloは参照半径以上にする。
+    プロセス全体のRSS上限ではない。reference_radius指定時はその半径を使う。
     """
 
     region: tuple[int, int | None, int] = (64, None, 64)
@@ -52,6 +58,7 @@ class GeneratedRegion:
 
     core: AABB
     volume: RegionVolume
+    world_bounds: AABB | None = None
 
 
 def _check_local(operations: list[Operation]) -> tuple[int, bool]:
@@ -97,7 +104,7 @@ def generate_regions(
     operation_count, has_palettes = _check_local(blueprint.operations)
     has_palettes |= bool(blueprint.palettes)
     bounds = blueprint.bounds()
-    halo = max(limits.halo, reference_radius)
+    halo = reference_radius if reference_radius else limits.halo
     size = bounds.size
     core_size = [min(n or size[i], size[i]) for i, n in enumerate(limits.region)]
     budget = limits.max_memory_mb * 1024 * 1024
@@ -107,7 +114,9 @@ def generate_regions(
         cells = math.prod(min(core_size[i] + 2 * halo, size[i]) for i in range(3))
         scratch = sampler.batch_size * 2600 if has_palettes else 0
         cache = 2 * sampler.cache_limit if has_palettes else 0
-        return cells * 64 + operation_count * 4096 + scratch + cache
+        generation = cells * 64 + operation_count * 4096 + scratch + cache
+        weather = estimate_weather_memory(cells)
+        return max(generation, weather)
 
     while estimated_bytes() > budget:
         axis = max(range(3), key=lambda i: core_size[i])
@@ -138,7 +147,7 @@ def generate_regions(
                 )
                 for operation in blueprint.operations:
                     ctx.execute(operation)
-                yield GeneratedRegion(core, volume)
+                yield GeneratedRegion(core, volume, bounds)
                 del ctx, volume
 
 
