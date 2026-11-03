@@ -65,3 +65,13 @@ SHA-256は改行を含む実ファイルのbyteから計算し、任意のユー
 Minecraft Java Edition 1.21.11の確認用ワールドで、配布した `manual-review-20261020` の家・塔・接合二棟・斜面建築について、要求充足と外観・内部はすべて正常とのユーザー報告を受けた。これは後続fixtureの確認であり、上記の当初baselineにある `unhandled` や機械実行結果を更新するものではない。
 
 今回の比較画像ファイルは未提出で、AIが新たに撮影・画像照合した記録ではない。一般／熟練の評価者区分と外観・内部の1〜5採点は未回答、provider token等も未測定のまま保持する。正常報告から数値採点、人間同等以上の品質や使用量削減を推定しない。
+
+## 生成コア固定課題（Issue #153）
+
+[generation-core.json](../evaluation/records/generation-core.json) に固定住宅・塔を全4版×両出力形式で記録した。各組でBuildSpecから `make` し、emitしたBlueprintを従来の `build` 経路でも出力して、ブロック配置の一致と各必須条件の機械判定を保存する。条件判定は到達可能な経路・ドア、床ブロックと壁面の被覆、屋根の居住域上の配置、塔の階別到達・床・窓ガラスを出力ブロックから調べる。これらは課題文の構造条件を機械判定するもので、美観やMinecraft実画面の確認ではない。
+
+同じ記録の `regression_checks` はseed再現とseed差、core 16/32/64の配置一致、各中間段からの再開、既存examplesのvalidation・生成セル数を保持する。個々の固定課題結果、計測環境と入力ケースのhashは同JSON内を参照する。旧Blueprint fixtureの固定hash・検証試験は `tests/test_benchmark.py` のfixture回帰試験も参照する。
+
+この記録はCの住宅・塔を対象とする。街並み・地形・地下の計画品質はH、ブラインド人間比較・小型モデル・トークン総量比較はIの評価範囲であり、今回実施していない。Minecraftの実画面確認も未実施である。
+
+性能目標との照合は [PERFORMANCE.md](PERFORMANCE.md) と [make-baseline.json](../benchmarks/make-baseline.json) を参照する。NFR2のmedium 10秒目標に対し住宅29.682秒・塔21.374秒、large 120秒目標に対し住宅183.595秒・塔155.736秒で、いずれも未達だった。NFR3の巨大入力ピークRSS 2GB目標に対し、最大観測値はmake住宅largeの193.3MiBで目標内。NFR1の内蔵GPU・8GB想定端末では未測定であり、この端末の結果から性能を推定しない。
