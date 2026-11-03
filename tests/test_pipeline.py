@@ -4,6 +4,7 @@ import base64
 import gzip
 import hashlib
 import json
+import multiprocessing
 from dataclasses import replace
 from pathlib import Path
 
@@ -39,10 +40,11 @@ def spec_file(tmp_path, archetype="house", version="1.21.11", **values):
 
 
 @pytest.mark.parametrize("open_browser", [False, True])
-def test_cli_make_serves_completed_scene_once(tmp_path, monkeypatch, open_browser):
+@pytest.mark.parametrize("failed", [False, True])
+def test_cli_make_serves_completed_scene_once(tmp_path, monkeypatch, open_browser, failed):
     from mcblueprint import assets, viewer_server
 
-    source = spec_file(tmp_path)
+    source = spec_file(tmp_path, config={"decoration": {"depth": 0}} if failed else {})
     calls = []
     generated = pipeline.generate_regions
 
@@ -69,13 +71,18 @@ def test_cli_make_serves_completed_scene_once(tmp_path, monkeypatch, open_browse
     target = tmp_path / "result.schem"
     assert main(["make", str(source), "-o", str(target),
                  "--set", "preview.enabled=true", "--set",
-                 f"preview.open_browser={str(open_browser).lower()}"]) == 3
+                 f"preview.open_browser={str(open_browser).lower()}"]) == (3 if failed else 0)
     assert calls == ["generate", "serve"]
-    assert json.loads(target.with_suffix(".schem.run.json").read_bytes())["regenerated"]
+    record = json.loads(target.with_suffix(".schem.run.json").read_bytes())
+    assert record["regenerated"]
+    assert record["status"] == ("failed" if failed else "passed")
+    if failed:
+        assert any(d["code"] == "E201" for d in record["structuredDiagnostics"])
 
 
 @pytest.mark.parametrize("fmt", ["schem", "litematic"])
-def test_cli_make_2d_without_browser_or_assets(tmp_path, monkeypatch, fmt):
+@pytest.mark.parametrize("failed", [False, True])
+def test_cli_make_2d_without_browser_or_assets(tmp_path, monkeypatch, fmt, failed):
     from mcblueprint import assets, viewer_server
 
     def unexpected(*args, **kwargs):
@@ -83,29 +90,32 @@ def test_cli_make_2d_without_browser_or_assets(tmp_path, monkeypatch, fmt):
 
     monkeypatch.setattr(assets, "ensure_assets", unexpected)
     monkeypatch.setattr(viewer_server, "serve", unexpected)
-    source = spec_file(tmp_path)
+    source = spec_file(tmp_path, config={"decoration": {"depth": 0}} if failed else {})
     target = tmp_path / f"result.{fmt}"
     assert main(["make", str(source), "--format", fmt, "-o", str(target),
-                 "--set", "preview.enabled=true", "--set", "preview.mode=2d"]) == 3
+                 "--set", "preview.enabled=true", "--set",
+                 "preview.mode=2d"]) == (3 if failed else 0)
     assert len(list((tmp_path / "preview").glob("*.png"))) == 4
     record = json.loads(target.with_suffix(f".{fmt}.run.json").read_bytes())
     assert record["preview"] == "2d"
+    assert record["status"] == ("failed" if failed else "passed")
 
 
-def test_cli_preview_failure_preserves_generation_status(tmp_path, monkeypatch):
+@pytest.mark.parametrize("failed", [False, True])
+def test_cli_preview_failure_preserves_generation_status(tmp_path, monkeypatch, failed):
     from mcblueprint import assets
 
     def fail(*args):
         raise BlueprintError("アセットがありません")
 
     monkeypatch.setattr(assets, "ensure_assets", fail)
-    source = spec_file(tmp_path)
+    source = spec_file(tmp_path, config={"decoration": {"depth": 0}} if failed else {})
     target = tmp_path / "result.schem"
     assert main(["make", str(source), "-o", str(target),
                  "--set", "preview.enabled=true"]) == 2
     record = json.loads(target.with_suffix(".schem.run.json").read_bytes())
     assert target.is_file()
-    assert record["status"] == "failed"
+    assert record["status"] == ("failed" if failed else "passed")
     assert record["preview"] == "failed"
     assert record["previewError"] == "アセットがありません"
 
@@ -118,7 +128,71 @@ def test_cli_make_conflict_then_release(tmp_path):
     with lock_paths(target):
         assert main(["make", str(source), "-o", str(target)]) == 2
         assert not target.exists()
-    assert main(["make", str(source), "-o", str(target)]) == 3
+    assert main(["make", str(source), "-o", str(target)]) == 0
+
+
+def _hold_generation_paths(source, output, ready, release):
+    from mcblueprint.output_lock import lock_paths
+
+    with lock_paths(Path(source), Path(output)):
+        ready.set()
+        if not release.wait(30):
+            raise TimeoutError("ロック検証の解放待ちがタイムアウトしました")
+
+
+@pytest.mark.parametrize("entry", ["python", "cli"])
+@pytest.mark.parametrize("resource", ["input", "output"])
+def test_make_rejects_other_process_generation(tmp_path, entry, resource):
+    source = spec_file(tmp_path)
+    other = tmp_path / "other.yaml"
+    other.write_bytes(source.read_bytes())
+    target = tmp_path / "same.litematic"
+    ctx = multiprocessing.get_context("spawn")
+    ready, release = ctx.Event(), ctx.Event()
+    process = ctx.Process(target=_hold_generation_paths, args=(
+        str(source if resource == "input" else other), str(tmp_path / "same.schem"),
+        ready, release,
+    ))
+    process.start()
+    try:
+        assert ready.wait(10)
+        if entry == "python":
+            with pytest.raises(pipeline.PipelineError) as exc:
+                pipeline.make(source, output=target, overrides=["output.format=litematic"])
+            assert exc.value.code == 2
+        else:
+            assert main(["make", str(source), "-o", str(target),
+                         "--format", "litematic"]) == 2
+        assert not target.exists()
+        assert not (tmp_path / "same.scene.json.gz").exists()
+    finally:
+        release.set()
+        process.join(10)
+    assert process.exitcode == 0
+    assert pipeline.make(source, output=target,
+                         overrides=["output.format=litematic"]).code == 0
+
+
+def test_make_releases_input_and_output_after_failure(tmp_path):
+    from mcblueprint.output_lock import lock_paths
+
+    source = spec_file(tmp_path)
+    target = tmp_path / "result.schem"
+
+    def fail(stage):
+        if stage == "Site/Massing/Detail":
+            with pytest.raises(BlockingIOError):
+                with lock_paths(source):
+                    pass
+            with pytest.raises(BlockingIOError):
+                with lock_paths(target.with_suffix(".litematic")):
+                    pass
+            raise OSError("生成失敗")
+
+    with pytest.raises(pipeline.PipelineError) as exc:
+        pipeline.make(source, output=target, stage_hook=fail)
+    assert exc.value.code == 2
+    assert pipeline.make(source, output=target).code == 0
 
 
 def cells(path):

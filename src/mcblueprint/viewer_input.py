@@ -358,33 +358,19 @@ def prepare_input(path: str | Path, *, output: str | Path | None = None,
     if spec:
         if minecraft_version and minecraft_version != resolved.buildspec["minecraftVersion"]:
             raise BlueprintError("既知のMinecraft版と指定値が矛盾しています")
-        with lock_paths(path, out):
-            result = make(path, output=out, overrides=overrides)
-            out = result.output.resolve()
-            scene_path = out.with_name(out.stem + ".scene.json.gz")
-            _, scene = read_scene(scene_path)
-            _spec_sources(scene, resolved)
-            raw = _json(scene)
-            meta_path = scene_path.with_suffix(scene_path.suffix + ".meta.json")
-            previous_scene, previous_meta = scene_path.read_bytes(), meta_path.read_bytes()
-            meta = json.loads(previous_meta)
-            meta["sceneSha256"] = _sha(raw)
-            try:
-                atomic_write(scene_path, gzip.compress(raw, mtime=0))
-                atomic_write(meta_path, _json(meta))
-            except BaseException:
-                atomic_write(scene_path, previous_scene)
-                atomic_write(meta_path, previous_meta)
-                raise
+        result = make(path, output=out, overrides=overrides)
+        out = result.output.resolve()
+        scene_path = out.with_name(out.stem + ".scene.json.gz")
     elif path.name.endswith(".scene.json.gz"):
         raw, scene = read_scene(path)
         if minecraft_version and minecraft_version != scene["minecraftVersion"]:
             raise BlueprintError("既知のMinecraft版と指定値が矛盾しています")
         if scene_path == path:
             scene_path = out.with_name(out.stem + ".view.scene.json.gz")
-        for entry in scene["sources"]:
-            entry.pop("params", None)
-        atomic_write(scene_path, gzip.compress(_json(scene), mtime=0))
+        with lock_paths(path, out, scene_path):
+            for entry in scene["sources"]:
+                entry.pop("params", None)
+            atomic_write(scene_path, gzip.compress(_json(scene), mtime=0))
     else:
         if path.suffix.lower() == ".json":
             data = json.loads(original)
