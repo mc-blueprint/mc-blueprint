@@ -326,7 +326,11 @@ def build_parser() -> argparse.ArgumentParser:
     config_subparsers = config_parser.add_subparsers(dest="config_command", required=True)
     config_show = config_subparsers.add_parser("show", help="合成済み設定と値の出所を表示")
     config_show.add_argument("--set", action="append", default=[], metavar="KEY=VALUE")
-    make_parser = subparsers.add_parser("make", help="BuildSpecから生成・評価・出力する")
+    make_parser = subparsers.add_parser(
+        "make", help="BuildSpecから生成・評価・出力する",
+        description="実測評価とrun記録を出力。終了コード: 0=FAILなし、1=検証・構造、"
+                    "2=引数・I/O・資源不足、3=品質不合格（成果物を保存）。",
+    )
     make_parser.add_argument("spec", type=Path)
     make_parser.add_argument("-o", "--output", help="出力先ファイルまたはディレクトリ")
     make_parser.add_argument("--format", choices=tuple(EXPORTERS))
