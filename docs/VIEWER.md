@@ -23,14 +23,20 @@ make由来の生成metadataがあるときは同じ混色・Weather経路を使�
 [VIEWER_BUNDLE.md](VIEWER_BUNDLE.md) を参照。
 `preview.open_browser=false` ならURLだけを表示する。表示中は前景を保持し、Ctrl+Cで
 サーバーとSSE接続を閉じる。表示しているだけでは出力を占有しない。
-make後の自動表示は別途接続するため、このコマンドで起動する。
+CLIの `make` も既定で生成済みsceneを表示する。生成を二度実行せず、評価不合格
+（終了コード3）の成果も表示する。`preview.enabled=false` なら表示を省略し、
+`preview.mode=2d` なら出力先の `preview/` に4視点PNGを保存する。
+Pythonの `make` とviewerからの再生成は別サーバーを起動しない。
 
 ## 保存と再生成
 
 viewerの編集保存先は出力stemの `<名前>.edits.json`。
-再生成は保存済みeditsだけを対象にする。同梱viewerで保存と再生成が別操作の場合は、
-保存が成功してから再生成を押す。
+再生成は現在のeditsを保存してから要求する。保存失敗時は再生成せず、処理中は
+二重送信を防ぐ。保存ボタンだけでeditsを保存することもできる。
 BuildSpec入力ではspecを更新し、元の要素の出所と編集を維持して再生成する。
+BuildSpecへ保存するoverride IDは `edit-<元scene hashの先頭8桁>-<edit id>` とする。
+新しいsceneでviewerが同じedit IDを採番しても以前の編集と区別し、同じ名前空間付きIDの
+同内容は再追加せず、別内容は競合として拒否する。scene・editsはv1のまま扱う。
 それ以外の入力は置換・削除だけを許し、`<名前>.edited.json` に派生Blueprintを保存する。
 元のBlueprint・schematic・入力sceneは変更しない。
 
@@ -83,3 +89,12 @@ regenerateは空本文または `{}` だけを受け、コマンド・パス・�
 は開発用Nodeと既存Playwrightを使い、別プロファイルのヘッドレスブラウザで同梱bundleを
 検証する。実アセットを端末内で解決し、Bearer、Worker、CSS、画像、保存・再生成、
 SSEによる再読み込みを確認して全プロセスを閉じる。製品CLIからNodeは呼ばない。
+
+配布wheelの受入確認は、別のvenvへwheelと `render` extraを導入してから
+`scripts/verify_distribution.py --output <リポジトリ外の証跡保存先> --setup --download-assets`
+を実行する。公式manifestのSHA-1、全4版のSwiftShader静止画、同梱bundleのhashと
+ライセンス、住宅・塔・非spec入力の実APIと画面操作、保存・再生成・SSE更新を検証する。
+公式jar取得とChromium取得は通信を伴う。Nodeとdev-apiは使用しない。
+標準cacheからChromiumを起動できない環境では `--browser-cache <検証用cache>` を
+明示し、標準cacheでの失敗と区別して記録する。PNG撮影成功後のUI検証再開には
+`--skip-render` を使える。

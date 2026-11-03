@@ -42,6 +42,7 @@ def apply_edits(scene: dict[str, Any], edits: dict[str, Any], source: dict[str, 
 
     scene_bytesを渡す場合、展開済みscene JSONのSHA-256も一致確認する。
     入力dictは変更せず、BuildSpec候補はplanningで検証する。
+    BuildSpecのoverride IDはscene hashの先頭8桁で名前空間付けし、同内容は再追加しない。
     noteは候補に書かず、成功時にnotesへ対象付きメモを追加する。
     """
     validate_schema(edits, load_schema("edits.schema.json"), "edits")
@@ -82,9 +83,15 @@ def apply_edits(scene: dict[str, Any], edits: dict[str, Any], source: dict[str, 
             local_low, local_high = list(low), list(high)
             world_low = [low[i] + origin[i] for i in range(3)]
             world_high = [high[i] + origin[i] for i in range(3)]
-            entry = {"id": ident,
+            entry = {"id": f"edit-{edits['scene'][:8].lower()}-{ident}" if spec else ident,
                      "region": [local_low, local_high] if spec
                      else [world_low, world_high], "block": block}
+            if spec:
+                previous = next((item for item in overrides if item["id"] == entry["id"]), None)
+                if previous is not None:
+                    if previous == entry:
+                        continue
+                    raise _fail(f"ID {entry['id']!r} の内容が競合しています")
             if not spec:
                 if kind not in ("replace", "delete"):
                     raise _fail("非BuildSpec入力ではreplace/deleteのみ適用できます")
