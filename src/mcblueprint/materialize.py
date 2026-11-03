@@ -366,6 +366,7 @@ def materialize(
     attempts = 0
     selected = {}
     retry_roles = set(candidates)
+    failed_pairs = set()
     for attempt in range(20):
         attempts += 1
         for role, options in candidates.items():
@@ -375,6 +376,10 @@ def materialize(
                 index = 0
             else:
                 rng = random.Random(derive_seed(chosen_seed, "materialize", f"{role}/{attempt}"))
+                options = sorted(options, key=lambda option: sum(
+                    (role, option[0], other, item[0]) in failed_pairs
+                    for other, item in selected.items() if other != role
+                ))
                 width = max(1, math.ceil(len(options) * settings["variation"]))
                 index = rng.randrange(width)
             selected[role] = options[index]
@@ -384,6 +389,10 @@ def materialize(
             best, best_errors, best_score = dict(selected), errors, score
         if not errors:
             break
+        for error in errors:
+            first, second = error["pair"]
+            failed_pairs.add((first, selected[first][0], second, selected[second][0]))
+            failed_pairs.add((second, selected[second][0], first, selected[first][0]))
         retry_roles = {role for error in errors for role in error["pair"]} - fixed
     roles = {role: item[1] for role, item in best.items()}
     palettes = output["palettes"] = {}
