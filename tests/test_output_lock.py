@@ -35,3 +35,20 @@ def test_lock_released_after_exception(tmp_path):
             raise RuntimeError
     with lock_paths(path):
         pass
+
+
+@pytest.mark.parametrize("suffix", [
+    ".litematic", ".scene.json.gz", ".scene.json.gz.meta.json", ".schem.run.json",
+    ".litematic.run.json",
+])
+def test_output_stem_shares_lock(tmp_path, suffix):
+    with lock_paths(tmp_path / "same.schem"):
+        with pytest.raises(BlockingIOError):
+            with lock_paths(tmp_path / ("same" + suffix)):
+                pass
+
+
+def test_input_paths_keep_extensions(tmp_path):
+    with lock_paths(tmp_path / "spec.yaml"):
+        with lock_paths(tmp_path / "spec.yml", tmp_path / "spec.json"):
+            pass

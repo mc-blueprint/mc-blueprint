@@ -3,13 +3,20 @@ from __future__ import annotations
 import hashlib
 import io
 import json
+import subprocess
+import sys
 import threading
 import zipfile
 from pathlib import Path
 
 import pytest
 
-from mcblueprint.assets import SUPPORTED_VERSIONS, _cached_assets_valid, ensure_assets
+from mcblueprint.assets import (
+    SUPPORTED_VERSIONS,
+    _cached_assets_valid,
+    _version_lock,
+    ensure_assets,
+)
 from mcblueprint.errors import BlueprintError
 
 
@@ -202,3 +209,28 @@ def test_concurrent_requests_publish_one_complete_cache(tmp_path: Path) -> None:
     assert failures == []
     assert results == [cache / "assets/26.3"] * 2
     assert _cached_assets_valid(cache / "assets/26.3")
+
+
+@pytest.mark.skipif(sys.platform != "win32", reason="Windowsのバイトロックを検証する")
+def test_windows_lock_waits_without_reading_locked_byte(tmp_path):
+    command = (
+        "import sys; from pathlib import Path; from mcblueprint.assets import _version_lock; "
+        "lock = _version_lock(Path(sys.argv[1])); lock.__enter__(); "
+        "print('locked', flush=True); sys.stdin.read(1); lock.__exit__(None, None, None)"
+    )
+    path = tmp_path / "assets.lock"
+    child = subprocess.Popen([sys.executable, "-c", command, str(path)],
+                             stdin=subprocess.PIPE, stdout=subprocess.PIPE, text=True)
+    release = None
+    try:
+        assert child.stdout.readline().strip() == "locked"
+        release = threading.Timer(0.2, lambda: (child.stdin.write("x"), child.stdin.flush()))
+        release.start()
+        with _version_lock(path):
+            assert child.wait(timeout=5) == 0
+    finally:
+        if release is not None:
+            release.join()
+        child.stdin.close()
+        child.wait(timeout=5)
+        child.stdout.close()

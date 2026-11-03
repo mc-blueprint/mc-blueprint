@@ -300,3 +300,50 @@ def test_spec_note_in_api_responses_and_edits_file_only(tmp_path):
     finally:
         server.close()
     assert not server.thread.is_alive()
+
+
+def test_two_sessions_and_cli_share_generation_lock(tmp_path, monkeypatch):
+    import copy
+
+    from mcblueprint import viewer_input
+    from mcblueprint.cli import main
+
+    source = tmp_path / "house.yaml"
+    source.write_text('minecraftVersion: "1.21.11"\nscale: tiny\n', encoding="utf-8")
+    prepared = prepare_input(source, output=tmp_path / "output")
+    first = ViewerServer(prepared, tmp_path / "assets")
+    second = ViewerServer(copy.copy(prepared), tmp_path / "assets")
+    entered, release = threading.Event(), threading.Event()
+    generate = viewer_input.make
+
+    def delayed(*args, **kwargs):
+        entered.set()
+        assert release.wait(15)
+        return generate(*args, **kwargs)
+
+    monkeypatch.setattr(viewer_input, "make", delayed)
+    document = {"formatVersion": 1, "scene": prepared.scene_hash, "edits": [
+        {"id": "note", "kind": "note", "element": "house#1", "text": "確認"},
+    ]}
+    results = []
+    worker = None
+    try:
+        first.start()
+        second.start()
+        assert request(first, "POST", "/api/edits", json.dumps(document))[0] == 200
+        worker = threading.Thread(target=lambda: results.append(
+            request(first, "POST", "/api/regenerate", "{}")))
+        worker.start()
+        assert entered.wait(10)
+        assert request(second, "POST", "/api/regenerate", "{}")[0] == 409
+        assert main(["make", str(source), "-o", str(prepared.output)]) == 2
+    finally:
+        release.set()
+        if worker is not None:
+            worker.join(20)
+        first.close()
+        second.close()
+    assert not worker.is_alive()
+    assert results[0][0] == 200, results
+    assert main(["make", str(source), "-o", str(prepared.output),
+                 "--set", "preview.enabled=false"]) in (0, 3)

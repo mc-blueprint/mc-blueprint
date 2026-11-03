@@ -1,4 +1,5 @@
 import hashlib
+import json
 
 import pytest
 
@@ -54,6 +55,48 @@ def test_duplicate_conflicting_id_rejected():
     edits["edits"].append({"id": "edit-1", "kind": "delete", "at": [1, 0, 0]})
     with pytest.raises(BlueprintError, match="競合"):
         apply_edits(_scene(), edits, _blueprint())
+
+
+def test_spec_override_id_is_scoped_to_scene_generation():
+    source = {"formatVersion": 1, "minecraftVersion": "1.21.11",
+              "archetype": "house", "scale": "tiny"}
+    scene = _scene()
+    first_raw = json.dumps(scene).encode()
+    first_hash = hashlib.sha256(first_raw).hexdigest()
+    document = _edit("replace", region=[[0, 7, 0], [0, 7, 0]], block="minecraft:gold_block")
+    document["scene"] = first_hash
+    document["edits"][0]["id"] = "e1"
+    first = apply_edits(scene, document, source, scene_bytes=first_raw)
+    assert first["overrides"][0]["id"] == f"edit-{first_hash[:8]}-e1"
+    second_raw = json.dumps(scene | {"seed": 1}).encode()
+    second_hash = hashlib.sha256(second_raw).hexdigest()
+    document["scene"] = second_hash
+    document["edits"][0]["block"] = "minecraft:air"
+    second = apply_edits(scene, document, first, scene_bytes=second_raw)
+    assert [entry["id"] for entry in second["overrides"]] == [
+        f"edit-{first_hash[:8]}-e1", f"edit-{second_hash[:8]}-e1",
+    ]
+    assert [entry["block"] for entry in second["overrides"]] == [
+        "minecraft:gold_block", "minecraft:air",
+    ]
+    assert len(first["overrides"]) == 1
+    assert "overrides" not in source
+    assert document["edits"][0]["id"] == "e1"
+
+
+@pytest.mark.parametrize("conflicting", [False, True])
+def test_spec_override_reapplication_uses_namespaced_id(conflicting):
+    source = {"formatVersion": 1, "minecraftVersion": "1.21.11",
+              "archetype": "house", "scale": "tiny"}
+    document = _edit("replace", region=[[0, 7, 0], [0, 7, 0]], block="minecraft:gold_block")
+    source = apply_edits(_scene(), document, source)
+    if conflicting:
+        document["edits"][0]["block"] = "minecraft:air"
+        with pytest.raises(BlueprintError, match="edit-00000000-edit-1.*競合"):
+            apply_edits(_scene(), document, source)
+    else:
+        result = apply_edits(_scene(), document, source)
+        assert result["overrides"] == source["overrides"]
 
 
 def test_out_of_bounds_and_unknown_param_rejected():
