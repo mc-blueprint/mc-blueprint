@@ -363,6 +363,9 @@ def build_parser() -> argparse.ArgumentParser:
     source.add_argument("--input", type=Path)
     edits_parser.add_argument("--scene", type=Path, required=True)
     edits_parser.add_argument("-o", "--output", type=Path)
+    edits_parser.add_argument("--seed", type=int, help="scene生成時と同じseedを指定する")
+    edits_parser.add_argument("--set", action="append", default=[], metavar="KEY=VALUE",
+                              help="scene生成時と同じ設定の上書きを指定する")
     return parser
 
 
