@@ -13,11 +13,11 @@ from mcblueprint.operations.composite import (
     CompositeOperation,
     is_stairs,
     oriented,
-    parse_block,
     slab_for,
     spec_json,
 )
 from mcblueprint.operations.registry import register
+from mcblueprint.operations.room import parse_spec
 
 STYLES = ("gable", "hip")
 RIDGES = ("x", "z")
@@ -36,8 +36,8 @@ class RoofOperation(CompositeOperation):
         style: str = "gable",
         ridge: str | None = None,
         overhang: int = 1,
-        gable: BlockState | None = None,
-        ridge_block: BlockState | None = None,
+        gable: BlockState | BlockSpec | None = None,
+        ridge_block: BlockState | BlockSpec | None = None,
         comment: str | None = None,
     ) -> None:
         super().__init__(path, comment)
@@ -54,6 +54,11 @@ class RoofOperation(CompositeOperation):
             self.ridge_block = ridge_block
         elif spec.block is not None:
             self.ridge_block = slab_for(spec.block)
+        elif spec.role is not None:
+            self.ridge_block = (
+                BlockSpec(role=spec.role, shape="slab", state=(("type", "bottom"),))
+                if spec.shape == "stairs" else spec
+            )
         else:
             self.ridge_block = None  # palette roofs use the palette for the ridge
 
@@ -67,12 +72,17 @@ class RoofOperation(CompositeOperation):
             parse_choice(data, "style", path, STYLES, "gable"),
             parse_choice(data, "ridge", path, RIDGES, "x") if "ridge" in data else None,
             parse_int(data, "overhang", path, minimum=0, default=1),
-            parse_block(data, "gable", path),
-            parse_block(data, "ridgeBlock", path),
+            cls._material(data, "gable", path),
+            cls._material(data, "ridgeBlock", path),
             data.get("comment"),
         )
 
-    def _slope(self, facing: str, shape: str | None = None) -> dict[str, str]:
+    @staticmethod
+    def _material(data: Mapping[str, Any], key: str, path: str) -> BlockState | BlockSpec | None:
+        spec = parse_spec(data, key, path)
+        return spec.block if spec and spec.block else spec
+
+    def _slope(self, facing: str, shape: str | None = None) -> dict[str, Any]:
         if is_stairs(self.spec):
             extra = {"shape": shape} if shape else {}
             return oriented(self.spec, facing=facing, half="bottom", **extra)
@@ -89,8 +99,10 @@ class RoofOperation(CompositeOperation):
             {"type": "set", "position": [xb, level, zb], **self._slope("north", "outer_left")},
         ]
 
-    def _ridge(self) -> dict[str, str]:
+    def _ridge(self) -> dict[str, Any]:
         if self.ridge_block is not None:
+            if isinstance(self.ridge_block, BlockSpec):
+                return spec_json(self.ridge_block)
             return {"block": self.ridge_block.to_string()}
         return spec_json(self.spec)
 
@@ -176,7 +188,7 @@ class RoofOperation(CompositeOperation):
 
     def _gable_walls(
         self, x0: int, x1: int, z0: int, z1: int, y: int,
-        materials: tuple[BlockState, BlockState] | None = None,
+        materials: tuple[BlockState | BlockSpec, BlockState | BlockSpec] | None = None,
     ) -> list[dict[str, Any]]:
         """棟軸の最小端・最大端を閉じる妻壁。materials省略時は両端にgable材を使う。"""
         fp = self.footprint
@@ -196,7 +208,7 @@ class RoofOperation(CompositeOperation):
                             "type": "fill",
                             "from": [x, y + layer, a],
                             "to": [x, y + layer, b],
-                            "block": material.to_string(),
+                            **spec_json(material),
                         }
                     )
             else:
@@ -209,7 +221,7 @@ class RoofOperation(CompositeOperation):
                             "type": "fill",
                             "from": [a, y + layer, z],
                             "to": [b, y + layer, z],
-                            "block": material.to_string(),
+                            **spec_json(material),
                         }
                     )
             layer += 1

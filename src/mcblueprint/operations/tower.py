@@ -307,7 +307,7 @@ class TowerOperation(CompositeOperation):
                 **spec_json(self.stairs_spec),
             }
             if self.stairs_column is not None:
-                stairs["column"] = self.stairs_column.to_string()
+                stairs["column"] = spec_json(self.stairs_column)["block"]
             ops.append(stairs)
         if self.windows is not None:
             floors = self.storey_floors

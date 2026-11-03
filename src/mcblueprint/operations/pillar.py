@@ -22,8 +22,8 @@ class PillarOperation(CompositeOperation):
         position: Vec3,
         height: int,
         spec: BlockSpec,
-        base: BlockState | None = None,
-        cap: BlockState | None = None,
+        base: BlockState | BlockSpec | None = None,
+        cap: BlockState | BlockSpec | None = None,
         comment: str | None = None,
     ) -> None:
         super().__init__(path, comment)
@@ -57,8 +57,8 @@ class PillarOperation(CompositeOperation):
         ]
         if self.base is not None:
             ops.append(
-                {"type": "set", "position": self.position.to_list(), "block": self.base.to_string()}
+                {"type": "set", "position": self.position.to_list(), **spec_json(self.base)}
             )
         if self.cap is not None and self.height > 1:
-            ops.append({"type": "set", "position": top.to_list(), "block": self.cap.to_string()})
+            ops.append({"type": "set", "position": top.to_list(), **spec_json(self.cap)})
         return ops

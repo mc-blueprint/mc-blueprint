@@ -40,11 +40,15 @@ def parse_direction(
     return parse_choice(data, key, path, HORIZONTAL, default or "north")
 
 
-def parse_block(data: Mapping[str, Any], key: str, path: str) -> BlockState | None:
-    """Optional single block string (no palette) such as ``base`` or ``door``."""
+def parse_block(data: Mapping[str, Any], key: str, path: str) -> BlockState | BlockSpec | None:
+    """任意の単一ブロック。trim/fill/base/cap/columnはMaterialize前の役割参照も受ける。"""
     value = data.get(key)
     if value is None:
         return None
+    if key in ("trim", "fill", "base", "cap", "column") and (
+        isinstance(value, Mapping) and "role" in value
+    ):
+        return BlockSpec.from_dict({"block": value}, f"{path}.{key}")
     if not isinstance(value, str):
         raise BlueprintError(f"{path}.{key}: must be a block string")
     try:
@@ -53,17 +57,24 @@ def parse_block(data: Mapping[str, Any], key: str, path: str) -> BlockState | No
         raise BlueprintError(f"{path}.{key}: {exc}") from None
 
 
-def spec_json(spec: BlockSpec) -> dict[str, str]:
+def spec_json(spec: BlockSpec | BlockState) -> dict[str, Any]:
     """``block`` / ``palette`` entry for an expanded primitive operation."""
+    if isinstance(spec, BlockState):
+        return {"block": spec.to_string()}
+    if spec.role is not None:
+        return {"block": {"role": spec.role, "shape": spec.shape, "state": dict(spec.state)}}
     if spec.block is not None:
         return {"block": spec.block.to_string()}
     assert spec.palette is not None
     return {"palette": spec.palette}
 
 
-def oriented(spec: BlockSpec, **defaults: str) -> dict[str, str]:
+def oriented(spec: BlockSpec, **defaults: str) -> dict[str, Any]:
     """Like :func:`spec_json` but fills ``defaults`` (e.g. ``facing``) into a
     stairs / slab block that does not set them itself; palettes are left as is."""
+    if spec.role is not None:
+        return {"block": {"role": spec.role, "shape": spec.shape,
+                          "state": defaults | dict(spec.state)}}
     if spec.block is None:
         return spec_json(spec)
     state = spec.block
@@ -74,7 +85,9 @@ def oriented(spec: BlockSpec, **defaults: str) -> dict[str, str]:
 
 
 def is_stairs(spec: BlockSpec) -> bool:
-    return spec.block is not None and spec.block.id.endswith("_stairs")
+    return spec.shape == "stairs" if spec.role else (
+        spec.block is not None and spec.block.id.endswith("_stairs")
+    )
 
 
 def slab_for(state: BlockState) -> BlockState:

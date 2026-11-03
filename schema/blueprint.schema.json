@@ -1416,6 +1416,9 @@
           "offset": {
             "$ref": "#/$defs/position"
           },
+          "rotation": {
+            "enum": [0, 90, 180, 270]
+          },
           "operations": {
             "$ref": "#/$defs/operations"
           },

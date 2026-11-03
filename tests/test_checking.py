@@ -79,13 +79,17 @@ def test_patterns_accept_existing_components_as_modules(
     assert "0 error(s)" in capsys.readouterr().out
 
 
-def test_module_role_reference_in_nested_operation_is_rejected(tmp_path: Path) -> None:
+def test_module_role_reference_in_nested_operation_is_materialized(tmp_path: Path) -> None:
     from mcblueprint.pattern_checking import check_patterns
 
     root = tmp_path / "patterns"
     module_dir = root / "modules" / "legacy"
     module_dir.mkdir(parents=True)
     (root / "styles").mkdir()
+    (root / "styles" / "legacy.yaml").write_text(
+        "formatVersion: 1\nname: legacy\ngrid:\n  bay: [3, 5]\n  story_height: [4, 5]\n"
+        "modules: {}\nroles: {frame: wood}\n", encoding="utf-8",
+    )
     (module_dir / "nested.json").write_text(
         json.dumps(
             {
@@ -94,6 +98,8 @@ def test_module_role_reference_in_nested_operation_is_rejected(tmp_path: Path) -
                 "operations": [
                     {
                         "type": "repeat",
+                        "count": 2,
+                        "offset": [1, 0, 0],
                         "operations": [
                             {"type": "set", "position": [0, 0, 0], "block": {
                                 "role": "frame", "shape": "stairs", "state": {}
@@ -107,7 +113,7 @@ def test_module_role_reference_in_nested_operation_is_rejected(tmp_path: Path) -
     )
     results = check_patterns(root)
     module = next(result for result in results if result.kind == "module")
-    assert any("materialized" in error.message for error in module.errors)
+    assert module.errors == []
 
 GOOD_PRESET = """# good
 

@@ -16,7 +16,16 @@
 {"type": "set", "position": [0, 0, 0], "block": {"role": "frame", "shape": "stairs", "state": {"facing": "north"}}}
 ```
 
-`block` または Palette の `block` に書けます。役割参照は Materialize 前には実ブロックが決まらないため `mcblueprint check` でエラーになります。
+`block` または Palette の `block`、および [Materialize対象の材質スロット](OPERATIONS.md#materialize-前の役割入力) に書けます。
+`mcblueprint check` は、モジュール名に対応する様式の既定材でMaterializeしてから、通常の意味検証・生成・支持検査を行います。
+対応する様式名がないモジュールは検査対象の各様式で確認し、役割を定義する様式がなければ未知役割として拒否します。
+版を省略すると全4版、`--minecraft-version` を指定するとその版だけ検証します。
+未知の役割、必要形状の不足、無効な状態はエラーです。色の関係が解けない場合の診断は構造エラーとは区別します。
+モジュール内Paletteの役割参照は、そのPaletteが持つ重みを維持して主ブロックへ解決します。
+役割参照入りPaletteは全entryを同じ役割に揃えます。異なる役割、または役割参照と具体ブロックを混在させたPaletteはMaterializeで未対応として拒否します。
+役割参照を持つ入れ子の `component` はMaterialize時に展開し、Paletteの親からの継承・子での上書きと、位置・回転・セル属性を保持します。
+部品の展開は、役割参照の解決や改名対象Paletteの継承に必要なものに限定します。未参照の役割入りPaletteや子での同名上書きだけを理由に、無関係な具体部品を展開しません。必要な展開も平行移動と回転を1段にまとめ、部品1個分の入れ子の深さを保ちます。
+同梱patternsとlockは本機能のためには更新しません。
 
 ## 検証
 

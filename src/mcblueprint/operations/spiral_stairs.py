@@ -83,7 +83,7 @@ class SpiralStairsOperation(CompositeOperation):
         spec: BlockSpec,
         turn: str = "clockwise",
         headroom: int = DEFAULT_HEADROOM,
-        column: BlockState | None = None,
+        column: BlockState | BlockSpec | None = None,
         comment: str | None = None,
     ) -> None:
         super().__init__(path, comment)
@@ -122,7 +122,7 @@ class SpiralStairsOperation(CompositeOperation):
                     "type": "fill",
                     "from": self.center.to_list(),
                     "to": (self.center + Vec3(0, self.height - 1, 0)).to_list(),
-                    "block": self.column.to_string(),
+                    **spec_json(self.column),
                 }
             )
         treads = tread_cells(self.radius, self.turn == "clockwise")

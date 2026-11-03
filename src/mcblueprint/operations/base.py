@@ -44,10 +44,13 @@ def derive_seed(seed: int, stage: str, element: str) -> int:
 
 @dataclass(frozen=True, slots=True)
 class BlockSpec:
-    """Either a concrete block or a palette name (exactly one of them)."""
+    """具体ブロック、Palette名、またはMaterialize前の役割参照。"""
 
     block: BlockState | None = None
     palette: str | None = None
+    role: str | None = None
+    shape: str = "full"
+    state: tuple[tuple[str, str], ...] = ()
 
     @classmethod
     def from_dict(cls, data: Mapping[str, Any], path: str) -> BlockSpec:
@@ -56,6 +59,12 @@ class BlockSpec:
         if has_block == has_palette:
             raise BlueprintError(f"{path}: exactly one of 'block' or 'palette' must be given")
         if has_block:
+            if isinstance(data["block"], Mapping):
+                ref = data["block"]
+                if set(ref) != {"role", "shape", "state"}:
+                    raise BlueprintError(f"{path}.block: role / shape / state が必要です")
+                return cls(role=ref["role"], shape=ref["shape"],
+                           state=tuple(sorted(ref["state"].items())))
             try:
                 return cls(block=BlockState.parse(data["block"]))
             except BlueprintError as exc:

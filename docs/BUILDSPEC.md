@@ -18,7 +18,7 @@ houseのfeatureは`floors`（1〜2）、`floor_height`（4以上）、`roof`（g
 
 scaleの外形上限はtiny `[16,16,16]`、small `[32,32,32]`、medium `[64,48,64]`、large `[128,96,128]`、huge `[256,128,256]` です。`size: [x,y,z]` は軒などを含む外形上限としてscaleより優先します。各寸法は1〜256の整数です。階数と階高の指定がsizeの高さを超える場合は拒否します。
 
-BuildSpecの`materials`は材質名または`{color: [L,a,b], material: ...}`です。Lは0〜1、a/bは−0.4〜0.4です。YAML重複キー、未知の設定、型・範囲違反は読み込み時にエラーになります。
+BuildSpecの`materials`は材質名（`stone`）、固定ブロックID（`minecraft:stone`）、または`{color: [L,a,b], material: ...}`です。object形式は`color`・`material`の少なくとも一方を指定します。色だけなら様式の当該役割の材質候補から選びます。固定IDは選び直さず、必要な別形状だけ同じfamilyから解決し、混色率を0にします。必要形状がなければエラーです。Lは0〜1、a/bは−0.4〜0.4です。YAML重複キー、未知の設定、型・範囲違反は読み込み時にエラーになります。材質・配色解決の詳細は [Materialize](OPERATIONS.md#materialize-前の役割入力) を参照してください。
 
 現行Cではhouseとtowerを扱います。castleはMassing段で未対応として拒否し、城郭計画はHマイルストーンです。furnished内装はDetail段で未対応として拒否し、Dマイルストーンです。地形生成のhill/mountain/island/caveはSite段で未対応として拒否し、Hマイルストーンです。none/flatと既存terrain snapshotを指定できます。
 

@@ -45,7 +45,7 @@
   "$defs": {
     "material": {"oneOf": [
       {"type": "string", "minLength": 1},
-      {"type": "object", "required": ["color", "material"], "additionalProperties": false, "properties": {
+      {"type": "object", "anyOf": [{"required": ["color"]}, {"required": ["material"]}], "additionalProperties": false, "properties": {
         "color": {"type": "array", "prefixItems": [
           {"type": "number", "minimum": 0, "maximum": 1},
           {"type": "number", "minimum": -0.4, "maximum": 0.4},

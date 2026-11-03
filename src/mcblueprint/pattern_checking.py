@@ -13,7 +13,8 @@ from yaml import YAMLError
 
 from mcblueprint import blockdata, components
 from mcblueprint.checking import CheckResult, check_component_data
-from mcblueprint.errors import ValidationError
+from mcblueprint.errors import BlueprintError, ValidationError
+from mcblueprint.materialize import materialize
 
 SCHEMA_DIR = Path(__file__).parent / "schema"
 
@@ -45,25 +46,11 @@ def _module_registry(schema: dict[str, Any]) -> Registry[Any]:
     )
 
 
-def _role_references(value: Any, path: str = "") -> list[str]:
-    references = []
-    if isinstance(value, dict):
-        for key, child in value.items():
-            child_path = f"{path}.{key}" if path else key
-            if key == "block" and isinstance(child, dict) and "role" in child:
-                references.append(child_path)
-            else:
-                references.extend(_role_references(child, child_path))
-    elif isinstance(value, list):
-        for index, child in enumerate(value):
-            references.extend(_role_references(child, f"{path}[{index}]"))
-    return references
-
-
 def check_patterns(root: Path, version: str | None = None) -> list[CheckResult]:
     """patterns ディレクトリ内の様式・モジュール・出典と相互参照を検証する。"""
     results: list[CheckResult] = []
     styles: dict[str, dict[str, Any]] = {}
+    material_styles: dict[str, dict[str, Any]] = {}
     modules: set[str] = set()
     style_schema = _schema("pattern-style.schema.json")
     module_schema = _schema("pattern-module.schema.json")
@@ -82,6 +69,8 @@ def check_patterns(root: Path, version: str | None = None) -> list[CheckResult]:
             data = yaml.safe_load(path.read_text(encoding="utf-8"))
             errors = _validate(data, style_schema)
             if isinstance(data, dict):
+                if not errors:
+                    material_styles[path.stem] = data
                 if not _validate(data.get("modules", {}), style_schema["properties"]["modules"]):
                     styles[path.stem] = data
                 if data.get("name") != path.stem:
@@ -100,23 +89,38 @@ def check_patterns(root: Path, version: str | None = None) -> list[CheckResult]:
                 modules.add(name)
                 if data.get("name") != name:
                     errors.append(ValidationError("name", f"must match module path {name!r}"))
-                for role_path in _role_references(data.get("operations", []), "operations"):
-                    errors.append(
-                        ValidationError(
-                            role_path, "role references must be materialized before validation"
-                        )
-                    )
                 warnings = []
                 if not errors:
-                    component = check_component_data(
-                        path,
-                        version or blockdata.supported_versions()[0],
-                        data,
-                        components.default_search_paths(),
-                        module_paths=(root / "modules",),
+                    variants = [material_styles[path.parent.name]] if (
+                        path.parent.name in material_styles
+                    ) else (
+                        list(material_styles.values()) or [{"roles": {}}]
                     )
-                    errors.extend(component.errors)
-                    warnings = component.warnings
+                    for target_version in [version] if version else blockdata.supported_versions():
+                        for style in variants:
+                            try:
+                                with components.component_search_paths(
+                                    components.default_search_paths(),
+                                    module_paths=(root / "modules",),
+                                ):
+                                    concrete = materialize(
+                                        {**data, "minecraftVersion": target_version}, style=style,
+                                    ).blueprint
+                                concrete.pop("minecraftVersion")
+                                concrete.pop("seed", None)
+                                component = check_component_data(
+                                    path, target_version, concrete,
+                                    components.default_search_paths(),
+                                    module_paths=(root / "modules",),
+                                )
+                                errors.extend(component.errors)
+                                warnings.extend(component.warnings)
+                            except BlueprintError as exc:
+                                errors.append(ValidationError("operations", str(exc)))
+                            if errors:
+                                break
+                        if errors:
+                            break
         except (OSError, json.JSONDecodeError) as exc:
             errors = [ValidationError("", f"Invalid JSON: {exc}")]
         results.append(CheckResult(path, "module", errors, warnings))
