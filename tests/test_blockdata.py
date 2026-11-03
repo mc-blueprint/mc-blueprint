@@ -80,6 +80,15 @@ def test_complete_fills_defaults() -> None:
         data.complete(BlockState.parse("not_a_block"))
 
 
+def test_drawing_attributes_are_resolved_for_state() -> None:
+    data = blockdata.load_block_data("1.21.11")
+    assert data.drawing(BlockState.parse("air")) == (0, 0, "invisible", "none", None)
+    assert data.drawing(BlockState.parse("sea_lantern"))[:2] == (15, 15)
+    fixed = data.drawing(BlockState.parse("birch_leaves"))
+    assert fixed[3] == "fixed"
+    assert fixed[4] == data.tints["fixed"]["minecraft:birch_leaves"]
+
+
 @pytest.mark.parametrize("version", blockdata.supported_versions())
 def test_every_default_is_an_allowed_value(version: str) -> None:
     raw = json.loads(
