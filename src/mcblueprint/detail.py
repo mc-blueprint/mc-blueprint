@@ -3,15 +3,17 @@
 from __future__ import annotations
 
 import copy
+import json
 import math
 import random
+import warnings
 
 from mcblueprint import components
 from mcblueprint.critic import plan_from_metadata
 from mcblueprint.errors import BlueprintError
 from mcblueprint.materialize import _expand
 from mcblueprint.model import AABB, Vec3
-from mcblueprint.operations.base import derive_seed
+from mcblueprint.operations.base import derive_seed, intersect
 from mcblueprint.operations.registry import build_operation
 from mcblueprint.operations.shapes import disc_offsets
 from mcblueprint.operations.transform import Transform
@@ -19,6 +21,65 @@ from mcblueprint.operations.transform import Transform
 NORMALS = {"north": (0, 0, -1), "south": (0, 0, 1),
            "east": (1, 0, 0), "west": (-1, 0, 0)}
 ROTATIONS = {"north": 0, "south": 180, "east": 90, "west": 270}
+
+
+class DetailError(BlueprintError):
+    """Detailの入力エラー。diagnosticは修正先付きのJSON互換診断。"""
+
+    def __init__(self, message, diagnostic):
+        self.diagnostic = diagnostic
+        super().__init__(f"{message} {json.dumps(diagnostic, ensure_ascii=False)}")
+
+
+def _recess_openings(style, strength, root, body, detail, contract):
+    maximum = style["depth_layers"]["opening"]
+    if isinstance(maximum, list):
+        maximum = maximum[-1]
+    depth = math.floor(strength * maximum + 0.5)
+    if not depth:
+        return
+    structure = [AABB.of(Vec3.from_seq(item["from"]), Vec3.from_seq(item["to"]))
+                 for item in (*contract["columns"], *contract["beams"])]
+    passages = [(op, build_operation(op, root).bounds()) for op in body + detail
+                if op.get("reserved") == "circulation"]
+    recessed = []
+    for op in detail:
+        if op["type"] not in ("window", "doorway"):
+            continue
+        face = op.get("face")
+        if face is None:
+            axis = 2 if op.get("axis", "x") == "x" else 0
+            face = ("south" if op["position"][axis] > 0 else "north") if axis == 2 else (
+                "east" if op["position"][axis] > 0 else "west")
+        inward = Vec3(*NORMALS[face]) * -depth
+        original = build_operation(op, root).bounds()
+        moved = copy.deepcopy(op)
+        moved["position"] = (Vec3.from_seq(op["position"]) + inward).to_list()
+        bounds = original.union(build_operation(moved, root).bounds())
+        conflicts = [box for other, box in passages if other is not op] + structure
+        if any(intersect(bounds, box) is not None for box in conflicts):
+            diagnostic = {"code": "opening_recess_blocked", "metric": "opening_recess",
+                          "severity": "warn", "element": op["element"],
+                          "source": "config.decoration.depth", "actual": 0, "expected": depth,
+                          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+                          "repairPaths": ["config.decoration.depth"]}
+            op["comment"] = json.dumps(diagnostic, ensure_ascii=False)
+            warnings.warn(op["comment"], stacklevel=2)
+            continue
+        # 基準面の開口は投影の正本として残し、機能ブロックだけを内側へ移す。
+        if op["type"] == "window":
+            op["block"] = "air"
+        else:
+            op.pop("door", None)
+        recessed.append({
+            "type": "translate", "offset": [0, 0, 0],
+            **{key: moved[key] for key in ("id", "element", "role", "source", "face",
+                                          "reserved", "owner") if key in moved},
+            "id": f"{op['id']}.recess",
+            "operations": [{"type": "fill", "from": bounds.min.to_list(),
+                            "to": bounds.max.to_list(), "block": "air"}, moved],
+        })
+    detail.extend(recessed)
 
 
 def _module(name):
@@ -218,6 +279,7 @@ def plan_detail(params, style, config, root, body, detail, contract, projected_c
     )
     used_palettes = {op["palette"] for wrapper in placed for op in wrapper["operations"]
                      if "palette" in op}
+    _recess_openings(style, settings["depth"], root, body, detail, contract)
     detail[:] = placed + detail
     return decorations, {name: entries for name, entries in palettes.items()
                          if name in used_palettes}
@@ -340,8 +402,18 @@ def _facade_selection(placed, params, style, config, root, body, contract, modul
         area = sum(not cell.opening for cell in facade.cells)
         upper = math.floor(area * style["decoration"]["density"][1])
         if area and math.ceil(area * style["decoration"]["density"][0]) > upper:
-            raise BlueprintError(f"Detail: {facade.element}: 装飾の収容不足 "
-                                 f"(非開口面積={area}、密度範囲={style['decoration']['density']})")
+            dimensions = ("radius", "floor_height") if "radius" in params else (
+                "width", "depth", "floor_height")
+            raise DetailError(
+                f"Detail: {facade.element}: 装飾の収容不足 "
+                f"(非開口面積={area}、密度範囲={style['decoration']['density']})",
+                {"code": "detail_capacity", "metric": "decoration_density",
+                 "severity": "error", "element": facade.element,
+                 "source": "style.decoration.density",
+                 "actual": {"area": area, "maxBlocks": upper},
+                 "expected": {"density": style["decoration"]["density"]},
+                 "repairPaths": [*(f"elements.{root}.{key}" for key in dimensions), "size"]},
+            )
         desired = min(upper, math.floor(area * target + 0.5))
         options = candidates[facade.element]
         opposite = {"south": "north", "west": "east"}.get(facade.face, facade.face)

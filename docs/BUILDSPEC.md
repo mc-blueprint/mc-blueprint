@@ -91,7 +91,16 @@ Weather・最小評価・出力を接続します。従来の `generate` は共�
   付け柱の基部を分節し、部品の装飾部位と基本施工の付け柱を様式の`depth_layers`内で選びます。
   屋根縁による上書きも考慮し、4×4の局所投影で凹凸が不足する箇所を優先します。
   構造・通路予約と開口を保護し、密度上限を超えて凹凸を追加することはありません。
+  機能開口は`depth_layers.opening`の最大値に`config.decoration.depth`を掛け、
+  `floor(value + 0.5)`で整数化した分だけ内側へ後退します（北面では+z）。
+  基準面の開口投影と、後退先までの空間は維持します。部品全体は移動しません。
+  後退域が構造・通路予約に重なる開口は後退量を0にし、`opening_recess_blocked`診断を
+  Pythonの警告として出し、対象Operationの`comment`にもJSONで保存します。
+  診断は対象要素、実効量・要求量、理由、修正先`config.decoration.depth`を含みます。
   整数ブロック数で様式の密度範囲を満たせない面は、Detail段で収容不足として拒否します。
+  `DetailError.diagnostic`と例外文中のJSONは`detail_capacity`、対象面、非開口面積・上限個数、
+  期待密度範囲、修正先（`elements.<root>`の既知寸法と`size`）を持ちます。
+  `make`の終了コードは従来どおり1です。
 - 材質の役割定義は同梱patternsの各様式から読みます。計画側に様式別の補完を持たず、
   Resolveの優先順に従って利用者指定材を反映します。同梱元commitとSHA-256は
   `src/mcblueprint/data/lock.json` の `patterns` に記録します。
