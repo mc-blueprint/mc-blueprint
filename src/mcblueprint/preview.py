@@ -18,10 +18,11 @@ import json
 from collections.abc import Callable, Iterable
 from dataclasses import dataclass
 from functools import cache
-from importlib import resources
 from pathlib import Path
+from statistics import median
 from typing import Any
 
+from mcblueprint.blockdata import BlockData, BlockInfo, load_block_data
 from mcblueprint.errors import BlueprintError
 from mcblueprint.model.block import BlockState
 from mcblueprint.model.vec import AABB, Vec3
@@ -52,67 +53,97 @@ def _pil() -> Any:
 # --- colours ------------------------------------------------------------------
 
 
+def _oklab_to_linear(lab: Iterable[float]) -> tuple[float, float, float]:
+    # https://bottosson.github.io/posts/oklab/ の逆変換。
+    lightness, a, b = lab
+    long = (lightness + 0.3963377774 * a + 0.2158037573 * b) ** 3
+    m = (lightness - 0.1055613458 * a - 0.0638541728 * b) ** 3
+    s = (lightness - 0.0894841775 * a - 1.2914855480 * b) ** 3
+    return (
+        4.0767416621 * long - 3.3077115913 * m + 0.2309699292 * s,
+        -1.2684380046 * long + 2.6097574011 * m - 0.3413193965 * s,
+        -0.0041960863 * long - 0.7034186147 * m + 1.7076147010 * s,
+    )
+
+
+def _srgb(linear: Iterable[float]) -> RGB:
+    def encode(value: float) -> int:
+        value = max(0.0, min(1.0, value))
+        value = 12.92 * value if value <= 0.0031308 else 1.055 * value ** (1 / 2.4) - 0.055
+        return round(value * 255)
+
+    return tuple(encode(value) for value in linear)  # type: ignore[return-value]
+
+
+def _face_linear(info: BlockInfo, face: dict[str, Any], data: BlockData) -> tuple[float, ...]:
+    def median_color(key: str) -> tuple[float, float, float]:
+        return _oklab_to_linear(face[key][axis][2] for axis in ("L", "a", "b"))
+
+    if info.tint == "none" or "tintedOklab" not in face:
+        return median_color("oklab")
+    tint = data.tints[info.tint][info.id if info.tint == "fixed" else "plains"]
+    color = tuple(
+        x * y for x, y in zip(median_color("tintedOklab"), _oklab_to_linear(tint), strict=True)
+    )
+    if "untintedOklab" in face:
+        # 面積比はデータにないため、着色層と未着色層を等しい重みで合成する。
+        color = tuple(
+            (x + y) / 2 for x, y in zip(color, median_color("untintedOklab"), strict=True)
+        )
+    return color
+
+
 @cache
-def _color_table() -> tuple[RGB, dict[str, RGB | None]]:
-    text = resources.files("mcblueprint").joinpath("data", "colors.json").read_text("utf-8")
-    data = json.loads(text)
-    keywords = {k: (tuple(v) if v is not None else None) for k, v in data["keywords"].items()}
-    return tuple(data["default"]), keywords
-
-
-DYES = (
-    "white", "light_gray", "gray", "black", "brown", "red", "orange", "yellow",
-    "lime", "green", "cyan", "light_blue", "blue", "purple", "magenta", "pink",
-)  # fmt: skip
-TERRACOTTA_TINT: RGB = (150, 95, 75)
+def _material_colors(version: str, face: str) -> dict[str, RGB]:
+    data = load_block_data(version)
+    samples: dict[str, list[tuple[float, ...]]] = {}
+    for info in data.blocks():
+        if info.faces:
+            source = info.faces.get(face, next(iter(info.faces.values())))
+            samples.setdefault(info.material, []).append(_face_linear(info, source, data))
+    return {
+        material: _srgb(median(values) for values in zip(*colors, strict=True))
+        for material, colors in samples.items()
+    }
 
 
 def _blend(a: RGB, b: RGB, t: float) -> RGB:
     return tuple(round(x * (1 - t) + y * t) for x, y in zip(a, b, strict=True))  # type: ignore[return-value]
 
 
-def color_keyword(state: BlockState) -> str | None:
-    """The ``colors.json`` keyword (or dye name) that decides the block's colour,
-    or None when the block falls back to the default colour."""
-    _, keywords = _color_table()
-    name = state.id.split(":", 1)[-1]
-    for dye in sorted(DYES, key=len, reverse=True):
-        if name.startswith(dye + "_"):
-            return dye
-    best: str | None = None
-    for keyword in keywords:
-        if keyword == "air" and name not in ("air", "cave_air", "void_air"):
-            continue
-        if keyword in name and (best is None or len(keyword) > len(best)):
-            best = keyword
-    return best
+def block_color(state: BlockState, version: str = "1.21.11", face: str = "top") -> RGB | None:
+    """既定状態の面色を返す。face は top / side / bottom、着色は plains。
+
+    空気3種は None。欠けた面は同ブロックの別面、水の面色欠損は水の着色値、
+    その他の全方面欠損は同版・同材質の中央値で補完する。未知のIDは BlueprintError。
+    """
+    return _block_color(state.id, version, face)
 
 
-def block_color(state: BlockState) -> RGB | None:
-    """Approximate colour for a block, or None for air-like blocks."""
-    default, keywords = _color_table()
-    name = state.id.split(":", 1)[-1]
-    keyword = color_keyword(state)
-    if keyword is None:
-        return default
-    color = keywords[keyword]
-    if keyword in DYES and name.startswith(keyword + "_"):
-        # dyed blocks (white_concrete, light_gray_terracotta, red_bed, ...) take the dye colour
-        assert color is not None
-        if "terracotta" in name:
-            return _blend(color, TERRACOTTA_TINT, 0.4)
-        if "glass" in name:
-            return _blend(color, (235, 245, 250), 0.5)
-    return color
+@cache
+def _block_color(block_id: str, version: str, face: str) -> RGB | None:
+    data = load_block_data(version)
+    info = data.get(block_id)
+    if info is None:
+        raise BlueprintError(f"Unknown block id: {block_id}")
+    if block_id in ("minecraft:air", "minecraft:cave_air", "minecraft:void_air"):
+        return None
+    if info.faces:
+        source = info.faces.get(face, next(iter(info.faces.values())))
+        return _srgb(_face_linear(info, source, data))
+    if info.tint == "water":
+        return _srgb(_oklab_to_linear(data.tints["water"]["plains"]))
+    return _material_colors(version, face)[info.material]
 
 
-def uncoloured_blocks(volume: BlockVolume) -> list[str]:
-    """Block ids in ``volume`` that have no entry in ``colors.json`` (drawn grey)."""
-    seen: set[str] = set()
-    for _, state in volume:
-        if state.id not in seen and color_keyword(state) is None:
-            seen.add(state.id)
-    return sorted(seen)
+def uncoloured_blocks(volume: BlockVolume, version: str = "1.21.11") -> list[str]:
+    """面色を持たず、着色値または材質色で補完する非空気ブロックIDを返す。"""
+    data = load_block_data(version)
+    return sorted({
+        state.id for _, state in volume
+        if (info := data.get(state.id)) is not None and not info.faces
+        and state.id not in ("minecraft:air", "minecraft:cave_air", "minecraft:void_air")
+    })
 
 
 def shade(color: RGB, factor: float) -> RGB:
@@ -128,6 +159,7 @@ class Options:
 
     範囲外の遮蔽と断面の ghost は除外する。source は範囲画像の元 Blueprint 参照
     （API 呼出元が指定するパス等）。範囲指定時だけ PNG 情報と出力 JSON に残す。
+    version は面色と着色表を取得する同梱 Minecraft 版で、既定は 1.21.11。
     """
 
     scale: int = 8
@@ -135,6 +167,7 @@ class Options:
     origin: Vec3 | None = None  # blueprint origin to mark
     region: AABB | None = None
     source: str | None = None
+    version: str = "1.21.11"
 
 
 def selected_bounds(bounds: AABB, region: AABB | None) -> AABB:
@@ -147,12 +180,12 @@ def selected_bounds(bounds: AABB, region: AABB | None) -> AABB:
     return AABB(low, high)
 
 
-def _select_region(volume: BlockVolume, bounds: AABB) -> BlockVolume:
+def _select_region(volume: BlockVolume, bounds: AABB, version: str) -> BlockVolume:
     selected = BlockVolume()
     for pos, state in volume:
         if bounds.contains(pos):
             selected.set(pos, state)
-    if not any(_visible(selected)):
+    if not any(_visible(selected, version)):
         raise BlueprintError(f"Nothing to preview: no visible blocks in region ({bounds})")
     return selected
 
@@ -196,7 +229,7 @@ def render(volume: BlockVolume, view: str, scale: int = 8, options: Options | No
     options = options or Options(scale=scale)
     bounds = selected_bounds(source_bounds, options.region)
     if options.region is not None:
-        volume = _select_region(volume, bounds)
+        volume = _select_region(volume, bounds, options.version)
     if view == "top":
         image = _render_top(volume, bounds, options)
     elif view == "isometric":
@@ -220,14 +253,14 @@ def render_layer(
     options = options or Options(scale=scale)
     bounds = selected_bounds(source_bounds, options.region)
     if options.region is not None:
-        volume = _select_region(volume, bounds)
+        volume = _select_region(volume, bounds, options.version)
     if not bounds.min.y <= y <= bounds.max.y:
         raise BlueprintError(
             f"Layer y={y} is outside the preview bounds (y {bounds.min.y}..{bounds.max.y})"
         )
     cells: dict[tuple[int, int], RGB] = {}
     ghosts: dict[tuple[int, int], RGB] = {}
-    for pos, color in _visible(volume):
+    for pos, color in _visible(volume, options.version):
         if pos.y == y:
             cells[(pos.x, pos.z)] = color
         elif pos.y == y - 1:
@@ -252,9 +285,11 @@ def render_layer(
     return _region_info(canvas.image, source_bounds, bounds, options, "layer", y)
 
 
-def _visible(volume: BlockVolume) -> Iterable[tuple[Vec3, RGB]]:
+def _visible(
+    volume: BlockVolume, version: str = "1.21.11", face: str = "top",
+) -> Iterable[tuple[Vec3, RGB]]:
     for pos, state in volume:
-        color = block_color(state)
+        color = block_color(state, version, face)
         if color is not None:
             yield pos, color
 
@@ -357,7 +392,7 @@ class _Canvas:
 def _render_top(volume: BlockVolume, bounds: AABB, options: Options) -> Any:
     size = bounds.size
     highest: dict[tuple[int, int], tuple[int, RGB]] = {}
-    for pos, color in _visible(volume):
+    for pos, color in _visible(volume, options.version):
         key = (pos.x, pos.z)
         if key not in highest or pos.y > highest[key][0]:
             highest[key] = (pos.y, color)
@@ -395,7 +430,7 @@ def _render_elevation(volume: BlockVolume, bounds: AABB, options: Options, view:
     forward = view in ("south", "west")
     column_world = (lambda c: lo + c) if forward else (lambda c: hi + 1 - c)
     nearest: dict[tuple[int, int], tuple[int, RGB]] = {}
-    for pos, color in _visible(volume):
+    for pos, color in _visible(volume, options.version, "side"):
         key = (column(pos), pos.y)
         d = depth(pos)
         if key not in nearest or d < nearest[key][0]:
@@ -458,10 +493,13 @@ def _shape_cells(state: BlockState) -> frozenset[Vec3]:
     return full
 
 
-def _isometric_faces(volume: BlockVolume) -> Iterable[tuple[tuple[Vec3, ...], RGB, float]]:
+def _isometric_faces(
+    volume: BlockVolume, version: str = "1.21.11",
+) -> Iterable[tuple[tuple[Vec3, ...], RGB, float]]:
     """隣接形状に覆われない上面・南面・東面を、同一ブロック内で結合して返す。"""
     blocks = {
-        pos: (state, color) for pos, state in volume if (color := block_color(state)) is not None
+        pos: (state, color) for pos, state in volume
+        if (color := block_color(state, version)) is not None
     }
     directions = (Vec3(0, 1, 0), Vec3(1, 0, 0), Vec3(0, 0, 1))
     for pos, (state, color) in blocks.items():
@@ -521,7 +559,9 @@ def _isometric_faces(volume: BlockVolume) -> Iterable[tuple[tuple[Vec3, ...], RG
                     vertices = tuple(Vec3(plane, b, a) for a, b in corners)
                 else:
                     vertices = tuple(Vec3(a, b, plane) for a, b in corners)
-                yield vertices, color, (1.05, 0.75, 0.6)[axis]
+                face_color = color if axis == 0 else block_color(state, version, "side")
+                assert face_color is not None
+                yield vertices, face_color, (1.05, 0.75, 0.6)[axis]
 
 
 def _render_isometric(volume: BlockVolume, bounds: AABB, options: Options) -> Any:
@@ -541,7 +581,7 @@ def _render_isometric(volume: BlockVolume, bounds: AABB, options: Options) -> An
         return round(origin_x + (x - z) * s), round(origin_y + s + (x + z) * half - y * s)
 
     faces = sorted(
-        _isometric_faces(volume),
+        _isometric_faces(volume, options.version),
         key=lambda face: (
             sum(p.x + p.z for p in face[0]) / len(face[0]),
             sum(p.y for p in face[0]) / len(face[0]),
@@ -589,7 +629,7 @@ def write_previews(
         raise BlueprintError("Nothing to preview: no blocks were generated")
     bounds = selected_bounds(source_bounds, options.region)
     if options.region is not None:
-        _select_region(volume, bounds)
+        _select_region(volume, bounds, options.version)
         outside = [y for y in layers if not bounds.min.y <= y <= bounds.max.y]
         if outside:
             raise BlueprintError(f"Layer(s) {outside} are outside the preview bounds ({bounds})")

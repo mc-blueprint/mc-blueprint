@@ -8,6 +8,7 @@ from pathlib import Path
 from mcblueprint import blockdata, preview, schema
 from mcblueprint.cli import main
 from mcblueprint.loader import read_blueprint_json
+from mcblueprint.model.block import BlockState
 from mcblueprint.validator import validate
 
 spec = importlib.util.spec_from_file_location(
@@ -50,7 +51,8 @@ def test_benchmark_median_uses_midpoint_for_even_sample_count(monkeypatch) -> No
 def test_benchmark_reset_clears_all_runtime_caches() -> None:
     blockdata.supported_versions()
     blockdata.load_block_data(blockdata.supported_versions()[0])
-    preview._color_table()
+    preview.block_color(BlockState.parse("water"))
+    preview.block_color(BlockState.parse("chest"))
     schema.load_schema()
     schema.load_component_schema()
 
@@ -58,7 +60,9 @@ def test_benchmark_reset_clears_all_runtime_caches() -> None:
 
     assert blockdata._versions.cache_info().currsize == 0
     assert blockdata.load_block_data.cache_info().currsize == 0
-    assert preview._color_table.cache_info().currsize == 0
+    assert blockdata._read_block_data.cache_info().currsize == 0
+    assert preview._block_color.cache_info().currsize == 0
+    assert preview._material_colors.cache_info().currsize == 0
     assert schema.load_schema.cache_info().currsize == 0
     assert schema.load_component_schema.cache_info().currsize == 0
 

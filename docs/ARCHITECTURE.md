@@ -72,7 +72,6 @@ src/mcblueprint/
 │  └─ blueprint.schema.json   パッケージ同梱の JSON Schema（リポジトリの schema/ と同一）
 └─ data/
    ├─ lock.json         同梱データの出所・版・commit・SHA-256
-   ├─ colors.json       プレビュー用の近似色
    └─ blockdata/        blockdata-<minecraftVersion>.json と固定版スキーマ
 ```
 
@@ -359,7 +358,7 @@ Litematica 用の `.litematic`。ルート Compound は無名、gzip 圧縮。1 
 
 テストでは書き出した `.schem` を `nbtlib.load` で読み戻し、`Width` / `Height` / `Length` / `Offset` / `Palette` / `BlockData` を検証する。手動確認では WorldEdit の `//schem load` → `//paste` を使う。
 
-## 9.5 Preview（`preview.py`, `data/colors.json`）
+## 9.5 Preview（`preview.py`）
 
 生成した `BlockVolume` を PNG に描画する。任意依存 `Pillow`（`pip install -e ".[preview]"`）が必要で、未導入なら `BlueprintError` で案内する。
 
@@ -370,9 +369,13 @@ Litematica 用の `.litematic`。ルート Compound は無名、gzip 圧縮。1 
 | `isometric` | 2:1 のピクセルアイソメトリック（南東上空から）。上面・+x 面・+z 面を塗り分ける。通常 stairs と slab は状態に応じた半ブロック形状、それ以外は立方体近似。隣接形状で覆われる面は描かず、`scale` 6 以上では輪郭線 |
 | 断面（`--layer Y` / `--layers A..B` / `--layers all`） | 高さ y の水平断面（`render_layer`）。その段のブロックを描き、1 つ下の段で覆われていないブロックを薄く重ねる。出力は `<stem>-y<NN>.png`（0 埋めで並び順を保つ） |
 
-- 色は `data/colors.json` のキーワード（ブロック ID の部分一致、最長一致）で決める近似。染料名で始まるブロック（`white_concrete` など）は染料の色、テラコッタとステンドグラスは色味を混ぜる。`air` は描かない。どのキーワードにも一致しないブロックは既定の灰色で描き、CLI が `WARNING` で ID を列挙する（`uncoloured_blocks()`）。
+- 色は Blueprint の Minecraft 版の blockdata を `load_block_data()` で取得し、面ごとの OKLab 50 パーセンタイルを sRGB に変換する。平面図・水平断面は top、立面図は side、等角図は上面に top、南面・東面に side を使う。状態による色の回転・変化は扱わず、blockdata の既定状態の向きを使う。
+- 着色は plains を既定とし、fixed はブロックIDの着色値を使う。`tintedOklab` の素材色と着色値をそれぞれ線形 sRGB に変換して乗算する。`untintedOklab` が併存するときは、面積比が提供されないため未着色層と等重みで合成する。`tint: none` または層別色がない面は `oklab` を未着色で使う。変換は [OKLab 作者の公開式](https://bottosson.github.io/posts/oklab/)と標準 sRGB 伝達関数を用い、依存は追加しない。
+- air・cave_air・void_air は描かない。要求面がなければ同ブロックの最初の既存面を使う。全方面がない水系は plains の water 着色値、それ以外は同版・同材質の各ブロックの面色を線形 sRGB 成分ごとに中央値集約して補完する。全方面欠損の非空気IDを `uncoloured_blocks()` が返し、CLI は補完方法を WARNING に表示する。透明ブロックや特殊描画の正確な外観・染色差は再現できない。
+- 全方面欠損は 1.21.11 / 26.1.2 で各200件、26.2 / 26.3 で各136件（各版とも空気3件、水系2件を含む）。空気を除く197 / 197 / 133 / 133件は着色値または材質中央値で描ける。要求面だけが欠ける場合の別面補完を含め、全版・全ブロックの色解決をテストする。
+- Python API の `Options.version` と `block_color(..., version=...)` は既定で 1.21.11。CLI は `--minecraft-version` の上書きも含めた入力版を渡す。未知のIDは灰色で隠さず BlueprintError。ローダーは版一覧取得と実際の情報取得で同じJSONキャッシュを共有する。
 - 形状対応は `minecraft:*_stairs` の `facing`（4 方位）・`half`（`bottom` / `top`）・`shape`（`straight` / `inner_left` / `inner_right` / `outer_left` / `outer_right`）と `minecraft:*_slab` の `type`（`bottom` / `top` / `double`）。省略時はそれぞれ `north` / `bottom` / `straight`、`bottom` を使う。隣接状態から stairs の角を再計算せず、入力の `shape` をそのまま描く。
-- アイソメトリックは半ブロック占有セルから露出面を求め、同じブロックの同一平面を結合して内部線を除く。未対応形状・独自名前空間・不明な形状状態値は立方体近似。テクスチャ・光伝播・透過・任意モデルには対応せず、色と形状の精度は別である。色表の `air` は `air` / `cave_air` / `void_air` だけに適用し、`stairs` を透明にしない。対応範囲と固定 fixture の比較方法は [PREVIEW_SHAPES.md](PREVIEW_SHAPES.md)。
+- アイソメトリックは半ブロック占有セルから露出面を求め、同じブロックの同一平面を結合して内部線を除く。未対応形状・不明な形状状態値は立方体近似。独自名前空間も形状判定単体では立方体だが、同梱 blockdata にないIDの色解決はエラーとなる。テクスチャ・光伝播・透過・任意モデルには対応せず、色と形状の精度は別である。対応範囲と固定 fixture の比較方法は [PREVIEW_SHAPES.md](PREVIEW_SHAPES.md)。
 - 陰影: 立面図は上面が露出するブロックの上辺に明るい線、隣が空いている（または奥にある）辺に暗い線。平面図と断面は右（+x）と手前（+z）の隣が低い・無い辺に暗い線。
 - `--grid N`: N ブロックごとの濃い罫線と、余白（14 px）に世界座標のラベル。Blueprint の `origin` を赤い × で示す（立面図は origin の列と高さ、isometric は上面の輪郭）。北・東の立面図は左右が反転しているので、ラベルの数値は減る向きに並ぶ。
 - `--from X Y Z --to X Y Z` / `Options.region` は元の Blueprint 座標で両端を含む矩形範囲を選ぶ。全生成後に元範囲との交差だけを描き、元座標を移動しない。範囲外の遮蔽・ghost を取り除いた切口で、画像寸法は同じ設定の全体図を超えない。選択 Y 外の layer、完全範囲外、可視ブロックのない選択はエラー。範囲画像は `<stem>-region-<view>.png` / `-region-y<NN>.png` とし、PNG 情報と `<stem>-region.json` に元入力参照・元範囲・要求/実描画範囲・view/layer を保存する。API・切口・比較方法の正本は [PREVIEW_REGIONS.md](PREVIEW_REGIONS.md)。
