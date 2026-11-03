@@ -13,9 +13,11 @@ from hashlib import sha256
 from pathlib import Path
 
 import numpy as np
+import yaml
 
 from mcblueprint import __version__, blockdata
 from mcblueprint.buildspec import ResolveResult, resolve_buildspec
+from mcblueprint.critic import CriticAccumulator, plan_from_metadata
 from mcblueprint.errors import BlueprintError
 from mcblueprint.exporters import EXPORTERS
 from mcblueprint.exporters._spool import RegionSpool
@@ -266,32 +268,89 @@ def export_generated_blueprint(
         raise BlueprintError(f"Blueprintの出力に失敗しました: {exc}") from exc
 
 
-def _evaluate(window, blueprint, context, source, max_nodes):
+def _evaluate(window, blueprint, context, source, max_nodes, critic):
     root = context["massing"]["element"]
-    lines = []
+    metrics = dict(critic.metrics)
+    diagnostics = []
+
+    def diagnostic(code, metric, severity, actual, expected, *, element=root,
+                   repair_paths=(), **details):
+        diagnostics.append({"code": code, "metric": metric, "severity": severity,
+                            "element": element, "source": str(source), "actual": actual,
+                            "expected": expected, "repairPaths": list(repair_paths), **details})
+
+    for item in critic.diagnostics:
+        details = dict(item)
+        code, metric, severity = (details.pop(k) for k in ("code", "metric", "severity"))
+        actual, expected = details.pop("actual"), details.pop("expected")
+        paths = details.pop("repairPaths", ())
+        diagnostic(code, metric, severity, actual, expected,
+                   repair_paths=paths, **details)
+    structural = [d for d in diagnostics if d["severity"] == "error"]
+    if structural:
+        raise PipelineError("Critic", " ".join(_diagnostic_line(d) for d in structural), 1)
+
     support_count, first = _support(window, context["resolved"]["config"]["limits"])
-    failed = bool(support_count)
-    lines.append(f"{'FAIL' if support_count else 'OK'} support={support_count} {source} {root}"
-                 + (f" {first}" if first else ""))
+    metrics["support"] = {"value": support_count}
+    diagnostic("support", "support", "fail" if support_count else "ok", support_count, 0,
+               detail=first)
     points = context["massing"]
     start = Vec3.from_seq(points["entrance"])
+    routes = []
     for point in points["arrivals"]:
         end = Vec3.from_seq(point)
         route = check_route(window, start, end, blueprint.minecraft_version, max_nodes=max_nodes)
-        failed |= route.status != "reachable"
         reason = route.issues[0].reason if route.issues else ""
-        lines.append(f"{'OK' if route.status == 'reachable' else 'FAIL'} walkability="
-                     f"{route.status} {source} {root} {end.to_list()} {reason}".rstrip())
+        routes.append({"from": start.to_list(), "to": end.to_list(), "status": route.status})
+        diagnostic("walkability", "walkability", "ok" if route.status == "reachable" else "fail",
+                   route.status, "reachable", position=end.to_list(), detail=reason)
         start = end
-    for diagnostic in context.get("materialDiagnostics", []):
-        failed = True
-        lines.append(f"FAIL {diagnostic['code']} {source} {root} "
-                     + json.dumps(diagnostic, ensure_ascii=False, sort_keys=True))
-    if not context.get("materialDiagnostics"):
-        lines.append(f"OK palette_relation {source} {root}")
-    for metric in ("column_continuity", "flat_ratio", "decoration_density", "facade_mix"):
-        lines.append(f"INFO {metric}=not-implemented {source} {root}")
-    return failed, lines
+    metrics["walkability"] = {"routes": routes}
+    for item in context.get("materialDiagnostics", []):
+        diagnostics.append({**item, "metric": "palette_relation", "severity": "fail",
+                            "relationMetric": item["metric"],
+                            "element": root, "source": str(source),
+                            "actual": item.get("actual"),
+                            "expected": {key: item[key] for key in ("minimum", "maximum")
+                                         if key in item},
+                            "repairPaths": ["config.palette.contrast",
+                                            "config.palette.saturation"]})
+    metrics["palette_relation"] = {"value": not bool(context.get("materialDiagnostics"))}
+    for metric in ("decoration_density", "facade_mix"):
+        if not metrics[metric]:
+            reason = ("装飾指定Operationなし" if metric == "decoration_density" else
+                      "固定ID役割は対象外、または外壁役割の測定対象なし")
+            metrics[metric] = {"value": None, "status": "n/a", "reason": reason}
+    if metrics["beam_continuity"]["value"] is None:
+        metrics["beam_continuity"].update(status="n/a", reason="計画梁なし")
+    if metrics["flat_ratio"]["value"] is None:
+        metrics["flat_ratio"].update(status="failed", reason="有効な外壁深度を測定できません")
+    lines = [_diagnostic_line(d) for d in diagnostics]
+    for metric, value in metrics.items():
+        if any(d["metric"] == metric for d in diagnostics):
+            continue
+        actual = value.get("value", value)
+        if value.get("status") == "n/a":
+            actual = "n/a"
+        state = {"n/a": "INFO", "failed": "FAIL"}.get(value.get("status"), "OK")
+        lines.append(f"{state} {metric}={actual} {source} {root}"
+                     + (f" {value['reason']}" if "reason" in value else ""))
+    return any(d["severity"] == "fail" for d in diagnostics), lines, metrics, diagnostics
+
+
+def _diagnostic_line(diagnostic):
+    severity = {"ok": "OK", "warn": "WARN", "fail": "FAIL", "error": "FAIL"}
+    actual = diagnostic["actual"]
+    paths = ",".join(diagnostic["repairPaths"])
+    return (f"{severity[diagnostic['severity']]} {diagnostic['code']} "
+            f"{diagnostic['metric']}={actual} expected={diagnostic['expected']} "
+            f"{diagnostic['source']} {diagnostic['element']}"
+            + (f" face={diagnostic['face']}" if "face" in diagnostic else "")
+            + (f" role={diagnostic['role']}" if "role" in diagnostic else "")
+            + (f" position={diagnostic['position']}" if "position" in diagnostic else "")
+            + (f" pair={diagnostic['pair']}" if "pair" in diagnostic else "")
+            + (f" → {paths}" if paths else "")
+            + (f" {diagnostic['detail']}" if diagnostic.get("detail") else ""))
 
 
 def make(
@@ -389,6 +448,7 @@ def make(
             concrete = material.blueprint
             context["materialDiagnostics"] = list(material.diagnostics)
             context["maxAreaRatios"] = material.max_area_ratios
+            context["fixedRoles"] = sorted(material.fixed_roles)
             concrete.setdefault("metadata", {})["generation"] = {
                 "mode": GENERATION, "config": config,
                 "groundHeight": context["site"]["floorY"],
@@ -430,18 +490,40 @@ def make(
                 weather_counts[code] = weather_counts.get(code, 0) + 1
 
             regions = generated_blueprint_regions(blueprint, on_diagnostic=weather_diagnostic)
-            spool.write(capture_sources(regions, bounds, source_spool, context, scene_sources))
+            style_path = Path(__file__).parent / "data/patterns/styles" / f"{spec['style']}.yaml"
+            style = yaml.safe_load(style_path.read_text(encoding="utf-8"))
+            critic_plan = plan_from_metadata(
+                blueprint.metadata["planning"], massing=context["massing"],
+                offset=context["site"]["offset"],
+                decoration_range=style["decoration"]["density"], fixed_roles=context["fixedRoles"],
+            )
+            accumulator = CriticAccumulator(
+                critic_plan, max_memory_mb=config["limits"]["max_memory_mb"],
+            )
+
+            def consume_regions():
+                for region in regions:
+                    accumulator.consume(region)
+                    yield region
+
+            spool.write(capture_sources(consume_regions(), bounds, source_spool, context,
+                                        scene_sources))
             stage = "Critic"
             if stage_hook:
                 stage_hook(stage)
             with spool.path.open("rb") as stream:
                 max_rows = max(1, min(128, int(budget // (bounds.size.x * 4 + 256) // 8)))
                 window = _SpoolWindow(spool, stream, max_rows)
-                failed, lines = _evaluate(window, blueprint, context, source,
-                                          max_nodes=max(1, int(budget // 2048)))
+                failed, lines, metrics, structured = _evaluate(
+                    window, blueprint, context, source, max_nodes=max(1, int(budget // 2048)),
+                    critic=accumulator.finalize(),
+                )
                 for code, count in sorted(weather_counts.items()):
-                    lines.append(f"WARN {code} count={count} {source} "
-                                 + context["massing"]["element"])
+                    diagnostic = {"code": code, "metric": "weather_transition", "severity": "warn",
+                                  "source": str(source), "element": context["massing"]["element"],
+                                  "actual": count, "expected": 0, "repairPaths": []}
+                    structured.append(diagnostic)
+                    lines.append(_diagnostic_line(diagnostic))
                 stage = "Export"
                 if stage_hook:
                     stage_hook(stage)
@@ -478,7 +560,8 @@ def make(
             _atomic_json(staged_record, {"formatVersion": 1, **expected, "status": status,
                                          "preview": "not-run", "seed": blueprint.seed,
                                          "config": config, "sources": resolved.origins,
-                                         "output": str(out), "diagnostics": lines})
+                                         "output": str(out), "diagnostics": lines,
+                                         "metrics": metrics, "structuredDiagnostics": structured})
             backups = {}
             scene_out = out.with_name(f"{out.stem}.scene.json.gz")
             scene_meta_out = scene_out.with_suffix(scene_out.suffix + ".meta.json")
