@@ -1,13 +1,18 @@
+import hashlib
 import json
+import math
 from pathlib import Path
 
 import pytest
+from jsonschema import Draft202012Validator
 
 from mcblueprint import blockdata
 from mcblueprint.errors import BlueprintError
 from mcblueprint.model import BlockState
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+DATA_DIR = REPO_ROOT / "src" / "mcblueprint" / "data"
+BLOCKDATA_DIR = DATA_DIR / "blockdata"
 
 
 def test_supported_versions_includes_1_21_11() -> None:
@@ -75,29 +80,70 @@ def test_complete_fills_defaults() -> None:
         data.complete(BlockState.parse("not_a_block"))
 
 
-def test_every_default_is_an_allowed_value() -> None:
+@pytest.mark.parametrize("version", blockdata.supported_versions())
+def test_every_default_is_an_allowed_value(version: str) -> None:
     raw = json.loads(
-        (REPO_ROOT / "src" / "mcblueprint" / "data" / "blocks" / "1.21.11.json").read_text(
-            encoding="utf-8"
-        )
+        (BLOCKDATA_DIR / f"blockdata-{version}.json").read_text(encoding="utf-8")
     )
-    for block_id, entry in raw.items():
+    for block_id, entry in raw["blocks"].items():
         assert set(entry["default"]) == set(entry["properties"]), block_id
         for name, value in entry["default"].items():
             assert value in entry["properties"][name], (block_id, name)
 
 
-def test_versions_json_matches_bundled_files() -> None:
-    data_dir = REPO_ROOT / "src" / "mcblueprint" / "data"
-    versions = json.loads((data_dir / "versions.json").read_text(encoding="utf-8"))
-    files = {p.stem for p in (data_dir / "blocks").glob("*.json")}
-    assert set(versions) == files
-    assert list(versions) == blockdata.supported_versions()
-    # sorted numerically (1.21.11 before 26.1.2) with increasing DataVersions
+def test_blockdata_lock_matches_bundled_files() -> None:
+    lock = json.loads((DATA_DIR / "lock.json").read_text(encoding="utf-8"))["blockdata"]
+    assert lock["repository"] == "https://github.com/mc-blueprint/mc-blueprint-blockdata"
+    assert lock["version"] == "1.0.0"
+    assert lock["commit"] == "88ac6cb2fa90a99c65edacd1713904649c17d1a6"
+    files = {p.name: p for p in BLOCKDATA_DIR.iterdir() if p.is_file()}
+    assert set(lock["sha256"]) == set(files)
+    for name, path in files.items():
+        assert hashlib.sha256(path.read_bytes()).hexdigest() == lock["sha256"][name], name
+    versions = blockdata.supported_versions()
+    assert {f"blockdata-{version}.json" for version in versions} == (
+        set(files) - {"blockdata.schema.json"}
+    )
     keys = [tuple(int(part) for part in v.split(".")) for v in versions]
     assert keys == sorted(keys)
-    data_versions = [info["dataVersion"] for info in versions.values()]
+    data_versions = [blockdata.data_version(version) for version in versions]
     assert data_versions == sorted(data_versions) and len(set(data_versions)) == len(data_versions)
+
+
+@pytest.mark.parametrize(
+    ("version", "blocks", "states"),
+    [
+        ("1.21.11", 1166, 29671),
+        ("26.1.2", 1168, 29873),
+        ("26.2", 1196, 32366),
+        ("26.3", 1286, 35723),
+    ],
+)
+def test_blockdata_v1_contract(version: str, blocks: int, states: int) -> None:
+    schema = json.loads((BLOCKDATA_DIR / "blockdata.schema.json").read_text(encoding="utf-8"))
+    raw = json.loads((BLOCKDATA_DIR / f"blockdata-{version}.json").read_text(encoding="utf-8"))
+    Draft202012Validator(schema).validate(raw)
+    lock = json.loads((DATA_DIR / "lock.json").read_text(encoding="utf-8"))["blockdata"]
+    assert raw["minecraftVersion"] == version
+    assert raw["dataVersion"] == blockdata.data_version(version)
+    assert raw["generator"] == {
+        "repository": "mc-blueprint/mc-blueprint-blockdata",
+        "version": lock["version"],
+        "commit": lock["commit"],
+    }
+    assert len(raw["blocks"]) == blocks
+    assert sum(
+        math.prod(len(values) for values in entry["properties"].values())
+        for entry in raw["blocks"].values()
+    ) == states
+    loaded = blockdata.load_block_data(version)
+    for block_id, entry in raw["blocks"].items():
+        info = loaded.get(block_id)
+        assert info is not None
+        assert info.properties == {
+            name: tuple(values) for name, values in entry["properties"].items()
+        }
+        assert info.default == entry["default"]
 
 
 @pytest.mark.parametrize("version", blockdata.supported_versions())

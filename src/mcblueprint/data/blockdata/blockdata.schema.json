@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/mc-blueprint/mc-blueprint-blockdata/blob/develop/src/mcblockdata/blockdata.schema.json",
+  "title": "mc-blueprint blockdata v1",
+  "type": "object",
+  "required": ["formatVersion", "minecraftVersion", "dataVersion", "generator", "blocks", "families", "tints"],
+  "properties": {
+    "formatVersion": {"const": 1},
+    "minecraftVersion": {"type": "string", "minLength": 1},
+    "dataVersion": {"type": "integer", "minimum": 0},
+    "generator": {
+      "type": "object",
+      "required": ["repository", "version", "commit"],
+      "properties": {
+        "repository": {"const": "mc-blueprint/mc-blueprint-blockdata"},
+        "version": {"type": "string", "minLength": 1},
+        "commit": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "blocks": {
+      "type": "object",
+      "minProperties": 1,
+      "patternProperties": {
+        "^[a-z0-9_.-]+:[a-z0-9_./-]+$": {
+          "type": "object",
+          "required": ["properties", "default", "material", "shape", "tint", "light", "render"],
+          "properties": {
+            "properties": {"type": "object", "additionalProperties": {"type": "array", "items": {"type": "string"}}},
+            "default": {"type": "object", "additionalProperties": {"type": "string"}},
+            "material": {"enum": ["stone", "brick", "wood", "plaster", "terracotta", "concrete", "metal", "glass", "soil", "sand", "plant", "wool", "ice_snow", "ore", "mineral", "light", "liquid", "other"]},
+            "subMaterial": {"type": "string"},
+            "shape": {"enum": ["full", "stairs", "slab", "wall", "fence", "fence_gate", "pane", "door", "trapdoor", "button", "pressure_plate", "sign", "hanging_sign", "carpet", "rail", "plant", "fluid"]},
+            "family": {"type": "string"},
+            "tint": {"enum": ["none", "grass", "foliage", "water", "fixed"]},
+            "light": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "required": ["when", "emission", "opacity"],
+                "properties": {
+                  "when": {"type": "object", "additionalProperties": {"type": "string"}},
+                  "emission": {"type": "integer", "minimum": 0, "maximum": 15},
+                  "opacity": {"type": "integer", "minimum": 0, "maximum": 15}
+                },
+                "additionalProperties": false
+              }
+            },
+            "faces": {
+              "type": "object",
+              "properties": {
+                "top": {"$ref": "#/$defs/face"},
+                "side": {"$ref": "#/$defs/face"},
+                "bottom": {"$ref": "#/$defs/face"}
+              },
+              "additionalProperties": false
+            },
+            "weathering": {
+              "type": "object",
+              "properties": {
+                "moss": {"$ref": "#/$defs/blockId"},
+                "crack": {"$ref": "#/$defs/blockId"}
+              },
+              "additionalProperties": false
+            },
+            "render": {"enum": ["model", "fluid", "entity", "invisible"]}
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "families": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "minProperties": 1,
+        "additionalProperties": {"$ref": "#/$defs/blockId"}
+      }
+    },
+    "tints": {
+      "type": "object",
+      "properties": {
+        "grass": {"$ref": "#/$defs/biomeColors"},
+        "foliage": {"$ref": "#/$defs/biomeColors"},
+        "water": {"$ref": "#/$defs/biomeColors"},
+        "fixed": {
+          "type": "object",
+          "description": "名前空間付きブロックID → OKLab [L,a,b]。素材色と乗算色を線形sRGBに変換して乗算する。facesは未着色の素材色。",
+          "propertyNames": {"$ref": "#/$defs/blockId"},
+          "additionalProperties": {"$ref": "#/$defs/tintColor"}
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "$defs": {
+    "blockId": {"type": "string", "pattern": "^[a-z0-9_.-]+:[a-z0-9_./-]+$"},
+    "face": {
+      "type": "object",
+      "required": ["oklab"],
+      "properties": {
+        "oklab": {
+          "$ref": "#/$defs/oklab",
+          "description": "互換用の素材色分位点。着色層と未着色層を合わせた値。"
+        },
+        "tintedOklab": {
+          "$ref": "#/$defs/oklab",
+          "description": "tintindex >= 0の層だけの素材色分位点。乗算色を線形sRGBで適用する。"
+        },
+        "untintedOklab": {
+          "$ref": "#/$defs/oklab",
+          "description": "tintedOklabと共存する未着色層の分位点。着色を掛けない。"
+        }
+      },
+      "dependentRequired": {"untintedOklab": ["tintedOklab"]},
+      "additionalProperties": false
+    },
+    "oklab": {
+      "type": "object",
+      "required": ["L", "a", "b"],
+      "properties": {
+        "L": {"$ref": "#/$defs/percentiles", "items": {"type": "number", "minimum": 0, "maximum": 1.00001}},
+        "a": {"$ref": "#/$defs/percentiles", "items": {"type": "number", "minimum": -0.4, "maximum": 0.4}},
+        "b": {"$ref": "#/$defs/percentiles", "items": {"type": "number", "minimum": -0.4, "maximum": 0.4}}
+      },
+      "additionalProperties": false
+    },
+    "percentiles": {"type": "array", "minItems": 5, "maxItems": 5},
+    "biomeColors": {
+      "type": "object",
+      "description": "バイオームID → OKLab [L,a,b]。素材色と乗算色を線形sRGBに変換して乗算する。",
+      "additionalProperties": {"$ref": "#/$defs/tintColor"}
+    },
+    "tintColor": {
+        "type": "array",
+        "items": {"type": "number"},
+        "minItems": 3,
+        "maxItems": 3
+    }
+  },
+  "additionalProperties": false
+}

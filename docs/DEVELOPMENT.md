@@ -106,19 +106,17 @@ Blueprint JSON Schema の正本は `src/mcblueprint/schema/blueprint.schema.json
 
 Litematica を使う場合は `.schem` をそのまま読み込めるほか、`mcblueprint build examples/house.json --format litematic` で `.litematic` を生成し、ゲームディレクトリの `schematics/` に置いて Litematica の「Load Schematics」から読み込める。
 
-## ブロックデータの再生成
+## ブロックデータの更新
 
-ブロック ID・プロパティ・デフォルト状態の検証に使うデータは `src/mcblueprint/data/blocks/<version>.json`、DataVersion は `src/mcblueprint/data/versions.json` にあり、どちらもコミット済み（利用者に Java は不要）。同梱バージョンの一覧と差分は [VERSIONS.md](VERSIONS.md) にまとめる。
-新しい Minecraft バージョンを追加するときは Java を用意し、次を実行して生成物をコミットする。`1.21.x` のサーバーは Java 21、`26.x` のサーバーは Java 25 が必要で、`--java` で実行ファイルを指定できる（省略時は `PATH` の `java`）。
+ブロック ID・プロパティ・既定値・DataVersion は `src/mcblueprint/data/blockdata/blockdata-<版>.json` にあり、mc-blueprint-blockdata の Release を同梱する。利用者・mc-blueprint の開発者に Java は不要。同梱バージョンの一覧と差分は [VERSIONS.md](VERSIONS.md) にまとめる。
 
-```bash
-python scripts/generate_block_data.py --version 1.21.11 --download
-python scripts/generate_block_data.py --version 26.3 --download --java "C:/Program Files/Eclipse Adoptium/jdk-25.0.4.7-hotspot/bin/java.exe"
-```
+1. 提供元のリリースを確定し、`gh release download <tag> -R mc-blueprint/mc-blueprint-blockdata --dir <一時ディレクトリ>` で資産を取得する。
+2. `SHA256SUMS` で照合した `blockdata-<版>.json` だけをバイト列のまま `src/mcblueprint/data/blockdata/` に置く。差分ファイル・`generator.commit` は同梱しない。
+3. 同じcommitの `src/mcblockdata/blockdata.schema.json` を同梱先の `blockdata.schema.json` にコピーする。スキーマの正本は提供元に置き、ここでは編集しない。
+4. `src/mcblueprint/data/lock.json` の `blockdata` に提供元URL（`repository`）・リリース版（`version`）・`commit` と、各ファイル名からSHA-256への辞書（`sha256`）を記録する。既存の `patterns` 記録は保持する。
+5. `ruff check .`・`pytest`・`mcblueprint check --strict` を実行し、本書とバージョン表を必要に応じて更新する。新しい版ではブロック・状態・既定値の差も確認する。
 
-対応バージョンの一覧は `src/mcblueprint/data/versions.json` が正となり、`mcblueprint versions` で表示できる。Minecraft Java Edition は 2026 年から `26.3` のような年ベースの採番へ移行しているが、スクリプトは Mojang の公式マニフェストに載っているバージョン ID をそのまま受け付ける。追加後は `tests/test_blockdata.py`（`versions.json` と `blocks/` の対応、DataVersion の単調増加、旧バージョンのブロックが残っていること）と `tests/test_examples.py`（全バージョンで `examples/` が検証を通ること）が自動で検査する。
-
-`--download` は Mojang の公式マニフェストから `server.jar` を `generated/` に取得し SHA-1 を検証する。手元の `server.jar` を使う場合は `--server-jar <path>` を指定する。スクリプトは公式データジェネレータ（`--reports`）を実行し、`reports/blocks.json` を圧縮形式へ変換する。`generated/` は git 管理外。
+版一覧はlockに記録したファイルの `minecraftVersion`・`dataVersion` から導き、DataVersionの昇順で `mcblueprint versions` に表示する。`tests/test_blockdata.py` は固定SHA-256・スキーマ・出所・ファイル一覧との対応・全版の読み込み・既定値・DataVersionの単調増加を、`tests/test_examples.py` は全版のサンプル検証を確認する。`.gitattributes` の `src/mcblueprint/data/** text eol=lf` により、ReleaseのLFを維持する。
 
 ## 開発フロー
 
