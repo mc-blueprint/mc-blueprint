@@ -14,6 +14,7 @@ from mcblueprint.loader import load_blueprint_dict
 from mcblueprint.materialize import materialize
 from mcblueprint.model import AABB, BlockState, Vec3
 from mcblueprint.model.blueprint import Blueprint
+from mcblueprint.operations.shapes import disc_offsets
 from mcblueprint.planning import plan_buildspec
 from mcblueprint.traversal import check_building, check_route
 from mcblueprint.validator import validate
@@ -130,6 +131,40 @@ def test_seed_stability_and_columns(tmp_path, archetype):
     original = copy.deepcopy(first.blueprint)
     built(first)
     assert first.blueprint == original
+
+
+@pytest.mark.parametrize("archetype,shape", (("house", None), ("tower", "round"),
+                                               ("tower", "square")))
+def test_planning_exports_expected_structure_and_facade_contract(tmp_path, archetype, shape):
+    features = {"shape": shape} if shape else {}
+    first = plan(tmp_path, archetype=archetype, features=features)
+    second = plan(tmp_path, archetype=archetype, features=features,
+                  elements={f"{archetype}#1": {"angle": 90}})
+    contract = first.massing
+    assert contract["columns"] and contract["beams"] and contract["facades"]
+    assert [column["id"] for column in contract["columns"]] == [
+        column["id"] for column in second.massing["columns"]
+    ]
+    assert [beam["id"] for beam in contract["beams"]] == [
+        beam["id"] for beam in second.massing["beams"]
+    ]
+    assert all(facade["normal"] and facade["origin"] and facade["uAxis"]
+               and facade["vAxis"] for facade in contract["facades"])
+    assert all(opening["projection"]["u"] and opening["projection"]["v"]
+               for facade in contract["facades"] for opening in facade["openings"])
+    if shape == "round":
+        radius = first.massing["params"]["radius"]
+        outline = {(p.x, p.z) for p in disc_offsets(radius, "hollow", "y")}
+        assert all((column["from"][0] - first.site["offset"][0],
+                    column["from"][2] - first.site["offset"][2]) in outline
+                   for column in contract["columns"])
+    _, volume = built(first)
+    for column in contract["columns"]:
+        x, _, z = column["from"]
+        y0, y1 = column["from"][1], column["to"][1]
+        assert all(volume.attributes(Vec3(x, y, z)).reserved == "structure"
+                   for y in range(y0, y1 + 1))
+    assert first.blueprint["metadata"]["planning"]["columns"] == contract["columns"]
 
 
 @pytest.mark.parametrize("style,roof", (("medieval", "hip"), ("japanese", "gable"),
