@@ -13,12 +13,21 @@ _held: set[str] = set()
 
 
 def _key(path: Path) -> str:
-    return os.path.normcase(str(path.resolve()))
+    normalized = os.path.normcase(str(path.resolve()))
+    for suffix in (".scene.json.gz.meta.json", ".scene.json.gz", ".schem.run.json",
+                   ".litematic.run.json", ".schem", ".litematic"):
+        if normalized.endswith(suffix):
+            return normalized.removesuffix(suffix)
+    return normalized
 
 
 @contextmanager
 def lock_paths(*paths: Path):
-    """正規化した複数パスを非待機でロックし、with終了時に解放する。"""
+    """複数パスを一定順・非待機でロックし、with終了時に解放する。
+
+    schem・litematic・scene・scene sidecar・runは同じ出力stemを共有する。
+    その他の入力パスは拡張子を含めて正規化する。競合はBlockingIOError。
+    """
     keys = sorted({_key(Path(path)) for path in paths})
     lock_dir = Path.home() / ".cache" / "mc-blueprint" / "locks"
     lock_dir.mkdir(parents=True, exist_ok=True)
