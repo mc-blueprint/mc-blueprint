@@ -11,7 +11,7 @@ from typing import Any
 
 from mcblueprint.blockdata import BlockData
 from mcblueprint.errors import BlueprintError
-from mcblueprint.generator import GeneratedRegion
+from mcblueprint.generator import GeneratedRegion, estimate_weather_memory
 from mcblueprint.model.block import BlockState
 from mcblueprint.model.vec import Vec3
 from mcblueprint.operations.base import derive_seed
@@ -99,7 +99,7 @@ def apply_weather(
     if (isinstance(max_memory_mb, bool) or not isinstance(max_memory_mb, int | float)
             or not math.isfinite(max_memory_mb) or max_memory_mb <= 0):
         raise ValueError("max_memory_mb は有限の正数が必要です")
-    if volume.region.volume * 384 > max_memory_mb * 1024 * 1024:
+    if estimate_weather_memory(volume.region.volume) > max_memory_mb * 1024 * 1024:
         raise BlueprintError("Weatherの領域・距離場・候補が max_memory_mb に収まりません")
     moss = config.get("moss", {})
     cracks = config.get("cracks", {})
@@ -121,16 +121,22 @@ def apply_weather(
         raise ValueError("weathering.moss.ground_proximity.height は0以上の整数が必要です")
     results: list[tuple[Vec3, BlockState, Any]] = []
     plants: list[tuple[Vec3, BlockState, Any, Vec3]] = []
+    removed: set[Vec3] = set()
     bounds = volume.region
+    world_bounds = region.world_bounds or bounds
+    check_min = Vec3.max(region.core.min - Vec3(1, 1, 1), bounds.min)
+    check_max = Vec3.min(region.core.max + Vec3(1, 1, 1), bounds.max)
     distances = _water_distances(volume, water_radius) if water_radius else {}
     diagnostics: list[dict[str, Any]] = []
 
-    for y in range(region.core.min.y, region.core.max.y + 1):
-        for z in range(region.core.min.z, region.core.max.z + 1):
-            for x in range(region.core.min.x, region.core.max.x + 1):
+    for y in range(check_min.y, check_max.y + 1):
+        for z in range(check_min.z, check_max.z + 1):
+            for x in range(check_min.x, check_max.x + 1):
                 pos = Vec3(x, y, z)
                 original = volume.get(pos)
                 if original is None:
+                    if not region.core.contains(pos):
+                        continue
                     if volume.attributes(pos).reserved is not None:
                         continue
                     below = volume.get(pos + Vec3(0, -1, 0))
@@ -148,8 +154,6 @@ def apply_weather(
                                 or support_state.id in _NON_SOLID
                                 or support_attr.role in ("floor", "path")
                                 or support_state.id.endswith(("_stairs", "_door"))):
-                            continue
-                        if not bounds.contains(support):
                             continue
                         plant_ids = (("minecraft:short_grass", "minecraft:fern")
                                      if face == "bottom" and
@@ -190,9 +194,10 @@ def apply_weather(
                 for offset, face in _NEIGHBORS:
                     adjacent = pos + offset
                     neighbor = volume.get(adjacent)
-                    if bounds.contains(adjacent) and (
-                        neighbor is None or neighbor.id in _AIR_IDS
-                    ):
+                    if (not world_bounds.contains(adjacent)
+                            or bounds.contains(adjacent) and (
+                                neighbor is None or neighbor.id in _AIR_IDS
+                            )):
                         exposed.add(face)
                 reserved = attr.reserved
                 if reserved == "circulation":
@@ -270,10 +275,11 @@ def apply_weather(
                     seed, attr.element, pos, "missing",
                 ) < missing_amount * age):
                     target = _AIR
-                if target != original:
+                if target.id in _AIR_IDS:
+                    removed.add(pos)
+                if target != original and region.core.contains(pos):
                     results.append((pos, target, attr))
 
-    removed = {pos for pos, state, _ in results if state.id in _AIR_IDS}
     results.extend(
         (pos, state, attr) for pos, state, attr, support in plants if support not in removed
     )
