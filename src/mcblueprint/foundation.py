@@ -8,7 +8,7 @@ from typing import Any
 from mcblueprint.errors import BlueprintError
 from mcblueprint.model.block import BlockState
 from mcblueprint.model.vec import AABB, Vec3
-from mcblueprint.terrain import TerrainPlacement
+from mcblueprint.terrain import ColumnWrites, RegionTerrainSnapshot, TerrainPlacement
 from mcblueprint.volume import MAX_VOLUME
 
 STABLE_GROUND = frozenset(
@@ -132,7 +132,7 @@ class FoundationResult:
 class FoundationPlan:
     """重複のないBlueprint座標の変更列と集計。材質は基礎材または通常air。"""
 
-    writes: tuple[tuple[Vec3, BlockState], ...]
+    writes: tuple[tuple[Vec3, BlockState], ...] | ColumnWrites
     result: FoundationResult
 
 
@@ -149,14 +149,17 @@ def plan_foundation(
     """
     bounds = spec.scan_bounds
     region = terrain.region
+    compact = isinstance(terrain.snapshot, RegionTerrainSnapshot)
     if region.volume > MAX_VOLUME:
         raise FoundationError((FoundationIssue(bounds.min, "施工セル総数の上限を超えます"),))
     if not region.contains(bounds.min) or not region.contains(bounds.max):
         outside = bounds.min if not region.contains(bounds.min) else bounds.max
         raise FoundationError((FoundationIssue(outside, "探索帯が施工/取得範囲外です"),))
+    if compact and bounds.size.x * bounds.size.z * 512 > terrain.snapshot.plan_budget_bytes:
+        raise BlueprintError("造成の列検査・計画が limits.max_memory_mb に収まりません")
     floor_y = spec.footprint.min.y
     issues: list[FoundationIssue] = []
-    writes: list[tuple[Vec3, BlockState]] = []
+    writes = ColumnWrites(terrain.snapshot.plan_budget_bytes) if compact else []
     cut_cells = fill_cells = floor_cells = 0
     required_cut = required_fill = 0
     required_support = 1
@@ -217,7 +220,7 @@ def plan_foundation(
                     floor_cells += 1
     if issues:
         raise FoundationError(tuple(issues))
-    return FoundationPlan(tuple(writes), FoundationResult(
+    return FoundationPlan(writes if compact else tuple(writes), FoundationResult(
         spec.footprint, cut_cells, fill_cells, floor_cells,
         required_cut, required_fill, required_support,
     ))

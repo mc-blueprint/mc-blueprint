@@ -14,14 +14,14 @@ from typing import Any
 from mcblueprint import blockdata, components
 from mcblueprint.errors import BlueprintError
 from mcblueprint.foundation import FoundationSpec, plan_foundation
-from mcblueprint.importers import read_terrain
+from mcblueprint.importers import read_terrain, read_terrain_regions
 from mcblueprint.model.block import BlockState
 from mcblueprint.model.blueprint import FORMAT_VERSION, Blueprint
 from mcblueprint.model.palette import Palette, PaletteEntry
 from mcblueprint.model.vec import AABB, Vec3
 from mcblueprint.operations.registry import build_operations
 from mcblueprint.surface_path import SurfacePathSpec, plan_surface_path
-from mcblueprint.terrain import TerrainPlacement
+from mcblueprint.terrain import RegionTerrainSnapshot, TerrainPlacement
 
 
 def read_blueprint_json(path: str | Path) -> dict[str, Any]:
@@ -51,10 +51,13 @@ def load_blueprint(path: str | Path) -> Blueprint:
         return load_blueprint_dict(read_blueprint_json(path), base_dir=Path(path).parent)
 
 
-def load_blueprint_dict(data: dict[str, Any], *, base_dir: Path | None = None) -> Blueprint:
+def load_blueprint_dict(
+    data: dict[str, Any], *, base_dir: Path | None = None, terrain_snapshot=None,
+) -> Blueprint:
     """検証済みJSONをモデルへ変換する。地形sourceの相対パスはbase_dir（既定cwd）基準。
 
     地形ファイルはこの呼出し時に読み取り、不変のsnapshotとして保持する。
+    terrain_snapshot指定時はSiteで読取済みの同じ地形を再利用し、版・保存hashを照合する。
     読取不能・保持不能・施工条件違反はBlueprintErrorになる。
     """
     format_version = data.get("formatVersion")
@@ -78,7 +81,7 @@ def load_blueprint_dict(data: dict[str, Any], *, base_dir: Path | None = None) -
         size=_vec(data["size"], "size") if "size" in data else None,
         palettes=build_palettes(data.get("palettes", {})),
         metadata=data.get("metadata"),
-        terrain=_load_terrain(data, base_dir) if "terrain" in data else None,
+        terrain=_load_terrain(data, base_dir, terrain_snapshot) if "terrain" in data else None,
     )
     if blueprint.terrain is not None:
         region = blueprint.terrain.region
@@ -101,9 +104,24 @@ def load_blueprint_dict(data: dict[str, Any], *, base_dir: Path | None = None) -
     return blueprint
 
 
-def _load_terrain(data: dict[str, Any], base_dir: Path | None) -> TerrainPlacement:
+def _load_terrain(data: dict[str, Any], base_dir: Path | None, snapshot=None) -> TerrainPlacement:
     raw = data["terrain"]
-    snapshot = read_terrain((base_dir or Path.cwd()) / raw["source"])
+    generation = (data.get("metadata") or {}).get("generation", {})
+    if not isinstance(generation, dict):
+        generation = {}
+    if snapshot is None:
+        source = (base_dir or Path.cwd()) / raw["source"]
+        if generation.get("mode") == "buildspec-v1":
+            try:
+                budget = generation["config"]["limits"]["max_memory_mb"]
+            except (KeyError, TypeError) as exc:
+                raise BlueprintError("生成metadataに合成済みのメモリ上限が必要です") from exc
+            snapshot = read_terrain_regions(source, max_memory_mb=budget)
+        else:
+            snapshot = read_terrain(source)
+    expected = generation.get("terrainHash")
+    if expected is not None and snapshot.input_sha256 != expected:
+        raise BlueprintError("terrain.source の入力hashが保存された地形と一致しません")
     if snapshot.minecraft_version != data["minecraftVersion"]:
         raise BlueprintError("terrain.source のDataVersionがBlueprintのMinecraft版と一致しません")
 
@@ -117,6 +135,12 @@ def _load_terrain(data: dict[str, Any], base_dir: Path | None) -> TerrainPlaceme
     except ValueError as exc:
         raise BlueprintError(str(exc)) from exc
     blocks = blockdata.load_block_data(data["minecraftVersion"])
+    if isinstance(snapshot, RegionTerrainSnapshot):
+        for position, state in snapshot.states_in(terrain.region):
+            problem = blocks.check_state(state)
+            if problem is not None:
+                raise BlueprintError(f"terrain.source {position}: {problem}")
+        return terrain
     for local, state in snapshot.blocks.items():
         if terrain.region.contains(snapshot.to_source(local)):
             problem = blocks.check_state(state)

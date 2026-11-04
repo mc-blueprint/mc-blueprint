@@ -15,12 +15,13 @@ from mcblueprint.detail import plan_detail
 from mcblueprint.errors import BlueprintError
 from mcblueprint.facade_projection import NORMALS, plan_facades
 from mcblueprint.foundation import STABLE_GROUND
-from mcblueprint.importers import read_terrain
+from mcblueprint.importers import read_terrain_regions
 from mcblueprint.model import AABB, Vec3
 from mcblueprint.operations.building import BuildingFace, BuildingLayout
 from mcblueprint.operations.registry import build_operation
 from mcblueprint.operations.shapes import disc_offsets
 from mcblueprint.operations.transform import Transform
+from mcblueprint.terrain import RegionTerrainSnapshot
 
 
 @dataclass(frozen=True)
@@ -40,6 +41,7 @@ class PlanningResult:
     palette: dict[str, Any]
     layout: BuildingLayout | None
     diagnostics: tuple[dict[str, Any], ...]
+    terrain_snapshot: RegionTerrainSnapshot | None = None
 
 
 def _ref(role: str, shape: str = "full") -> dict[str, Any]:
@@ -304,8 +306,8 @@ def plan_buildspec(resolved: ResolveResult) -> PlanningResult:
     """Resolve結果から住宅・塔の計画を作る。入力を変更せず、生成は実行しない。
 
     寸法不足・未知のelements/param・不正なoverrideはBlueprintError。
-    予約へのoverrideは生成時にも検査される。snapshotは既存loader/foundationを
-    通るBlueprintとして出力し、generate_regionsではなくgenerateで施工する。
+    予約へのoverrideは生成時にも検査される。snapshotは領域読取用spoolを保持し、
+    同じ元地形をloader/foundationと領域生成で使う。
     """
     if resolved.buildspec is None:
         raise BlueprintError("Site: BuildSpecが必要です")
@@ -389,8 +391,11 @@ def plan_buildspec(resolved: ResolveResult) -> PlanningResult:
     terrain = spec["site"]["terrain"]
     terrain_json = {}
     floor_y = 0
+    snapshot = None
     if terrain not in ("none", "flat"):
-        snapshot = read_terrain(terrain)
+        snapshot = read_terrain_regions(
+            terrain, max_memory_mb=resolved.config["limits"]["max_memory_mb"],
+        )
         if snapshot.minecraft_version != spec["minecraftVersion"]:
             raise BlueprintError("Site: snapshotのMinecraft版が一致しません")
         region = snapshot.source_bounds
@@ -398,7 +403,7 @@ def plan_buildspec(resolved: ResolveResult) -> PlanningResult:
             raise BlueprintError("Site: snapshotがsizeの敷地を含みません")
         offset = offset + Vec3(region.min.x + (region.size.x - size[0]) // 2, 0,
                                region.min.z + (region.size.z - size[2]) // 2)
-        floor_y = max((snapshot.to_source(p).y for p in snapshot.blocks), default=region.min.y) + 1
+        floor_y = snapshot.surface_y + 1
         offset = offset + Vec3(0, floor_y, 0)
         footprint = transform.bounds(AABB(
             Vec3(0, 0, 0) if layout else Vec3(-params["radius"], 0, -params["radius"]),
@@ -479,6 +484,9 @@ def plan_buildspec(resolved: ResolveResult) -> PlanningResult:
         )
     site = {"formatVersion": 1, "stage": "site", "offset": offset.to_list(),
             "floorY": floor_y, "terrain": terrain}
+    if snapshot is not None:
+        site["terrainHash"] = snapshot.input_sha256
+        site["groundHeight"] = {"type": "terrain", "inputHash": snapshot.input_sha256}
     massing = {"formatVersion": 1, "stage": "massing", "element": root, "params": params,
                "entrance": entrance.to_list(), "arrivals": [p.to_list() for p in arrivals],
                "operations": body, **contract}
@@ -486,4 +494,4 @@ def plan_buildspec(resolved: ResolveResult) -> PlanningResult:
                    "decorations": decorations, "overrides": overrides,
                    "diagnostics": diagnostics}
     return PlanningResult(site, massing, detail_json, blueprint, palette, layout,
-                          tuple(diagnostics))
+                          tuple(diagnostics), snapshot)

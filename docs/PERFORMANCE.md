@@ -356,3 +356,29 @@ core数が128から2048へ16倍になると、観測時間は変更前の約154.
 配置・指標・構造化診断・展開sceneの4種hashと終了コードが一致し、全件終了コード0だった。
 性能は再測定していない。参照commit・統合commit・実装hash・入力hashと照合結果は
 [spool-reuse-234-verification.json](../evaluation/records/spool-reuse-234-verification.json) に保存する。
+
+## 元地形snapshotの領域施工（#237）
+
+`scripts/benchmark_snapshot_regions.py --output benchmarks/snapshot-regions.json` は、
+固定合成地形medium `64×48×64` / huge `256×128×256` を両入力形式で作り、条件ごとに
+独立プロセスで測定する。地盤は下半分が石、上半分がair、貼付offsetは負値。
+16×16の基礎と幅3の道路を計画する。元入力の作成は計測外だが、圧縮入力の事前検査、
+NBTデコード、spool化、Blueprint意味検証、造成・道路計画、全coreの生成を含む。
+全体BlockVolumeは復元しない。coreは32×16×32、haloは4、予算は128MiB。
+
+2026-11-04、Python 3.12.15 / Windows、各条件1回の結果：
+
+| 規模 | 入力形式 | 入力検証・計画（秒） | 全体（秒） | プロセスpeak RSS（MiB） |
+|---|---|---:|---:|---:|
+| medium | schem | 0.578 | 0.746 | 71.4 |
+| medium | litematic | 0.503 | 0.665 | 70.4 |
+| huge | schem | 6.965 | 17.756 | 75.2 |
+| huge | litematic | 10.526 | 21.361 | 70.3 |
+
+hugeは全8,388,608セルを512 coreで生成し、入力デコードを含むRSSが128MiB以内だった。
+入力hash、実装hash、依存版、OS、セル数と集計は
+[snapshot-regions.json](../benchmarks/snapshot-regions.json) に保存する。
+pytest全件と並行して実行したため時間値は負荷の影響を含む。
+Weather・Critic・scene・出力は測定範囲外であり、make全体のNFR2/3の達成証跡には使わない。
+小snapshotでは旧施工との配置・造成集計、make/Blueprint build/detail・Blueprint再開の一致、
+入力変更拒否と既存完成出力の保全を回帰テストで確認する。

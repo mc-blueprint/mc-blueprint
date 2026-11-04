@@ -134,7 +134,8 @@ def apply_weather(
             for x in range(check_min.x, check_max.x + 1):
                 pos = Vec3(x, y, z)
                 original = volume.get(pos)
-                if original is None:
+                if (original is None or original == _AIR
+                        and volume.attributes(pos).operation is None):
                     if not region.core.contains(pos):
                         continue
                     if volume.attributes(pos).reserved is not None:

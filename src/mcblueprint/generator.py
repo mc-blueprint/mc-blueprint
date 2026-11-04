@@ -5,7 +5,7 @@ from __future__ import annotations
 import math
 import random
 from collections.abc import Iterator
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 
 from mcblueprint.errors import BlueprintError
 from mcblueprint.foundation import FoundationResult
@@ -15,7 +15,8 @@ from mcblueprint.operations.base import ExecutionContext, Operation, intersect
 from mcblueprint.operations.box_like import iter_box
 from mcblueprint.operations.randomness import PaletteSampler
 from mcblueprint.surface_path import check_surface_path
-from mcblueprint.volume import MAX_VOLUME, BlockVolume, RegionVolume
+from mcblueprint.terrain import ColumnWrites, RegionTerrainSnapshot
+from mcblueprint.volume import EMPTY_ATTRIBUTES, MAX_VOLUME, BlockVolume, RegionVolume
 
 WEATHER_BYTES_PER_CELL = 384
 
@@ -96,19 +97,30 @@ def generate_regions(
     """決定的な生成をcore/halo単位で返す。全体BlockVolumeは作らない。
 
     呼出し元は1領域ずつ消費・解放する。core外は参照専用で、出力・集計しない。
-    copy・元地形の施工は従来generateを使用する。予算不足時はcoreを縮め、
+    copyは従来generateを使用する。予算不足時はcoreを縮め、
     1セルのcoreと必要haloでも収まらなければBlueprintErrorになる。
     各セルの適用順は元のOperation順を維持する。reverseは領域の列挙順だけを変える。
     """
     limits = limits or GenerationLimits()
     if type(reference_radius) is not int or reference_radius < 0:
         raise BlueprintError("reference_radius は0以上の整数が必要です")
-    if blueprint.terrain is not None or blueprint.foundation is not None or blueprint.surface_path:
-        raise BlueprintError("元地形の施工は領域生成では未対応です")
     operation_count, has_palettes, local_memory = _check_local(blueprint.operations)
+    if blueprint.terrain is not None:
+        local_memory += getattr(blueprint.terrain.snapshot, "generation_memory_bytes", 0)
+    for plan in (blueprint.foundation, blueprint.surface_path):
+        if plan is not None:
+            local_memory += (plan.writes.generation_memory_bytes
+                             if isinstance(plan.writes, ColumnWrites) else len(plan.writes) * 256)
+    if blueprint.surface_path is not None:
+        local_memory += (len(blueprint.surface_path.surfaces)
+                         + len(blueprint.surface_path.head_tops)) * 256
     has_palettes |= bool(blueprint.palettes)
     bounds = blueprint.bounds()
+    if blueprint.terrain is not None and bounds.volume > MAX_VOLUME:
+        raise BlueprintError(f"施工範囲が {MAX_VOLUME:,} セルを超えています（airを含む）")
     halo = reference_radius if reference_radius else limits.halo
+    if blueprint.surface_path is not None:
+        halo = max(halo, blueprint.surface_path.clearance + 2)
     size = bounds.size
     core_size = [min(n or size[i], size[i]) for i, n in enumerate(limits.region)]
     budget = limits.max_memory_mb * 1024 * 1024
@@ -144,6 +156,28 @@ def generate_regions(
                     volume = RegionVolume(area)
                 except MemoryError as exc:
                     raise BlueprintError("領域配列を保持するメモリを確保できません") from exc
+                if blueprint.terrain is not None:
+                    snapshot = blueprint.terrain.snapshot
+                    if isinstance(snapshot, RegionTerrainSnapshot):
+                        lo, hi = snapshot.to_local(area.min), snapshot.to_local(area.max)
+                        for row_y in range(lo.y, hi.y + 1):
+                            for row_z in range(lo.z, hi.z + 1):
+                                row = snapshot.row(row_y, row_z)[lo.x:hi.x + 1]
+                                start = Vec3(area.min.x, row_y + snapshot.offset.y,
+                                             row_z + snapshot.offset.z)
+                                volume.set_box(AABB(start, start.with_axis("x", area.max.x)),
+                                               snapshot.palette, row.reshape(1, 1, -1),
+                                               EMPTY_ATTRIBUTES)
+                    else:
+                        for pos in iter_box(area):
+                            volume.set(pos, snapshot.get(snapshot.to_local(pos)))
+                for plan in (blueprint.foundation, blueprint.surface_path):
+                    if plan is not None:
+                        writes = (plan.writes.iter_region(area)
+                                  if isinstance(plan.writes, ColumnWrites) else plan.writes)
+                        for pos, state in writes:
+                            if area.contains(pos):
+                                volume.set(pos, state)
                 ctx = ExecutionContext(
                     volume, random.Random(0), blueprint.palettes,
                     seed=blueprint.seed if seed is None else seed,
@@ -151,6 +185,17 @@ def generate_regions(
                 )
                 for operation in blueprint.operations:
                     ctx.execute(operation)
+                if blueprint.surface_path is not None:
+                    check_surface_path(volume, blueprint.surface_path, core=core)
+                    for pos, top in blueprint.surface_path.head_tops:
+                        for head_y in range(pos.y - 1, top + 1):
+                            cell = pos.with_axis("y", head_y)
+                            if area.contains(cell):
+                                attributes = volume.attributes(cell)
+                                if attributes.reserved is None:
+                                    volume.set(cell, volume.get(cell), replace(
+                                        attributes, reserved="circulation", owner="surfacePath",
+                                    ))
                 yield GeneratedRegion(core, volume, bounds)
                 del ctx, volume
 
