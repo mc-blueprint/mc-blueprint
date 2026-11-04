@@ -2,6 +2,10 @@
 
 正本は `docs/FORMAT.md`。ここでは書くのに必要な要点だけをまとめる。
 
+BuildSpec の閉じた特徴語彙と planner 対応範囲は `docs/BUILDSPEC.md`、
+敷地規則は `docs/PATTERNS.md`、内部階層 v2 と安定IDは `docs/INTERNAL_PLANNING.md` を参照する。
+外部の BuildSpec・scene・edits は v1 を維持する。旧 checkpoint は再生成する。
+
 ## 骨格
 
 ```json

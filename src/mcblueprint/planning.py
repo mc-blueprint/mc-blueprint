@@ -21,6 +21,7 @@ from mcblueprint.operations.building import BuildingFace, BuildingLayout
 from mcblueprint.operations.registry import build_operation
 from mcblueprint.operations.shapes import disc_offsets
 from mcblueprint.operations.transform import Transform
+from mcblueprint.plan_contract import hierarchy
 from mcblueprint.terrain import RegionTerrainSnapshot
 
 
@@ -28,7 +29,7 @@ from mcblueprint.terrain import RegionTerrainSnapshot
 class PlanningResult:
     """計画段のJSONとMaterializeへの入力。ブロックの展開・材質抽選は行わない。
 
-    site/massing/detailはformatVersion=1。blueprintは役割参照を含むため、
+    site/massing/detailはformatVersion=2。blueprintは役割参照を含むため、
     materializeにstyle・biome・paletteを併せて渡してからloaderで読む。
     layoutは住宅のみ、入口・各階到着点を計画座標で保持する。
     diagnosticsはDetailの診断で、detail["diagnostics"]にも保存する。
@@ -312,6 +313,10 @@ def plan_buildspec(resolved: ResolveResult) -> PlanningResult:
     if resolved.buildspec is None:
         raise BlueprintError("Site: BuildSpecが必要です")
     spec = copy.deepcopy(resolved.buildspec)
+    if spec["archetype"] not in ("house", "tower"):
+        raise BlueprintError(f"Site/Massing: {spec['archetype']} plannerは未対応です")
+    if spec["site"]["terrain"] in ("hill", "mountain", "plateau", "valley", "island", "cave"):
+        raise BlueprintError(f"Site: {spec['site']['terrain']} plannerは未対応です")
     root = f"{spec['archetype']}#1"
     style_path = Path(__file__).parent / "data" / "patterns" / "styles" / f"{spec['style']}.yaml"
     style = yaml.safe_load(style_path.read_text(encoding="utf-8"))
@@ -482,16 +487,19 @@ def plan_buildspec(resolved: ResolveResult) -> PlanningResult:
                 op for op in body if op["element"] == f"{root}.roof"
             ), root).bounds()), transform.apply_axis("z"),
         )
-    site = {"formatVersion": 1, "stage": "site", "offset": offset.to_list(),
+    site = {"formatVersion": 2, "stage": "site", "offset": offset.to_list(),
             "floorY": floor_y, "terrain": terrain}
     if snapshot is not None:
         site["terrainHash"] = snapshot.input_sha256
         site["groundHeight"] = {"type": "terrain", "inputHash": snapshot.input_sha256}
-    massing = {"formatVersion": 1, "stage": "massing", "element": root, "params": params,
-               "entrance": entrance.to_list(), "arrivals": [p.to_list() for p in arrivals],
-               "operations": body, **contract}
-    detail_json = {"formatVersion": 1, "stage": "detail", "operations": detail,
+    detail_json = {"formatVersion": 2, "stage": "detail", "operations": detail,
                    "decorations": decorations, "overrides": overrides,
                    "diagnostics": diagnostics}
+    building = {**blueprint["metadata"]["planning"], "archetype": spec["archetype"],
+                "offset": offset.to_list(), "operations": body}
+    massing = {**hierarchy(spec["archetype"], [building]), "stage": "massing"}
+    blueprint["metadata"]["planning"] = copy.deepcopy(massing)
+    site.update(hierarchy(spec["archetype"], [copy.deepcopy(building)]), stage="site")
+    detail_json.update(hierarchy(spec["archetype"], [copy.deepcopy(building)]), stage="detail")
     return PlanningResult(site, massing, detail_json, blueprint, palette, layout,
                           tuple(diagnostics), snapshot)

@@ -20,7 +20,22 @@ scaleの外形上限はtiny `[16,16,16]`、small `[32,32,32]`、medium `[64,48,6
 
 BuildSpecの`materials`は材質名（`stone`）、固定ブロックID（`minecraft:stone`）、または`{color: [L,a,b], material: ...}`です。object形式は`color`・`material`の少なくとも一方を指定します。色だけなら様式の当該役割の材質候補から選びます。固定IDは選び直さず、必要な別形状だけ同じfamilyから解決し、混色率を0にします。必要形状がなければエラーです。Lは0〜1、a/bは−0.4〜0.4です。YAML重複キー、未知の設定、型・範囲違反は読み込み時にエラーになります。材質・配色解決の詳細は [Materialize](OPERATIONS.md#materialize-前の役割入力) を参照してください。
 
-現行Cではhouseとtowerを扱います。castleはMassing段で未対応として拒否し、城郭計画はHマイルストーンです。furnished内装はDetail段で未対応として拒否し、Dマイルストーンです。地形生成のhill/mountain/island/caveはSite段で未対応として拒否し、Hマイルストーンです。none/flatと既存terrain snapshotを指定できます。
+生成はhouseとtowerに対応します。次のHの語彙はResolve・`spec-template`で扱いますが、
+planner未実装のため生成時にSite/Massing段で拒否します。指定数を黙って減らしたり、空計画を成功にしません。
+
+| archetype | features（括弧内は既定値） |
+|---|---|
+| castle | curtain_wall / keep / gatehouse（true）、towers（非負整数、6）、moat（false） |
+| town / city | buildings（正整数）、plaza / well / market（true） |
+| terrain | overhangs / arches（true） |
+| cave | entrances（正整数、1） |
+| underground_city | buildings（正整数）、entrances（正整数、1）、supports / lights（true） |
+
+buildings の規模別既定は tiny/small/medium/large/huge に対し 1/3/4/8/12。
+size だけを指定した場合は small の既定数を使います。city は後続で town と同じ planner を使います。
+地形名 none/flat/hill/mountain/plateau/valley/island/cave はパス解決より先に判別します。
+現行makeはnone/flatと既存terrain snapshotに対応し、他の地形生成はSite段で未対応です。
+furnished内装はDetail段で未対応として拒否します。
 
 ## Resolve API
 
@@ -36,7 +51,7 @@ mcblueprint config show --set weathering.age=0.4
 
 `mcblueprint.planning.plan_buildspec(resolve_result)` は `ResolveResult` を受け取り、
 `PlanningResult` を返します。入力は変更せず、ブロック生成や材質抽選は行いません。
-`site`・`massing`・`detail` は `formatVersion: 1` のJSON辞書、`blueprint` は
+`site`・`massing`・`detail` は `formatVersion: 2` のJSON辞書、`blueprint` は
 Materialize前の役割参照を含むBlueprintです。`palette` は同梱様式の役割定義を含む
 Resolveの配色設定のコピーです。`layout` は住宅の `BuildingLayout`、塔は
 `None` です。`diagnostics` は計画の追加診断（現行は空）で、入力エラーは
@@ -81,7 +96,7 @@ Weather・最小評価・出力を接続します。従来の `generate` は共�
   同じ通路の責務で `circulation` として予約します。
   Detailの窓は梁と柱を避けます。`minimal` は壁際の床に最小照明を置き、`none` は照明を省略します。
   構造上の床・階段は両方で維持します。`furnished` はResolveで未対応診断になります。
-- Massing JSONと`metadata.planning`には、Criticが比較する`columns`（安定IDと期待上下端）、
+- Massing JSONと`metadata.planning`の各棟には、Criticが比較する`columns`（安定IDと期待上下端）、
   `beams`（安定IDと高さ・範囲）、`facades`（安定ID、外向き法線、原点、u/v軸、範囲、開口投影）を
   記録します。住宅の柱間は4を基本にし、窓・入口・階段と重なる候補は除き、外壁の内側へ柱を
   配置します。塔の柱は実際の壁輪郭上に置き、隣接柱間を向き付き面区間として表します。

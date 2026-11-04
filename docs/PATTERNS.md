@@ -1,5 +1,48 @@
 # パターンライブラリ v1
 
+## 敷地規則 layout v1
+
+`pattern-layout.schema.json` は package 側 `src/mcblueprint/schema/` が正本、
+root 側 `schema/` は同一コピー。様式 schema には敷地項目を追加しない。
+`layouts/<style>/<name>.yaml` を `load_layout("style.name")` で読む。
+必須キーは `formatVersion: 1`、`name: style.name`、`archetype`、`style`、`rules`、`modules`。
+archetype は castle/town/city/terrain/cave/underground_city。
+
+rules は次の閉じたキーから1項目以上を指定する。値は両端を含む `[最小値, 最大値]`。
+単位はブロック、整数1〜256（floorClearance だけ2〜256）。逆転範囲は拒否する。
+
+| キー | 意味 |
+|---|---|
+| plotWidth / plotDepth | 区画の x / z 寸法 |
+| roadWidth | 道路幅 |
+| plazaSpacing | 広場の間隔 |
+| wallSpacing | 城壁の間隔 |
+| towerSpacing | 塔の間隔 |
+| floorClearance | 地下床上の歩行頭上空間 |
+| ceilingClearance | 屋根と地下天井の余裕 |
+
+modules は既存モジュール名の重複なし配列。空配列は許可する。
+`style` と全モジュール参照の存在、name とファイル名・様式の整合を読み込み時に検証する。
+未知キー・未知版・非整数・範囲外・重複YAMLキーは拒否する。
+`mcblueprint check --strict` も layouts を検査する。
+同梱読み込みでは patterns 全体の既存 commit/SHA-256 lock を照合する。
+layout 追加時は同じ patterns artifact に含めて lock を更新する。今回の同梱データは変更しない。
+
+最小例（テスト用。実様式の配布データは patterns#13）：
+
+```yaml
+formatVersion: 1
+name: medieval.town
+archetype: town
+style: medieval
+rules:
+  plotWidth: [12, 24]
+  roadWidth: [3, 5]
+modules: [medieval.window]
+```
+
+内部の区画・棟・接続グラフは [内部計画 v2](INTERNAL_PLANNING.md) を参照する。
+
 `src/mcblueprint/data/patterns/` は mc-blueprint-patterns の確定 commit を同梱する。同梱元・commit・SHA-256 の正本は [lock.json の `patterns`](../src/mcblueprint/data/lock.json) とする。更新時は正本の develop に取り込まれた commit を決め、その commit から `styles/`・`modules/`・`sources.yaml` を置き換え、lock の commit と SHA-256 を更新する。SHA-256 は対象ファイルを相対パスの UTF-8 バイト列順に並べ、各ファイルについて `相対パス + NUL + ファイル内容 + NUL` を連結したバイト列の SHA-256。
 
 `component` のドット区切り名（例 `medieval.window`）は同梱モジュールを参照する。利用者の `components/<name>.json` は従来どおり Blueprint と作業ディレクトリから探索する。

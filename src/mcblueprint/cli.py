@@ -341,7 +341,9 @@ def build_parser() -> argparse.ArgumentParser:
     make_parser.add_argument("--resume", type=Path, help="検証付き中間ファイルから再開")
     subparsers.add_parser("archetypes", help="対応アーキタイプを1行1件で表示")
     template = subparsers.add_parser("spec-template", help="コメント付きBuildSpec雛形")
-    template.add_argument("archetype", choices=("house", "tower"))
+    from mcblueprint.buildspec import SUPPORTED_ARCHETYPES
+
+    template.add_argument("archetype", choices=SUPPORTED_ARCHETYPES)
     template.add_argument("--minecraft-version", required=True,
                           choices=blockdata.supported_versions())
     help_parser = subparsers.add_parser("help", help="必要な仕様の参照先を表示")
@@ -559,12 +561,26 @@ def _run_make(args: argparse.Namespace, out: TextIO) -> int:
 def _run_archetypes(args: argparse.Namespace, out: TextIO) -> int:
     print("house 住宅（1〜2階、gable/hip、最小内装）", file=out)
     print("tower 塔（round/square、階段・各階床・胸壁）", file=out)
+    from mcblueprint.buildspec import SUPPORTED_ARCHETYPES
+
+    for name in SUPPORTED_ARCHETYPES[2:]:
+        print(f"{name} 特徴語彙のみ対応（planner未対応）", file=out)
     return EXIT_OK
 
 
 def _run_spec_template(args: argparse.Namespace, out: TextIO) -> int:
     features = ("  floors: 2\n  floor_height: 4\n  roof: gable" if args.archetype == "house"
                 else "  shape: round\n  floors: 3\n  floor_height: 4\n  battlement: true")
+    if args.archetype not in ("house", "tower"):
+        import yaml
+
+        from mcblueprint.buildspec import feature_defaults
+
+        features = yaml.safe_dump(feature_defaults(args.archetype), sort_keys=False).rstrip()
+        features = "\n".join("  " + line for line in features.splitlines())
+    elements = (f"# 既知の棟IDのパラメータだけ編集できる。\n# elements:\n"
+                f"#   {args.archetype}#1:\n#     angle: 90" if args.archetype in ("house", "tower")
+                else "# このarchetypeのplannerは未対応です。")
     print(f'''# 対象版を明示し、敷地は軒・胸壁を含む上限にする。
 formatVersion: 1
 minecraftVersion: "{args.minecraft_version}"
@@ -586,10 +602,7 @@ interior: minimal
 # materials:
 #   wall_main: minecraft:stone_bricks
 #   frame: minecraft:oak_log
-# 既知ルートIDのパラメータだけ編集できる。
-# elements:
-#   {args.archetype}#1:
-#     angle: 90
+{elements}
 # config:
 #   weathering:
 #     age: 0.4''', file=out)

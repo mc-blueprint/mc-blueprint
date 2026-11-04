@@ -19,8 +19,9 @@ SCALE_LIMITS = {
     "large": [128, 96, 128],
     "huge": [256, 128, 256],
 }
-SUPPORTED_ARCHETYPES = ("house", "tower")
-SUPPORTED_TERRAINS = ("none", "flat")
+SUPPORTED_ARCHETYPES = ("house", "tower", "castle", "town", "city", "terrain",
+                        "cave", "underground_city")
+SUPPORTED_TERRAINS = ("none", "flat", "hill", "mountain", "plateau", "valley", "island", "cave")
 
 
 class _UniqueLoader(yaml.SafeLoader):
@@ -72,14 +73,9 @@ def _near(value: str, choices: tuple[str, ...]) -> str:
 def _validate_features(data: dict[str, Any]) -> None:
     archetype = data.get("archetype")
     if archetype not in SUPPORTED_ARCHETYPES:
-        if archetype == "castle":
-            raise BlueprintError(
-                "archetype 'castle' はCのMassing段で未対応です（城郭計画はHマイルストーン）"
-            )
         raise BlueprintError(
-            f"未知または未対応のarchetype {archetype!r} "
-            f"{_near(str(archetype), SUPPORTED_ARCHETYPES)}（CのMassing段ではhouse/towerのみ対応。"
-            "その他のarchetypeはHマイルストーン）"
+            f"未知のarchetype {archetype!r} "
+            f"{_near(str(archetype), SUPPORTED_ARCHETYPES)}"
         )
     features = data.get("features", {})
     if not isinstance(features, dict):
@@ -87,6 +83,12 @@ def _validate_features(data: dict[str, Any]) -> None:
     allowed = {
         "house": {"floors", "floor_height", "roof"},
         "tower": {"shape", "floors", "floor_height", "battlement"},
+        "castle": {"curtain_wall", "keep", "gatehouse", "towers", "moat"},
+        "town": {"buildings", "plaza", "well", "market"},
+        "city": {"buildings", "plaza", "well", "market"},
+        "terrain": {"overhangs", "arches"},
+        "cave": {"entrances"},
+        "underground_city": {"buildings", "entrances", "supports", "lights"},
     }[archetype]
     for key in features:
         if key not in allowed:
@@ -119,15 +121,8 @@ def _normalize(data: dict[str, Any]) -> dict[str, Any]:
     site = result.get("site")
     if isinstance(site, dict):
         terrain = site.get("terrain", "none")
-        unsupported_terrain = ("hill", "mountain", "island", "cave")
-        if terrain in unsupported_terrain:
-            raise BlueprintError(
-                f"site.terrain {terrain!r} はSite段で未対応です "
-                "（Cはnone/flatと既存terrain snapshotに対応。"
-                "hill/mountain/island/cave生成はHマイルストーン）"
-            )
-        if isinstance(terrain, str) and terrain not in (*SUPPORTED_TERRAINS, *unsupported_terrain):
-            choices = (*SUPPORTED_TERRAINS, *unsupported_terrain)
+        if isinstance(terrain, str) and terrain not in SUPPORTED_TERRAINS:
+            choices = SUPPORTED_TERRAINS
             if difflib.get_close_matches(terrain, choices, n=1, cutoff=0.7):
                 raise BlueprintError(f"site.terrain {terrain!r} {_near(terrain, choices)}")
     if result.get("interior") == "furnished":
@@ -160,7 +155,24 @@ def _normalize(data: dict[str, Any]) -> dict[str, Any]:
         roof_height = 1 if result["archetype"] == "house" else 2
         if floors * floor_height + roof_height > result["size"][1]:
             raise BlueprintError("BuildSpec.features: 階数と階高がBuildSpec.sizeのy上限を超えます")
+    result["features"] = {**feature_defaults(result["archetype"], result.get("scale", "small")),
+                          **features}
     return result
+
+
+def feature_defaults(archetype: str, scale: str = "small") -> dict:
+    """Hの特徴語彙の既定値。house/towerは既存の様式依存値を維持する。"""
+    buildings = dict(zip(SCALE_LIMITS, (1, 3, 4, 8, 12), strict=True))[scale]
+    return {
+        "castle": {"curtain_wall": True, "keep": True, "gatehouse": True,
+                   "towers": 6, "moat": False},
+        "town": {"buildings": buildings, "plaza": True, "well": True, "market": True},
+        "city": {"buildings": buildings, "plaza": True, "well": True, "market": True},
+        "terrain": {"overhangs": True, "arches": True},
+        "cave": {"entrances": 1},
+        "underground_city": {"buildings": buildings, "entrances": 1,
+                             "supports": True, "lights": True},
+    }.get(archetype, {})
 
 
 def load_buildspec(path: str | Path) -> dict[str, Any]:
