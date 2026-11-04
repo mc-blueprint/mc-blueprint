@@ -1,0 +1,147 @@
+{
+  "formatVersion": 1,
+  "packVersion": "1.0.0",
+  "taxonomyVersion": "0.1.0",
+  "vocabularyVersion": "1.0.0",
+  "palettePrior": [
+    {
+      "when": {},
+      "roles": {
+        "wall_main": {
+          "oklab": {
+            "L": [
+              0.2,
+              0.3,
+              0.4,
+              0.5,
+              0.6
+            ],
+            "a": [
+              -0.1,
+              -0.05,
+              0,
+              0.05,
+              0.1
+            ],
+            "b": [
+              -0.1,
+              -0.05,
+              0,
+              0.05,
+              0.1
+            ]
+          },
+          "n": 4,
+          "subjects": 2,
+          "nEff": 1.5
+        },
+        "roof": {
+          "oklab": {
+            "L": [
+              0.2,
+              0.3,
+              0.4,
+              0.5,
+              0.6
+            ],
+            "a": [
+              -0.1,
+              -0.05,
+              0,
+              0.05,
+              0.1
+            ],
+            "b": [
+              -0.1,
+              -0.05,
+              0,
+              0.05,
+              0.1
+            ]
+          },
+          "n": 4,
+          "subjects": 2,
+          "nEff": 1.5
+        }
+      }
+    }
+  ],
+  "materialPrior": [
+    {
+      "when": {},
+      "roles": {
+        "wall_main": {
+          "stone": 0.75,
+          "wood": 0.25
+        }
+      }
+    }
+  ],
+  "relationRule": [
+    {
+      "when": {},
+      "pair": [
+        "wall_main",
+        "roof"
+      ],
+      "dL": [
+        -0.2,
+        -0.1,
+        0,
+        0.1,
+        0.2
+      ],
+      "dC": [
+        -0.1,
+        -0.05,
+        0,
+        0.05,
+        0.1
+      ],
+      "dh": {
+        "origin": 3.1,
+        "quantiles": [
+          -0.2,
+          -0.1,
+          0,
+          0.1,
+          0.2
+        ]
+      },
+      "n": 4,
+      "subjects": 2,
+      "nEff": 1.5
+    }
+  ],
+  "accentRule": [
+    {
+      "when": {},
+      "role": "accent",
+      "maxAreaRatio": 0.1
+    }
+  ],
+  "provenance": {
+    "dataLicense": "synthetic-fixture",
+    "inputs": 4,
+    "subjects": 2,
+    "licenses": {
+      "CC0-1.0": 4
+    },
+    "attributions": [
+      {
+        "source": "数値だけの自作fixture",
+        "author": "mc-blueprint",
+        "license": "CC0-1.0",
+        "url": "https://github.com/mc-blueprint/mc-blueprint"
+      }
+    ],
+    "snapshot": {
+      "id": "synthetic-v1",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "generator": {
+      "repository": "https://github.com/mc-blueprint/mc-blueprint",
+      "commit": "dabb0dc000000000000000000000000000000000"
+    }
+  }
+}
