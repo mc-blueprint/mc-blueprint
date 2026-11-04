@@ -1,5 +1,17 @@
 # 設定 v1
 
+## 地形の寸法換算（H04計画API）
+
+`terrain_field.plan_terrain` はterrain設定から全体2D場を確定する。
+地形帯Hは `size.y−1−clearance`。flat/hill/mountain/plateau/valley/islandの
+最大形状起伏はそれぞれHの0/0.35/0.85/0.60/0.50/0.55倍にamplitudeを掛ける。
+amplitude=0は平坦。波長は `max(2, noise.scale×(2−1.5×roughness))`、
+octaves/persistenceノイズは起伏の0.25倍。erosion=0は無処理、正値は全体粗格子の
+水滴侵食を適用する。水位nullは島でHの0.25、他は0.15（世界座標の底面を加算）。
+明示水位は地形帯内の整数。terrain.vegetationは敷地の木/草候補で、
+weathering.vegetationとは別。makeへの接続・洞窟生成は後続Issueで行う。
+方式・再開用hash・表層計画の契約は [TERRAIN.md](TERRAIN.md) を参照。
+
 設定は `schema/config.schema.json` を正本とし、wheel 同梱用コピーを `src/mcblueprint/schema/` に置きます。`config.yaml` の重複キー、未知キー、型・範囲違反は拒否されます。
 
 ## 優先順位
