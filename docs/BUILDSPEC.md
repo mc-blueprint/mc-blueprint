@@ -162,8 +162,9 @@ CLIの `--format`・`--seed`・`--set KEY=VALUE` を最上位の設定として�
 完成coreを一時spoolへ保存してから支持検査をcoreだけ集計し、入口→各階→屋上の順に
 既存traversalで確認します。全体のBlockVolumeを復元せず、行キャッシュで領域を跨いで読みます。
 探索状態にも `limits.max_memory_mb` から上限を設定し、超過は資源不足として失敗します。
-元地形snapshotの施工は現行 `generate_regions` が未対応のため、`make` でも拒否します。
-snapshotは上記の計画APIと従来の `generate` で施工してください。
+元地形snapshotは不変の領域spoolとして読み込み、造成・道路の列計画を通常Operationより前に
+各領域へ適用します。単独建物は元地表の最高Yの1セル上を床にし、従来と同じ造成条件で検査します。
+版・施工範囲・保護域と入力hashを検証し、入力配列が予算に収まらない場合は生成前に拒否します。
 
 診断は1件1行で入力パス・要素IDを含みます。supportとwalkability、Materializeの
 `palette_relation` を評価し、traversalの `blocked` と `unsupported` を区別します。
@@ -219,6 +220,10 @@ Blueprintからの再開ではMaterializeも省略します。Generateは常に�
 
 emitしたBlueprintは具体ブロック／既存Paletteと `metadata.generation` を持ちます。
 このmetadataは `mode: buildspec-v1`、合成設定 `config`、基準面 `groundHeight` を保持します。
+`groundHeight` は `{ "type": "constant", "value": Y }` または
+`{ "type": "terrain", "inputHash": SHA256 }`。後者は造成前の元地形の(x,z)最上面を
+領域ごとに参照します。地形入力の `terrainHash` も保存し、元ファイルが変わった場合は
+Blueprint build・resumeを拒否します。地形付きの古いcheckpointは再生成してください。
 `build` はこれがある場合に限り領域生成とWeatherを使い、makeと同じ配置を再現します。
 metadataがない従来Blueprintの乱数・生成方式は維持します。出力形式内の時刻や圧縮ヘッダーの
 バイト一致は保証しません。emit後のOperation編集は `validate`・`build` で扱い、

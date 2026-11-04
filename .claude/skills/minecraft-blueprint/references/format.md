@@ -36,7 +36,7 @@
 | `origin` | | 貼り付け基準点（`//paste` でプレイヤー位置に来る Blueprint 座標）。既定 `[0,0,0]` |
 | `size` | | 最大サイズ `[幅X, 高さY, 奥行きZ]`。超えると検証エラー。位置は問わない |
 | `palettes` | | 名前 → `{block, weight}` の配列。`weight` 既定 1 |
-| `terrain` | | 元地形の `source`、施工矩形 `region`、任意の保護矩形配列 `protected`。座標・保存・再生成の契約は `docs/TERRAIN.md` |
+| `terrain` | | 元地形の `source`、施工矩形 `region`、任意の保護矩形配列 `protected`。makeの領域施工にも対応。座標・保存・再生成と入力hashの契約は `docs/TERRAIN.md` |
 | `foundation` | | terrain必須。同Yの `from` / `to` で敷地と床Yを明示し、探索帯・切土/盛土/支持深さ上限内で造成する。`docs/FOUNDATION.md` を参照 |
 | `surfacePath` | | terrain必須。XZ経由点と入口足元から全幅の地表道路を計画する。入力・制限は `docs/SURFACE_PATH.md` |
 | `description` / `author` / `metadata` | | 任意。`metadata` は自由なオブジェクト |

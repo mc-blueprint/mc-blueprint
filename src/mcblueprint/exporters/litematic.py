@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import math
 import time
-from collections.abc import Iterable, Sequence
+from collections.abc import Iterable, Iterator, Sequence
 from pathlib import Path
 
 import numpy as np
@@ -39,18 +39,20 @@ def pack_bit_array(values: Sequence[int] | np.ndarray, bits: int) -> np.ndarray:
 
 def unpack_bit_array(longs: list[int], bits: int, count: int) -> list[int]:
     """Inverse of :func:`pack_bit_array` (used by tests and future importers)."""
-    words = [int(w) & 0xFFFFFFFFFFFFFFFF for w in longs]
+    return list(iter_bit_array(longs, bits, count))
+
+
+def iter_bit_array(longs: Sequence[int], bits: int, count: int) -> Iterator[int]:
+    """元配列を複製せず、境界をまたぐLitematicaの添字を順に復号する。"""
     mask = (1 << bits) - 1
-    values = []
     for index in range(count):
         start = index * bits
         word, offset = divmod(start, 64)
-        value = words[word] >> offset
+        value = (int(longs[word]) & 0xFFFFFFFFFFFFFFFF) >> offset
         end_word = (start + bits - 1) // 64
         if end_word != word:
-            value |= words[end_word] << (64 - offset)
-        values.append(value & mask)
-    return values
+            value |= (int(longs[end_word]) & 0xFFFFFFFFFFFFFFFF) << (64 - offset)
+        yield value & mask
 
 
 def bits_for(palette_size: int) -> int:

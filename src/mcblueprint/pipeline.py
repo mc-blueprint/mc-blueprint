@@ -24,6 +24,7 @@ from mcblueprint.errors import BlueprintError
 from mcblueprint.exporters import EXPORTERS
 from mcblueprint.exporters._spool import RegionSpool
 from mcblueprint.generator import GeneratedRegion, GenerationLimits, generate_regions
+from mcblueprint.importers import terrain_file_hash
 from mcblueprint.model import AABB, Vec3
 from mcblueprint.operations.box_like import iter_box
 from mcblueprint.planning import plan_buildspec
@@ -243,8 +244,14 @@ def generated_blueprint_regions(
 
     config = metadata.get("config", {})
     validate_schema(config, load_schema("config.schema.json"), "metadata.generation.config")
+    ground = metadata.get("groundHeight")
+    constant_ground = (isinstance(ground, dict) and ground.get("type") == "constant"
+                       and type(ground.get("value")) is int)
+    terrain_ground = (isinstance(ground, dict) and ground.get("type") == "terrain"
+                      and blueprint.terrain is not None
+                      and ground.get("inputHash") == blueprint.terrain.snapshot.input_sha256)
     if (not {"limits", "weathering", "randomness"} <= config.keys()
-            or type(metadata.get("groundHeight")) is not int):
+            or not (type(ground) is int or constant_ground or terrain_ground)):
         raise BlueprintError("生成metadataに合成設定・基準面が必要です")
     if not {"region", "halo", "max_memory_mb"} <= config["limits"].keys():
         raise BlueprintError("metadata.generation.config.limitsに合成済み上限が必要です")
@@ -252,10 +259,12 @@ def generated_blueprint_regions(
     blocks = blockdata.load_block_data(blueprint.minecraft_version)
     for region in generate_regions(blueprint, limits=limits, seed=seed,
                                    reference_radius=required_halo(config["weathering"])):
+        heights = (blueprint.terrain.snapshot.ground_heights(region.volume.region)
+                   if terrain_ground else ground["value"] if constant_ground else ground)
         diagnostics = apply_weather(
             region, blocks, config=config["weathering"],
             seed=blueprint.seed if seed is None else seed,
-            randomness=config["randomness"], ground_height=metadata["groundHeight"],
+            randomness=config["randomness"], ground_height=heights,
             max_memory_mb=limits.max_memory_mb,
         )
         if on_diagnostic:
@@ -493,6 +502,10 @@ def make(
             out = out / (source.stem + EXPORTERS[fmt].extension)
         if out.resolve() == source:
             raise PipelineError(stage, "入力と出力は別のパスにしてください", 2)
+        terrain_source = resolved.buildspec["site"]["terrain"]
+        if (terrain_source not in ("none", "flat")
+                and out.resolve() == Path(terrain_source).resolve()):
+            raise PipelineError(stage, "元地形の入力と出力は別のパスにしてください", 2)
         # 出力先は解決後に分かるため、入力と合わせて一定順で取り直す。
         locks.enter_context(lock_paths(source, out))
         if source.read_bytes() != original:
@@ -503,10 +516,15 @@ def make(
             "sha256": sha256(original).hexdigest(),
             "resolvedHash": _hash(resolved.buildspec),
         }}
+        terrain_hash = None
+        if terrain_source not in ("none", "flat"):
+            terrain_hash = terrain_file_hash(terrain_source)
+            expected["input"]["terrainHash"] = terrain_hash
         context = {"resolved": {"buildspec": resolved.buildspec,
                                 "config": config, "origins": resolved.origins}}
         resumed = -1
         resumed_data = None
+        terrain_snapshot = None
         if resume is not None:
             stage = "Resume"
             resumed_data, sidecar = _read_checkpoint(Path(resume), expected)
@@ -548,6 +566,7 @@ def make(
             if stage_hook:
                 stage_hook(stage)
             plan = plan_buildspec(ResolveResult(**context["resolved"]))
+            terrain_snapshot = plan.terrain_snapshot
             context.update(site=plan.site, massing=plan.massing, detail=plan.detail,
                            plannedBlueprint=plan.blueprint, palette=plan.palette)
         for name in ("site", "massing", "detail"):
@@ -576,15 +595,25 @@ def make(
                 }
             concrete.setdefault("metadata", {})["generation"] = {
                 "mode": GENERATION, "config": config,
-                "groundHeight": context["site"]["floorY"],
+                "groundHeight": context["site"].get("groundHeight", {
+                    "type": "constant", "value": context["site"]["floorY"],
+                }),
             }
+            if "terrainHash" in context["site"]:
+                concrete["metadata"]["generation"]["terrainHash"] = context["site"]["terrainHash"]
         else:
             concrete = resumed_data
         checkpoint("blueprint", concrete)
         stage = "Generate"
-        blueprint, errors = validate_and_load(concrete, base_dir=source.parent)
+        blueprint, errors = validate_and_load(
+            concrete, base_dir=source.parent, terrain_snapshot=terrain_snapshot,
+        )
         if errors:
-            raise PipelineError("Validate", " ".join(e.format() for e in errors))
+            message = " ".join(e.format() for e in errors)
+            raise PipelineError("Validate", message, 2 if "max_memory_mb" in message else 1)
+        if (terrain_hash is not None
+                and blueprint.terrain.snapshot.input_sha256 != terrain_hash):
+            raise PipelineError(stage, "計画中に地形入力が変更されています", 2)
         bounds = blueprint.bounds()
         budget = config["limits"]["max_memory_mb"] * 1024 * 1024
         if stage_hook:
@@ -709,6 +738,8 @@ def make(
             try:
                 if source.read_bytes() != original:
                     raise PipelineError(stage, "公開直前に入力が変更されています", 2)
+                if terrain_hash is not None and terrain_file_hash(terrain_source) != terrain_hash:
+                    raise PipelineError(stage, "公開直前に地形入力が変更されています", 2)
                 os.replace(staged_out, out)
                 os.replace(staged_record, record)
                 os.replace(staged_scene, scene_out)
@@ -727,7 +758,7 @@ def make(
         cause = exc
         while cause.__cause__ is not None:
             cause = cause.__cause__
-        resource = stage in ("Generate", "Critic") and any(
+        resource = stage in ("Site/Massing/Detail", "Generate", "Critic") and any(
             word in str(exc) for word in ("メモリ", "max_memory_mb")
         )
         code = 2 if isinstance(cause, OSError | MemoryError) or resource or stage == "Export" else 1

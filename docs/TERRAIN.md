@@ -204,6 +204,31 @@ terrain指定なしの既存exportは従来どおり省略プロパティを補�
 
 ## API・CLIと再生成
 
+### makeと領域生成
+
+make用の内部読取経路 `read_terrain_regions(path, max_memory_mb=...)` は旧importerと
+NBTの版・offset・パレット解釈を共有する。`nbtlib` の入力配列から1行ずつ密なuint32添字へ
+変換し、一時spoolへ保存する。全セルの座標辞書・BlockVolume・Python添字リストは作らない。
+通常の `read_terrain()` / `TerrainSnapshot` の公開APIは変更しない。
+
+圧縮解除は固定長窓で事前走査し、入力配列・変換行・パレットを予算へ含める。
+入力の圧縮解除サイズの3倍と1MiB、パレット1状態あたり2048bytes、行幅あたり128bytesを
+準備時の保守的な見積りとし、予算超過は領域生成前に資源不足として拒否する。
+spoolの読取行キャッシュは8行に限定する。生成予算にはこの窓・パレット・施工列計画と
+道路の路面/頭上索引も含める。予算値はプロセス全体のRSSと同一ではない。
+
+`generate_regions()` は施工矩形内の元状態をhalo付き領域へ初期化し、造成→道路→通常Operationの
+順に適用する。道路の支持・路面・頭上はWeatherから保護する。
+元地形の通常airも未配置セルと同じ植生候補にするが、予約・通行域の保護は維持する。
+地面距離は造成前の元地形で、通常air以外の最上面Yを使う。
+全air列の基準は取得下端Y。建物の上面を地面にしない。
+`metadata.generation.groundHeight` の一定値/地形場の判別形式は [BUILDSPEC.md](BUILDSPEC.md) を参照。
+入力hashは圧縮ヘッダーも含み、makeの再開context、emitしたBlueprint、公開直前に照合する。
+hash違いの旧出力は更新しない。施工範囲・保護域・版不一致の拒否条件は旧施工と共通。
+makeの出力先が正規化したパスで元地形入力と一致する場合は、書込み前に終了コード2で拒否する。
+
+### 従来の全体施工
+
 元地形の明示位置に平坦な床・基礎を造成する場合は、任意の `foundation` 項目を使う。
 全列の事前検査、探索帯、切土・盛土・支持深さの契約は [FOUNDATION.md](FOUNDATION.md)。
 造成後の地形と明示した入口を道路で結ぶ場合は [SURFACE_PATH.md](SURFACE_PATH.md) の
@@ -211,6 +236,7 @@ terrain指定なしの既存exportは従来どおり省略プロパティを補�
 
 `load_blueprint_dict(data, base_dir=...)` と `validate(data, base_dir=...)` の `base_dir` は
 source相対パスの基準（省略時cwd）。`load_blueprint(path)` とCLIはBlueprintの親を渡す。
+`metadata.generation` がobject以外の場合は指定なしとして従来の施工経路を使う。
 `validate_and_load(data, *, base_dir=None, max_dimension=1024)` は成功時に検証に使った
 同じBlueprintと空のエラー列、失敗時に `None` と検証エラー列を返す。
 CLIは検証と生成で同じsnapshotを使い、同一実行中にsourceを再読込しない。
