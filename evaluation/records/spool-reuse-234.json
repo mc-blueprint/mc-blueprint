@@ -1601,5 +1601,6 @@
     "PyYAML": "6.0.3"
   },
   "cpu_isolation_observation": "他タスクが並行稼働し、前半の測定は全件pytestとも並行した。CPUを隔離していないため時間差だけで本変更の効果やNFR2/3の達成を判定しない。",
-  "line_ending_normalization": "初期のmedium試行後に変更ファイルをCRLFからLFへ統一。Python ASTは不変。各試行のenvironment.engineHashは測定時のbyteを識別する。"
+  "line_ending_normalization": "初期のmedium試行後に変更ファイルをCRLFからLFへ統一。Python ASTは不変。各試行のenvironment.engineHashは測定時のbyteを識別する。",
+  "implementation_note": "索引の先頭core依存を修正しdevelopを取り込む前の測定。修正後の性能値ではない。統合後の4種hash照合はspool-reuse-234-verification.jsonを参照。"
 }
