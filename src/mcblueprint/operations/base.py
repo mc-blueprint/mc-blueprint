@@ -73,7 +73,10 @@ class BlockSpec:
 
 
 class ExecutionContext:
-    """Shared state while executing operations: target volume, RNG, palettes, transform."""
+    """Operation実行時のvolume・抽選・変換・属性。
+
+    generation_seed は通常生成の実効seedを新Operationへ渡し、既存の共有Randomは維持する。
+    """
 
     def __init__(
         self,
@@ -88,6 +91,7 @@ class ExecutionContext:
         operation_id: str = "",
         on_conflict: str = "error",
         sampler: PaletteSampler | None = None,
+        generation_seed: int | None = None,
     ) -> None:
         self.volume = volume
         self.rng = rng
@@ -95,6 +99,7 @@ class ExecutionContext:
         self.transform = transform or Transform.identity()
         self.depth = depth
         self.seed = seed
+        self.generation_seed = seed if generation_seed is None else generation_seed
         self.attributes = attributes
         self.operation_id = operation_id
         self.on_conflict = on_conflict
@@ -236,6 +241,7 @@ class ExecutionContext:
             operation_id=f"{self.operation_id}@{instance}:{transform.rows}:{transform.offset}",
             on_conflict=self.on_conflict,
             sampler=self.sampler,
+            generation_seed=self.generation_seed,
         )
 
 

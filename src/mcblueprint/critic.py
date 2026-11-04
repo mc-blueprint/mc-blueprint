@@ -13,6 +13,7 @@ from mcblueprint.facade_projection import FacadeCell as FacadeCell
 from mcblueprint.facade_projection import project_facades
 from mcblueprint.generator import GeneratedRegion
 from mcblueprint.model.vec import AABB, Vec3
+from mcblueprint.operations.base import ExecutionContext
 from mcblueprint.operations.box_like import iter_box
 from mcblueprint.operations.registry import build_operation
 from mcblueprint.operations.transform import Transform
@@ -23,10 +24,11 @@ _AIR = {"minecraft:air", "minecraft:cave_air", "minecraft:void_air"}
 
 @dataclass(frozen=True)
 class StructuralRun:
-    """柱または梁の期待セルと予約owner。"""
+    """構造の期待セルと予約owner。role=Noneの屋根は意味役割を限定せず検査する。"""
 
     owner: str
     cells: tuple[Vec3, ...]
+    role: str | None = "frame"
 
 
 @dataclass(frozen=True)
@@ -41,6 +43,7 @@ class CriticPlan:
     fixed_roles: frozenset[str] = frozenset()
     terrain_only: bool = False
     building_fixed_roles: Mapping[str, frozenset[str]] = field(default_factory=dict)
+    junction_cells: Mapping[Vec3, str] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -85,12 +88,59 @@ def _convert_plan(planning, massing, offset, decoration_range, fixed_roles):
             raise BlueprintError("Critic計画とMassingの棟IDが一致しません")
         plans = [_convert_plan(b, shapes.get(b["element"]), b["offset"],
                                decoration_range, fixed_roles) for b in buildings]
+        from mcblueprint.junctions import junction_geometry
+
+        junctions = junction_geometry(planning)
+        internal = {point for junction in junctions for point in junction.shared}
+        transferred = set(internal)
+        transferred.update(point for junction in junctions for point in junction.removed_frame)
+
+        def retain(runs):
+            return tuple(replace(run, cells=cells) for run in runs
+                         if (cells := tuple(p for p in run.cells if p not in transferred)))
+
+        junction_beams = tuple(StructuralRun(j.element, tuple(
+            point for point, parts in j.shared.items() if point not in j.passages
+            and any(point.y == part.top or point.y in part.floors for part in parts)
+        )) for j in junctions)
+        import random
+
+        from mcblueprint.volume import BlockVolume
+
+        roof_runs = tuple(StructuralRun(j.element, tuple(j.roof_cells(
+            ExecutionContext(BlockVolume(), random.Random(0), {}))), None) for j in junctions)
+        support_runs = tuple(StructuralRun(j.element, tuple(j.supports))
+                             for j in junctions if j.supports)
+        jamb_runs = tuple(StructuralRun(j.element, tuple(j.jambs - j.passages.keys()))
+                          for j in junctions if j.jambs - j.passages.keys())
+        transferred.update(point for run in roof_runs for point in run.cells)
+        facades, shared_surfaces = [], set()
+        for p in plans:
+            for facade in p.facades:
+                cells = []
+                for cell in facade.cells:
+                    if any(j.internal_face(cell.pos, facade.face, facade.building)
+                           for j in junctions):
+                        continue
+                    if cell.pos in internal:
+                        key = facade.face, cell.pos
+                        if key in shared_surfaces:
+                            continue
+                        shared_surfaces.add(key)
+                    cells.append(cell)
+                if cells and any(not c.opening for c in cells):
+                    facades.append(replace(facade, cells=tuple(cells)))
+        targets = {(f.element, f.face) for f in facades}
         return CriticPlan(
-            tuple(run for p in plans for run in p.columns),
-            tuple(run for p in plans for run in p.beams),
-            tuple(f for p in plans for f in p.facades),
-            {key: value for p in plans for key, value in p.decoration_operations.items()},
+            retain(run for p in plans for run in p.columns) + support_runs + jamb_runs,
+            retain(run for p in plans for run in p.beams) + junction_beams
+            + tuple(run for run in roof_runs if run.cells),
+            tuple(facades),
+            {key: value for p in plans for key, value in p.decoration_operations.items()
+             if value in targets},
             tuple(decoration_range), frozenset(fixed_roles), not buildings,
+            junction_cells={**{point: j.element for j in junctions for point in j.shared},
+                            **{point: run.owner for run in roof_runs for point in run.cells}},
         )
     shapes = {}
     params = planning.get("params", {})
@@ -221,7 +271,7 @@ class CriticAccumulator:
                     _present(state)
                     and attr.owner == run.owner
                     and attr.reserved == "structure"
-                    and attr.role == "frame"
+                    and (run.role is None or attr.role == run.role)
                 )
 
         for fi, facade in enumerate(self.plan.facades):
@@ -261,6 +311,8 @@ class CriticAccumulator:
                         or element.startswith(facade.element + ".")
                         or facade.building
                         and element.startswith(facade.building + ".")
+                        or self.plan.junction_cells.get(cell.pos) == attr.owner
+                        and attr.reserved == "structure"
                     ):
                         continue
                     if attr.role not in (
@@ -271,7 +323,9 @@ class CriticAccumulator:
                         "window_frame",
                         "accent",
                     ):
-                        continue
+                        if not (pos == cell.pos and attr.reserved == "structure"
+                                and self.plan.junction_cells.get(pos) == attr.owner):
+                            continue
                     depth = facade.depth_at(pos)
                     if facade.building and not element.startswith(facade.element):
                         depth_axis = 2 if axis == 0 else 0

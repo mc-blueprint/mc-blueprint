@@ -64,7 +64,11 @@ house/tower/castle/town/city/underground_city の棟なし計画は拒否する�
 `contacts.first/second` も同じ実在 ID を使う。存在しない接尾辞を前方一致で受理しない。
 `contacts` は接触する二部材と両端を含む世界座標区間、`passages` は接続節点の対。
 接合帯の予約 owner は接合 ID と一致させる。`roofPolicy` は既存 `join` または
-屋根包絡の `envelope`。接合 Operation と接触面除外の施工は #239 が実装する。
+屋根包絡の `envelope`。`materialize_plan` が棟別配色後に `building_junction` へ写す。
+施工とCriticは同じ接合幾何を使い、内部接触面だけを除外する。
+低棟の上の高棟外壁、接合の支持・梁・屋根は期待形状として検査する。
+接合 passage も完成spoolの歩行検査に含める。
+具体的な入力と制限は [OPERATIONS.md](OPERATIONS.md#building_junction) を参照。
 
 ## 配色・地形と後続 planner
 
