@@ -325,7 +325,8 @@
             "path",
             "landform",
             "component",
-            "join_buildings"
+            "join_buildings",
+            "terrain_density"
           ]
         }
       },
@@ -712,6 +713,18 @@
           },
           "then": {
             "$ref": "#/$defs/ops/join_buildings"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "terrain_density"
+              }
+            }
+          },
+          "then": {
+            "$ref": "#/$defs/ops/terrain_density"
           }
         }
       ]
@@ -1417,7 +1430,12 @@
             "$ref": "#/$defs/position"
           },
           "rotation": {
-            "enum": [0, 90, 180, 270]
+            "enum": [
+              0,
+              90,
+              180,
+              270
+            ]
           },
           "operations": {
             "$ref": "#/$defs/operations"
@@ -3262,6 +3280,125 @@
             }
           }
         ]
+      },
+      "terrain_density": {
+        "type": "object",
+        "required": [
+          "type",
+          "plan",
+          "minecraftVersion"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "type": {
+            "const": "terrain_density"
+          },
+          "comment": {
+            "type": "string"
+          },
+          "id": {
+            "$ref": "#/$defs/cellAttributes/properties/id"
+          },
+          "role": {
+            "$ref": "#/$defs/cellAttributes/properties/role"
+          },
+          "element": {
+            "$ref": "#/$defs/cellAttributes/properties/element"
+          },
+          "owner": {
+            "$ref": "#/$defs/cellAttributes/properties/owner"
+          },
+          "source": {
+            "$ref": "#/$defs/cellAttributes/properties/source"
+          },
+          "face": {
+            "$ref": "#/$defs/cellAttributes/properties/face"
+          },
+          "reserved": {
+            "$ref": "#/$defs/cellAttributes/properties/reserved"
+          },
+          "onConflict": {
+            "$ref": "#/$defs/cellAttributes/properties/onConflict"
+          },
+          "minecraftVersion": {
+            "type": "string",
+            "pattern": "^[0-9]+\\.[0-9]+(\\.[0-9]+)?$"
+          },
+          "plan": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "formatVersion",
+              "field",
+              "overhangs",
+              "arches",
+              "mainCave",
+              "entrances",
+              "caveGraph",
+              "arch",
+              "sha256"
+            ],
+            "properties": {
+              "formatVersion": {
+                "const": 1
+              },
+              "field": {
+                "type": "object"
+              },
+              "overhangs": {
+                "type": "boolean"
+              },
+              "arches": {
+                "type": "boolean"
+              },
+              "mainCave": {
+                "type": "boolean"
+              },
+              "entrances": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 4
+              },
+              "caveGraph": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "nodes",
+                  "edges"
+                ],
+                "properties": {
+                  "nodes": {
+                    "type": "array",
+                    "items": {
+                      "type": "object"
+                    }
+                  },
+                  "edges": {
+                    "type": "array",
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      },
+                      "minItems": 2,
+                      "maxItems": 2
+                    }
+                  }
+                }
+              },
+              "arch": {
+                "type": [
+                  "object",
+                  "null"
+                ]
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            }
+          }
+        }
       }
     },
     "direction": {
