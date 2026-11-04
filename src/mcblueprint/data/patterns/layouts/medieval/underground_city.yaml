@@ -1,0 +1,13 @@
+formatVersion: 1
+name: medieval.underground_city
+archetype: underground_city
+style: medieval
+rules:
+  plotWidth: [12, 24]
+  plotDepth: [12, 24]
+  roadWidth: [3, 5]
+  plazaSpacing: [32, 64]
+  floorClearance: [4, 8]
+  ceilingClearance: [3, 8]
+modules:
+  - medieval.lantern_post
