@@ -135,3 +135,40 @@ palette_prior/material_prior/relation_rule/accent_rule、provenanceを持つ。
 配列はtuple、objectは読み取り専用Mappingとして保持し、入力から独立する。
 後続の読込処理はparse_colorpackを使い、検証済みColorPackをpipelineへ渡す。
 読取OSError・lock/hash/DATA_LICENSEの確認と実観測の品質保証は本APIの外で行う。
+
+## Materializeでの選択
+
+`materialize(..., colorpack=pack, building_type="house")` に検証済みColorPackを渡す。
+内部でパックを読み込まず、既定の `None` は従来のD28（様式材質とblockdata色）を使う。
+pipelineへの読込接続と実統計の適合検証は別工程とする。
+
+条件は公開対応表に写し、`{style, buildingType, biomeLike}` → `{style, biomeLike}` →
+`{style}` → `{}` の順で役割・pairごとに探索する。未知の建物種別・biomeは条件から除く。
+支持数で再平滑化せず、平滑化済み分布はその値とsupportの親参照を保持する。
+材質は様式候補と正確率の共通集合を安定順で再正規化して抽選し、共通候補がない条件は
+親へ進む。最後まで分布がなければその軸だけD28を使う。
+
+優先順は固定ID、明示材質・明示色、パック、D28とし、色と材質は独立に選ぶ。
+固定IDの状態・必要形状・歩行条件は従来どおり検証し、代用品への変更を行わずmixを0にする。
+パック色は用途付き導出seedから `q=0.5+(u-0.5)*0.9*variation` を選び、
+5/25/50/75/95%の間を同じqでL/a/bそれぞれ線形補間する。variation=0は中央値。
+a/bには `0.5+saturation`、accent役割にはさらに `1+accent` を掛け、明示色には掛けない。
+
+関係は選んだ実ブロックの用途面の中央値で評価する。差はpairのsecond−firstとし、
+dL/dCの5〜95%区間を中心からそれぞれ `0.5+contrast`、`0.5+saturation` 倍する。
+dhは `wrap(h_second-h_first-origin)` を比較し、片方の彩度が0.02以下ならdhだけ不適用。
+パック規則のない既存pairはD28を使う。最大20試行し、パック関係を使う場合は違反件数、
+区間幅で正規化した違反量の和、安定ID順で最小解を選ぶ。幅0は指標の固定範囲で正規化する。
+固定IDも検査するが再抽選しない。解なしは `palette_relation` 診断として残す。
+
+MaterializeResultの既存フィールドに加え、`selection_sources` は役割ごとの
+`color`・`material`・面積上限規則の対象役割の `maxAreaRatio` の選択元を持つ。`source` は
+`pack` / `d28` / `explicit` / `fixed_id`、packには `when` と、該当すれば
+`supportSourceWhen` を付ける。`relation_checks` は最終解の関係検査の選択元、pair、
+指標ごとの適用の有無を持ち、pack/d28ともに実値・区間または不適用理由を記録する。
+D28のwall_mainとroof/frameは絶対明度差、wall_mainとwall_secondaryは絶対彩度差と
+円周色相差を記録する。無彩色でdhを除外した場合は `applied: false, reason: "achromatic"`
+とし、適用可能な指標の適合数とは区別する。
+`max_area_ratios[role]` には `accentRule.role` ごとのパック上限×accentを渡す。
+accentの規則欠損時は従来の0.08×accentを使い、他の役割へ既定上限は追加しない。
+実ブロック色の欠損は不適用理由と関係違反を残し、合格扱いにしない。
