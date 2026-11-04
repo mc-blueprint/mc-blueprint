@@ -197,6 +197,84 @@ def run(phase, baseline_root):
         structure.write_json(RECORD, record)
 
 
+def run_h_baseline():
+    """Record three current house/tower medium/large runs for H01."""
+    from mcblueprint.importers import read_schematic
+
+    record_path = ROOT / "evaluation/records/h-baseline.json"
+    work = ROOT / "benchmarks/.tmp/issue-232"
+    work.mkdir(parents=True, exist_ok=True)
+    record = {
+        "schema_version": 1,
+        "record_type": "h-baseline",
+        "provenance": benchmark._benchmark_provenance(),
+        "script": structure.reference(Path(__file__).resolve()),
+        "environment": benchmark._profile_environment(),
+        "storage": "H: NTFS; physical device model unavailable",
+        "comparison_limits": [
+            ("基準端末はCPU 8コア/16論理CPU、物理メモリ64GiB、GeForce RTX 4070 SUPERで、"
+             "NFR1相当端末ではない。"),
+            "独立子プロセス起動からmakeのscene/run確定までを3回計時し、全試行と中央値を記録する。",
+            ("stage_hook値は累積経過時間と段開始時Working Setであり、"
+             "段単独の時間・ピークRSSではない。"),
+            "OSピークRSSは独立子プロセス全体のPeakWorkingSetSize。NFR2/3の達成判定には使わない。",
+            "固定H地形ケースは未実装の期待条件であり、この住宅/塔測定で生成成功とみなさない。",
+        ],
+        "results": [],
+    }
+    for scale in ("medium", "large"):
+        for archetype in ("house", "tower"):
+            name = f"{archetype}-{scale}"
+            folder = work / name
+            folder.mkdir(parents=True, exist_ok=True)
+            source = folder / "spec.yaml"
+            spec = structure.performance_spec(archetype, scale)
+            spec["seed"] = 42
+            source.write_text(yaml.safe_dump(spec, allow_unicode=True), encoding="utf-8",
+                              newline="\n")
+            output = folder / "result.schem"
+            samples = []
+            for index in range(3):
+                command = [sys.executable, "-X", "utf8", str(Path(__file__).resolve()),
+                           "--worker", str(source), str(output)]
+                elapsed, sample = benchmark._isolated(command)
+                sample["seconds"] = elapsed
+                sample["signature"] = signature(output)
+                samples.append(sample)
+                print(f"H01 {name} {index + 1}/3: {elapsed:.3f}s", flush=True)
+            generated = read_schematic(output)
+            run_record = json.loads(output.with_suffix(output.suffix + ".run.json").read_bytes())
+            expected = samples[0]["signature"]
+            result = {
+                "case": name,
+                "input_sha256": structure.digest(source),
+                "input": spec,
+                "actual_dimensions": generated.volume.bounds().size.to_list(),
+                "occupied_cells": len(generated.volume),
+                "core_size": run_record["config"]["limits"]["region"],
+                "halo": run_record["config"]["limits"]["halo"],
+                "generation": {
+                    "engine": run_record["environment"]["engine"],
+                    "data_hash": run_record["environment"]["dataHash"],
+                    "engine_hash": run_record["environment"]["engineHash"],
+                    "lock_hash": run_record["environment"]["lockHash"],
+                },
+                "repetitions": len(samples),
+                "samples": samples,
+                "seconds_median": statistics.median(item["seconds"] for item in samples),
+                "process_peak_rss_bytes_median": statistics.median(
+                    item["process_peak_rss_bytes"] for item in samples
+                ),
+                "reproducible": all(item["signature"] == expected for item in samples),
+                "status": "success" if all(item["code"] == 0 for item in samples) else "failure",
+            }
+            if not result["reproducible"]:
+                raise ValueError(f"反復間で出力が異なります: {name}")
+            record["results"].append(result)
+            record["updated_at"] = datetime.now(UTC).isoformat()
+            structure.write_json(record_path, record)
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--phase", choices=("before", "profile", "after", "profile-after",
@@ -204,8 +282,11 @@ if __name__ == "__main__":
     parser.add_argument("--worker", nargs=2, type=Path)
     parser.add_argument("--profile", type=Path)
     parser.add_argument("--baseline-root", type=Path)
+    parser.add_argument("--h-baseline", action="store_true")
     args = parser.parse_args()
     if args.worker:
         print(json.dumps(worker(*args.worker, args.profile)))
+    elif args.h_baseline:
+        run_h_baseline()
     elif args.phase:
         run(args.phase, args.baseline_root)

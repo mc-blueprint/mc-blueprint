@@ -1,0 +1,904 @@
+{
+  "schema_version": 1,
+  "record_type": "h-baseline",
+  "provenance": {
+    "commit": "dabb0dce7c6eaf803986ae55c5d736cbd1ad2e44",
+    "engine_sha256": "396740f6bb10e6d5e694db43fc90f2e5302c5e1e74af5c05378200f85219953f",
+    "lock_sha256": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48",
+    "default_config_sha256": "17f5c240ead94ebb8c410f045b3344f07d07ec9c29a8a769645f853b5ea28d64"
+  },
+  "script": {
+    "path": "scripts/evaluate_make_performance.py",
+    "sha256": "2b45c7c38960c3fc43fc97376d6d29eefef5e9bd377f017c99d8c252c8c61ea3",
+    "measurement_sha256": "974fa9cd1351fb59f4c322bcbc5d55a7e65fcfcb36cdc7cd05b5aab0896e93d7",
+    "line_ending_normalization": "測定時CRLFからLFへ変換。Python ASTは一致。"
+  },
+  "environment": {
+    "os": "Windows-11-10.0.26200-SP0",
+    "cpu": "AMD Ryzen 7 5700X 8-Core Processor",
+    "cpu_reason": null,
+    "logical_cpu_count": 16,
+    "memory_total_bytes": 68640256000,
+    "memory_reason": null,
+    "gpu": "NVIDIA GeForce RTX 4070 SUPER",
+    "gpu_reason": null,
+    "python": "3.12.15 (main, Oct 21 2026, 17:48:33) [MSC v.1944 64 bit (AMD64)]",
+    "python_version": "3.12.15"
+  },
+  "storage": "H: NTFS; physical device model unavailable",
+  "physical_cpu_cores": 8,
+  "cpu_isolation_observation": "測定中に別worktreeのPythonプロセスが並行稼働しており用途は未特定。CPU負荷は完全には隔離されていない。",
+  "excluded_measurements": [
+    {
+      "input": {
+        "archetype": "house",
+        "scale": "huge",
+        "size": [
+          256,
+          128,
+          256
+        ]
+      },
+      "status": "invalid-input",
+      "reason": "現行houseの計画外形[255,136,255]が要求寸法に収まらない。時間/RSSの性能測定には含めない。"
+    }
+  ],
+  "comparison_limits": [
+    "基準端末はCPU 8コア/16論理CPU、物理メモリ64GiB、GeForce RTX 4070 SUPERで、NFR1相当端末ではない。",
+    "独立子プロセス起動からmakeのscene/run確定までを3回計時し、全試行と中央値を記録する。",
+    "stage_hook値は累積経過時間と段開始時Working Setであり、段単独の時間・ピークRSSではない。",
+    "OSピークRSSは独立子プロセス全体のPeakWorkingSetSize。NFR2/3の達成判定には使わない。",
+    "固定H地形ケースは未実装の期待条件であり、この住宅/塔測定で生成成功とみなさない。"
+  ],
+  "results": [
+    {
+      "case": "house-medium",
+      "input_sha256": "5aae28387110c6a8fc46fd103bb8ab0575da4171aa738e90f48081b67d965447",
+      "input": {
+        "minecraftVersion": "1.21.11",
+        "archetype": "house",
+        "style": "medieval",
+        "scale": "medium",
+        "seed": 42,
+        "features": {
+          "floors": 2,
+          "floor_height": 4,
+          "roof": "gable"
+        },
+        "interior": "minimal",
+        "size": [
+          64,
+          48,
+          64
+        ],
+        "elements": {
+          "house#1": {
+            "width": 61,
+            "depth": 61
+          }
+        }
+      },
+      "repetitions": 3,
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 67.25267279997934,
+          "process_peak_rss_bytes": 206180352,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0010443999199196696,
+              "rss_at_stage_start_bytes": 52813824
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.07717740000225604,
+              "rss_at_stage_start_bytes": 52903936
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.9139086999930441,
+              "rss_at_stage_start_bytes": 55619584
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 3.492452099919319,
+              "rss_at_stage_start_bytes": 83574784
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 66.02092139993329,
+              "rss_at_stage_start_bytes": 87474176
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 66.51131069997791,
+              "rss_at_stage_start_bytes": 87691264
+            }
+          ],
+          "implementation": {
+            "pipeline": "H:\\mc-blueprint\\worktrees\\mcb-232\\mc-blueprint\\src\\mcblueprint\\pipeline.py",
+            "environment": {
+              "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
+              "engine": "0.1.0",
+              "engineHash": "6ac5f7c4445409aea26e08f7c5870ecdcf0a3ac32103736ef00c8fa4a02aaf27",
+              "lockHash": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48"
+            }
+          },
+          "seconds": 68.58747969998512,
+          "signature": {
+            "placement_sha256": "908a759149a17f837b83914f34db36cb5be81902ca28d27a5665232cc4bf7ddc",
+            "metrics_sha256": "b0c378a1b5f143f10229a9c433e82998c6fd2647d054f2cc94ae07bde4757671",
+            "structured_diagnostics_sha256": "5c3fe1b76e998ab57bdc34716a6f75a338323bae5452f9caa6d6bcc715a24990",
+            "scene_json_sha256": "5644c306b7d377341852b207082d6c7afb68bfb631b9e99e11ff1b65989c6489"
+          }
+        },
+        {
+          "code": 0,
+          "make_runtime_seconds": 60.34473169990815,
+          "process_peak_rss_bytes": 201904128,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0012429999187588692,
+              "rss_at_stage_start_bytes": 52535296
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04843540000729263,
+              "rss_at_stage_start_bytes": 52854784
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.7521169999381527,
+              "rss_at_stage_start_bytes": 56852480
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 2.5710413999622688,
+              "rss_at_stage_start_bytes": 83746816
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 58.97525699995458,
+              "rss_at_stage_start_bytes": 87126016
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 59.50604279991239,
+              "rss_at_stage_start_bytes": 87642112
+            }
+          ],
+          "implementation": {
+            "pipeline": "H:\\mc-blueprint\\worktrees\\mcb-232\\mc-blueprint\\src\\mcblueprint\\pipeline.py",
+            "environment": {
+              "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
+              "engine": "0.1.0",
+              "engineHash": "6ac5f7c4445409aea26e08f7c5870ecdcf0a3ac32103736ef00c8fa4a02aaf27",
+              "lockHash": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48"
+            }
+          },
+          "seconds": 61.38659749994986,
+          "signature": {
+            "placement_sha256": "908a759149a17f837b83914f34db36cb5be81902ca28d27a5665232cc4bf7ddc",
+            "metrics_sha256": "b0c378a1b5f143f10229a9c433e82998c6fd2647d054f2cc94ae07bde4757671",
+            "structured_diagnostics_sha256": "5c3fe1b76e998ab57bdc34716a6f75a338323bae5452f9caa6d6bcc715a24990",
+            "scene_json_sha256": "5644c306b7d377341852b207082d6c7afb68bfb631b9e99e11ff1b65989c6489"
+          }
+        },
+        {
+          "code": 0,
+          "make_runtime_seconds": 59.25189319998026,
+          "process_peak_rss_bytes": 203874304,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0010327000636607409,
+              "rss_at_stage_start_bytes": 51806208
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04730049998033792,
+              "rss_at_stage_start_bytes": 52432896
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 0.705578500055708,
+              "rss_at_stage_start_bytes": 56414208
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 2.442424700013362,
+              "rss_at_stage_start_bytes": 83881984
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 57.961375599959865,
+              "rss_at_stage_start_bytes": 88100864
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 58.46525690006092,
+              "rss_at_stage_start_bytes": 88731648
+            }
+          ],
+          "implementation": {
+            "pipeline": "H:\\mc-blueprint\\worktrees\\mcb-232\\mc-blueprint\\src\\mcblueprint\\pipeline.py",
+            "environment": {
+              "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
+              "engine": "0.1.0",
+              "engineHash": "6ac5f7c4445409aea26e08f7c5870ecdcf0a3ac32103736ef00c8fa4a02aaf27",
+              "lockHash": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48"
+            }
+          },
+          "seconds": 60.21366770006716,
+          "signature": {
+            "placement_sha256": "908a759149a17f837b83914f34db36cb5be81902ca28d27a5665232cc4bf7ddc",
+            "metrics_sha256": "b0c378a1b5f143f10229a9c433e82998c6fd2647d054f2cc94ae07bde4757671",
+            "structured_diagnostics_sha256": "5c3fe1b76e998ab57bdc34716a6f75a338323bae5452f9caa6d6bcc715a24990",
+            "scene_json_sha256": "5644c306b7d377341852b207082d6c7afb68bfb631b9e99e11ff1b65989c6489"
+          }
+        }
+      ],
+      "seconds_median": 61.38659749994986,
+      "process_peak_rss_bytes_median": 203874304,
+      "reproducible": true,
+      "status": "success",
+      "actual_dimensions": [
+        63,
+        40,
+        63
+      ],
+      "occupied_cells": 19772,
+      "core_size": [
+        64,
+        null,
+        64
+      ],
+      "halo": 16,
+      "generation": {
+        "engine": "0.1.0",
+        "data_hash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
+        "engine_hash": "6ac5f7c4445409aea26e08f7c5870ecdcf0a3ac32103736ef00c8fa4a02aaf27",
+        "lock_hash": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48"
+      }
+    },
+    {
+      "case": "tower-medium",
+      "input_sha256": "f4391589c22710d842e9289fd7dc032a8081ecd8b58a7cb6703596e3888a42c0",
+      "input": {
+        "minecraftVersion": "1.21.11",
+        "archetype": "tower",
+        "style": "medieval",
+        "scale": "medium",
+        "seed": 42,
+        "features": {
+          "shape": "square",
+          "floors": 8,
+          "floor_height": 5,
+          "battlement": true
+        },
+        "interior": "minimal",
+        "size": [
+          64,
+          48,
+          64
+        ],
+        "elements": {
+          "tower#1": {
+            "radius": 29
+          }
+        }
+      },
+      "repetitions": 3,
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 56.936231400002725,
+          "process_peak_rss_bytes": 201986048,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0009926999919116497,
+              "rss_at_stage_start_bytes": 53010432
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04411330004222691,
+              "rss_at_stage_start_bytes": 53227520
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 1.5410163999767974,
+              "rss_at_stage_start_bytes": 77058048
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 10.898510500090197,
+              "rss_at_stage_start_bytes": 97329152
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 49.341423799982294,
+              "rss_at_stage_start_bytes": 113082368
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 55.68222409998998,
+              "rss_at_stage_start_bytes": 114532352
+            }
+          ],
+          "implementation": {
+            "pipeline": "H:\\mc-blueprint\\worktrees\\mcb-232\\mc-blueprint\\src\\mcblueprint\\pipeline.py",
+            "environment": {
+              "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
+              "engine": "0.1.0",
+              "engineHash": "6ac5f7c4445409aea26e08f7c5870ecdcf0a3ac32103736ef00c8fa4a02aaf27",
+              "lockHash": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48"
+            }
+          },
+          "seconds": 57.9482122999616,
+          "signature": {
+            "placement_sha256": "7983c3bceb90132c1492ed81eac6aa76c0750749db9d2d5ffc1dee4994f62400",
+            "metrics_sha256": "a1b11d7d93908fc66d53c59cf1e6f69daf87e05f5ff75755e9ce6c80af0044b1",
+            "structured_diagnostics_sha256": "472e63e57c6b7c07bdf9eb4e7a3ff466c5e9ac5c205bb9df0cf447be0532c980",
+            "scene_json_sha256": "538947b991ff559b806309c4369e8eda214711466f2270525ad2748e102a1871"
+          }
+        },
+        {
+          "code": 0,
+          "make_runtime_seconds": 59.587930999929085,
+          "process_peak_rss_bytes": 201768960,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0009814000222831964,
+              "rss_at_stage_start_bytes": 52633600
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.043398199952207506,
+              "rss_at_stage_start_bytes": 52932608
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 1.543104499927722,
+              "rss_at_stage_start_bytes": 76607488
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 10.517892300034873,
+              "rss_at_stage_start_bytes": 97075200
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 50.64552689995617,
+              "rss_at_stage_start_bytes": 112787456
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 58.0687260000268,
+              "rss_at_stage_start_bytes": 114073600
+            }
+          ],
+          "implementation": {
+            "pipeline": "H:\\mc-blueprint\\worktrees\\mcb-232\\mc-blueprint\\src\\mcblueprint\\pipeline.py",
+            "environment": {
+              "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
+              "engine": "0.1.0",
+              "engineHash": "6ac5f7c4445409aea26e08f7c5870ecdcf0a3ac32103736ef00c8fa4a02aaf27",
+              "lockHash": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48"
+            }
+          },
+          "seconds": 60.602340599987656,
+          "signature": {
+            "placement_sha256": "7983c3bceb90132c1492ed81eac6aa76c0750749db9d2d5ffc1dee4994f62400",
+            "metrics_sha256": "a1b11d7d93908fc66d53c59cf1e6f69daf87e05f5ff75755e9ce6c80af0044b1",
+            "structured_diagnostics_sha256": "472e63e57c6b7c07bdf9eb4e7a3ff466c5e9ac5c205bb9df0cf447be0532c980",
+            "scene_json_sha256": "538947b991ff559b806309c4369e8eda214711466f2270525ad2748e102a1871"
+          }
+        },
+        {
+          "code": 0,
+          "make_runtime_seconds": 61.335069000022486,
+          "process_peak_rss_bytes": 201904128,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.001171999960206449,
+              "rss_at_stage_start_bytes": 52486144
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.05902859999332577,
+              "rss_at_stage_start_bytes": 52731904
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 1.7747483999701217,
+              "rss_at_stage_start_bytes": 76910592
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 12.418260399950668,
+              "rss_at_stage_start_bytes": 95404032
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 52.6523333999794,
+              "rss_at_stage_start_bytes": 113766400
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 59.889000099967234,
+              "rss_at_stage_start_bytes": 114757632
+            }
+          ],
+          "implementation": {
+            "pipeline": "H:\\mc-blueprint\\worktrees\\mcb-232\\mc-blueprint\\src\\mcblueprint\\pipeline.py",
+            "environment": {
+              "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
+              "engine": "0.1.0",
+              "engineHash": "6ac5f7c4445409aea26e08f7c5870ecdcf0a3ac32103736ef00c8fa4a02aaf27",
+              "lockHash": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48"
+            }
+          },
+          "seconds": 62.44600290001836,
+          "signature": {
+            "placement_sha256": "7983c3bceb90132c1492ed81eac6aa76c0750749db9d2d5ffc1dee4994f62400",
+            "metrics_sha256": "a1b11d7d93908fc66d53c59cf1e6f69daf87e05f5ff75755e9ce6c80af0044b1",
+            "structured_diagnostics_sha256": "472e63e57c6b7c07bdf9eb4e7a3ff466c5e9ac5c205bb9df0cf447be0532c980",
+            "scene_json_sha256": "538947b991ff559b806309c4369e8eda214711466f2270525ad2748e102a1871"
+          }
+        }
+      ],
+      "seconds_median": 60.602340599987656,
+      "process_peak_rss_bytes_median": 201904128,
+      "reproducible": true,
+      "status": "success",
+      "actual_dimensions": [
+        61,
+        43,
+        61
+      ],
+      "occupied_cells": 44047,
+      "core_size": [
+        64,
+        null,
+        64
+      ],
+      "halo": 16,
+      "generation": {
+        "engine": "0.1.0",
+        "data_hash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
+        "engine_hash": "6ac5f7c4445409aea26e08f7c5870ecdcf0a3ac32103736ef00c8fa4a02aaf27",
+        "lock_hash": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48"
+      }
+    },
+    {
+      "case": "house-large",
+      "input_sha256": "25ba7157ff2ffd25ccffee7a11ea94f7e79c26b3a12ff617e2746aa9310739f1",
+      "input": {
+        "minecraftVersion": "1.21.11",
+        "archetype": "house",
+        "style": "medieval",
+        "scale": "large",
+        "seed": 42,
+        "features": {
+          "floors": 2,
+          "floor_height": 4,
+          "roof": "gable"
+        },
+        "interior": "minimal",
+        "size": [
+          128,
+          96,
+          128
+        ],
+        "elements": {
+          "house#1": {
+            "width": 125,
+            "depth": 125
+          }
+        }
+      },
+      "repetitions": 3,
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 328.9671772000147,
+          "process_peak_rss_bytes": 218894336,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0009861000580713153,
+              "rss_at_stage_start_bytes": 52371456
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.05649560003075749,
+              "rss_at_stage_start_bytes": 52543488
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 2.4602221000241116,
+              "rss_at_stage_start_bytes": 61526016
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 7.5589534000027925,
+              "rss_at_stage_start_bytes": 88150016
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 321.07926510006655,
+              "rss_at_stage_start_bytes": 95264768
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 324.2015149999643,
+              "rss_at_stage_start_bytes": 96284672
+            }
+          ],
+          "implementation": {
+            "pipeline": "H:\\mc-blueprint\\worktrees\\mcb-232\\mc-blueprint\\src\\mcblueprint\\pipeline.py",
+            "environment": {
+              "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
+              "engine": "0.1.0",
+              "engineHash": "6ac5f7c4445409aea26e08f7c5870ecdcf0a3ac32103736ef00c8fa4a02aaf27",
+              "lockHash": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48"
+            }
+          },
+          "seconds": 329.99855309992563,
+          "signature": {
+            "placement_sha256": "9ec6770d6f76ce06c03a43f829feef94a9ff44cf3de89c56e9fdc81cdc09c1c1",
+            "metrics_sha256": "9419735a250f08a571b87e61dba891f4c9cfc055dd8e731348c37ac87a3cee64",
+            "structured_diagnostics_sha256": "056cb8151c35aade2d0c4938d3929e38426e44bd06f4d43f3bcb9fb26f56c020",
+            "scene_json_sha256": "504f06525dfa9352e87fe06d2a995cd23fa000486d78324402606636b4f1f1f3"
+          }
+        },
+        {
+          "code": 0,
+          "make_runtime_seconds": 300.2438297999324,
+          "process_peak_rss_bytes": 218738688,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0010142999235540628,
+              "rss_at_stage_start_bytes": 53051392
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04468179994728416,
+              "rss_at_stage_start_bytes": 53231616
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 2.5021177999442443,
+              "rss_at_stage_start_bytes": 62607360
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 7.201733900001273,
+              "rss_at_stage_start_bytes": 90312704
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 293.3538783999393,
+              "rss_at_stage_start_bytes": 95678464
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 296.21954259998165,
+              "rss_at_stage_start_bytes": 96567296
+            }
+          ],
+          "implementation": {
+            "pipeline": "H:\\mc-blueprint\\worktrees\\mcb-232\\mc-blueprint\\src\\mcblueprint\\pipeline.py",
+            "environment": {
+              "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
+              "engine": "0.1.0",
+              "engineHash": "6ac5f7c4445409aea26e08f7c5870ecdcf0a3ac32103736ef00c8fa4a02aaf27",
+              "lockHash": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48"
+            }
+          },
+          "seconds": 301.18532839999534,
+          "signature": {
+            "placement_sha256": "9ec6770d6f76ce06c03a43f829feef94a9ff44cf3de89c56e9fdc81cdc09c1c1",
+            "metrics_sha256": "9419735a250f08a571b87e61dba891f4c9cfc055dd8e731348c37ac87a3cee64",
+            "structured_diagnostics_sha256": "056cb8151c35aade2d0c4938d3929e38426e44bd06f4d43f3bcb9fb26f56c020",
+            "scene_json_sha256": "504f06525dfa9352e87fe06d2a995cd23fa000486d78324402606636b4f1f1f3"
+          }
+        },
+        {
+          "code": 0,
+          "make_runtime_seconds": 301.8444008999504,
+          "process_peak_rss_bytes": 219054080,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0010056999744847417,
+              "rss_at_stage_start_bytes": 52207616
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.043057399918325245,
+              "rss_at_stage_start_bytes": 52445184
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 2.6216327999718487,
+              "rss_at_stage_start_bytes": 60600320
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 7.915772299980745,
+              "rss_at_stage_start_bytes": 88104960
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 294.43993959994987,
+              "rss_at_stage_start_bytes": 95387648
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 297.3544312999584,
+              "rss_at_stage_start_bytes": 96301056
+            }
+          ],
+          "implementation": {
+            "pipeline": "H:\\mc-blueprint\\worktrees\\mcb-232\\mc-blueprint\\src\\mcblueprint\\pipeline.py",
+            "environment": {
+              "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
+              "engine": "0.1.0",
+              "engineHash": "6ac5f7c4445409aea26e08f7c5870ecdcf0a3ac32103736ef00c8fa4a02aaf27",
+              "lockHash": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48"
+            }
+          },
+          "seconds": 302.8446248000255,
+          "signature": {
+            "placement_sha256": "9ec6770d6f76ce06c03a43f829feef94a9ff44cf3de89c56e9fdc81cdc09c1c1",
+            "metrics_sha256": "9419735a250f08a571b87e61dba891f4c9cfc055dd8e731348c37ac87a3cee64",
+            "structured_diagnostics_sha256": "056cb8151c35aade2d0c4938d3929e38426e44bd06f4d43f3bcb9fb26f56c020",
+            "scene_json_sha256": "504f06525dfa9352e87fe06d2a995cd23fa000486d78324402606636b4f1f1f3"
+          }
+        }
+      ],
+      "seconds_median": 302.8446248000255,
+      "process_peak_rss_bytes_median": 218894336,
+      "reproducible": true,
+      "status": "success",
+      "actual_dimensions": [
+        127,
+        72,
+        127
+      ],
+      "occupied_cells": 76857,
+      "core_size": [
+        64,
+        null,
+        64
+      ],
+      "halo": 16,
+      "generation": {
+        "engine": "0.1.0",
+        "data_hash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
+        "engine_hash": "6ac5f7c4445409aea26e08f7c5870ecdcf0a3ac32103736ef00c8fa4a02aaf27",
+        "lock_hash": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48"
+      }
+    },
+    {
+      "case": "tower-large",
+      "input_sha256": "cd2e1cf461a97e26b211d40a10229b68630d4c8bb54e63843edb4a54a6317ba8",
+      "input": {
+        "minecraftVersion": "1.21.11",
+        "archetype": "tower",
+        "style": "medieval",
+        "scale": "large",
+        "seed": 42,
+        "features": {
+          "shape": "square",
+          "floors": 17,
+          "floor_height": 5,
+          "battlement": true
+        },
+        "interior": "minimal",
+        "size": [
+          128,
+          96,
+          128
+        ],
+        "elements": {
+          "tower#1": {
+            "radius": 61
+          }
+        }
+      },
+      "repetitions": 3,
+      "samples": [
+        {
+          "code": 0,
+          "make_runtime_seconds": 392.2680988999782,
+          "process_peak_rss_bytes": 338018304,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0009970000246539712,
+              "rss_at_stage_start_bytes": 52232192
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.054201000020839274,
+              "rss_at_stage_start_bytes": 52617216
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 13.820719899958931,
+              "rss_at_stage_start_bytes": 152178688
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 57.03126119996887,
+              "rss_at_stage_start_bytes": 165289984
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 293.3480245000683,
+              "rss_at_stage_start_bytes": 225878016
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 382.52799119998235,
+              "rss_at_stage_start_bytes": 229326848
+            }
+          ],
+          "implementation": {
+            "pipeline": "H:\\mc-blueprint\\worktrees\\mcb-232\\mc-blueprint\\src\\mcblueprint\\pipeline.py",
+            "environment": {
+              "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
+              "engine": "0.1.0",
+              "engineHash": "6ac5f7c4445409aea26e08f7c5870ecdcf0a3ac32103736ef00c8fa4a02aaf27",
+              "lockHash": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48"
+            }
+          },
+          "seconds": 393.29584719997365,
+          "signature": {
+            "placement_sha256": "447b0b00e93d65ae6157d0901eba2513cb4c0dcb609a381b0e810134451d5d51",
+            "metrics_sha256": "67b2aba36c0e53e4ccc1015639e2674d0d224c026f0c060d58372e277db960e7",
+            "structured_diagnostics_sha256": "adc67eea9069630d6fcc90b3a3473969e9f5dbc3d6745cdaeeb4ca25f0563064",
+            "scene_json_sha256": "bfac24f62697fc91ef9a8ce1bc5e50ce47412bf6c97c9d4ceac60e3b66e52516"
+          }
+        },
+        {
+          "code": 0,
+          "make_runtime_seconds": 383.19828980008606,
+          "process_peak_rss_bytes": 336203776,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.0009704000549390912,
+              "rss_at_stage_start_bytes": 52375552
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04419530008453876,
+              "rss_at_stage_start_bytes": 52600832
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 12.723967000027187,
+              "rss_at_stage_start_bytes": 150974464
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 52.96500450000167,
+              "rss_at_stage_start_bytes": 162324480
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 293.56105980009306,
+              "rss_at_stage_start_bytes": 226299904
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 373.8297868000809,
+              "rss_at_stage_start_bytes": 229670912
+            }
+          ],
+          "implementation": {
+            "pipeline": "H:\\mc-blueprint\\worktrees\\mcb-232\\mc-blueprint\\src\\mcblueprint\\pipeline.py",
+            "environment": {
+              "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
+              "engine": "0.1.0",
+              "engineHash": "6ac5f7c4445409aea26e08f7c5870ecdcf0a3ac32103736ef00c8fa4a02aaf27",
+              "lockHash": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48"
+            }
+          },
+          "seconds": 384.2087526000105,
+          "signature": {
+            "placement_sha256": "447b0b00e93d65ae6157d0901eba2513cb4c0dcb609a381b0e810134451d5d51",
+            "metrics_sha256": "67b2aba36c0e53e4ccc1015639e2674d0d224c026f0c060d58372e277db960e7",
+            "structured_diagnostics_sha256": "adc67eea9069630d6fcc90b3a3473969e9f5dbc3d6745cdaeeb4ca25f0563064",
+            "scene_json_sha256": "bfac24f62697fc91ef9a8ce1bc5e50ce47412bf6c97c9d4ceac60e3b66e52516"
+          }
+        },
+        {
+          "code": 0,
+          "make_runtime_seconds": 373.1455922999885,
+          "process_peak_rss_bytes": 337575936,
+          "stage_hook_samples": [
+            {
+              "stage": "Resolve",
+              "elapsed_seconds": 0.001016999944113195,
+              "rss_at_stage_start_bytes": 52871168
+            },
+            {
+              "stage": "Site/Massing/Detail",
+              "elapsed_seconds": 0.04318009992130101,
+              "rss_at_stage_start_bytes": 51929088
+            },
+            {
+              "stage": "Materialize",
+              "elapsed_seconds": 12.964496699976735,
+              "rss_at_stage_start_bytes": 149508096
+            },
+            {
+              "stage": "Generate",
+              "elapsed_seconds": 55.67600799992215,
+              "rss_at_stage_start_bytes": 162365440
+            },
+            {
+              "stage": "Critic",
+              "elapsed_seconds": 275.74853580002673,
+              "rss_at_stage_start_bytes": 226025472
+            },
+            {
+              "stage": "Export",
+              "elapsed_seconds": 362.6136445000302,
+              "rss_at_stage_start_bytes": 229462016
+            }
+          ],
+          "implementation": {
+            "pipeline": "H:\\mc-blueprint\\worktrees\\mcb-232\\mc-blueprint\\src\\mcblueprint\\pipeline.py",
+            "environment": {
+              "dataHash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
+              "engine": "0.1.0",
+              "engineHash": "6ac5f7c4445409aea26e08f7c5870ecdcf0a3ac32103736ef00c8fa4a02aaf27",
+              "lockHash": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48"
+            }
+          },
+          "seconds": 374.1635884999996,
+          "signature": {
+            "placement_sha256": "447b0b00e93d65ae6157d0901eba2513cb4c0dcb609a381b0e810134451d5d51",
+            "metrics_sha256": "67b2aba36c0e53e4ccc1015639e2674d0d224c026f0c060d58372e277db960e7",
+            "structured_diagnostics_sha256": "adc67eea9069630d6fcc90b3a3473969e9f5dbc3d6745cdaeeb4ca25f0563064",
+            "scene_json_sha256": "bfac24f62697fc91ef9a8ce1bc5e50ce47412bf6c97c9d4ceac60e3b66e52516"
+          }
+        }
+      ],
+      "seconds_median": 384.2087526000105,
+      "process_peak_rss_bytes_median": 337575936,
+      "reproducible": true,
+      "status": "success",
+      "actual_dimensions": [
+        125,
+        88,
+        125
+      ],
+      "occupied_cells": 327426,
+      "core_size": [
+        64,
+        null,
+        64
+      ],
+      "halo": 16,
+      "generation": {
+        "engine": "0.1.0",
+        "data_hash": "1b3a5e429e659172f959f5142c65fe839e892a84b0ba06d98a3464eeee437f41",
+        "engine_hash": "6ac5f7c4445409aea26e08f7c5870ecdcf0a3ac32103736ef00c8fa4a02aaf27",
+        "lock_hash": "dbe9b6956a22b881fa5248aa8963a14aa0b3e59d3bfd509e3058ad2efd41dc48"
+      }
+    }
+  ],
+  "updated_at": "2026-11-04T03:37:37.317525+00:00"
+}

@@ -45,6 +45,54 @@ def test_case_definitions_and_references_are_valid() -> None:
     assert any("連続した切妻屋根" in requirement for requirement in pair["requirements"])
 
 
+def test_h_fixed_case_inputs_have_stable_hashes_and_pending_status() -> None:
+    cases_path = ROOT / "evaluation/cases/large-scale.json"
+    data = json.loads(cases_path.read_text(encoding="utf-8"))
+    assert data["caseSet"] == "H01"
+    assert data["assessedCommit"] == "dabb0dc"
+    assert len(data["cases"]) == 12
+    assert all(case["statusAtBase"] == "not-implemented" for case in data["cases"])
+    assert {case["id"] for case in data["cases"]} == {
+        "castle-medieval", "town-medieval", "cave", "underground-city-medieval",
+        *(f"terrain-{landform}-{relief}-{erosion}"
+          for landform in ("mountain", "island")
+          for relief in ("flat", "relief")
+          for erosion in ("no-erosion", "eroded")),
+    }
+
+    inputs = data["inputs"]
+    assert len(inputs) == 72
+    assert len({(item["caseId"], item["scale"], item["seed"]) for item in inputs}) == 72
+    cases = {case["id"]: case for case in data["cases"]}
+    for item in inputs:
+        spec = {
+            **cases[item["caseId"]]["buildSpec"],
+            "scale": item["scale"],
+            "size": data["scales"][item["scale"]],
+            "seed": item["seed"],
+        }
+        raw = json.dumps(spec, sort_keys=True, separators=(",", ":"),
+                         ensure_ascii=False).encode("utf-8")
+        assert hashlib.sha256(raw).hexdigest() == item["sha256"]
+
+    baseline = read_json(Path("evaluation/records/h-baseline.json"))
+    assert baseline["record_type"] == "h-baseline"
+    assert baseline["script"]["sha256"] == file_hash("scripts/evaluate_make_performance.py")
+    assert {result["case"] for result in baseline["results"]} == {
+        "house-medium", "tower-medium", "house-large", "tower-large",
+    }
+    for result in baseline["results"]:
+        assert result["status"] == "success"
+        assert result["reproducible"]
+        assert len(result["actual_dimensions"]) == 3
+        assert result["occupied_cells"] > 0
+        assert result["core_size"] == [64, None, 64]
+        assert result["halo"] == 16
+        assert len(result["samples"]) == result["repetitions"] == 3
+        assert all(sample["code"] == 0 for sample in result["samples"])
+        assert all(sample["process_peak_rss_bytes"] > 0 for sample in result["samples"])
+
+
 def test_baseline_records_have_consistent_statuses_and_hashes() -> None:
     cases = read_json(CASES_PATH)["cases"]
     cases_by_id = {case["id"]: case for case in cases}
