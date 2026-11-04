@@ -11,8 +11,9 @@ from typing import Any
 import yaml
 
 from mcblueprint.buildspec import ResolveResult
-from mcblueprint.detail import NORMALS, plan_detail
+from mcblueprint.detail import plan_detail
 from mcblueprint.errors import BlueprintError
+from mcblueprint.facade_projection import NORMALS, plan_facades
 from mcblueprint.foundation import STABLE_GROUND
 from mcblueprint.importers import read_terrain
 from mcblueprint.model import AABB, Vec3
@@ -79,16 +80,8 @@ def _column_clear(x, z, height, operations, root):
     return True
 
 
-def _projection(box, origin, axis):
-    values = [((x - origin.x) * axis.x + (z - origin.z) * axis.z)
-              for x in (box.min.x, box.max.x) for z in (box.min.z, box.max.z)]
-    return {"u": [min(values), max(values)],
-            "v": [box.min.y - origin.y, box.max.y - origin.y]}
-
-
 def _plan_contract(root, body, detail, transform, params, layout):
     """Criticが期待構造と面上の開口を照合する座標契約を作る。"""
-    rotation = Transform(transform.rows)
     frame = next(op for op in body if op["element"] == f"{root}.frame")
     frame_ops = frame["operations"]
     columns, beams = [], []
@@ -103,88 +96,7 @@ def _plan_contract(root, body, detail, transform, params, layout):
             beams.append({"id": f"{root}.beam#{len(beams) + 1}",
                           "y": bounds.min.y, "from": bounds.min.to_list(),
                           "to": bounds.max.to_list()})
-    opening_boxes = [(opening, transform.bounds(build_operation(opening, root).bounds()))
-                     for opening in detail if opening["type"] in ("window", "doorway")]
-    facades = []
-    for op in body:
-        if "face" not in op:
-            continue
-        bounds = build_operation(op, root).bounds()
-        bounds = transform.bounds(bounds)
-        directions = {"north": Vec3(0, 0, -1), "south": Vec3(0, 0, 1),
-                      "west": Vec3(-1, 0, 0), "east": Vec3(1, 0, 0)}
-        face = rotation.apply(directions[op["face"]])
-        origin = transform.apply(build_operation(op, root).bounds().min)
-        axis = rotation.apply(Vec3.from_seq(
-            [1, 0, 0] if op["face"] in ("north", "south") else [0, 0, 1]
-        ))
-        openings = []
-        for opening, box in opening_boxes:
-            if opening.get("face") != op["face"]:
-                continue
-            openings.append({"id": opening["element"], "from": box.min.to_list(),
-                             "to": box.max.to_list(), "projection": _projection(box, origin, axis)})
-        facades.append({"id": op["element"], "normal": face.to_list(),
-                        "origin": origin.to_list(), "uAxis": axis.to_list(),
-                        "vAxis": [0, 1, 0], "from": bounds.min.to_list(),
-                        "to": bounds.max.to_list(), "openings": openings})
-    if not layout:
-        points = sorted({(op["from"][0], op["from"][2]) for op in frame_ops
-                         if op["type"] == "fill" and op["from"][0] == op["to"][0]
-                         and op["from"][2] == op["to"][2]},
-                        key=lambda p: math.atan2(p[1], p[0]))
-        if params["shape"] == "square":
-            radius = params["radius"]
-            points = sorted(set(points) | {(x, z) for x in (-radius, radius)
-                                           for z in (-radius, radius)},
-                            key=lambda p: math.atan2(p[1], p[0]))
-        for index, start in enumerate(points):
-            end = points[(index + 1) % len(points)]
-            dx, dz = end[0] - start[0], end[1] - start[1]
-            arc = []
-            if params["shape"] == "round":
-                start_angle = math.atan2(start[1], start[0])
-                sweep = (math.atan2(end[1], end[0]) - start_angle) % math.tau
-                arc = [p for p in disc_offsets(params["radius"], "hollow", "y")
-                       if (math.atan2(p.z, p.x) - start_angle) % math.tau <= sweep]
-                nx, nz = start[0] + end[0], start[1] + end[1]
-                scale = max(1, math.gcd(abs(nx), abs(nz)))
-                normal = Vec3(nx // scale, 0, nz // scale)
-            elif dx:
-                normal = Vec3(0, 0, 1 if (start[1] + end[1]) // 2 > 0 else -1)
-            else:
-                normal = Vec3(1 if (start[0] + end[0]) // 2 > 0 else -1, 0, 0)
-            for level in range(params["floors"]):
-                lo = Vec3(start[0], level * params["floor_height"] + 1, start[1])
-                hi = Vec3(end[0], min((level + 1) * params["floor_height"],
-                                      params["height"]), end[1])
-                local_box = AABB.of(lo, hi)
-                if arc:
-                    local_box = AABB.from_points([
-                        Vec3(p.x, y, p.z) for p in arc for y in (lo.y, hi.y)
-                    ])
-                box = transform.bounds(local_box)
-                openings = []
-                for opening, opening_box in opening_boxes:
-                    center = Vec3((opening_box.min.x + opening_box.max.x) // 2,
-                                  (opening_box.min.y + opening_box.max.y) // 2,
-                                  (opening_box.min.z + opening_box.max.z) // 2)
-                    segment_center = transform.apply(Vec3((start[0] + end[0]) // 2,
-                                                           lo.y, (start[1] + end[1]) // 2))
-                    if (center.x - segment_center.x) ** 2 + (center.z - segment_center.z) ** 2 < 16:
-                        origin = transform.apply(lo)
-                        u_axis = rotation.apply(Vec3(dx, 0, dz))
-                        openings.append({"id": opening["element"],
-                                         "from": opening_box.min.to_list(),
-                                         "to": opening_box.max.to_list(),
-                                         "projection": _projection(opening_box, origin, u_axis)})
-                facades.append({"id": f"{root}.facade.segment#{index + 1}.floor#{level + 1}",
-                                "normal": rotation.apply(normal).to_list(),
-                                "origin": transform.apply(lo).to_list(),
-                                "uAxis": rotation.apply(Vec3(dx, 0, dz)).to_list(),
-                                "vAxis": [0, 1, 0],
-                                "from": box.min.to_list(), "to": box.max.to_list(),
-                                "openings": openings})
+    facades = plan_facades(root, body, detail, transform, params, layout)
     return {"columns": columns, "beams": beams, "facades": facades}
 
 
