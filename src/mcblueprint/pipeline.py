@@ -259,8 +259,14 @@ def generated_blueprint_regions(
     terrain_ground = (isinstance(ground, dict) and ground.get("type") == "terrain"
                       and blueprint.terrain is not None
                       and ground.get("inputHash") == blueprint.terrain.snapshot.input_sha256)
+    height_field = None
+    if isinstance(ground, dict) and ground.get("type") == "heightfield":
+        from mcblueprint.terrain_field import TerrainField
+
+        height_field = TerrainField.from_dict(ground["field"])
     if (not {"limits", "weathering", "randomness"} <= config.keys()
-            or not (type(ground) is int or constant_ground or terrain_ground)):
+            or not (type(ground) is int or constant_ground or terrain_ground
+                    or height_field is not None)):
         raise BlueprintError("生成metadataに合成設定・基準面が必要です")
     if not {"region", "halo", "max_memory_mb"} <= config["limits"].keys():
         raise BlueprintError("metadata.generation.config.limitsに合成済み上限が必要です")
@@ -270,6 +276,14 @@ def generated_blueprint_regions(
                                    reference_radius=required_halo(config["weathering"])):
         heights = (blueprint.terrain.snapshot.ground_heights(region.volume.region)
                    if terrain_ground else ground["value"] if constant_ground else ground)
+        if height_field is not None:
+            area = region.volume.region
+            field_bounds = height_field.bounds
+            heights = {(x, z): int(height_field.heights[
+                min(max(z - field_bounds.min.z, 0), field_bounds.size.z - 1),
+                min(max(x - field_bounds.min.x, 0), field_bounds.size.x - 1)])
+                for z in range(area.min.z, area.max.z + 1)
+                for x in range(area.min.x, area.max.x + 1)}
         diagnostics = apply_weather(
             region, blocks, config=config["weathering"],
             seed=blueprint.seed if seed is None else seed,

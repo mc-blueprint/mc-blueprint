@@ -1,0 +1,11 @@
+formatVersion: 1
+name: medieval.town
+archetype: town
+style: medieval
+rules:
+  plotWidth: [12, 24]
+  plotDepth: [12, 24]
+  roadWidth: [4, 6]
+  plazaSpacing: [32, 64]
+modules:
+  - medieval.lantern_post

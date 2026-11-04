@@ -24,3 +24,9 @@ sources:
     source: https://github.com/mc-blueprint/mc-blueprint-patterns
     license: MIT
     attribution: mc-blueprint-patterns にて作成
+    modules: []
+  - id: medieval-site-layouts
+    source: https://github.com/mc-blueprint/mc-blueprint-patterns
+    license: MIT
+    attribution: mc-blueprint-patterns にて作成（城郭・街路・地下都市の敷地規則）
+    modules: []

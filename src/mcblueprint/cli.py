@@ -561,9 +561,10 @@ def _run_make(args: argparse.Namespace, out: TextIO) -> int:
 def _run_archetypes(args: argparse.Namespace, out: TextIO) -> int:
     print("house 住宅（1〜2階、gable/hip、最小内装）", file=out)
     print("tower 塔（round/square、階段・各階床・胸壁）", file=out)
+    print("castle 城郭（medieval、medium以上、城壁・接合棟・塔・門・堀）", file=out)
     from mcblueprint.buildspec import SUPPORTED_ARCHETYPES
 
-    for name in SUPPORTED_ARCHETYPES[2:]:
+    for name in SUPPORTED_ARCHETYPES[3:]:
         print(f"{name} 特徴語彙のみ対応（planner未対応）", file=out)
     return EXIT_OK
 
@@ -581,15 +582,21 @@ def _run_spec_template(args: argparse.Namespace, out: TextIO) -> int:
     elements = (f"# 既知の棟IDのパラメータだけ編集できる。\n# elements:\n"
                 f"#   {args.archetype}#1:\n#     angle: 90" if args.archetype in ("house", "tower")
                 else "# このarchetypeのplannerは未対応です。")
+    if args.archetype == "castle":
+        elements = "# 主棟 house#1、付属棟 house#2/#3、塔 tower#1…を計画する。"
+    scale = "medium" if args.archetype == "castle" else "small"
+    size = "[64, 48, 64]" if args.archetype == "castle" else "[32, 32, 32]"
+    styles = ("castleはmedievalに対応。" if args.archetype == "castle"
+              else "medieval / japanese / modern")
     print(f'''# 対象版を明示し、敷地は軒・胸壁を含む上限にする。
 formatVersion: 1
 minecraftVersion: "{args.minecraft_version}"
 archetype: {args.archetype}
-# medieval / japanese / modern
+# {styles}
 style: medieval
 # tiny / small / medium / large / huge。size指定が優先。
-scale: small
-# size: [32, 32, 32]
+scale: {scale}
+# size: {size}
 seed: 42
 site:
   terrain: none
