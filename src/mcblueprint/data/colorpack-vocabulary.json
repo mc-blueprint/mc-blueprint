@@ -1,0 +1,146 @@
+{
+  "formatVersion": 1,
+  "vocabularyVersion": "1.0.0",
+  "taxonomy": {
+    "version": "0.1.0",
+    "repository": "https://github.com/mc-blueprint/mc-blueprint-color-stats",
+    "commit": "d63a596667e58c545d8fb762e8699a8c3af94a9c"
+  },
+  "styleMap": {
+    "medieval": "medieval",
+    "japanese": "japanese",
+    "modern": "modern"
+  },
+  "buildingTypeMap": {
+    "house": "house",
+    "tower": "tower",
+    "castle": "castle"
+  },
+  "biomeMap": {
+    "badlands": "badlands",
+    "bamboo_jungle": "jungle",
+    "basalt_deltas": "nether",
+    "beach": "beach",
+    "birch_forest": "forest",
+    "cherry_grove": "forest",
+    "cold_ocean": "ocean",
+    "crimson_forest": "nether",
+    "dark_forest": "forest",
+    "deep_cold_ocean": "ocean",
+    "deep_dark": "mountains",
+    "deep_frozen_ocean": "ocean",
+    "deep_lukewarm_ocean": "ocean",
+    "deep_ocean": "ocean",
+    "desert": "desert",
+    "dripstone_caves": "mountains",
+    "end_barrens": "end",
+    "end_highlands": "end",
+    "end_midlands": "end",
+    "eroded_badlands": "badlands",
+    "flower_forest": "forest",
+    "forest": "forest",
+    "frozen_ocean": "ocean",
+    "frozen_peaks": "snowy",
+    "frozen_river": "river",
+    "grove": "snowy",
+    "ice_spikes": "snowy",
+    "jagged_peaks": "snowy",
+    "jungle": "jungle",
+    "lukewarm_ocean": "ocean",
+    "lush_caves": "mountains",
+    "mangrove_swamp": "swamp",
+    "meadow": "plains",
+    "mushroom_fields": "mushroom_fields",
+    "nether_wastes": "nether",
+    "ocean": "ocean",
+    "old_growth_birch_forest": "forest",
+    "old_growth_pine_taiga": "taiga",
+    "old_growth_spruce_taiga": "taiga",
+    "pale_garden": "forest",
+    "plains": "plains",
+    "river": "river",
+    "savanna": "savanna",
+    "savanna_plateau": "savanna",
+    "small_end_islands": "end",
+    "snowy_beach": "beach",
+    "snowy_plains": "snowy",
+    "snowy_slopes": "snowy",
+    "snowy_taiga": "snowy",
+    "soul_sand_valley": "nether",
+    "sparse_jungle": "jungle",
+    "stony_peaks": "mountains",
+    "stony_shore": "beach",
+    "sunflower_plains": "plains",
+    "swamp": "swamp",
+    "taiga": "taiga",
+    "the_end": "end",
+    "warm_ocean": "ocean",
+    "warped_forest": "nether",
+    "windswept_forest": "mountains",
+    "windswept_gravelly_hills": "mountains",
+    "windswept_hills": "mountains",
+    "windswept_savanna": "savanna",
+    "wooded_badlands": "badlands"
+  },
+  "roleParts": {
+    "foundation": [
+      "plinth",
+      "stairs_entry"
+    ],
+    "wall_main": [
+      "wall_main",
+      "gable_wall"
+    ],
+    "wall_secondary": [
+      "wall_secondary"
+    ],
+    "frame": [
+      "column",
+      "beam",
+      "half_timber"
+    ],
+    "roof": [
+      "roof_surface"
+    ],
+    "trim": [
+      "eave",
+      "ridge",
+      "gable_trim",
+      "cornice",
+      "band_course"
+    ],
+    "window_frame": [
+      "window_frame"
+    ],
+    "floor": [
+      "floor_visible"
+    ],
+    "path": [
+      "path",
+      "path_natural"
+    ],
+    "accent": [
+      "accent_other"
+    ]
+  },
+  "materials": [
+    "stone",
+    "brick",
+    "wood",
+    "plaster",
+    "terracotta",
+    "concrete",
+    "metal",
+    "glass",
+    "soil",
+    "sand",
+    "plant",
+    "wool",
+    "ice_snow",
+    "ore",
+    "mineral",
+    "light",
+    "liquid",
+    "other"
+  ]
+}
