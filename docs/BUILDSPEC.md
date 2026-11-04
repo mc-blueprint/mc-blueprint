@@ -34,7 +34,8 @@ planner未実装のため生成時にSite/Massing段で拒否します。指定�
 buildings の規模別既定は tiny/small/medium/large/huge に対し 1/3/4/8/12。
 size だけを指定した場合は small の既定数を使います。city は後続で town と同じ planner を使います。
 地形名 none/flat/hill/mountain/plateau/valley/island/cave はパス解決より先に判別します。
-現行makeはnone/flatと既存terrain snapshotに対応し、他の地形生成はSite段で未対応です。
+住宅・単独塔のmakeはnone/flatと既存terrain snapshotに対応します。
+castleは生成地形にも対応します（[城郭の生成](CASTLE.md)）。他のarchetypeの地形生成はSite段で未対応です。
 furnished内装はDetail段で未対応として拒否します。
 
 ## Resolve API

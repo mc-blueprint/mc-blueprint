@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "issue": 240,
+  "regressions": {
+    "closedWall": 5,
+    "actualContacts": 3,
+    "fourSideTowerCapacity": 3,
+    "layoutRoadWidth": 4
+  },
+  "relatedPytest": {
+    "castle": 43,
+    "planningAndJunction": 96,
+    "reusedExistingFullSuite": 3028,
+    "sharedExtraChanges": false
+  },
+  "existingFourHashes": {
+    "conditions": 24,
+    "matched": true
+  },
+  "materialInvestigation": {
+    "seed": 42,
+    "terrain": "hill",
+    "role": "wall_main",
+    "selected": "minecraft:pointed_dripstone",
+    "shape": "full",
+    "material": "stone",
+    "family": null,
+    "walkingRole": false,
+    "walkingFullBlock": false,
+    "sharedSelector": "mcblueprint.materialize.materialize",
+    "castleRequest": {
+      "role": "wall_main",
+      "shape": "full",
+      "state": {}
+    },
+    "sharedSelectorChanged": false,
+    "gameOcclusionAndWaterContainment": "未検証"
+  },
+  "materialImpact": "非歩行役割のfull形状候補として選ばれる。実ゲームの遮蔽・保水は未検証。共有側の判断を#244へ引き継ぐ。"
+}

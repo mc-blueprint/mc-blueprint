@@ -1,15 +1,15 @@
 ---
 name: minecraft-blueprint
-description: Minecraft の建築を BuildSpec から生成し、評価診断に沿って調整する。住宅・塔の新規作成は mcblueprint CLI を使い、Blueprint の細部修正や既存 .schem / .litematic の編集では従来の Blueprint 手順を使う。
+description: Minecraft の建築を BuildSpec から生成し、評価診断に沿って調整する。住宅・塔・城郭の新規作成は mcblueprint CLI を使い、Blueprint の細部修正や既存 .schem / .litematic の編集では従来の Blueprint 手順を使う。
 ---
 
 # Minecraft 建築
 
-新しい住宅・塔は BuildSpec を入力し、配置・材質・評価を mcblueprint に任せます。Blueprint は細部の直接修正が必要な場合に使います。.schem / .litematic 自体を直接作成・編集しません。
+新しい住宅・塔・城郭は BuildSpec を入力し、配置・材質・評価を mcblueprint に任せます。Blueprint は細部の直接修正が必要な場合に使います。.schem / .litematic 自体を直接作成・編集しません。
 
 ## BuildSpec の手順
 
-1. `mcblueprint archetypes` で対応語彙を見て、`house` または `tower` を選びます。
+1. `mcblueprint archetypes` で対応語彙を見て、`house`・`tower`・`castle` の対応済みplannerから選びます。
 2. `mcblueprint spec-template <archetype> --minecraft-version <版>` の出力を YAML ファイルに保存し、依頼内容を反映します。版は依頼者に確認するか、プロジェクトの既定に従います。
 3. `mcblueprint make <spec.yaml> --emit blueprint` を実行し、診断と終了コードを確認します。
 4. 評価失敗なら診断に明示された修正対象だけを変更して再実行します。画像は利用者が求めたとき、または数値評価で判断できない見た目の確認に必要なときだけ `mcblueprint preview <emitされたBlueprint.json> --views isometric` で使います。

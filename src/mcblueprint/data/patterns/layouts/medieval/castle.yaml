@@ -1,0 +1,12 @@
+formatVersion: 1
+name: medieval.castle
+archetype: castle
+style: medieval
+rules:
+  plotWidth: [12, 32]
+  plotDepth: [12, 32]
+  roadWidth: [5, 7]
+  wallSpacing: [32, 64]
+  towerSpacing: [16, 32]
+modules:
+  - medieval.arched_gate

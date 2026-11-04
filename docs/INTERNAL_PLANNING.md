@@ -78,6 +78,7 @@ Operation は敷地分を含めて入力順を維持し、固定役割は棟別�
 配色パックの語彙・役割・条件を追加しない。単独棟は従来の抽選 seed を維持する。
 snapshot・`groundHeight` は既存 Site の契約をそのまま使用する。
 
-castle/town/city/terrain/cave/underground_city の特徴語彙は Resolve と雛形で扱うが、
+castle は [城郭の生成](CASTLE.md) に従って専用Site plannerで計画する。
+town/city/terrain/cave/underground_city の特徴語彙は Resolve と雛形で扱うが、
 各 planner は未実装であり Site/Massing 段で明示的に拒否する。
 複数棟検証は既存住宅・塔の合成固定ケースであり、街並み生成の実装ではない。

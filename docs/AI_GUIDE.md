@@ -1,5 +1,7 @@
 # AI エージェント向けガイド
 
+城郭は `mcblueprint spec-template castle` からBuildSpecを作成し、`mcblueprint make` で生成・評価する。対応条件は [城郭の生成](CASTLE.md) を参照。
+
 Codex、Claude Code などのコーディングエージェントから mc-blueprint を使って Minecraft の建築を生成する手順。
 エージェントに依存しない共通の流れをここに書き、各エージェント固有の設定は Skill / 設定ファイルに置く。
 
