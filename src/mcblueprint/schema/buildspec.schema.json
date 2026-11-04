@@ -16,7 +16,7 @@
     ], "minItems": 3, "maxItems": 3},
     "seed": {"type": "integer"},
     "site": {"type": "object", "additionalProperties": false, "properties": {
-      "terrain": {"type": "string", "minLength": 1},
+      "terrain": {"type": "string", "minLength": 1, "description": "地形名またはsnapshotパス。2D計画APIの地形はflat/hill/mountain/plateau/valley/island。makeの対応範囲は別途検証する。"},
       "biome": {"type": "string", "minLength": 1}
     }},
     "features": {"type": "object"},

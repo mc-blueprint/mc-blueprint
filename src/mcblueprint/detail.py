@@ -10,6 +10,7 @@ import random
 from mcblueprint import components
 from mcblueprint.critic import plan_from_metadata
 from mcblueprint.errors import BlueprintError
+from mcblueprint.facade_projection import NORMALS, plan_facade_runs
 from mcblueprint.materialize import _expand
 from mcblueprint.model import AABB, Vec3
 from mcblueprint.operations.base import derive_seed, intersect
@@ -17,8 +18,6 @@ from mcblueprint.operations.registry import build_operation
 from mcblueprint.operations.shapes import disc_offsets
 from mcblueprint.operations.transform import Transform
 
-NORMALS = {"north": (0, 0, -1), "south": (0, 0, 1),
-           "east": (1, 0, 0), "west": (-1, 0, 0)}
 ROTATIONS = {"north": 0, "south": 180, "east": 90, "west": 270}
 
 
@@ -92,32 +91,6 @@ def _module(name):
 def _bounds(ops):
     boxes = [build_operation(op, "detail").bounds() for op in ops]
     return AABB.from_points([p for box in boxes for p in (box.min, box.max)])
-
-
-def _runs(params, face):
-    """輪郭上で同一基準面を持つ水平区間を返す。"""
-    axis = 0 if face in ("north", "south") else 2
-    if "radius" not in params:
-        w, d = params["width"], params["depth"]
-        fixed = {"north": 0, "south": d - 1, "west": 0, "east": w - 1}[face]
-        return [(0, (w if axis == 0 else d) - 1, fixed)]
-    radius = params["radius"]
-    if params["shape"] == "square":
-        return [(-radius, radius, -radius if face in ("north", "west") else radius)]
-    outline = disc_offsets(radius, "hollow", "y")
-    rays = {}
-    sign = -1 if face in ("north", "west") else 1
-    for point in outline:
-        u, depth = point[axis], point[2 if axis == 0 else 0]
-        if u not in rays or sign * depth > sign * rays[u]:
-            rays[u] = depth
-    runs = []
-    for u, depth in sorted(rays.items()):
-        if runs and runs[-1][2] == depth and runs[-1][1] == u - 1:
-            runs[-1] = (runs[-1][0], u, depth)
-        else:
-            runs.append((u, u, depth))
-    return runs
 
 
 def _depth_operations(raw, style, strength):
@@ -252,7 +225,7 @@ def plan_detail(params, style, config, root, body, detail, contract, projected_c
 
     for face in NORMALS:
         axis = 0 if face in ("north", "south") else 2
-        for run_index, (start, end, fixed) in enumerate(_runs(params, face)):
+        for run_index, (start, end, fixed) in enumerate(plan_facade_runs(params, face)):
             # 柱間4の端数は基本壁・開口を維持する。
             starts = list(range(start, end, 4)) or [start]
             for bay_index, bay_start in enumerate(starts):
@@ -295,10 +268,9 @@ def _facade_selection(placed, params, style, config, root, body, contract, modul
     )
     rays = {}
     for facade in plan.facades:
-        axis = 0 if facade.face in ("north", "south") else 2
         for cell in facade.cells:
             if not cell.opening:
-                rays.setdefault((facade.face, cell.pos[axis], cell.pos.y), []).append(
+                rays.setdefault((facade.face, *facade.ray_key(cell.pos)), []).append(
                     (facade.element, cell.pos))
     selected = {facade.element: set() for facade in plan.facades}
     candidates = {facade.element: [] for facade in plan.facades}
@@ -442,30 +414,28 @@ def _facade_selection(placed, params, style, config, root, body, contract, modul
                       "block": {"role": "frame", "shape": "full", "state": {}}}
                 options.append((wrapper, op, 0, None, [(local, point)]))
 
-        axis = 0 if facade.face in ("north", "south") else 2
-        normal = Vec3(*NORMALS[facade.face])
+        axis = facade.ray_axis
         surfaces = {cell.pos: 0 for cell in facade.cells if not cell.opening}
-        projection = {(cell.pos[axis], cell.pos.y): cell.pos for cell in facade.cells
-                      if not cell.opening}
+        projection = facade.wall_projection()
         windows = {}
         window_at = {}
         for cell in facade.cells:
             if not cell.opening:
-                windows.setdefault((cell.u // 4, cell.v // 4), []).append(cell.pos)
-                window_at[cell.pos] = cell.u // 4, cell.v // 4
+                windows.setdefault(cell.window, []).append(cell.pos)
+                window_at[cell.pos] = cell.window
         for pos in surfaces:
-            surfaces[pos] = max([0, *(sum((p[i] - pos[i]) * normal[i] for i in (0, 2))
+            surfaces[pos] = max([0, *(facade.depth_at(p) - facade.depth_at(pos)
                                      for p in depths.get((facade.face, pos[axis], pos.y), ()))])
 
-        def relief(points, surfaces, projection=projection, axis=axis, normal=normal,
-                   windows=windows, window_at=window_at):
+        def relief(points, surfaces, projection=projection,
+                   windows=windows, window_at=window_at, facade=facade):
             changed = {}
             for _, point in points:
                 if point in occupied:
                     continue
-                pos = projection.get((point[axis], point.y))
+                pos = projection.get(facade.ray_key(point))
                 if pos is not None:
-                    depth = max(surfaces[pos], sum((point[i] - pos[i]) * normal[i] for i in (0, 2)))
+                    depth = max(surfaces[pos], facade.depth_at(point) - facade.depth_at(pos))
                     if depth != surfaces[pos]:
                         changed[pos] = max(changed.get(pos, depth), depth)
             affected = {window_at[pos] for pos in changed}
