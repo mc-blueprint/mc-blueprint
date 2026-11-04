@@ -396,7 +396,15 @@ def _evaluate(window, blueprint, context, source, max_nodes, critic):
     plan_buildings(plan)
     nodes = {node["id"]: node for node in plan["connections"]["nodes"]}
     routes = []
-    for edge in plan["connections"]["edges"]:
+    edges = list(plan["connections"]["edges"])
+    pairs = {frozenset((edge["from"], edge["to"])) for edge in edges}
+    for junction in plan["junctions"]:
+        for passage in junction["passages"]:
+            pair = frozenset((passage["from"], passage["to"]))
+            if pair not in pairs:
+                edges.append(passage)
+                pairs.add(pair)
+    for edge in edges:
         start = Vec3.from_seq(nodes[edge["from"]]["position"])
         end = Vec3.from_seq(nodes[edge["to"]]["position"])
         route = check_route(window, start, end, blueprint.minecraft_version, max_nodes=max_nodes)

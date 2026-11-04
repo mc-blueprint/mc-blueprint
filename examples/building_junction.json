@@ -1,0 +1,113 @@
+{
+  "formatVersion": 1,
+  "minecraftVersion": "1.21.11",
+  "name": "building_junction",
+  "operations": [
+    {
+      "type": "building_junction",
+      "element": "junction#1",
+      "owner": "junction#1",
+      "buildings": [
+        {
+          "type": "building",
+          "element": "house#1",
+          "position": [
+            0,
+            0,
+            0
+          ],
+          "width": 7,
+          "depth": 10,
+          "floors": 2,
+          "wall": "stone_bricks",
+          "floor": "oak_planks",
+          "roof": "oak_stairs",
+          "stairs": "oak_stairs",
+          "door": "oak_door",
+          "window": "glass"
+        },
+        {
+          "type": "building",
+          "element": "house#2",
+          "position": [
+            6,
+            0,
+            0
+          ],
+          "width": 9,
+          "depth": 10,
+          "floors": 1,
+          "wall": "stone_bricks",
+          "floor": "oak_planks",
+          "roof": "oak_stairs",
+          "stairs": "oak_stairs",
+          "door": "oak_door",
+          "window": "glass"
+        }
+      ],
+      "parts": [
+        {
+          "element": "house#1",
+          "shape": "rectangle"
+        },
+        {
+          "element": "house#2",
+          "shape": "rectangle"
+        }
+      ],
+      "contacts": [
+        {
+          "first": "house#1",
+          "second": "house#2",
+          "from": [
+            6,
+            0,
+            0
+          ],
+          "to": [
+            6,
+            4,
+            9
+          ]
+        }
+      ],
+      "nodes": [
+        {
+          "id": "a",
+          "element": "house#1",
+          "position": [
+            5,
+            1,
+            7
+          ]
+        },
+        {
+          "id": "b",
+          "element": "house#2",
+          "position": [
+            7,
+            1,
+            7
+          ]
+        }
+      ],
+      "passages": [
+        {
+          "from": "a",
+          "to": "b"
+        }
+      ],
+      "roofPolicy": "envelope",
+      "wall": "stone_bricks",
+      "frame": "oak_log",
+      "floor": "oak_planks",
+      "stairs": "oak_stairs"
+    }
+  ],
+  "description": "幅と階数が異なる棟を、共有壁と屋根包絡・内部通路で接合する。",
+  "size": [
+    17,
+    13,
+    12
+  ]
+}

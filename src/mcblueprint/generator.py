@@ -233,7 +233,8 @@ def generate_with_report(
     if blueprint.surface_path is not None:
         for pos, state in blueprint.surface_path.writes:
             volume.set(pos, state)
-    ctx = ExecutionContext(volume, random.Random(effective_seed), blueprint.palettes)
+    ctx = ExecutionContext(volume, random.Random(effective_seed), blueprint.palettes,
+                           generation_seed=effective_seed)
     for operation in blueprint.operations:
         ctx.execute(operation)
     if blueprint.surface_path is not None:

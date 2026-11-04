@@ -39,6 +39,7 @@ _BUILTIN_MODULES = (
     "building",
     "join_buildings",
     "tower",
+    "building_junction",
     "bridge",
     "gate",
     "garden",

@@ -1,5 +1,8 @@
 # 妻面同士の切妻屋根接合の固定確認
 
+異幅・直交屋根・異階数の屋根包絡は [building_junction](OPERATIONS.md#building_junction)
+で扱う。既存条件に合う `roofPolicy: join` は従来の屋根施工を使い、以下の固定対照を維持する。
+
 入力の正本は [OPERATIONS.md](OPERATIONS.md#join_buildings)。`join_buildings` に `joinRoof:true` を明示すると、対応条件を検証して個別roofの生成を止め、一つの屋根面・棟・軒と両外周の妻壁を生成する。共有壁の内部開口とheadroom3は維持する。
 
 ## 固定入力と対照
