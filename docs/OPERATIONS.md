@@ -962,6 +962,15 @@ Pythonの `BuildingOperation.apply_without_face(ctx, face)` は接続操作へ�
 
 ---
 
+## terrain_density（計画済み局所地形）
+
+`{"type": "terrain_density", "minecraftVersion": "1.21.11", "plan": <密度計画JSON>}`
+は、保存した2D場と形状・接続グラフから地形・水・植生を再生する。
+planは `terrain_density.plan_density(...).to_dict()` で作成する。
+範囲とseedはplanで固定し、minecraftVersionはBlueprintの版に一致させる。
+共通のrole/element/source属性と予約競合規則を継承する。
+主空洞・アーチの条件、領域API、再開と形状照合は [TERRAIN.md](TERRAIN.md#局所3d密度と必須形状h05) を参照。
+
 ## 将来対応
 
 現時点で追加を検討中の Operation はない。要望は Issue に起票する。
