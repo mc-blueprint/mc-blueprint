@@ -145,4 +145,13 @@ def check_patterns(root: Path, version: str | None = None) -> list[CheckResult]:
         results.append(CheckResult(path, "sources", errors))
     else:
         results.append(CheckResult(path, "sources", [ValidationError("", "file is required")]))
+    from mcblueprint.layouts import load_layout
+
+    for path in sorted((root / "layouts").glob("*/*.yaml")):
+        try:
+            load_layout(f"{path.parent.name}.{path.stem}", root=root)
+            errors = []
+        except (OSError, YAMLError, BlueprintError) as exc:
+            errors = [ValidationError("layout", str(exc))]
+        results.append(CheckResult(path, "layout", errors))
     return results

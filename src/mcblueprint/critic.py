@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from collections import Counter
 from collections.abc import Iterable, Mapping
-from dataclasses import dataclass
+from dataclasses import dataclass, field, replace
 
 from mcblueprint.errors import BlueprintError
 from mcblueprint.facade_projection import NORMALS as _NORMAL
@@ -16,6 +16,7 @@ from mcblueprint.model.vec import AABB, Vec3
 from mcblueprint.operations.box_like import iter_box
 from mcblueprint.operations.registry import build_operation
 from mcblueprint.operations.transform import Transform
+from mcblueprint.plan_contract import plan_buildings
 
 _AIR = {"minecraft:air", "minecraft:cave_air", "minecraft:void_air"}
 
@@ -38,6 +39,8 @@ class CriticPlan:
     decoration_operations: Mapping[str, tuple[str, str]]
     decoration_range: tuple[float, float]
     fixed_roles: frozenset[str] = frozenset()
+    terrain_only: bool = False
+    building_fixed_roles: Mapping[str, frozenset[str]] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -53,15 +56,20 @@ def plan_from_metadata(
     offset=(0, 0, 0),
     decoration_range=(0.0, 1.0),
     fixed_roles=(),
+    building_fixed_roles=None,
 ) -> CriticPlan:
     """計画範囲を期待セルへ展開する。massingの構造形状は梁の輪郭とownerに使う。
 
     offsetはSiteの平行移動。装飾はdecorationsの明示指定だけを使い、省略時は対象なし。
+    building_fixed_rolesは棟IDごとの固定役割。単独棟は従来のfixed_rolesを使う。
     計画の欠落・不整合はBlueprintError。最終生成セルから計画を推定しない。
     """
 
     try:
-        return _convert_plan(planning, massing, offset, decoration_range, fixed_roles)
+        plan = _convert_plan(planning, massing, offset, decoration_range, fixed_roles)
+        return replace(plan, building_fixed_roles={
+            root: frozenset(roles) for root, roles in (building_fixed_roles or {}).items()
+        })
     except (KeyError, TypeError, ValueError) as exc:
         raise BlueprintError(f"Critic計画が不正です: {exc}") from exc
 
@@ -70,6 +78,20 @@ def _convert_plan(planning, massing, offset, decoration_range, fixed_roles):
     def box(item):
         return AABB.of(Vec3.from_seq(item["from"]), Vec3.from_seq(item["to"]))
 
+    if "formatVersion" in planning:
+        buildings = plan_buildings(planning)
+        shapes = {b["element"]: b for b in plan_buildings(massing)} if massing is not None else {}
+        if massing is not None and set(shapes) != {b["element"] for b in buildings}:
+            raise BlueprintError("Critic計画とMassingの棟IDが一致しません")
+        plans = [_convert_plan(b, shapes.get(b["element"]), b["offset"],
+                               decoration_range, fixed_roles) for b in buildings]
+        return CriticPlan(
+            tuple(run for p in plans for run in p.columns),
+            tuple(run for p in plans for run in p.beams),
+            tuple(f for p in plans for f in p.facades),
+            {key: value for p in plans for key, value in p.decoration_operations.items()},
+            tuple(decoration_range), frozenset(fixed_roles), not buildings,
+        )
     shapes = {}
     params = planning.get("params", {})
     transform = Transform.rotation(params.get("angle", 0), Vec3(0, 0, 0)).then(
@@ -128,9 +150,11 @@ class CriticAccumulator:
     """
 
     def __init__(self, plan: CriticPlan, *, max_memory_mb: float = 2048,
-                 max_area_ratios: Mapping[str, float] | None = None):
+                 max_area_ratios: Mapping[str, float] | None = None,
+                 building_area_ratios: Mapping[str, Mapping[str, float]] | None = None):
         self.plan = plan
         self.max_area_ratios = max_area_ratios
+        self.building_area_ratios = building_area_ratios or {}
         self.role_counts = {root: Counter() for root in sorted({
             facade.building for facade in plan.facades if facade.building
         })} if max_area_ratios is not None else {}
@@ -145,7 +169,7 @@ class CriticAccumulator:
             raise BlueprintError("Criticの面要約が max_memory_mb に収まりません")
         self.summary_bytes = estimated
         self.max_memory_bytes = max_memory_mb * 1024 * 1024
-        if not self.plan.columns or not self.plan.facades:
+        if not self.plan.terrain_only and (not self.plan.columns or not self.plan.facades):
             raise BlueprintError("Critic計画に期待柱または外壁面がありません")
         if any(
             f.face not in _NORMAL or not f.cells or not any(not c.opening for c in f.cells)
@@ -280,6 +304,12 @@ class CriticAccumulator:
 
     def finalize(self) -> CriticResult:
         """全coreの集計値から指標と診断を返す。"""
+        if self.plan.terrain_only:
+            return CriticResult({name: {"value": None, "status": "n/a",
+                                        "reason": "棟なしの敷地計画"}
+                                 for name in ("column_continuity", "beam_continuity", "flat_ratio",
+                                              "decoration_density", "facade_mix",
+                                              "facade_surface_missing")}, ())
         self.columns_total = self.columns_present = self.beams_total = self.beams_present = 0
         self.missing_structure = []
         self.missing_surface = []
@@ -391,9 +421,11 @@ class CriticAccumulator:
                 )
 
         mixes = {}
+        fixed_roles = {facade.element: self.plan.building_fixed_roles.get(
+            facade.building, self.plan.fixed_roles) for facade in self.plan.facades}
         for key, counts in self.facade_blocks.items():
             element, face, role = key
-            if role in self.plan.fixed_roles:
+            if role in fixed_roles[element]:
                 continue
             total = sum(counts.values())
             if total:
@@ -442,7 +474,7 @@ class CriticAccumulator:
         area_ratios = {}
         for root, counts in self.role_counts.items():
             total = sum(counts.values())
-            for role, maximum in self.max_area_ratios.items():
+            for role, maximum in self.building_area_ratios.get(root, self.max_area_ratios).items():
                 value = counts[role] / total if total else None
                 area_ratios[f"{root}:{role}"] = {
                     "value": value, "numerator": counts[role], "denominator": total,

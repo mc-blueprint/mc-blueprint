@@ -17,6 +17,7 @@ from mcblueprint.generator import generate
 from mcblueprint.importers import read_schematic
 from mcblueprint.output_lock import lock_paths
 from mcblueprint.pipeline import make
+from mcblueprint.plan_contract import plan_buildings
 from mcblueprint.planning import plan_buildspec
 from mcblueprint.viewer_input import (
     EditConflict,
@@ -48,7 +49,7 @@ def test_selected_child_edits_root_params(tmp_path, archetype):
         "seed": 42, "config": {"weathering": {"age": 0}},
     }), encoding="utf-8")
     massing = plan_buildspec(resolve_buildspec(source)).massing
-    root = massing["element"]
+    root = plan_buildings(massing)[0]["element"]
     result = make(source, output=tmp_path / "made.schem")
     _, scene = read_scene(result.output.with_name("made.scene.json.gz"))
     used = set()
@@ -61,7 +62,7 @@ def test_selected_child_edits_root_params(tmp_path, archetype):
     for entry in selected:
         if entry.get("element", "").startswith(root):
             assert entry["element"] == root
-            assert entry["params"] == sorted(massing["params"])
+            assert entry["params"] == sorted(plan_buildings(massing)[0]["params"])
             assert entry.get("spec") and entry.get("path")
     assert any("facade" in entry.get("path", "") or "body" in entry.get("path", "")
                for entry in selected)

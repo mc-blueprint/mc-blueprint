@@ -46,6 +46,7 @@ class MaterializeResult:
     fixed_roles: frozenset[str] = frozenset()
     selection_sources: dict[str, dict[str, Any]] = field(default_factory=dict)
     relation_checks: tuple[dict[str, Any], ...] = ()
+    building_results: dict[str, MaterializeResult] = field(default_factory=dict)
 
 
 def _reference(value: Any) -> bool:
@@ -259,6 +260,7 @@ def materialize(
     biome: str = "plains", seed: int | None = None,
     palette: Mapping[str, Any] | None = None,
     colorpack: ColorPack | None = None, building_type: str | None = None,
+    element: str = "",
 ) -> MaterializeResult:
     """計画JSONの役割参照を解決し、既存loaderが読める具体JSONを返す。
 
@@ -269,6 +271,7 @@ def materialize(
     色関係が解けない場合は20回以内の最小違反解と診断を返す。固定IDは再抽選しない。
     colorpackは検証済みColorPackを直接渡す。自動読込せず、Noneなら従来のD28を使う。
     building_typeはパック条件の建物種別。未知値は種別条件を除いて探索する。
+    element指定時は世界seedと棟IDから抽選seedを導出する。単独建物の既存抽選は維持する。
     結果のselection_sourcesは役割の色・材質・面積上限の選択元、relation_checksは
     最終解の関係検査と不適用理由を保持する。
     """
@@ -303,6 +306,8 @@ def materialize(
         if ref["state"] not in states:
             states.append(ref["state"])
     chosen_seed = blueprint.get("seed", 0) if seed is None else seed
+    if element:
+        chosen_seed = derive_seed(chosen_seed, "materialize", element)
     output["seed"] = chosen_seed
     candidates: dict[str, list[tuple]] = {}
     fixed: set[str] = set()
@@ -570,3 +575,63 @@ def materialize(
     checks.extend(check for check in fallback_checks if frozenset(check["pair"]) not in covered)
     return MaterializeResult(output, roles, diagnostics, attempts,
                              max_area_ratios, frozenset(fixed), sources, tuple(checks))
+
+
+def materialize_plan(blueprint: Mapping[str, Any], **kwargs) -> MaterializeResult:
+    """階層計画の各棟へ世界seed・棟ID・種別を渡す。単独棟の抽選は従来と同一。
+
+    複数棟ではpalette名を棟ごとに分離し、診断・選択元を棟ID付きで保持する。
+    固定役割はbuilding_resultsの各棟に保持し、全体のfixed_rolesには集約しない。
+    kwargsはmaterializeと同じ。計画外の敷地Operationも既存の役割APIで解決する。
+    """
+    from mcblueprint.plan_contract import plan_buildings
+
+    buildings = plan_buildings(blueprint["metadata"]["planning"])
+    if len(buildings) <= 1:
+        return materialize(blueprint, **kwargs)
+    output = copy.deepcopy(dict(blueprint))
+    output["operations"] = [None] * len(blueprint["operations"])
+    output["palettes"] = {}
+    if kwargs.get("seed") is not None:
+        output["seed"] = kwargs["seed"]
+    results = {}
+    roots = {b["element"] for b in buildings}
+    operations = blueprint["operations"]
+    groups = [(b["element"], b["archetype"],
+               [(index, op) for index, op in enumerate(operations)
+                if op.get("element") == b["element"]])
+              for b in buildings]
+    groups.append(("site#1", kwargs.get("building_type"),
+                   [(index, op) for index, op in enumerate(operations)
+                    if op.get("element") not in roots]))
+    for root, kind, entries in groups:
+        if not entries:
+            if root in roots:
+                raise BlueprintError(f"Materialize: 棟のOperationがありません: {root}")
+            continue
+        result = materialize({**blueprint, "operations": [op for _, op in entries]},
+                             **{**kwargs, "building_type": kind, "element": root})
+        prefix = root.replace("#", "_")
+        names = {name: f"{prefix}_{name}" for name in result.blueprint.get("palettes", {})}
+
+        def rename(value, names=names):
+            if isinstance(value, list):
+                return [rename(child) for child in value]
+            if isinstance(value, dict):
+                return {key: names[child] if key == "palette" else rename(child)
+                        for key, child in value.items()}
+            return value
+
+        for (index, _), op in zip(entries, result.blueprint["operations"], strict=True):
+            output["operations"][index] = rename(op)
+        output["palettes"].update({names[name]: entries for name, entries
+                                   in result.blueprint.get("palettes", {}).items()})
+        results[root] = result
+    return MaterializeResult(
+        output, {}, tuple({**d, "element": root} for root, r in results.items()
+                          for d in r.diagnostics), max(r.attempts for r in results.values()),
+        {}, frozenset(),
+        {root: r.selection_sources for root, r in results.items()},
+        tuple({**check, "element": root} for root, r in results.items()
+              for check in r.relation_checks), results,
+    )
