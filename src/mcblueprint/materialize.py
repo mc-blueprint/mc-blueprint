@@ -14,6 +14,14 @@ import yaml
 
 from mcblueprint import components
 from mcblueprint.blockdata import BlockData, BlockInfo, load_block_data
+from mcblueprint.colorpack import ColorPack
+from mcblueprint.colorpack_selection import (
+    conditions,
+    lookup,
+    material_choice,
+    relation_checks,
+    target_color,
+)
 from mcblueprint.colors import face_linear, linear_to_oklab
 from mcblueprint.errors import BlueprintError
 from mcblueprint.model.block import BlockState
@@ -36,6 +44,8 @@ class MaterializeResult:
     attempts: int
     max_area_ratios: dict[str, float] = field(default_factory=dict)
     fixed_roles: frozenset[str] = frozenset()
+    selection_sources: dict[str, dict[str, Any]] = field(default_factory=dict)
+    relation_checks: tuple[dict[str, Any], ...] = ()
 
 
 def _reference(value: Any) -> bool:
@@ -181,15 +191,18 @@ def _distance(colors: tuple[tuple[float, ...], ...], target: tuple[float, ...]) 
                for color in colors) / len(colors)
 
 
-def _violations(
+def _d28_relations(
     selected: dict[str, tuple], contrast: float, saturation: float,
-) -> list[dict[str, Any]]:
-    errors = []
+) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    errors, checks = [], []
     pairs = (("wall_main", "roof"), ("wall_main", "frame"), ("wall_main", "wall_secondary"))
     for first, second in pairs:
         if first not in selected or second not in selected:
             continue
         if not selected[first][2] or not selected[second][2]:
+            checks.append({"source": "d28", "pair": [first, second],
+                           "metric": "color_unavailable", "applied": False,
+                           "reason": "color_unavailable"})
             errors.append({"code": "palette_relation", "pair": [first, second],
                            "metric": "color_unavailable", "violation": 1.0})
             continue
@@ -198,6 +211,9 @@ def _violations(
         a, b = selected[first][2][2], selected[second][2][2]
         difference = abs(a[0] - b[0])
         minimum = 0.04 + 0.24 * contrast
+        checks.append({"source": "d28", "pair": [first, second], "metric": "dL",
+                       "applied": True, "actual": difference, "minimum": minimum,
+                       "maximum": 1.0})
         if difference < minimum:
             errors.append({"code": "palette_relation", "pair": [first, second],
                            "metric": "dL", "actual": difference, "minimum": minimum,
@@ -208,6 +224,9 @@ def _violations(
         ca, cb = math.hypot(a[1], a[2]), math.hypot(b[1], b[2])
         distance = abs(ca - cb)
         maximum = 0.04 + 0.12 * saturation
+        checks.append({"source": "d28", "pair": ["wall_main", "wall_secondary"],
+                       "metric": "dC", "applied": True, "actual": distance,
+                       "minimum": 0.0, "maximum": maximum})
         if distance > maximum:
             errors.append({"code": "palette_relation", "pair": ["wall_main", "wall_secondary"],
                            "metric": "dC", "actual": distance, "maximum": maximum,
@@ -215,18 +234,31 @@ def _violations(
         if min(ca, cb) > 0.02:
             hue = abs(math.atan2(a[2], a[1]) - math.atan2(b[2], b[1]))
             hue = min(hue, 2 * math.pi - hue)
+            checks.append({"source": "d28", "pair": ["wall_main", "wall_secondary"],
+                           "metric": "dh", "applied": True, "actual": hue,
+                           "minimum": 0.0, "maximum": math.pi / 3})
             if hue > math.pi / 3:
                 errors.append({"code": "palette_relation",
                                "pair": ["wall_main", "wall_secondary"], "metric": "dh",
                                "actual": hue, "maximum": math.pi / 3,
                                "violation": hue - math.pi / 3})
-    return errors
+        else:
+            checks.append({"source": "d28", "pair": ["wall_main", "wall_secondary"],
+                           "metric": "dh", "applied": False, "reason": "achromatic"})
+    return errors, checks
+
+
+def _violations(
+    selected: dict[str, tuple], contrast: float, saturation: float,
+) -> list[dict[str, Any]]:
+    return _d28_relations(selected, contrast, saturation)[0]
 
 
 def materialize(
     blueprint: Mapping[str, Any], *, style: str | Mapping[str, Any] = "medieval",
     biome: str = "plains", seed: int | None = None,
     palette: Mapping[str, Any] | None = None,
+    colorpack: ColorPack | None = None, building_type: str | None = None,
 ) -> MaterializeResult:
     """計画JSONの役割参照を解決し、既存loaderが読める具体JSONを返す。
 
@@ -235,6 +267,10 @@ def materialize(
     検査対象の様式データ。未知役割・形状不足・状態不整合はBlueprintError。
     異なる役割または役割参照と具体値を混在したPaletteは未対応として拒否する。
     色関係が解けない場合は20回以内の最小違反解と診断を返す。固定IDは再抽選しない。
+    colorpackは検証済みColorPackを直接渡す。自動読込せず、Noneなら従来のD28を使う。
+    building_typeはパック条件の建物種別。未知値は種別条件を除いて探索する。
+    結果のselection_sourcesは役割の色・材質・面積上限の選択元、relation_checksは
+    最終解の関係検査と不適用理由を保持する。
     """
     data = load_block_data(blueprint["minecraftVersion"])
     output = copy.deepcopy(dict(blueprint))
@@ -246,6 +282,8 @@ def materialize(
     )
     if not list(_references([prepared, input_palettes])):
         return MaterializeResult(copy.deepcopy(dict(blueprint)), {}, (), 0)
+    style_name = style if isinstance(style, str) else style.get("name")
+    chain = conditions(style_name, building_type, biome) if colorpack is not None else ()
     if isinstance(style, str):
         path = Path(__file__).parent / "data" / "patterns" / "styles" / f"{style}.yaml"
         if not path.is_file():
@@ -269,12 +307,36 @@ def materialize(
     candidates: dict[str, list[tuple]] = {}
     fixed: set[str] = set()
     material_names = {info.material for info in data.blocks()}
+    sources = {}
+    max_area_ratios = {"accent": 0.08 * settings["accent"]}
     for role, shapes in sorted(required.items()):
         request = materials[role]
         color = request.get("color") if isinstance(request, dict) else None
         choices = request.get("material", style.get("roles", {}).get(role, [])) \
             if isinstance(request, dict) else request
         choices = choices if isinstance(choices, list) else [choices]
+        explicit = settings.get("materials", {}).get(role)
+        explicit_material = explicit is not None and (
+            not isinstance(explicit, dict) or "material" in explicit)
+        role_sources = sources[role] = {
+            "material": {"source": "explicit" if explicit_material else "d28"},
+            "color": {"source": "explicit" if color is not None else "d28"},
+        }
+        if colorpack is not None:
+            if not explicit_material:
+                material, role_sources["material"] = material_choice(
+                    colorpack.material_prior, chain, role, choices, chosen_seed)
+                if material is not None:
+                    choices = [material]
+            if color is None:
+                distribution, role_sources["color"] = lookup(colorpack.palette_prior, chain, role)
+                if distribution is not None:
+                    color = target_color(distribution, settings, chosen_seed, role)
+            rule, source = lookup(colorpack.accent_rule, chain, role)
+            if rule is not None or role == "accent":
+                role_sources["maxAreaRatio"] = source
+                if rule is not None:
+                    max_area_ratios[role] = rule["maxAreaRatio"] * settings["accent"]
         face = "top" if role in ("floor", "path", "roof") or any(
             (role, shape) in walking for shape in shapes
         ) else "side"
@@ -290,6 +352,8 @@ def materialize(
                     raise BlueprintError(f"materials.{role}: 固定IDの状態が不正です: {error}")
                 specified = parsed
                 fixed.add(role)
+                role_sources.update(material={"source": "fixed_id"},
+                                    color={"source": "fixed_id"})
                 info = data.get(parsed.id)
                 shapes_map = dict(data.families.get(info.family, {}))
                 shapes_map[info.shape] = info.id
@@ -369,12 +433,27 @@ def materialize(
     selected = {}
     retry_roles = set(candidates)
     failed_pairs = set()
+    pack_relations = colorpack is not None and any(
+        row["when"] in chain and all(role in candidates for role in row["pair"])
+        for row in colorpack.relation_rule)
+
+    def violations(selected):
+        fallback = _violations(selected, settings["contrast"], settings["saturation"])
+        if colorpack is None:
+            return fallback
+        errors, _, covered = relation_checks(selected, colorpack.relation_rule, chain, settings)
+        return errors + [{**error, "source": "d28", "violation": error["violation"] / (
+            (1 - error["minimum"] if "minimum" in error else error.get("maximum", 1))
+            if pack_relations else 1)}
+                         for error in fallback
+                         if frozenset(error["pair"]) not in covered]
+
     for attempt in range(20):
         attempts += 1
         for role, options in candidates.items():
             if attempt and role not in retry_roles:
                 continue
-            if attempt == 0 or role in fixed or settings["variation"] == 0:
+            if attempt == 0 or role in fixed or (not pack_relations and settings["variation"] == 0):
                 index = 0
             else:
                 rng = random.Random(derive_seed(chosen_seed, "materialize", f"{role}/{attempt}"))
@@ -384,18 +463,20 @@ def materialize(
                 ))
                 ranked = []
                 for option in options:
-                    violations = _violations({**selected, role: option},
-                                             settings["contrast"], settings["saturation"])
-                    ranked.append(((len(violations), sum(e["violation"] for e in violations)),
+                    errors = violations({**selected, role: option})
+                    ranked.append(((len(errors), sum(e["violation"] for e in errors)),
                                    option))
-                ranked.sort(key=lambda item: item[0])
+                ranked.sort(key=lambda item: (item[0], item[1][0]) if pack_relations
+                            else (item[0],))
                 options = [option for _, option in ranked]
                 width = min(max(1, math.ceil(len(options) * settings["variation"])),
                             sum(score == ranked[0][0] for score, _ in ranked))
                 index = rng.randrange(width)
             selected[role] = options[index]
-        errors = _violations(selected, settings["contrast"], settings["saturation"])
+        errors = violations(selected)
         score = len(errors), sum(e["violation"] for e in errors)
+        if pack_relations:
+            score = (*score, tuple(selected[role][0] for role in sorted(selected)))
         if score < best_score:
             best, best_errors, best_score = dict(selected), errors, score
         if not errors:
@@ -481,5 +562,11 @@ def materialize(
     diagnostics = tuple({**e, "attempts": attempts,
                          "candidates": {r: len(candidates[r]) for r in e["pair"]}}
                         for e in best_errors)
+    checks = []
+    covered = set()
+    if colorpack is not None:
+        _, checks, covered = relation_checks(best, colorpack.relation_rule, chain, settings)
+    _, fallback_checks = _d28_relations(best, settings["contrast"], settings["saturation"])
+    checks.extend(check for check in fallback_checks if frozenset(check["pair"]) not in covered)
     return MaterializeResult(output, roles, diagnostics, attempts,
-                             {"accent": 0.08 * settings["accent"]}, frozenset(fixed))
+                             max_area_ratios, frozenset(fixed), sources, tuple(checks))
