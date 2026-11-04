@@ -160,9 +160,11 @@ def audit(phase="after"):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("phase", choices=(
-        "before", "after", "after-review", "audit", "audit-review"))
+        "before", "after", "after-review", "after-merge",
+        "audit", "audit-review", "audit-merge"))
     phase = parser.parse_args().phase
-    if phase in ("audit", "audit-review"):
-        audit("after-review" if phase == "audit-review" else "after")
+    if phase in ("audit", "audit-review", "audit-merge"):
+        stages = {"audit": "after", "audit-review": "after-review", "audit-merge": "after-merge"}
+        audit(stages[phase])
     else:
         run(phase)

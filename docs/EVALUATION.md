@@ -345,3 +345,22 @@ skipは任意のtiktoken未導入による。全件実行と再検証を合わ�
 ruff、strict検証（22ファイル、エラー・警告0）、wheelビルド、git diff --checkにも成功した。
 初回の関連試験はhash再生成との同時実行で固定入力の排他が1件競合したため、
 生成処理を直列化して関連87件を再実行した。排他処理の変更や回避は行っていない。
+
+### develop取り込み後の確認（f4a8ff2）
+
+WIP `227a65b` を保存してから `origin/develop` の `f4a8ff2` をmergeし、
+競合なしでmerge commit `a4fca08` を作成した。
+#230の配色パックの関係評価・accent面積集計と、#233の共通投影取得を両方保持する。
+#235の追加依存 `pyfastnoiselite==0.0.7` をPython 3.12のタスク専用venvへ導入した。
+
+`python scripts/evaluate_projection.py after-merge` で56条件を再生成し、
+`python scripts/evaluate_projection.py audit-merge` で変更前基準と既存D固定16件へ再照合した。
+4種hashと終了コードは全件一致し、merge前の反証修正後の結果とも一致する。
+初回・反証修正後の記録は上書きせず、今回分を `after-merge` として保存する。
+検証環境では配色パックが同梱されていないため、固定入力は従来の配色経路を使う。
+この範囲で#230由来の比較結果の変化はない。パック利用時の関係・accent評価は#230の人工パック試験で確認する。
+
+取り込み後のPython 3.12で全件pytestは2820成功・1skip（任意のtiktoken未導入）。
+#230の配色パック接続・関係/accent集計と、#235の地形場の追加試験も含めて成功した。
+ruff、strict検証（22ファイル、エラー・警告0）、wheelビルド、git diff --checkも成功した。
+WIPとmergeの2コミットは書き換えず、追加差分は再検証スクリプト・記録・本文書だけとする。
