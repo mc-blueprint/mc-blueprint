@@ -202,10 +202,20 @@ def _present(state) -> bool:
 
 
 class CriticAccumulator:
-    """Weather後coreの要約だけを保持し、全領域の消費後に評価を確定する。"""
+    """Weather後coreの要約だけを保持し、全領域の消費後に評価を確定する。
 
-    def __init__(self, plan: CriticPlan, *, max_memory_mb: float = 2048):
+    max_area_ratiosは役割ごとの補正済み面積上限。Noneなら面積を評価しない。
+    面積の分母はfacade.buildingで示した建物root配下の全役割セルとする。
+    """
+
+    def __init__(self, plan: CriticPlan, *, max_memory_mb: float = 2048,
+                 max_area_ratios: Mapping[str, float] | None = None):
         self.plan = plan
+        self.max_area_ratios = max_area_ratios
+        self.role_counts = {root: Counter() for root in sorted({
+            facade.building for facade in plan.facades if facade.building
+        })} if max_area_ratios is not None else {}
+        self.color_cores = set()
         if max_memory_mb <= 0:
             raise ValueError("max_memory_mb は正数が必要です")
         facade_cells = sum(len(f.cells) for f in self.plan.facades)
@@ -253,6 +263,9 @@ class CriticAccumulator:
 
     def consume(self, region: GeneratedRegion) -> None:
         """同じcoreの再入力は重複計数せず、haloは参照しない。"""
+        count_color = self.max_area_ratios is not None and region.core not in self.color_cores
+        if count_color:
+            self.color_cores.add(region.core)
         for kind, index, run in self.structural_runs:
             for pos_index, pos in enumerate(run.cells):
                 if not region.core.contains(pos):
@@ -284,6 +297,11 @@ class CriticAccumulator:
             if not region.core.contains(pos) or not _present(state):
                 continue
             attr = region.volume.attributes(pos)
+            if count_color and attr.role and attr.element:
+                for root, counts in self.role_counts.items():
+                    if attr.element == root or attr.element.startswith(root + "."):
+                        counts[attr.role] += 1
+                        break
             target = self.plan.decoration_operations.get(attr.operation)
             if target is not None and pos not in self.decorated_seen:
                 self.decorated_seen.add(pos)
@@ -503,8 +521,29 @@ class CriticAccumulator:
                         "repairPaths": ["config.decoration.depth", "config.decoration.density"],
                     }
                 )
+        area_ratios = {}
+        for root, counts in self.role_counts.items():
+            total = sum(counts.values())
+            for role, maximum in self.max_area_ratios.items():
+                value = counts[role] / total if total else None
+                area_ratios[f"{root}:{role}"] = {
+                    "value": value, "numerator": counts[role], "denominator": total,
+                    "maximum": maximum,
+                    **({"status": "failed", "reason": "建物の役割セルなし"} if not total else {}),
+                }
+                if not total or value > maximum:
+                    self.diagnostics.append({
+                        "code": "accent_area_ratio", "metric": "accent_area_ratio",
+                        "severity": "fail", "element": root, "role": role,
+                        "actual": value, "expected": maximum,
+                        "repairPaths": ["config.palette.accent"],
+                    })
+        if self.max_area_ratios is not None and not area_ratios:
+            area_ratios = {"value": None, "status": "n/a", "reason": "対象建物なし"}
         return CriticResult(
             {
+                **({"accent_area_ratio": area_ratios}
+                   if self.max_area_ratios is not None else {}),
                 "column_continuity": {
                     "value": self.columns_present / self.columns_total
                     if self.columns_total

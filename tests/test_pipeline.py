@@ -513,7 +513,7 @@ def test_resume_rejects_mismatch(tmp_path, monkeypatch, change):
     elif change in ("engine", "lock"):
         environment = pipeline._environment()
         environment["engineHash" if change == "engine" else "lockHash"] = "wrong"
-        monkeypatch.setattr(pipeline, "_environment", lambda: environment)
+        monkeypatch.setattr(pipeline, "_environment", lambda **kwargs: environment)
     elif change == "parent":
         (tmp_path / "result.detail.json").write_text("{}", encoding="utf-8")
     else:

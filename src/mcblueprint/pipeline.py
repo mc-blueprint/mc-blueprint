@@ -18,6 +18,7 @@ import yaml
 
 from mcblueprint import __version__, blockdata
 from mcblueprint.buildspec import ResolveResult, resolve_buildspec
+from mcblueprint.colorpack import load_colorpack
 from mcblueprint.critic import CriticAccumulator, plan_from_metadata
 from mcblueprint.errors import BlueprintError
 from mcblueprint.exporters import EXPORTERS
@@ -151,9 +152,11 @@ def _atomic_json(path: Path, value) -> None:
         temporary.unlink(missing_ok=True)
 
 
-def _environment() -> dict:
+def _environment(*, colorpack=...) -> dict:
+    if colorpack is ...:
+        colorpack = load_colorpack()
     root = Path(__file__).parent
-    return {
+    result = {
         "engine": __version__,
         "engineHash": _hash({p.relative_to(root).as_posix(): sha256(p.read_bytes()).hexdigest()
                              for p in sorted(root.rglob("*.py"))}),
@@ -162,6 +165,18 @@ def _environment() -> dict:
                            for folder in ("blockdata", "patterns")
                            for p in sorted((root / "data" / folder).rglob("*")) if p.is_file()}),
     }
+    if colorpack is not None:
+        identity = {
+            "packVersion": colorpack.pack_version,
+            "taxonomyVersion": colorpack.taxonomy_version,
+            "vocabularyVersion": colorpack.vocabulary_version,
+            "packSha256": colorpack.pack_sha256,
+            "licenseSha256": colorpack.license_sha256,
+            "vocabularySha256": colorpack.vocabulary_sha256,
+        }
+        result["colorpack"] = identity
+        result["dataHash"] = _hash({"data": result["dataHash"], "colorpack": identity})
+    return result
 
 
 def _read_checkpoint(
@@ -393,6 +408,30 @@ def _evaluate(window, blueprint, context, source, max_nodes, critic):
                             "repairPaths": ["config.palette.contrast",
                                             "config.palette.saturation"]})
     metrics["palette_relation"] = {"value": not bool(context.get("materialDiagnostics"))}
+    if "colorpack" in context:
+        checks = context["colorpack"]["relationChecks"]
+        relation = {}
+        for origin in ("pack", "d28"):
+            records = [check for check in checks if check["source"] == origin]
+            applied = [check for check in records if check["applied"]]
+            passed = sum(check["minimum"] <= check["actual"] <= check["maximum"]
+                         for check in applied)
+            relation[origin] = {
+                "value": passed / len(applied) if applied else None,
+                "numerator": passed, "denominator": len(applied),
+                "excluded": sum(check.get("reason") == "achromatic" for check in records),
+                "missing": sum(check.get("reason") == "color_unavailable" for check in records),
+            }
+            if relation[origin]["missing"]:
+                relation[origin]["status"] = "failed"
+            elif not applied:
+                relation[origin]["status"] = "n/a"
+        numerator = sum(value["numerator"] for value in relation.values())
+        denominator = sum(value["denominator"] for value in relation.values())
+        metrics["palette_relation"] = {
+            "value": numerator / denominator if denominator else None,
+            "numerator": numerator, "denominator": denominator, **relation,
+        }
     for metric in ("decoration_density", "facade_mix"):
         if not metrics[metric]:
             reason = ("装飾指定Operationなし" if metric == "decoration_density" else
@@ -471,7 +510,8 @@ def make(
         locks.enter_context(lock_paths(source, out))
         if source.read_bytes() != original:
             raise PipelineError(stage, "ロック取得中に入力が変更されています", 2)
-        expected = {"environment": _environment(), "input": {
+        colorpack = load_colorpack()
+        expected = {"environment": _environment(colorpack=colorpack), "input": {
             "path": str(source), "basePath": str(source.parent),
             "sha256": sha256(original).hexdigest(),
             "resolvedHash": _hash(resolved.buildspec),
@@ -532,11 +572,21 @@ def make(
             if stage_hook:
                 stage_hook(stage)
             material = materialize(context["plannedBlueprint"], style=spec["style"],
-                                   biome=spec["site"]["biome"], palette=context["palette"])
+                                   biome=spec["site"]["biome"], palette=context["palette"],
+                                   colorpack=colorpack.pack if colorpack is not None else None,
+                                   building_type=spec["archetype"])
             concrete = material.blueprint
             context["materialDiagnostics"] = list(material.diagnostics)
             context["maxAreaRatios"] = material.max_area_ratios
             context["fixedRoles"] = sorted(material.fixed_roles)
+            if colorpack is not None:
+                context["colorpack"] = {
+                    **expected["environment"]["colorpack"],
+                    "selectionSources": material.selection_sources,
+                    "relationChecks": list(material.relation_checks),
+                    "maxAreaRatios": material.max_area_ratios,
+                    "attempts": material.attempts,
+                }
             concrete.setdefault("metadata", {})["generation"] = {
                 "mode": GENERATION, "config": config,
                 "groundHeight": context["site"]["floorY"],
@@ -587,6 +637,7 @@ def make(
             )
             accumulator = CriticAccumulator(
                 critic_plan, max_memory_mb=config["limits"]["max_memory_mb"],
+                max_area_ratios=context["maxAreaRatios"] if colorpack is not None else None,
             )
 
             def consume_regions():
@@ -658,6 +709,8 @@ def make(
                                          "preview": "not-run", "seed": blueprint.seed,
                                          "config": config, "sources": resolved.origins,
                                          "output": str(out), "diagnostics": lines,
+                                         **({"colorpack": context["colorpack"]}
+                                            if colorpack is not None else {}),
                                          "metrics": metrics, "structuredDiagnostics": structured})
             backups = {}
             scene_out = out.with_name(f"{out.stem}.scene.json.gz")

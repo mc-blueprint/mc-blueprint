@@ -6,8 +6,8 @@ color-statsが生成し、mc-blueprintが受け取る配色統計の契約。
 `src/mcblueprint/data/colorpack-vocabulary.json` を正本とする。
 既存依存のjsonschemaで構造を検証し、Pythonで意味を検証する。依存の追加はない。
 
-この変更は受入れ契約だけを定義する。生成・実パック同梱・自動読込・CLI・
-Materializeへの接続は後続Issueで行う。Blueprint/BuildSpecの保存形式は変わらない。
+makeは検証済み同梱パックをMaterializeへ渡し、生成・評価・再開へ接続する。
+実パックの同梱は別工程とし、Blueprint/BuildSpecの保存形式は変わらない。
 未リリースの旧snake_case形式と `block_color` は受け付けず、移行処理も持たない。
 
 ## 版と公開語彙
@@ -60,7 +60,7 @@ whenは次の4形だけを許す。キー省略は無条件を表し、null・�
 ```
 
 読み手は役割/pairごとに最初の値を採用し、欠損分だけ親へ進み、採用条件を記録する。
-このIssueの検証APIは検索・抽選・フォールバックを実行しない。
+検証API自体は検索・抽選・フォールバックを実行しない。
 
 | 配列 | 行の構造 |
 |---|---|
@@ -154,7 +154,7 @@ JSON不整合はBlueprintError、resourceの読み取りI/O失敗はOSErrorと�
 
 `materialize(..., colorpack=pack, building_type="house")` に検証済みColorPackを渡す。
 内部でパックを読み込まず、既定の `None` は従来のD28（様式材質とblockdata色）を使う。
-pipelineへの読込接続と実統計の適合検証は別工程とする。
+makeではpipelineが一度だけload_colorpackを呼び、archetype・style・biomeとともに渡す。
 
 条件は公開対応表に写し、`{style, buildingType, biomeLike}` → `{style, biomeLike}` →
 `{style}` → `{}` の順で役割・pairごとに探索する。未知の建物種別・biomeは条件から除く。
@@ -186,3 +186,26 @@ D28のwall_mainとroof/frameは絶対明度差、wall_mainとwall_secondaryは�
 `max_area_ratios[role]` には `accentRule.role` ごとのパック上限×accentを渡す。
 accentの規則欠損時は従来の0.08×accentを使い、他の役割へ既定上限は追加しない。
 実ブロック色の欠損は不適用理由と関係違反を残し、合格扱いにしない。
+
+## 生成・評価・再開への接続
+
+パック使用時のrunの `colorpack` とBlueprint checkpointのcontextは、3版と
+パック・ライセンス・語彙の実内容hash、`selectionSources`、`relationChecks`、
+`maxAreaRatios`、`attempts` を保持する。各採用条件・親分布・欠損理由は
+Materializeの記録をそのまま使う。統計値を使用した結果の保証とは区別する。
+
+`metrics.palette_relation` は適合数/適用可能数とpack/d28の内訳を持つ。
+無彩色によるdh除外は `excluded`、色欠損は `missing` として分ける。
+pack規則ゼロは `value: null, status: n/a`。D28適合をpack適合へ加算しない。
+0.9は内部目標であり、個々の関係違反があれば品質FAILを維持する。
+
+`metrics.accent_area_ratio` はWeather後の非air coreの役割セルを建物root別に数える。
+建物内の全役割セルが分母、対象roleセルが分子。haloを数えず、建物ごとの超過を
+全体平均で隠さない。上限との等値は許し、超過は品質FAIL（終了3）として成果を保存する。
+計画建物の役割セルを測れない場合もFAIL、対象建物がない場合だけn/aとする。
+
+配色パック・DATA_LICENSE・語彙の版と実内容hashをenvironmentの `colorpack` と
+`dataHash` に含める。resume、apply-edits、viewer再生成は同じenvironmentを照合し、
+同じ版の内容変更も拒否する。scene/editsのschema版は変えない。
+破損パックは計画・生成前に拒否し、既存成果を保持する。
+パック完全不在では従来のD28経路を使い、配色用のrun項目・評価項目を追加しない。
