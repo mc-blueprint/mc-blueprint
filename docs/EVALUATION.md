@@ -298,3 +298,69 @@ pytestの警告には、開口後退が予約領域と重なる場合に後退�
 [large-scale.json](../evaluation/cases/large-scale.json) はHの12条件（山岳/島嶼の起伏・侵食の4通りを含む）をmedium/huge、seed 42/73/101で凍結し、72個のBuildSpec入力hashを持つ。これは実装前の期待条件である。起点 `dabb0dc` では対象archetypeが未実装のため、生成結果や品質合格を記録しない。後続Issueでは全4版・両出力形式・BuildSpec/emit Blueprintの接続を評価し、core分割・逆順・resumeの一致と指定負例を確認する。
 
 住宅・塔のmedium/large 4対照入力の現行時間・段別RSS・OSピークRSS・出力状態は [h-baseline.json](../evaluation/records/h-baseline.json) を参照する。既存住宅archetypeはhuge要求寸法に収まらないため、hugeは未実装H課題の期待入力としてのみ保持する。端末仕様と測定境界は [PERFORMANCE.md](PERFORMANCE.md) に記録する。対象端末がNFR1相当ではないため、この記録は性能の基準証跡であり、NFR2/3達成判定ではない。
+
+## H02 外壁の輪郭・投影の共通計画（Issue #233）
+
+`facade_projection.py` を向き付き輪郭・ローカル軸・開口投影・基準セル・ray・深度・4×4評価窓の内部APIの正本とする。
+Planningは `plan_facades` で面メタデータを作り、Criticは `project_facades` で基準セルへ展開する。
+Detailも同じ投影を使い、部品の所属ray、基準深度からの差、評価窓を共通APIから取得する。
+モジュール配置の水平区間も `plan_facade_runs` で計画し、Detail側に輪郭・最外rayの計算を残さない。
+区間はローカルu昇順で、従来の区間端点・固定座標・部品IDの順序を保持する。
+最外rayの選択は投影セル展開と共通にし、被覆検査用の円塔の段差保持と使い分ける。
+円塔の同じrayに並ぶ輪郭段差は被覆対象としてすべて残す。
+壁の被覆は基準セルそのもの、凹凸は装飾を含む最外深度と各基準セルの深度との差で判定する。
+窓の原点は面のローカル原点に固定し、開口マスクの軸倍率と評価窓の1ブロック単位を区別する。
+指標の算式・閾値、予約と干渉する開口後退のWARN、外部BuildSpec/scene/editsと内部計画JSONの形式は維持する。
+
+[projection-233.json](../evaluation/records/projection-233.json) は `1c9ed70` と共通化後を比較した記録である。
+D固定16件、3様式×住宅・round塔・square塔×4方向の36件、core幅7の正順・逆順4件、
+計56条件で配置・指標・構造化診断・展開後sceneの4種hashと終了コードが一致した。
+変更前後は同じ入力パスとbyteを使い、診断の順序も含めて無変換で照合する。
+過去のD記録との比較だけは入力worktreeの絶対パス差を明示的に合わせ、
+配置・全指標・構造化診断とsceneが一致することを別に確認する。
+基準記録の上書きや性能再測定は行わない。
+core分割と非分割でも配置・指標・scene・診断内容が一致する。
+円塔の逆順coreだけは診断配列の順序が非分割と異なるが、これは既存のpartition記録にもある差である。
+今回の変更前後では逆順coreの診断順序も含めて同一である。
+
+再実行は共通化前に `python scripts/evaluate_projection.py before`、共通化後に
+`python scripts/evaluate_projection.py after` と `python scripts/evaluate_projection.py audit` を行う。
+既存のbefore/after記録は上書きを拒否する。`audit` は再生成せず既存成果物から照合する。
+反証で指摘されたDetailの水平区間計算の集約後は、`python scripts/evaluate_projection.py after-review`
+で56条件を再生成し、`python scripts/evaluate_projection.py audit-review` で同じ変更前基準および既存D記録と照合する。
+初回の `after` 記録・成果物は上書きせず、再検証分を `after-review` として保存する。
+装飾背面の壁欠損、開口後退WARN、回転、core境界は既存のPlanning/Detail/Critic試験でも検証する。
+
+初回のPython 3.12のローカル検証はruff、strict検証（22ファイル、エラー・警告0）、wheelビルド、
+git diff --checkに成功した。pytest全件は2725成功・2失敗・1skipで完走し、失敗2件の再実行は成功した。
+失敗は未変更の評価スクリプトのcheckout時CRLF化による記録hash差と、
+localhost HTTP接続のWindows側中断（WinError 10053）だった。
+前者はHEADのLFと内容が同一であることを確認してLFへ復元し、評価記録試験15件が成功した。
+後者は再現せず、viewerサーバー試験全72件も再実行で成功した。中断の原因は未特定である。
+skipは任意のtiktoken未導入による。全件実行と再検証を合わせ、残るテスト失敗はない。
+
+反証修正後は円塔の半径4・5・8×4方向と住宅・square塔の4方向について、従来の区間順序・端点・固定座標を固定した16試験を追加した。
+全件pytestは2743成功・1skip、共通投影とDetailの関連試験は87成功。
+56条件を再生成し、変更前基準との4種hash一致と既存D固定16件との一致を再確認した。
+ruff、strict検証（22ファイル、エラー・警告0）、wheelビルド、git diff --checkにも成功した。
+初回の関連試験はhash再生成との同時実行で固定入力の排他が1件競合したため、
+生成処理を直列化して関連87件を再実行した。排他処理の変更や回避は行っていない。
+
+### develop取り込み後の確認（f4a8ff2）
+
+WIP `227a65b` を保存してから `origin/develop` の `f4a8ff2` をmergeし、
+競合なしでmerge commit `a4fca08` を作成した。
+#230の配色パックの関係評価・accent面積集計と、#233の共通投影取得を両方保持する。
+#235の追加依存 `pyfastnoiselite==0.0.7` をPython 3.12のタスク専用venvへ導入した。
+
+`python scripts/evaluate_projection.py after-merge` で56条件を再生成し、
+`python scripts/evaluate_projection.py audit-merge` で変更前基準と既存D固定16件へ再照合した。
+4種hashと終了コードは全件一致し、merge前の反証修正後の結果とも一致する。
+初回・反証修正後の記録は上書きせず、今回分を `after-merge` として保存する。
+検証環境では配色パックが同梱されていないため、固定入力は従来の配色経路を使う。
+この範囲で#230由来の比較結果の変化はない。パック利用時の関係・accent評価は#230の人工パック試験で確認する。
+
+取り込み後のPython 3.12で全件pytestは2820成功・1skip（任意のtiktoken未導入）。
+#230の配色パック接続・関係/accent集計と、#235の地形場の追加試験も含めて成功した。
+ruff、strict検証（22ファイル、エラー・警告0）、wheelビルド、git diff --checkも成功した。
+WIPとmergeの2コミットは書き換えず、追加差分は再検証スクリプト・記録・本文書だけとする。

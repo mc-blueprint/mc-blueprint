@@ -7,15 +7,17 @@ from collections.abc import Iterable, Mapping
 from dataclasses import dataclass
 
 from mcblueprint.errors import BlueprintError
+from mcblueprint.facade_projection import NORMALS as _NORMAL
+from mcblueprint.facade_projection import Facade as Facade
+from mcblueprint.facade_projection import FacadeCell as FacadeCell
+from mcblueprint.facade_projection import project_facades
 from mcblueprint.generator import GeneratedRegion
 from mcblueprint.model.vec import AABB, Vec3
 from mcblueprint.operations.box_like import iter_box
 from mcblueprint.operations.registry import build_operation
-from mcblueprint.operations.shapes import disc_offsets
 from mcblueprint.operations.transform import Transform
 
 _AIR = {"minecraft:air", "minecraft:cave_air", "minecraft:void_air"}
-_NORMAL = {"north": (0, 0, -1), "south": (0, 0, 1), "east": (1, 0, 0), "west": (-1, 0, 0)}
 
 
 @dataclass(frozen=True)
@@ -24,29 +26,6 @@ class StructuralRun:
 
     owner: str
     cells: tuple[Vec3, ...]
-
-
-@dataclass(frozen=True)
-class FacadeCell:
-    """外壁投影のセル。depthは面法線方向の基準面からの距離。"""
-
-    pos: Vec3
-    u: int
-    v: int
-    depth: int
-    opening: bool = False
-    segment: int = 0
-
-
-@dataclass(frozen=True)
-class Facade:
-    """一つの建物・向き付き面に属する外壁投影。"""
-
-    element: str
-    face: str
-    cells: tuple[FacadeCell, ...]
-    role: str = "wall_main"
-    building: str | None = None
 
 
 @dataclass(frozen=True)
@@ -93,8 +72,6 @@ def _convert_plan(planning, massing, offset, decoration_range, fixed_roles):
 
     shapes = {}
     params = planning.get("params", {})
-    rotation = Transform.rotation(params.get("angle", 0), Vec3(0, 0, 0))
-    reverse = Transform.rotation(-params.get("angle", 0), Vec3(0, 0, 0))
     transform = Transform.rotation(params.get("angle", 0), Vec3(0, 0, 0)).then(
         Transform.translation(Vec3.from_seq(offset))
     )
@@ -120,65 +97,7 @@ def _convert_plan(planning, massing, offset, decoration_range, fixed_roles):
 
     columns = tuple(run(item) for item in planning["columns"])
     beams = tuple(run(item) for item in planning["beams"])
-    contour = None
-    if params.get("shape") == "round":
-        contour = [transform.apply(p) for p in disc_offsets(params["radius"], "hollow", "y")]
-    facades = []
-    used = set()
-    for item in planning["facades"]:
-        normal = Vec3.from_seq(item["normal"])
-        origin = Vec3.from_seq(item["origin"])
-        axis = Vec3.from_seq(item["uAxis"])
-        local_normal = reverse.apply(normal)
-        face = rotation.apply_direction(max(
-            _NORMAL,
-            key=lambda name: sum(
-                a * b for a, b in zip(_NORMAL[name], local_normal.to_list(), strict=True)
-            ),
-        ))
-        direction = Vec3.from_seq(_NORMAL[face])
-        bounds = box(item)
-        points = list(iter_box(bounds))
-        if contour is not None:
-            points = [
-                Vec3(p.x, y, p.z)
-                for p in contour
-                if bounds.min.x <= p.x <= bounds.max.x and bounds.min.z <= p.z <= bounds.max.z
-                for y in range(bounds.min.y, bounds.max.y + 1)
-            ]
-        else:
-            points = [
-                p for p in points if (p - origin).x * normal.x + (p - origin).z * normal.z == 0
-            ]
-        # roundの輪郭セルは同じrayに並ぶ段差も被覆対象に残す。
-        rays = {}
-        for pos in points:
-            u = pos.x if direction.z else pos.z
-            key = pos if contour is not None else (u, pos.y)
-            depth = pos.x * direction.x + pos.z * direction.z
-            if key not in rays or depth > rays[key][0]:
-                rays[key] = depth, pos
-        projected = []
-        for depth, pos in rays.values():
-            if (face, pos) in used:
-                continue
-            used.add((face, pos))
-            u = (pos - origin).x * axis.x + (pos - origin).z * axis.z
-            v = pos.y - origin.y
-            opening = False
-            for entry in item["openings"]:
-                if "projection" in entry:
-                    mask = entry["projection"]
-                    opening |= mask["u"][0] <= u <= mask["u"][1] and (
-                        mask["v"][0] <= v <= mask["v"][1]
-                    )
-                else:
-                    opening |= box(entry).contains(pos)
-            # roundの階段状輪郭はそれぞれを深度0に正規化する。
-            local_u = ((pos.x - origin.x) * (1 if axis.x > 0 else -1) if direction.z
-                       else (pos.z - origin.z) * (1 if axis.z > 0 else -1))
-            projected.append(FacadeCell(pos, local_u, v, depth, opening, segment=len(facades)))
-        facades.append(Facade(item["id"], face, tuple(projected), building=planning.get("element")))
+    facades = project_facades(planning, offset=offset)
     decorations = {
         item["operation"]: (item["element"], item["face"])
         for item in planning.get("decorations", [])
@@ -258,8 +177,8 @@ class CriticAccumulator:
             for ci, cell in enumerate(facade.cells):
                 if cell.opening:
                     continue
-                axis = 0 if facade.face in ("north", "south") else 2
-                self.projections.setdefault((axis, cell.pos[axis], cell.pos.y), []).append((fi, ci))
+                axis = facade.ray_axis
+                self.projections.setdefault((axis, *facade.ray_key(cell.pos)), []).append((fi, ci))
 
     def consume(self, region: GeneratedRegion) -> None:
         """同じcoreの再入力は重複計数せず、haloは参照しない。"""
@@ -329,8 +248,7 @@ class CriticAccumulator:
                         "accent",
                     ):
                         continue
-                    normal = _NORMAL[facade.face]
-                    depth = pos.x * normal[0] + pos.z * normal[2]
+                    depth = facade.depth_at(pos)
                     if facade.building and not element.startswith(facade.element):
                         depth_axis = 2 if axis == 0 else 0
                         distance = abs(pos[depth_axis] - cell.pos[depth_axis])
@@ -385,7 +303,7 @@ class CriticAccumulator:
                         }
                     )
                 if key in self.surfaces:
-                    window = (facade.element, facade.face, cell.segment, cell.u // 4, cell.v // 4)
+                    window = (facade.element, facade.face, cell.segment, *cell.window)
                     self.flat_windows.setdefault(window, []).append(self.surfaces[key] - cell.depth)
 
         for kind, index, run in self.structural_runs:
