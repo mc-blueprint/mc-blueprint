@@ -44,9 +44,28 @@ def export_generated_regions(
         ) as tmp:
             spool = RegionSpool(Path(tmp) / "cells", bounds)
             spool.write(regions)
-            EXPORTERS[format]().export_rows(
-                spool.rows(), bounds, blueprint, out_path, palette=spool.palette,
-            )
+            _export_spool(spool, blueprint, out_path, format=format)
+    except OSError as exc:
+        raise BlueprintError(f"領域生成の出力に失敗しました: {exc}") from exc
+    return out_path
+
+
+def _export_spool(
+    spool: RegionSpool, blueprint: Blueprint, out_path: Path, *, format: str = "schem",
+) -> Path:
+    """同じ処理内で検査・書込みを完了したspoolを出力する。所有側が寿命を管理する。
+
+    再生成や再退避は行わない。未完成spoolと未対応形式はBlueprintError、
+    I/O失敗もBlueprintErrorとし、既存ファイルはexport_rowsの原子的保存で保つ。
+    """
+    if format not in EXPORTERS:
+        raise BlueprintError(f"未対応の出力形式: {format}")
+    if not spool.complete:
+        raise BlueprintError("未完成の出力spoolです")
+    try:
+        EXPORTERS[format]().export_rows(
+            spool.rows(), spool.bounds, blueprint, out_path, palette=spool.palette,
+        )
     except OSError as exc:
         raise BlueprintError(f"領域生成の出力に失敗しました: {exc}") from exc
     return out_path
