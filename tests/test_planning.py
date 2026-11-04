@@ -16,6 +16,7 @@ from mcblueprint.materialize import materialize
 from mcblueprint.model import AABB, BlockState, Vec3
 from mcblueprint.model.blueprint import Blueprint
 from mcblueprint.operations.shapes import disc_offsets
+from mcblueprint.plan_contract import plan_buildings
 from mcblueprint.planning import plan_buildspec
 from mcblueprint.traversal import check_building, check_route
 from mcblueprint.validator import validate
@@ -75,8 +76,8 @@ def test_tower_fixed_case_all_versions(tmp_path, version, style, shape):
     result = plan(tmp_path, minecraftVersion=version, archetype="tower", style=style,
                   features={"shape": shape, "floors": 3})
     _, volume = built(result, style)
-    start = Vec3.from_seq(result.massing["entrance"])
-    for point in result.massing["arrivals"]:
+    start = Vec3.from_seq(plan_buildings(result.massing)[0]["entrance"])
+    for point in plan_buildings(result.massing)[0]["arrivals"]:
         end = Vec3.from_seq(point)
         assert check_route(volume, start, end, version).status == "reachable"
         assert volume.attributes(end).reserved == "circulation"
@@ -108,8 +109,8 @@ def test_rotation_reservations_and_region_determinism(tmp_path, archetype, angle
             volume, result.layout, "1.21.11",
         ))
     else:
-        for end in result.massing["arrivals"]:
-            assert check_route(volume, Vec3.from_seq(result.massing["entrance"]),
+        for end in plan_buildings(result.massing)[0]["arrivals"]:
+            assert check_route(volume, Vec3.from_seq(plan_buildings(result.massing)[0]["entrance"]),
                                Vec3.from_seq(end), "1.21.11").status == "reachable"
 
 
@@ -144,16 +145,17 @@ def test_planning_exports_expected_structure_and_facade_contract(tmp_path, arche
     first = plan(tmp_path, archetype=archetype, features=features)
     second = plan(tmp_path, archetype=archetype, features=features,
                   elements={f"{archetype}#1": {"angle": angle}})
-    contract = first.massing
+    contract = plan_buildings(first.massing)[0]
     assert contract["columns"] and contract["beams"] and contract["facades"]
     assert [column["id"] for column in contract["columns"]] == [
-        column["id"] for column in second.massing["columns"]
+        column["id"] for column in plan_buildings(second.massing)[0]["columns"]
     ]
     assert [beam["id"] for beam in contract["beams"]] == [
-        beam["id"] for beam in second.massing["beams"]
+        beam["id"] for beam in plan_buildings(second.massing)[0]["beams"]
     ]
     rotation = Transform.rotation(angle, Vec3(0, 0, 0))
-    for before, after in zip(contract["facades"], second.massing["facades"], strict=True):
+    for before, after in zip(contract["facades"], plan_buildings(second.massing)[0]["facades"],
+                             strict=True):
         assert after["id"] == before["id"]
         for key in ("normal", "uAxis"):
             assert after[key] == rotation.apply(Vec3.from_seq(before[key])).to_list()
@@ -162,7 +164,7 @@ def test_planning_exports_expected_structure_and_facade_contract(tmp_path, arche
     assert all(opening["projection"]["u"] and opening["projection"]["v"]
                for facade in contract["facades"] for opening in facade["openings"])
     if shape == "round":
-        radius = first.massing["params"]["radius"]
+        radius = plan_buildings(first.massing)[0]["params"]["radius"]
         outline = {(p.x, p.z) for p in disc_offsets(radius, "hollow", "y")}
         assert all((column["from"][0] - first.site["offset"][0],
                     column["from"][2] - first.site["offset"][2]) in outline
@@ -173,7 +175,8 @@ def test_planning_exports_expected_structure_and_facade_contract(tmp_path, arche
         y0, y1 = column["from"][1], column["to"][1]
         assert all(volume.attributes(Vec3(x, y, z)).reserved == "structure"
                    for y in range(y0, y1 + 1))
-    assert first.blueprint["metadata"]["planning"]["columns"] == contract["columns"]
+    metadata = plan_buildings(first.blueprint["metadata"]["planning"])[0]
+    assert metadata["columns"] == contract["columns"]
 
     from mcblueprint.critic import plan_from_metadata
 
@@ -190,7 +193,7 @@ def test_roof_styles_and_exact_size_limit(tmp_path, style, roof):
     result = plan(tmp_path, style=style, features=features)
     bp, _ = built(result, style)
     size = bp.bounds().size.to_list()
-    assert result.massing["params"]["roof"] == roof
+    assert plan_buildings(result.massing)[0]["params"]["roof"] == roof
     exact = plan(tmp_path, style=style, features=features, size=size)
     assert built(exact, style)[0].bounds().size.to_list() == size
     with pytest.raises(BlueprintError, match="size"):
@@ -206,8 +209,9 @@ def test_detail_uses_bundled_facade_modules_and_marks_decoration(tmp_path, style
                   if op.get("source", "").startswith("style.modules.")]
     assert components
     assert all(op["onConflict"] == "skip" for op in components)
-    assert first.detail["decorations"] == first.massing["decorations"]
-    assert first.detail["decorations"] == first.blueprint["metadata"]["planning"]["decorations"]
+    assert first.detail["decorations"] == plan_buildings(first.massing)[0]["decorations"]
+    metadata = plan_buildings(first.blueprint["metadata"]["planning"])[0]
+    assert first.detail["decorations"] == metadata["decorations"]
     _, volume = built(first, style)
     declared = {item["operation"] for item in first.detail["decorations"]}
     actual = {volume.attributes(pos).operation for pos, _ in volume
@@ -251,10 +255,10 @@ def test_tower_floor_spacing_and_no_battlement(tmp_path, floors, height):
     result = plan(tmp_path, archetype="tower", features={"floors": floors,
                   "floor_height": height, "battlement": False})
     _, volume = built(result)
-    points = result.massing["arrivals"]
+    points = plan_buildings(result.massing)[0]["arrivals"]
     assert len(points) == floors + 1
     assert [p[1] for p in points] == [i * height + 1 for i in range(floors + 1)]
-    assert all(check_route(volume, Vec3.from_seq(result.massing["entrance"]),
+    assert all(check_route(volume, Vec3.from_seq(plan_buildings(result.massing)[0]["entrance"]),
                            Vec3.from_seq(p), "1.21.11").status == "reachable" for p in points)
 
 
@@ -272,7 +276,7 @@ def test_elements_errors_and_furnished(tmp_path):
 
 def test_explicit_flat_roof_is_accepted_by_buildspec_schema(tmp_path):
     result = plan(tmp_path, style="modern", features={"roof": "flat"})
-    assert result.massing["params"]["roof"] == "flat"
+    assert plan_buildings(result.massing)[0]["params"]["roof"] == "flat"
 
 
 @pytest.mark.parametrize("style", STYLES)
@@ -287,9 +291,9 @@ def test_tower_detail_keeps_modules_at_original_size(tmp_path, style, shape):
     assert "style.modules.roof_edge" in sources
     assert sources & {"style.modules.bay", "style.modules.window"}
     _, volume = built(result, style)
-    assert all(check_route(volume, Vec3.from_seq(result.massing["entrance"]),
+    assert all(check_route(volume, Vec3.from_seq(plan_buildings(result.massing)[0]["entrance"]),
                            Vec3.from_seq(point), "1.21.11").status == "reachable"
-               for point in result.massing["arrivals"])
+               for point in plan_buildings(result.massing)[0]["arrivals"])
 
 
 def test_detail_missing_module_is_diagnosed(tmp_path, monkeypatch):
@@ -391,7 +395,7 @@ def test_arrival_and_landing_support_cannot_be_removed(tmp_path, archetype, floo
     result = plan(tmp_path, **values)
     bp, volume = built(result)
     supports = set()
-    for point in result.massing["arrivals"]:
+    for point in plan_buildings(result.massing)[0]["arrivals"]:
         feet = Vec3.from_seq(point)
         support = feet - Vec3(0, 1, 0)
         attrs = volume.attributes(support)
@@ -430,16 +434,18 @@ def test_fixed_case_fixtures_preserve_requirements(tmp_path):
         assert all(line in text for line in [case["task"], *case["requirements"]])
         result = plan_buildspec(resolve_buildspec(fixture, project_dir=tmp_path,
                                                  user_config=tmp_path / "missing.yaml"))
-        assert result.blueprint["metadata"]["planning"]["element"] in ("house#1", "tower#1")
+        metadata = plan_buildings(result.blueprint["metadata"]["planning"])[0]
+        assert metadata["element"] in ("house#1", "tower#1")
         _, volume = built(result)
         if result.layout:
             assert all(r.status == "reachable" for r in check_building(
                 volume, result.layout, "1.21.11",
             ))
         else:
-            assert all(check_route(volume, Vec3.from_seq(result.massing["entrance"]),
+            entrance = Vec3.from_seq(plan_buildings(result.massing)[0]["entrance"])
+            assert all(check_route(volume, entrance,
                                    Vec3.from_seq(p), "1.21.11").status == "reachable"
-                       for p in result.massing["arrivals"])
+                       for p in plan_buildings(result.massing)[0]["arrivals"])
 
 
 def test_snapshot_foundation_and_scene_origin(tmp_path):
@@ -469,11 +475,11 @@ def test_snapshot_foundation_and_scene_origin(tmp_path):
 
 def test_height_edit_keeps_floor_count_and_headroom(tmp_path):
     result = plan(tmp_path, archetype="tower", elements={"tower#1": {"height": 17}})
-    assert result.massing["params"]["floor_height"] == 6
+    assert plan_buildings(result.massing)[0]["params"]["floor_height"] == 6
     _, volume = built(result)
-    assert all(check_route(volume, Vec3.from_seq(result.massing["entrance"]),
+    assert all(check_route(volume, Vec3.from_seq(plan_buildings(result.massing)[0]["entrance"]),
                            Vec3.from_seq(p), "1.21.11").status == "reachable"
-               for p in result.massing["arrivals"])
+               for p in plan_buildings(result.massing)[0]["arrivals"])
 
 
 @pytest.mark.parametrize("angle", (0, 90, 180, 270))
@@ -490,7 +496,7 @@ def test_round_facade_plan_covers_entire_actual_contour(tmp_path, angle):
         Transform.translation(Vec3.from_seq(result.site["offset"])))
     expected = {transform.apply(Vec3(p.x, y, p.z))
                 for p in disc_offsets(5, "hollow", "y")
-                for y in range(1, metadata["params"]["height"] + 1)}
+                for y in range(1, plan_buildings(metadata)[0]["params"]["height"] + 1)}
     covered = {c.pos for facade in critic.facades for c in facade.cells}
     assert expected <= covered
     bp, volume = built(result)
@@ -521,12 +527,13 @@ def test_fixed_record_audit_detects_contour_and_hidden_wall_loss(tmp_path, entry
     covered = {c.pos for f in critic.facades for c in f.cells}
     if entry["case"] == "standalone-tower":
         offset = Vec3.from_seq(result.site["offset"])
+        params = plan_buildings(metadata)[0]["params"]
         expected = {offset + Vec3(p.x, y, p.z)
-                    for p in disc_offsets(metadata["params"]["radius"], "hollow", "y")
-                    for y in range(1, metadata["params"]["height"] + 1)}
+                    for p in disc_offsets(params["radius"], "hollow", "y")
+                    for y in range(1, params["height"] + 1)}
         assert expected <= covered
     else:
-        params = metadata["params"]
+        params = plan_buildings(metadata)[0]["params"]
         offset = Vec3.from_seq(result.site["offset"])
         expected = {offset + Vec3(x, y, z)
                     for x in range(params["width"]) for z in range(params["depth"])
@@ -550,7 +557,7 @@ def test_fixed_record_audit_detects_contour_and_hidden_wall_loss(tmp_path, entry
     # 記録と同じ壁を回し、生成し直した装飾の差を混ぜず投影だけを監査する。
     for angle in (90, 180, 270):
         rotation = Transform.rotation(angle, Vec3(0, 0, 0))
-        rotated = copy.deepcopy(metadata)
+        rotated = copy.deepcopy(plan_buildings(metadata)[0])
         rotated["params"]["angle"] = angle
         for item in rotated["decorations"]:
             item["face"] = rotation.apply_direction(item["face"])
@@ -602,7 +609,7 @@ def test_round_contour_steps_alone_are_flat(tmp_path):
     volume = BlockVolume()
     offset = Vec3.from_seq(result.site["offset"])
     for p in disc_offsets(5, "hollow", "y"):
-        for y in range(1, metadata["params"]["height"] + 1):
+        for y in range(1, plan_buildings(metadata)[0]["params"]["height"] + 1):
             volume.set(offset + Vec3(p.x, y, p.z), BlockState.of("stone"),
                        CellAttributes(role="wall_main", element="tower#1.wall"))
     measured = evaluate(critic, [GeneratedRegion(volume.bounds(), volume)])

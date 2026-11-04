@@ -15,6 +15,7 @@ from mcblueprint.errors import BlueprintError
 from mcblueprint.exporters._spool import RegionSpool
 from mcblueprint.model.blueprint import Blueprint
 from mcblueprint.model.vec import AABB
+from mcblueprint.plan_contract import building_for_element
 from mcblueprint.volume import EMPTY_ATTRIBUTES
 
 
@@ -71,12 +72,10 @@ def _source_descriptor(attr, context: dict) -> dict | None:
     if attr.operation:
         descriptor["path"] = attr.operation
     massing = context.get("massing", {})
-    root = massing.get("element")
-    if (root and attr.element
-            and (attr.element == root or attr.element.startswith(root + "."))
-            and massing.get("params")):
-        descriptor["element"] = root
-        descriptor["params"] = sorted(massing["params"])
+    building = building_for_element(massing, attr.element) if massing and attr.element else None
+    if building is not None:
+        descriptor["element"] = building["element"]
+        descriptor["params"] = sorted(building["params"])
     return descriptor
 
 

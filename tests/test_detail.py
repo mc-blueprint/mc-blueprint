@@ -17,6 +17,7 @@ from mcblueprint.materialize import materialize
 from mcblueprint.model import Vec3
 from mcblueprint.operations.transform import Transform
 from mcblueprint.pipeline import PipelineError, make
+from mcblueprint.plan_contract import plan_buildings
 from mcblueprint.planning import plan_buildspec
 
 
@@ -27,7 +28,7 @@ def test_square_tower_normals_and_decoration_ids(tmp_path, angle):
         "features": {"shape": "square"}, "elements": {"tower#1": {"angle": angle}},
     }, project_dir=tmp_path, user_config=tmp_path / "missing.yaml"))
     center = plan.site["offset"]
-    for facade in plan.massing["facades"]:
+    for facade in plan_buildings(plan.massing)[0]["facades"]:
         normal = facade["normal"]
         assert sum(normal[i] * (facade["origin"][i] - center[i]) for i in (0, 2)) > 0
     operations = [item["operation"] for item in plan.detail["decorations"]]
@@ -110,7 +111,7 @@ def test_functional_openings_recede_and_keep_reservations(tmp_path, recwarn, arc
                     local[reverse.apply(pos - offset)] = state, region.volume.attributes(pos)
         cells.append(local)
     before, after = cells
-    params = planned.massing["params"]
+    params = plan_buildings(planned.massing)[0]["params"]
     blocked = {op["element"]: json.loads(op["comment"]) for op in planned.detail["operations"]
                if op.get("comment", "").startswith('{"code": "opening_recess_blocked"')}
     moved = 0
