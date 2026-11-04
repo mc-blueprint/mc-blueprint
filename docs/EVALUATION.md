@@ -292,3 +292,9 @@ develop側の外壁輪郭、被覆と最外深度の分離、回転に依存し�
 merge後のローカル検証はruff成功、pytest全件2550成功・1skip（任意のtiktoken未導入）・317警告、
 strict検証22ファイルでエラー・警告0、wheelビルド成功。
 pytestの警告には、開口後退が予約領域と重なる場合に後退量を0とする#215の診断が含まれる。
+
+## H01 地形・大規模の固定入力と基準測定
+
+[large-scale.json](../evaluation/cases/large-scale.json) はHの12条件（山岳/島嶼の起伏・侵食の4通りを含む）をmedium/huge、seed 42/73/101で凍結し、72個のBuildSpec入力hashを持つ。これは実装前の期待条件である。起点 `dabb0dc` では対象archetypeが未実装のため、生成結果や品質合格を記録しない。後続Issueでは全4版・両出力形式・BuildSpec/emit Blueprintの接続を評価し、core分割・逆順・resumeの一致と指定負例を確認する。
+
+住宅・塔のmedium/large 4対照入力の現行時間・段別RSS・OSピークRSS・出力状態は [h-baseline.json](../evaluation/records/h-baseline.json) を参照する。既存住宅archetypeはhuge要求寸法に収まらないため、hugeは未実装H課題の期待入力としてのみ保持する。端末仕様と測定境界は [PERFORMANCE.md](PERFORMANCE.md) に記録する。対象端末がNFR1相当ではないため、この記録は性能の基準証跡であり、NFR2/3達成判定ではない。

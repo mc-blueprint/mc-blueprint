@@ -277,3 +277,15 @@ python -X utf8 scripts/evaluate_make_performance.py --phase fixed-after
 python -X utf8 scripts/evaluate_make_performance.py --phase before --baseline-root output/issue-210/develop-fc8fbf9
 python -X utf8 scripts/evaluate_make_performance.py --phase after
 ```
+
+## H01 地形・大規模の固定基準
+
+Hの回帰入力と各入力のSHA-256は [large-scale.json](../evaluation/cases/large-scale.json) に固定する。中世城・街並み・洞窟・地下都市に加え、山岳/島嶼地形は起伏なし/あり×侵食なし/ありの8条件を定義する。12条件それぞれにmedium `64×48×64` / huge `256×128×256` とseed `42/73/101` を組み合わせた72入力がある。ハッシュはBuildSpecへ規模・寸法・seedを追加し、キー順を整えたUTF-8 compact JSONのSHA-256。現起点で未実装の入力は期待仕様として保持し、生成できた実測結果を作らない。
+
+住宅・塔の現行対照測定は次で実行する。既存#210と同じ4入力（medium/large × 住宅/塔）を独立子プロセスで各3回測り、段別stage_hook、全体時間、OSピークRSS、品質/終了コード、出力hashを [h-baseline.json](../evaluation/records/h-baseline.json) に保存する。既存住宅archetypeは256×128×256のhuge寸法に外形が収まらないため、hugeはH固定課題の期待入力に限り、この対照測定へ含めない。
+
+```powershell
+python scripts/evaluate_make_performance.py --h-baseline
+```
+
+時間は子プロセス起動から `make` の出力・scene・run確定まで。段の値は累積経過時間と段開始時のWorking Setで、隣接値の差を段時間として読む。ピークRSSは独立したプロセス全体のOS計測値を使う。失敗試行は中央値から除外せず全値を残し、品質不合格と計測完了を区別する。LLM・jar取得・viewer表示・profilerは含めない。この端末はCPU 8コア/16論理CPU、物理メモリ64GiB、RTX 4070 SUPERのためNFR1端末に該当せず、結果からNFR1〜3の達成を判定しない。測定区間に別worktreeのPythonプロセスも稼働しており、CPU負荷を完全には隔離できなかった。

@@ -1,0 +1,882 @@
+{
+  "schemaVersion": 1,
+  "recordType": "large-scale-fixed-cases",
+  "caseSet": "H01",
+  "assessedCommit": "dabb0dc",
+  "minecraftVersion": "1.21.11",
+  "scales": {
+    "medium": [
+      64,
+      48,
+      64
+    ],
+    "huge": [
+      256,
+      128,
+      256
+    ]
+  },
+  "seeds": [
+    42,
+    73,
+    101
+  ],
+  "hashRule": "SHA-256 of UTF-8 compact JSON (keys sorted, ensure_ascii=false) for each composed BuildSpec.",
+  "cases": [
+    {
+      "id": "castle-medieval",
+      "task": "中世風の巨大な城を設計する。",
+      "requirements": [
+        "主棟1棟",
+        "付属棟2棟以上",
+        "閉じた城壁",
+        "塔6基",
+        "門1基",
+        "堀",
+        "門から主棟と塔の計画階へ通行可能",
+        "異階数接合",
+        "地形に沿う基礎"
+      ],
+      "buildSpec": {
+        "formatVersion": 1,
+        "minecraftVersion": "1.21.11",
+        "archetype": "castle",
+        "style": "medieval",
+        "site": {
+          "terrain": "hill",
+          "biome": "plains"
+        },
+        "features": {
+          "curtain_wall": true,
+          "keep": true,
+          "towers": 6,
+          "gatehouse": true,
+          "moat": true
+        },
+        "interior": "minimal"
+      },
+      "statusAtBase": "not-implemented"
+    },
+    {
+      "id": "terrain-mountain-flat-no-erosion",
+      "task": "起伏と侵食を持つ山岳地形を設計する。 起伏=0、侵食=0を固定する。",
+      "requirements": [
+        "起伏設定 0",
+        "侵食設定 0",
+        "張り出し",
+        "アーチ",
+        "洞窟",
+        "水と表層",
+        "植生",
+        "支持部",
+        "空洞開口"
+      ],
+      "buildSpec": {
+        "formatVersion": 1,
+        "minecraftVersion": "1.21.11",
+        "archetype": "terrain",
+        "site": {
+          "terrain": "mountain",
+          "biome": "plains"
+        },
+        "features": {
+          "overhangs": true,
+          "arches": true
+        },
+        "config": {
+          "terrain": {
+            "roughness": 0.5,
+            "amplitude": 0,
+            "erosion": 0,
+            "caves": 0.15,
+            "vegetation": 0.5
+          }
+        }
+      },
+      "statusAtBase": "not-implemented"
+    },
+    {
+      "id": "terrain-mountain-flat-eroded",
+      "task": "起伏と侵食を持つ山岳地形を設計する。 起伏=0、侵食=0.35を固定する。",
+      "requirements": [
+        "起伏設定 0",
+        "侵食設定 0.35",
+        "張り出し",
+        "アーチ",
+        "洞窟",
+        "水と表層",
+        "植生",
+        "支持部",
+        "空洞開口"
+      ],
+      "buildSpec": {
+        "formatVersion": 1,
+        "minecraftVersion": "1.21.11",
+        "archetype": "terrain",
+        "site": {
+          "terrain": "mountain",
+          "biome": "plains"
+        },
+        "features": {
+          "overhangs": true,
+          "arches": true
+        },
+        "config": {
+          "terrain": {
+            "roughness": 0.5,
+            "amplitude": 0,
+            "erosion": 0.35,
+            "caves": 0.15,
+            "vegetation": 0.5
+          }
+        }
+      },
+      "statusAtBase": "not-implemented"
+    },
+    {
+      "id": "terrain-mountain-relief-no-erosion",
+      "task": "起伏と侵食を持つ山岳地形を設計する。 起伏=0.65、侵食=0を固定する。",
+      "requirements": [
+        "起伏設定 0.65",
+        "侵食設定 0",
+        "張り出し",
+        "アーチ",
+        "洞窟",
+        "水と表層",
+        "植生",
+        "支持部",
+        "空洞開口"
+      ],
+      "buildSpec": {
+        "formatVersion": 1,
+        "minecraftVersion": "1.21.11",
+        "archetype": "terrain",
+        "site": {
+          "terrain": "mountain",
+          "biome": "plains"
+        },
+        "features": {
+          "overhangs": true,
+          "arches": true
+        },
+        "config": {
+          "terrain": {
+            "roughness": 0.5,
+            "amplitude": 0.65,
+            "erosion": 0,
+            "caves": 0.15,
+            "vegetation": 0.5
+          }
+        }
+      },
+      "statusAtBase": "not-implemented"
+    },
+    {
+      "id": "terrain-mountain-relief-eroded",
+      "task": "起伏と侵食を持つ山岳地形を設計する。 起伏=0.65、侵食=0.35を固定する。",
+      "requirements": [
+        "起伏設定 0.65",
+        "侵食設定 0.35",
+        "張り出し",
+        "アーチ",
+        "洞窟",
+        "水と表層",
+        "植生",
+        "支持部",
+        "空洞開口"
+      ],
+      "buildSpec": {
+        "formatVersion": 1,
+        "minecraftVersion": "1.21.11",
+        "archetype": "terrain",
+        "site": {
+          "terrain": "mountain",
+          "biome": "plains"
+        },
+        "features": {
+          "overhangs": true,
+          "arches": true
+        },
+        "config": {
+          "terrain": {
+            "roughness": 0.5,
+            "amplitude": 0.65,
+            "erosion": 0.35,
+            "caves": 0.15,
+            "vegetation": 0.5
+          }
+        }
+      },
+      "statusAtBase": "not-implemented"
+    },
+    {
+      "id": "terrain-island-flat-no-erosion",
+      "task": "起伏と侵食を持つ島の地形を設計する。 起伏=0、侵食=0を固定する。",
+      "requirements": [
+        "起伏設定 0",
+        "侵食設定 0",
+        "張り出し",
+        "アーチ",
+        "洞窟",
+        "水と表層",
+        "植生",
+        "支持部",
+        "空洞開口"
+      ],
+      "buildSpec": {
+        "formatVersion": 1,
+        "minecraftVersion": "1.21.11",
+        "archetype": "terrain",
+        "site": {
+          "terrain": "island",
+          "biome": "plains"
+        },
+        "features": {
+          "overhangs": true,
+          "arches": true
+        },
+        "config": {
+          "terrain": {
+            "roughness": 0.5,
+            "amplitude": 0,
+            "erosion": 0,
+            "caves": 0.15,
+            "vegetation": 0.5
+          }
+        }
+      },
+      "statusAtBase": "not-implemented"
+    },
+    {
+      "id": "terrain-island-flat-eroded",
+      "task": "起伏と侵食を持つ島の地形を設計する。 起伏=0、侵食=0.35を固定する。",
+      "requirements": [
+        "起伏設定 0",
+        "侵食設定 0.35",
+        "張り出し",
+        "アーチ",
+        "洞窟",
+        "水と表層",
+        "植生",
+        "支持部",
+        "空洞開口"
+      ],
+      "buildSpec": {
+        "formatVersion": 1,
+        "minecraftVersion": "1.21.11",
+        "archetype": "terrain",
+        "site": {
+          "terrain": "island",
+          "biome": "plains"
+        },
+        "features": {
+          "overhangs": true,
+          "arches": true
+        },
+        "config": {
+          "terrain": {
+            "roughness": 0.5,
+            "amplitude": 0,
+            "erosion": 0.35,
+            "caves": 0.15,
+            "vegetation": 0.5
+          }
+        }
+      },
+      "statusAtBase": "not-implemented"
+    },
+    {
+      "id": "terrain-island-relief-no-erosion",
+      "task": "起伏と侵食を持つ島の地形を設計する。 起伏=0.65、侵食=0を固定する。",
+      "requirements": [
+        "起伏設定 0.65",
+        "侵食設定 0",
+        "張り出し",
+        "アーチ",
+        "洞窟",
+        "水と表層",
+        "植生",
+        "支持部",
+        "空洞開口"
+      ],
+      "buildSpec": {
+        "formatVersion": 1,
+        "minecraftVersion": "1.21.11",
+        "archetype": "terrain",
+        "site": {
+          "terrain": "island",
+          "biome": "plains"
+        },
+        "features": {
+          "overhangs": true,
+          "arches": true
+        },
+        "config": {
+          "terrain": {
+            "roughness": 0.5,
+            "amplitude": 0.65,
+            "erosion": 0,
+            "caves": 0.15,
+            "vegetation": 0.5
+          }
+        }
+      },
+      "statusAtBase": "not-implemented"
+    },
+    {
+      "id": "terrain-island-relief-eroded",
+      "task": "起伏と侵食を持つ島の地形を設計する。 起伏=0.65、侵食=0.35を固定する。",
+      "requirements": [
+        "起伏設定 0.65",
+        "侵食設定 0.35",
+        "張り出し",
+        "アーチ",
+        "洞窟",
+        "水と表層",
+        "植生",
+        "支持部",
+        "空洞開口"
+      ],
+      "buildSpec": {
+        "formatVersion": 1,
+        "minecraftVersion": "1.21.11",
+        "archetype": "terrain",
+        "site": {
+          "terrain": "island",
+          "biome": "plains"
+        },
+        "features": {
+          "overhangs": true,
+          "arches": true
+        },
+        "config": {
+          "terrain": {
+            "roughness": 0.5,
+            "amplitude": 0.65,
+            "erosion": 0.35,
+            "caves": 0.15,
+            "vegetation": 0.5
+          }
+        }
+      },
+      "statusAtBase": "not-implemented"
+    },
+    {
+      "id": "town-medieval",
+      "task": "中世の街並みを設計する。",
+      "requirements": [
+        "建物8棟以上",
+        "連結街路",
+        "道路に面する区画",
+        "異階数建物",
+        "広場・井戸・市場",
+        "各入口への経路"
+      ],
+      "buildSpec": {
+        "formatVersion": 1,
+        "minecraftVersion": "1.21.11",
+        "archetype": "town",
+        "style": "medieval",
+        "site": {
+          "terrain": "flat",
+          "biome": "plains"
+        },
+        "features": {
+          "buildings": 8,
+          "plaza": true,
+          "well": true,
+          "market": true
+        },
+        "interior": "minimal"
+      },
+      "statusAtBase": "not-implemented"
+    },
+    {
+      "id": "cave",
+      "task": "入口から到達可能な巨大洞窟を設計する。",
+      "requirements": [
+        "主空洞",
+        "到達可能な入口"
+      ],
+      "buildSpec": {
+        "formatVersion": 1,
+        "minecraftVersion": "1.21.11",
+        "archetype": "cave",
+        "site": {
+          "terrain": "cave",
+          "biome": "plains"
+        },
+        "features": {
+          "entrances": 1
+        }
+      },
+      "statusAtBase": "not-implemented"
+    },
+    {
+      "id": "underground-city-medieval",
+      "task": "巨大洞窟に中世の地下都市を設計する。",
+      "requirements": [
+        "建物8棟以上",
+        "街路",
+        "支柱",
+        "光源",
+        "屋根と天井が交差しない",
+        "主空洞",
+        "到達可能な入口"
+      ],
+      "buildSpec": {
+        "formatVersion": 1,
+        "minecraftVersion": "1.21.11",
+        "archetype": "underground_city",
+        "style": "medieval",
+        "site": {
+          "terrain": "cave",
+          "biome": "plains"
+        },
+        "features": {
+          "buildings": 8,
+          "entrances": 1,
+          "supports": true,
+          "lights": true
+        },
+        "interior": "minimal"
+      },
+      "statusAtBase": "not-implemented"
+    }
+  ],
+  "inputMatrix": "各caseのbuildSpecへscale、size、seedを追加した入力を、全medium/huge・全seedで評価する。実装の有無と実行結果は固定条件の達成と分けて記録する。",
+  "inputs": [
+    {
+      "caseId": "castle-medieval",
+      "scale": "medium",
+      "seed": 42,
+      "sha256": "0ebc8caac94eb70084007e6415921db11acbc870e8f7f70fc30ba4a89418586a"
+    },
+    {
+      "caseId": "castle-medieval",
+      "scale": "medium",
+      "seed": 73,
+      "sha256": "158fb31b89675854431102afd171dce025186de467183568f6cd2923e91ce64c"
+    },
+    {
+      "caseId": "castle-medieval",
+      "scale": "medium",
+      "seed": 101,
+      "sha256": "d59b44f64c40251e863df5612f93c5821605d2837d58a58a04eab9ed63d4fa66"
+    },
+    {
+      "caseId": "castle-medieval",
+      "scale": "huge",
+      "seed": 42,
+      "sha256": "1cd9b875452dab8f5351e1b538b84f615b77184d0c9ffe99aac1b633f129d8e4"
+    },
+    {
+      "caseId": "castle-medieval",
+      "scale": "huge",
+      "seed": 73,
+      "sha256": "e045029fdb6d610121ae660fda0ebe1cb02028e22ed982c0d0412126457f776a"
+    },
+    {
+      "caseId": "castle-medieval",
+      "scale": "huge",
+      "seed": 101,
+      "sha256": "7522f60299597c67da0dd2b84f119363da3432dcabecff0ecfe2a49ac389ef6b"
+    },
+    {
+      "caseId": "terrain-mountain-flat-no-erosion",
+      "scale": "medium",
+      "seed": 42,
+      "sha256": "3015d8f1a8f495207634a59c3389218dec70753ddfc849c25b18dec604275ecb"
+    },
+    {
+      "caseId": "terrain-mountain-flat-no-erosion",
+      "scale": "medium",
+      "seed": 73,
+      "sha256": "9c574d631955e7ab12ffb0e1f008bccc294985e212f343f16a5c05f7b0c7ab28"
+    },
+    {
+      "caseId": "terrain-mountain-flat-no-erosion",
+      "scale": "medium",
+      "seed": 101,
+      "sha256": "746be6ccf493a4cdaaf3cfa0f630154a2d9912747da816370aca10b321c99df3"
+    },
+    {
+      "caseId": "terrain-mountain-flat-no-erosion",
+      "scale": "huge",
+      "seed": 42,
+      "sha256": "7f7920858637b04e5ede94f097e15b9ece19461331aeca5ec3ea10206d4f8844"
+    },
+    {
+      "caseId": "terrain-mountain-flat-no-erosion",
+      "scale": "huge",
+      "seed": 73,
+      "sha256": "35dad1a6806b47f731388ebdd4202e3ef152058deec1bae91ce17614b661a912"
+    },
+    {
+      "caseId": "terrain-mountain-flat-no-erosion",
+      "scale": "huge",
+      "seed": 101,
+      "sha256": "ad7c14d74d00fc76d86367b687826d158dbcef54fa84c387ed04b85fc744d59f"
+    },
+    {
+      "caseId": "terrain-mountain-flat-eroded",
+      "scale": "medium",
+      "seed": 42,
+      "sha256": "63bf13c477ebd3a07fc884d9fb57c1c55b930af57acafd101e79790fdd8e823c"
+    },
+    {
+      "caseId": "terrain-mountain-flat-eroded",
+      "scale": "medium",
+      "seed": 73,
+      "sha256": "1be2ae0f1696ccef0c995b1d2c0d8900c482a009e867dd2450cb6ae3772e3c7c"
+    },
+    {
+      "caseId": "terrain-mountain-flat-eroded",
+      "scale": "medium",
+      "seed": 101,
+      "sha256": "1646971fd377412e88698b3a357adf867f31fb44376a82e70a4bb1650c868c75"
+    },
+    {
+      "caseId": "terrain-mountain-flat-eroded",
+      "scale": "huge",
+      "seed": 42,
+      "sha256": "adfd800bd2b5366a1617db8ec5496aa6fa35c7852cb43cf2cb451cb4db85402f"
+    },
+    {
+      "caseId": "terrain-mountain-flat-eroded",
+      "scale": "huge",
+      "seed": 73,
+      "sha256": "6e8707ecd54c685202b18c5fc009a12e1a3731737bed889bd3608781a99c63b3"
+    },
+    {
+      "caseId": "terrain-mountain-flat-eroded",
+      "scale": "huge",
+      "seed": 101,
+      "sha256": "db41405f953e51fed9ba1b31a64736abd6044c9a57f2ab90affe63908fce716c"
+    },
+    {
+      "caseId": "terrain-mountain-relief-no-erosion",
+      "scale": "medium",
+      "seed": 42,
+      "sha256": "42f01383cabdf31e698fde6743ce4ac6a05c6ddd422b5a52e1e207e6cd2dfdc0"
+    },
+    {
+      "caseId": "terrain-mountain-relief-no-erosion",
+      "scale": "medium",
+      "seed": 73,
+      "sha256": "fe2f07dcb1ca3eac5f98d92aa0c0d80f0703d9c9ca1e37d100e15245cde06800"
+    },
+    {
+      "caseId": "terrain-mountain-relief-no-erosion",
+      "scale": "medium",
+      "seed": 101,
+      "sha256": "8730cd07e3435493215b573f7e5152336c73132f9b2324a0464b3771163f5c8f"
+    },
+    {
+      "caseId": "terrain-mountain-relief-no-erosion",
+      "scale": "huge",
+      "seed": 42,
+      "sha256": "a0d83e38231bc4447b4d1daa41f2dba3606374d7080a213d9f772547b9590532"
+    },
+    {
+      "caseId": "terrain-mountain-relief-no-erosion",
+      "scale": "huge",
+      "seed": 73,
+      "sha256": "4a8739738302aa32cb5a8d82e1d06838291ba5d019006ed43b668338253bb052"
+    },
+    {
+      "caseId": "terrain-mountain-relief-no-erosion",
+      "scale": "huge",
+      "seed": 101,
+      "sha256": "af32842f978362b9224a62ca5ca7c005f91e0877332dabf92cf1468b248b9f0d"
+    },
+    {
+      "caseId": "terrain-mountain-relief-eroded",
+      "scale": "medium",
+      "seed": 42,
+      "sha256": "38052cea5dd14b057de82dae073813ddabc2f5aa1d96879b6d1f6607c3a3e9c0"
+    },
+    {
+      "caseId": "terrain-mountain-relief-eroded",
+      "scale": "medium",
+      "seed": 73,
+      "sha256": "fcc95b16fee2200c2c0250cde8c158762628005866fc1b75f89b63f4d3b8c2d4"
+    },
+    {
+      "caseId": "terrain-mountain-relief-eroded",
+      "scale": "medium",
+      "seed": 101,
+      "sha256": "1dfc2c45342916672af6b4d6e39b7752a2c3c87fa67183fbdbc5ee7254f47f91"
+    },
+    {
+      "caseId": "terrain-mountain-relief-eroded",
+      "scale": "huge",
+      "seed": 42,
+      "sha256": "b9a3fb51049a28e8f6c65ebcdfa56670cac0391a6a6d44349df4900baca41989"
+    },
+    {
+      "caseId": "terrain-mountain-relief-eroded",
+      "scale": "huge",
+      "seed": 73,
+      "sha256": "1792311a5d0fe3f2e9a5bde7a96d2094775b6fa58ff84a93f3aad2c30085a855"
+    },
+    {
+      "caseId": "terrain-mountain-relief-eroded",
+      "scale": "huge",
+      "seed": 101,
+      "sha256": "7a9752ff5f6179022dc4621b67851801cf0b7aeb2106cf6678e818e5dcaae949"
+    },
+    {
+      "caseId": "terrain-island-flat-no-erosion",
+      "scale": "medium",
+      "seed": 42,
+      "sha256": "fd2e951b29b653536648070d7b5d2d9322a9aa7523540c4abccc714a3677a38d"
+    },
+    {
+      "caseId": "terrain-island-flat-no-erosion",
+      "scale": "medium",
+      "seed": 73,
+      "sha256": "b523526458b93b3ece8b02a033c1a44b3b5117b906f28034774f871b665a4f5e"
+    },
+    {
+      "caseId": "terrain-island-flat-no-erosion",
+      "scale": "medium",
+      "seed": 101,
+      "sha256": "001d70447921557e4f02dbf78c55af5aa4594aa72752fed124379070106a94bf"
+    },
+    {
+      "caseId": "terrain-island-flat-no-erosion",
+      "scale": "huge",
+      "seed": 42,
+      "sha256": "8d9be3b6e4020f3797b1fec2d2bc7284fa93b59cb008f387f1f50486cb6be135"
+    },
+    {
+      "caseId": "terrain-island-flat-no-erosion",
+      "scale": "huge",
+      "seed": 73,
+      "sha256": "a5809c4a18cc1caada7ba07e023010bef4439a13f68b014777539ae4e45d05ff"
+    },
+    {
+      "caseId": "terrain-island-flat-no-erosion",
+      "scale": "huge",
+      "seed": 101,
+      "sha256": "53437cbe6abd6ecfd1d5614246c84222c3b5dee3b0a262b35076bd8d23e82b83"
+    },
+    {
+      "caseId": "terrain-island-flat-eroded",
+      "scale": "medium",
+      "seed": 42,
+      "sha256": "e1414356ffd1fde17d2bbf70df3d401d139d447a37a8a415ea94eec1a1a6ce1d"
+    },
+    {
+      "caseId": "terrain-island-flat-eroded",
+      "scale": "medium",
+      "seed": 73,
+      "sha256": "67676f0b786e9de7ea52e73b5c177dfe406063e677e4798f74d58223ec9b5259"
+    },
+    {
+      "caseId": "terrain-island-flat-eroded",
+      "scale": "medium",
+      "seed": 101,
+      "sha256": "e8fa25958d56c390ca1d273f8ea770eaf88e188ade6e5840ca787058ab021057"
+    },
+    {
+      "caseId": "terrain-island-flat-eroded",
+      "scale": "huge",
+      "seed": 42,
+      "sha256": "fe9b7b937cb402f0ea107fab68628ff6c2aec322b492df82c50247280ad1eb47"
+    },
+    {
+      "caseId": "terrain-island-flat-eroded",
+      "scale": "huge",
+      "seed": 73,
+      "sha256": "4e78ee4f2b4be044d4642b56eb51e614de6187038aacc9331ee05fa1b84458a2"
+    },
+    {
+      "caseId": "terrain-island-flat-eroded",
+      "scale": "huge",
+      "seed": 101,
+      "sha256": "cda522e823be2460f8446d3034778b4de76c4be3e26fd60b25f03c378c28e503"
+    },
+    {
+      "caseId": "terrain-island-relief-no-erosion",
+      "scale": "medium",
+      "seed": 42,
+      "sha256": "5f3ab7e2ba1b783f1dd7c6e9cd692f817aa3255780053367c13b9e2aadcb339b"
+    },
+    {
+      "caseId": "terrain-island-relief-no-erosion",
+      "scale": "medium",
+      "seed": 73,
+      "sha256": "8bf0dc265aa4e360d1f395602b31a82e108ab4ce8e6aa8c98fc76aff6f1e4aa2"
+    },
+    {
+      "caseId": "terrain-island-relief-no-erosion",
+      "scale": "medium",
+      "seed": 101,
+      "sha256": "e5c5f17991599a9baaf4a852b19adb06ffc7286e2f36421f0118353b5ef3cbfb"
+    },
+    {
+      "caseId": "terrain-island-relief-no-erosion",
+      "scale": "huge",
+      "seed": 42,
+      "sha256": "f3b05bab9302739393a6d7c4da2153f2d3b6b93f84e171e6f405092927d3b489"
+    },
+    {
+      "caseId": "terrain-island-relief-no-erosion",
+      "scale": "huge",
+      "seed": 73,
+      "sha256": "4cc33567c6d0963c3b48798a7d7728b89f1c1655020c340eb3730abe04b85368"
+    },
+    {
+      "caseId": "terrain-island-relief-no-erosion",
+      "scale": "huge",
+      "seed": 101,
+      "sha256": "a18960aa8669b5df6634162c69f88b09a0f4816a80cf13a00ec9156de213fcdd"
+    },
+    {
+      "caseId": "terrain-island-relief-eroded",
+      "scale": "medium",
+      "seed": 42,
+      "sha256": "68f2627922ae29b0fab4ccfc5c8eff497c7355f64989289143c142cc39fcf5ec"
+    },
+    {
+      "caseId": "terrain-island-relief-eroded",
+      "scale": "medium",
+      "seed": 73,
+      "sha256": "cba3bbc6545084848337e481f74921cf801a00b2eb628830b4f3da9eccc010b3"
+    },
+    {
+      "caseId": "terrain-island-relief-eroded",
+      "scale": "medium",
+      "seed": 101,
+      "sha256": "1480b0baaaf8d5d784d8a62bdbc53fbc28908f0d5545c5c9904a92c21aa6d94d"
+    },
+    {
+      "caseId": "terrain-island-relief-eroded",
+      "scale": "huge",
+      "seed": 42,
+      "sha256": "b3385d20c3e958e55b470a34c3bae308dfcef3e94bc6fd50ff6b667b7f6fb750"
+    },
+    {
+      "caseId": "terrain-island-relief-eroded",
+      "scale": "huge",
+      "seed": 73,
+      "sha256": "1361b2d3356946a573b66233ef1be1005ba23854d365edac6dd8dc4af5cd27e7"
+    },
+    {
+      "caseId": "terrain-island-relief-eroded",
+      "scale": "huge",
+      "seed": 101,
+      "sha256": "916c69bd8211b056fea2d8864f5973689b023b02a520ebd977d03322cce3f57f"
+    },
+    {
+      "caseId": "town-medieval",
+      "scale": "medium",
+      "seed": 42,
+      "sha256": "d380b036a29e97b19ddfeea984d7a5d27426b5806d1ef594549d4401a6605dc3"
+    },
+    {
+      "caseId": "town-medieval",
+      "scale": "medium",
+      "seed": 73,
+      "sha256": "3e065d5824065b62ed44a06ed5411684e3070ccb79210fe1f72dc795d3541d01"
+    },
+    {
+      "caseId": "town-medieval",
+      "scale": "medium",
+      "seed": 101,
+      "sha256": "c2eeef86627b4c6f9acb7b6a787310885744d36cba324e691e7da84d959809ca"
+    },
+    {
+      "caseId": "town-medieval",
+      "scale": "huge",
+      "seed": 42,
+      "sha256": "8d8c44ef000f51adda2aab79d0d9dbc114454a9bac03d66383c267aa3a4a8f4b"
+    },
+    {
+      "caseId": "town-medieval",
+      "scale": "huge",
+      "seed": 73,
+      "sha256": "554a648eda2042f9466eab9b19a2425aed159747b2b7032a350c33846af3bc68"
+    },
+    {
+      "caseId": "town-medieval",
+      "scale": "huge",
+      "seed": 101,
+      "sha256": "24648cf828d87dca7d026794e778430135422a0fc9db034edf7f6b3001ac446c"
+    },
+    {
+      "caseId": "cave",
+      "scale": "medium",
+      "seed": 42,
+      "sha256": "90fa89b8321ad4c32e29121a6b49ea91246f7d94ab3da71fd128b386a57c5965"
+    },
+    {
+      "caseId": "cave",
+      "scale": "medium",
+      "seed": 73,
+      "sha256": "aac898fcf51d39519130a5f71df273d5c99bc77d27576bd7651b442351a02a91"
+    },
+    {
+      "caseId": "cave",
+      "scale": "medium",
+      "seed": 101,
+      "sha256": "dfad223ae2d8a8eaeb454bb5554ae171341603854a10b5ac2456e55b1a91bb0b"
+    },
+    {
+      "caseId": "cave",
+      "scale": "huge",
+      "seed": 42,
+      "sha256": "189cd4e6aa17b87da1d76eae875f7fcf93501d343ee84424a206def1fc9e2632"
+    },
+    {
+      "caseId": "cave",
+      "scale": "huge",
+      "seed": 73,
+      "sha256": "9e37e7cacf0d2dd809170e048fdb24d6a657e2b4eee7e9e7b86b86baa852981f"
+    },
+    {
+      "caseId": "cave",
+      "scale": "huge",
+      "seed": 101,
+      "sha256": "3af80390336572d7c13a7cc925908f41f356e2ed8050d63166406a52d17099cb"
+    },
+    {
+      "caseId": "underground-city-medieval",
+      "scale": "medium",
+      "seed": 42,
+      "sha256": "c4315c39f3001c8639f6eb9bcd2d45631e880734772c0eb36b4d27ef57197037"
+    },
+    {
+      "caseId": "underground-city-medieval",
+      "scale": "medium",
+      "seed": 73,
+      "sha256": "db8b88ef629cbdea4cd4f695bf6d9118116c1436bb3d76f99062fd054ad61e26"
+    },
+    {
+      "caseId": "underground-city-medieval",
+      "scale": "medium",
+      "seed": 101,
+      "sha256": "a111a8f233350a7fb51c4a26a28b7c7b67af8b26c85b2cb2fb9d5880144c61c0"
+    },
+    {
+      "caseId": "underground-city-medieval",
+      "scale": "huge",
+      "seed": 42,
+      "sha256": "27ba1e3849269b8b9561f09cfc9cca5ad69d7236e072c40ee095579cb0ca60aa"
+    },
+    {
+      "caseId": "underground-city-medieval",
+      "scale": "huge",
+      "seed": 73,
+      "sha256": "7894fe2e5fe1048c3d9b01617d80a2e1aa1bd10838b8969ebf423aa637220938"
+    },
+    {
+      "caseId": "underground-city-medieval",
+      "scale": "huge",
+      "seed": 101,
+      "sha256": "c3ab442c888018b6b5024727f3928acde6e4ea786103b1f9d7ed315c5453a253"
+    }
+  ]
+}
