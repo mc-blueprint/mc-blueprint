@@ -20,6 +20,7 @@ classifiers = [
 ]
 dependencies = [
   "numpy>=1.26",
+  "pyfastnoiselite==0.0.7",
   "nbtlib>=2.0",
   "jsonschema>=4.18",
   "PyYAML>=6.0",
