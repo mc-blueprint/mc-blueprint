@@ -17,7 +17,7 @@ VIEWPORT = {"width": 1280, "height": 720}
 SWIFTSHADER_ARGS = [
     "--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader",
 ]
-INSTALL = 'python -m pip install "mc-blueprint[render]"'
+INSTALL = 'pip install ".[render]"（cloneしたリポジトリのルートで実行）'
 SETUP = "mcblueprint render --setup"
 PROBE = """() => {
     const gl = document.createElement('canvas').getContext('webgl2');

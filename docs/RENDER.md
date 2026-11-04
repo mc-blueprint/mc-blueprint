@@ -4,11 +4,15 @@
 利用者によるNode.js・JDK・Edgeの導入は不要。既存のPillowによる2D `preview` は別機能。
 
 ```bash
-python -m pip install "mc-blueprint[render]"
+git clone https://github.com/mc-blueprint/mc-blueprint.git
+cd mc-blueprint
+pip install ".[render]"
 mcblueprint render --setup
 mcblueprint render blueprints/house.json --views iso,front,top --out preview/
 mcblueprint render tower.yaml --set render.gpu=swiftshader
 ```
+
+clone と基本のインストールについては [README のインストール手順](../README.md#インストール)を参照。
 
 初回setupは現在のPythonからPlaywrightのCLIを実行し、対応するChromiumを公式配布元から
 Playwright標準cacheへ取得する。繰り返し実行できる。通常renderはブラウザを取得しない。
