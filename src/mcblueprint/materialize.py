@@ -627,6 +627,29 @@ def materialize_plan(blueprint: Mapping[str, Any], **kwargs) -> MaterializeResul
         output["palettes"].update({names[name]: entries for name, entries
                                    in result.blueprint.get("palettes", {}).items()})
         results[root] = result
+    from mcblueprint.junctions import junction_operations
+
+    junction_materials = {}
+    if output["metadata"]["planning"]["junctions"]:
+        data = load_block_data(output["minecraftVersion"])
+        members = [part["element"] for junction in output["metadata"]["planning"]["junctions"]
+                   for part in junction["parts"]]
+        for root, result in results.items():
+            if root not in roots or not any(m == root or m.startswith(root + ".") for m in members):
+                continue
+            floor = result.roles["floor"]["full"]
+            family = data.get(floor.id).family
+            stairs = data.families.get(family, {}).get("stairs")
+            if stairs is None:
+                raise BlueprintError(f"Materialize: {root}: 接合床材に階段形状がありません")
+            junction_materials[root] = {
+                "wall": result.roles["wall_main"]["full"].to_string(),
+                "frame": result.roles["frame"]["full"].to_string(),
+                "floor": floor.to_string(), "stairs": stairs,
+            }
+            if "stairs" in result.roles.get("roof", {}):
+                junction_materials[root]["roof"] = result.roles["roof"]["stairs"].id
+    output["operations"] = junction_operations(output, junction_materials)
     return MaterializeResult(
         output, {}, tuple({**d, "element": root} for root, r in results.items()
                           for d in r.diagnostics), max(r.attempts for r in results.values()),

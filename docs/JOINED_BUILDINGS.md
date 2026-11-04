@@ -1,5 +1,11 @@
 # 二棟接続の固定確認
 
+異幅・異階数・塔・L/T/中庭型・床高差は [building_junction](OPERATIONS.md#building_junction)
+を使う。従来の fixture と制限は以下のとおり維持する。
+新接合は `tests/test_operations_building_junction.py` と `tests/test_junction_planning.py` で
+4方向回転、core分割、歩行、owner、外壁・梁・屋根欠損、emit/resume を検証する。
+固定住宅・塔の4種hash比較は `evaluation/records/junction-239-baseline.json` に記録する。
+
 入力契約は [OPERATIONS.md の join_buildings](OPERATIONS.md#join_buildings)。この機能は共有面と内部開口の責務を持つ。`joinRoof` 省略時の固定対照をこの文書で扱い、全幅妻面の限定屋根接合は [JOINED_ROOFS.md](JOINED_ROOFS.md) を参照する。
 
 ## fixture と比較

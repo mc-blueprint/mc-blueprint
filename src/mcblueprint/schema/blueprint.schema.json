@@ -326,7 +326,8 @@
             "landform",
             "component",
             "join_buildings",
-            "terrain_density"
+            "terrain_density",
+            "building_junction"
           ]
         }
       },
@@ -725,6 +726,18 @@
           },
           "then": {
             "$ref": "#/$defs/ops/terrain_density"
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "type": {
+                "const": "building_junction"
+              }
+            }
+          },
+          "then": {
+            "$ref": "#/$defs/ops/building_junction"
           }
         }
       ]
@@ -3399,6 +3412,318 @@
             }
           }
         }
+      },
+      "building_junction": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "role": {
+            "type": "string",
+            "minLength": 1
+          },
+          "element": {
+            "type": "string",
+            "minLength": 1
+          },
+          "owner": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source": {
+            "type": "string",
+            "minLength": 1
+          },
+          "face": {
+            "enum": [
+              "north",
+              "east",
+              "south",
+              "west",
+              "up",
+              "down"
+            ]
+          },
+          "reserved": {
+            "enum": [
+              "structure",
+              "circulation"
+            ]
+          },
+          "onConflict": {
+            "enum": [
+              "error",
+              "skip"
+            ]
+          },
+          "type": {
+            "const": "building_junction"
+          },
+          "comment": {
+            "type": "string"
+          },
+          "buildings": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/operation"
+                },
+                {
+                  "required": [
+                    "element"
+                  ],
+                  "properties": {
+                    "type": {
+                      "enum": [
+                        "building",
+                        "tower",
+                        "translate"
+                      ]
+                    }
+                  }
+                }
+              ]
+            }
+          },
+          "parts": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "element": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "shape": {
+                  "enum": [
+                    "rectangle",
+                    "round",
+                    "square"
+                  ]
+                }
+              },
+              "required": [
+                "element",
+                "shape"
+              ]
+            }
+          },
+          "contacts": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "first": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "second": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "from": {
+                  "$ref": "#/$defs/position"
+                },
+                "to": {
+                  "$ref": "#/$defs/position"
+                }
+              },
+              "required": [
+                "first",
+                "second",
+                "from",
+                "to"
+              ]
+            }
+          },
+          "passages": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "from": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "to": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              },
+              "required": [
+                "from",
+                "to"
+              ]
+            }
+          },
+          "nodes": {
+            "type": "array",
+            "minItems": 2,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "element": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "position": {
+                  "$ref": "#/$defs/position"
+                }
+              },
+              "required": [
+                "id",
+                "element",
+                "position"
+              ]
+            }
+          },
+          "roofPolicy": {
+            "enum": [
+              "join",
+              "envelope"
+            ]
+          },
+          "profiles": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "element": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "params": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "floors",
+                    "floor_height"
+                  ],
+                  "properties": {
+                    "width": {
+                      "type": "integer",
+                      "minimum": 5
+                    },
+                    "depth": {
+                      "type": "integer",
+                      "minimum": 5
+                    },
+                    "floors": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "floor_height": {
+                      "type": "integer",
+                      "minimum": 4
+                    },
+                    "radius": {
+                      "type": "integer",
+                      "minimum": 2
+                    },
+                    "height": {
+                      "type": "integer",
+                      "minimum": 3
+                    },
+                    "angle": {
+                      "enum": [
+                        0,
+                        90,
+                        180,
+                        270
+                      ]
+                    },
+                    "shape": {
+                      "enum": [
+                        "round",
+                        "square"
+                      ]
+                    },
+                    "roof": {
+                      "enum": [
+                        "gable",
+                        "hip",
+                        "flat"
+                      ]
+                    },
+                    "battlement": {
+                      "type": "boolean"
+                    }
+                  },
+                  "oneOf": [
+                    {
+                      "required": [
+                        "width",
+                        "depth"
+                      ]
+                    },
+                    {
+                      "required": [
+                        "radius",
+                        "shape"
+                      ]
+                    }
+                  ]
+                },
+                "offset": {
+                  "$ref": "#/$defs/position"
+                }
+              },
+              "required": [
+                "element",
+                "params",
+                "offset"
+              ]
+            }
+          },
+          "wall": {
+            "$dynamicRef": "#block"
+          },
+          "frame": {
+            "$dynamicRef": "#block"
+          },
+          "floor": {
+            "$dynamicRef": "#block"
+          },
+          "stairs": {
+            "$dynamicRef": "#block"
+          },
+          "roof": {
+            "$dynamicRef": "#block"
+          }
+        },
+        "required": [
+          "type",
+          "element",
+          "owner",
+          "buildings",
+          "parts",
+          "contacts",
+          "passages",
+          "nodes",
+          "roofPolicy",
+          "wall",
+          "frame",
+          "floor",
+          "stairs"
+        ]
       }
     },
     "direction": {
