@@ -136,6 +136,20 @@ palette_prior/material_prior/relation_rule/accent_rule、provenanceを持つ。
 後続の読込処理はparse_colorpackを使い、検証済みColorPackをpipelineへ渡す。
 読取OSError・lock/hash/DATA_LICENSEの確認と実観測の品質保証は本APIの外で行う。
 
+## 同梱読み込みと版固定
+
+`load_colorpack() -> LoadedColorPack | None` は同梱resourceだけを読み込む。
+`src/mcblueprint/data/lock.json` の `colorpack` はrepository・40桁commit・
+`packVersion`・`taxonomyVersion`・`vocabularyVersion` と、`sha256` object内の
+`pack`・`license`・`vocabulary` の各SHA-256を固定する。実パックとDATA_LICENSEは
+まだ同梱しないため、現行lockにcolorpack項目がなく関連ファイルもない場合はNoneとなる。
+
+ロック対象は `data/colorpack/colorpack.json`、`data/colorpack/DATA_LICENSE`、
+`data/colorpack-vocabulary.json`。三つ全てが存在し、hashと各版がlockおよび相互に
+一致した後、パックを `parse_colorpack` で検証する。完全不在以外の欠損・hash・版・
+JSON不整合はBlueprintError、resourceの読み取りI/O失敗はOSErrorとして伝播する。
+戻り値は検証済みColorPack、3版、各内容hashを保持する。
+
 ## Materializeでの選択
 
 `materialize(..., colorpack=pack, building_type="house")` に検証済みColorPackを渡す。
