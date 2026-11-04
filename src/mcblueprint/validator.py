@@ -263,6 +263,11 @@ def _walk_operations(
     for index, op in enumerate(ops):
         op_path = f"{path}[{index}]"
         op_type = op["type"]
+        if op_type == "terrain_density" and op["minecraftVersion"] != blocks.version:
+            errors.append(ValidationError(
+                f"{op_path}.minecraftVersion",
+                "地形OperationとBlueprintの版が不一致です。", op_type,
+            ))
         if op_type in PLACEMENT_TYPES:
             has_block, has_palette = "block" in op, "palette" in op
             if has_block == has_palette:

@@ -53,7 +53,57 @@ terrain.vegetationは敷地の草/木候補の確率に使う。草は高さ1、
 5格子の木候補と頭上・外形余裕を固定し、水面・急斜面・砂・雪には配置しない。
 Weatherの植生とは独立。候補をブロックへ展開しcoreへ切り出すのは後続の領域生成側。
 このモジュールの導入では既存landform、makeの対応アーキタイプやSiteは変更しない。
-局所3D密度・必須空洞・アーチは後続Issueの責務。
+局所3D密度・必須空洞・アーチは次節の計画とOperationで施工する。
+
+## 局所3D密度と必須形状（H05）
+
+`terrain_density.plan_density(field, overhangs=True, arches=False, main_cave=False,
+entrances=1)` はH04の `TerrainField` を共有し、密度計画を返す。
+基礎密度は `height(x,z)−y`、0以上が地盤。overhangs指定時はH04と同じ固定版の
+3D世界座標ノイズを地形帯の `0.12×amplitude` 倍で加える。
+波長・オクターブ・振幅比は2D場と同じ換算を使う。変位と掘削は別々で、
+`caves=0` は追加枝洞だけを止める。枝洞は別seedのノイズの絶対値が
+`0.14×caves` 未満、元の地表下4ブロック以上・底面上3ブロック以上で掘る。
+底面は必ず地盤として残す。amplitude=0やoverhangs=Falseでも必須形状は消えない。
+
+main_caveは中央の楕円体と入口までの楕円体列を作り、隣接中心の間隔を
+小さい半径以下にして内部を重ねる。中心・整数半径・安定IDと接続辺を保持する。
+入口は西・東・北・南の順で1〜4個。楕円体の外側2ブロックの殻も地盤にし、
+主空洞と入口の和集合を最後に掘る。枝洞ノイズで必須空間や殻を失わない。
+archesは底面から立つ2本の支持部と楕円形の開口・上部を確保する。
+開口は地形のZ両端まで掘り抜き、前後の地盤に閉じ込められないようにする。
+主空洞とアーチは別計画で扱う。いずれもXZ各15以上・地形帯16以上を要求し、
+収まらない形状や入口数を黙って縮小しない。
+
+`TerrainDensity.sample(region)` は世界座標の閉区間に対して `(y,z,x)` の
+density/cavity/support/opening配列を返す。openingは外部までの必須開口全体。
+計画外の照会はBlueprintError。
+計画には3D配列・全体連結ラベルを保持せず、2D場と形状・接続グラフだけを持つ。
+`to_dict()` / `TerrainDensity.from_dict()` は2D場を含むJSONとSHA-256で再開する。
+未知版、hash・形状・接続グラフの不一致は再生成を要求する。
+
+Blueprintの `terrain_density` Operationには `plan`（上記JSON）と
+`minecraftVersion`（Blueprintと同じ版）が必須。Operationのseedはplanのfield.seedで
+確定し、build時の乱数seedで変更しない。旧landformやトップレベルterrainとは独立し、
+通常のemitされたBlueprintをvalidate/buildして同じ地形を再現できる。
+make・Siteへの接続と造成はH06/H07で行う。
+
+施工時の作業領域は最大XZ32×32・Y16（樹冠候補の照会はXZ各2の余裕）に分ける。
+高さ方向の走査で2Dの最上面だけを保持し、表層下3層を土/砂岩、支持部を石にする。
+表層材と植生候補はH04のcolumnを再利用する。水は非地盤セルの世界座標水位以下へ
+置き、主空洞の既定水位はなし。明示した水位だけ主空洞にも適用する。
+木・草は最上面がcolumn.topと一致するときだけ配置し、樹冠も隣接領域へ切り出す。
+木の幹が地盤と衝突する候補は採用しない。
+樹冠も密度が空気のセルだけに置き、隣接列の地盤や必須支持部を上書きしない。
+
+roleは `terrain.ground / terrain.cavity / terrain.opening / terrain.support / terrain.water /
+terrain.vegetation`、既定elementはterrain#0、sourceはconfig.terrain
+（植生はconfig.terrain.vegetation）。Operationの明示属性を継承する。
+必須空洞のairや地形支持部を建物用のstructure予約にはせず、既存予約の競合判定を守る。
+`check_density_region(plan, volume, core)` は完成coreの主空洞・アーチ開口の閉塞と石の支持部の欠落を
+照合する。水は計画水位以下だけ許し、欠落・未知セルを成功扱いにしない。
+通常の落下ブロックsupport検査をこの形状照合の代用にはしない。
+領域生成のメモリ予算には2D場と局所作業配列を加算し、予算不足は拒否する。
 
 ## オフライン地形スナップショット
 
