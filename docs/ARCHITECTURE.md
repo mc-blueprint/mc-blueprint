@@ -64,8 +64,9 @@ reference_radius=0, reverse=False)` は `GeneratedRegion(core, volume)` を逐�
   共有面・接合屋根はjoinが所有する。接合内の後段屋根が最終配置するセルは、宣言矩形を
   使って先行する子から責務を移譲し、それ以外では子の明示属性・予約を保持する。
 - 非局所copyは領域の列挙前にネスト・部品・複合操作も含めて拒否する。
-  元地形・foundation・surfacePathの施工も領域経路では未対応として拒否する。
-  従来generateの対応は維持する。
+  元地形は領域窓へ読み込み、foundation・surfacePathの列計画を先に適用する。
+  道路の完成検査はcoreと必要haloで行い、支持・路面・頭上をWeatherの通行保護域にする。
+  従来generateと旧TerrainSnapshotの対応は維持する。
 - メモリ予算はセルあたり64 bytes（配置・属性配列と後段snapshot・距離配列の余裕）と
   Operationあたり4096 bytesに、混色用MTバッチ・LRU・生成中タイルの余裕を足して判定する。
   MTは予算の1/4以内、LRUは1/8以内かつ24MiB以下とし、部品内のPaletteも考慮する。

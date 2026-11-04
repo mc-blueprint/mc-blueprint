@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import gzip
 import hashlib
+from collections.abc import Iterable, Iterator
 from dataclasses import dataclass
 from io import BytesIO
 from numbers import Integral
@@ -15,7 +16,7 @@ import nbtlib
 
 from mcblueprint import blockdata
 from mcblueprint.errors import BlueprintError
-from mcblueprint.exporters.litematic import bits_for, unpack_bit_array
+from mcblueprint.exporters.litematic import bits_for, iter_bit_array, unpack_bit_array
 from mcblueprint.model.block import BlockState
 from mcblueprint.model.vec import AABB, Vec3
 from mcblueprint.terrain import TerrainSnapshot
@@ -51,21 +52,24 @@ def read_schematic(path: str | Path) -> ImportedSchematic:
     raise BlueprintError(f"Unsupported schematic extension {suffix!r} (use .schem or .litematic)")
 
 
-def decode_varints(data: list[int], *, strict: bool = False) -> list[int]:
-    values, value, shift = [], 0, 0
+def _iter_varints(data: Iterable[int], *, strict: bool = False) -> Iterator[int]:
+    value, shift = 0, 0
     for byte in data:
-        byte &= 0xFF
+        byte = int(byte) & 0xFF
         if strict and (shift >= 35 or (shift == 28 and byte & 0xF8)):
             raise BlueprintError("地形の BlockData に不正な varint があります")
         value |= (byte & 0x7F) << shift
         if byte & 0x80:
             shift += 7
         else:
-            values.append(value)
+            yield value
             value, shift = 0, 0
     if strict and shift:
         raise BlueprintError("地形の BlockData の varint が途中で終了しています")
-    return values
+
+
+def decode_varints(data: list[int], *, strict: bool = False) -> list[int]:
+    return list(_iter_varints(data, strict=strict))
 
 
 @dataclass
@@ -73,7 +77,7 @@ class _SchematicData:
     size: Vec3
     offset: Vec3
     palette: dict[int, BlockState]
-    indices: list[int]
+    indices: Iterable[int]
     data_version: int | None
     name: str | None = None
 
@@ -152,7 +156,7 @@ def _read_schem(nbt: Any) -> ImportedSchematic:
     return _decode_schem(nbt).imported()
 
 
-def _decode_schem(nbt: Any, *, strict: bool = False) -> _SchematicData:
+def _decode_schem(nbt: Any, *, strict: bool = False, compact: bool = False) -> _SchematicData:
     root = nbt["Schematic"] if "Schematic" in nbt and "Version" not in nbt else nbt
     version = _integer(root.get("Version", 2), "Version", strict=strict)
     if version == 3:
@@ -180,12 +184,15 @@ def _decode_schem(nbt: Any, *, strict: bool = False) -> _SchematicData:
     }
     if strict and not isinstance(data_tag, nbtlib.ByteArray):
         raise BlueprintError("地形の BlockData / Blocks.Data は ByteArray が必要です")
-    indices = decode_varints(list(data_tag), strict=strict)
+    indices = ((data_tag if int(data_tag.min(initial=0)) >= 0
+                else _iter_varints(data_tag, strict=strict)) if compact
+               else decode_varints(list(data_tag), strict=strict))
     expected = width * height * length
     if strict:
         if len(palette) != len(palette_tag):
             raise BlueprintError("地形の palette に重複 index があります")
-        _validate_cells(Vec3(width, height, length), palette, indices)
+        if not compact:
+            _validate_cells(Vec3(width, height, length), palette, indices)
     elif len(indices) < expected:
         raise BlueprintError(f"Schematic block data is truncated ({len(indices)} < {expected})")
     data_version = (
@@ -199,7 +206,7 @@ def _read_litematic(nbt: Any) -> ImportedSchematic:
     return _decode_litematic(nbt).imported()
 
 
-def _decode_litematic(nbt: Any, *, strict: bool = False) -> _SchematicData:
+def _decode_litematic(nbt: Any, *, strict: bool = False, compact: bool = False) -> _SchematicData:
     regions = nbt["Regions"]
     if len(regions) != 1:
         raise BlueprintError(
@@ -236,8 +243,9 @@ def _decode_litematic(nbt: Any, *, strict: bool = False) -> _SchematicData:
         expected_words = (width * height * length * bits + 63) // 64
         if len(region["BlockStates"]) != expected_words:
             raise BlueprintError("地形の BlockStates 長が宣言領域と一致しません")
-    indices = unpack_bit_array(list(region["BlockStates"]), bits, width * height * length)
-    if strict:
+    indices = (iter_bit_array(region["BlockStates"], bits, width * height * length) if compact
+               else unpack_bit_array(list(region["BlockStates"]), bits, width * height * length))
+    if strict and not compact:
         _validate_cells(Vec3(width, height, length), palette, indices)
     data_version = (
         _integer(nbt["MinecraftDataVersion"], "MinecraftDataVersion", strict=strict)
@@ -249,6 +257,60 @@ def _decode_litematic(nbt: Any, *, strict: bool = False) -> _SchematicData:
     return _SchematicData(
         Vec3(width, height, length), origin, palette, indices, data_version, meta_name or str(name)
     )
+
+
+def read_terrain_regions(path: str | Path, *, max_memory_mb: float = 2048):
+    """make用の不変地形spoolを返す。入力配列を含む読取予算超過は展開前に拒否する。
+
+    NBTの版・座標・パレット検証は旧importerと共有し、添字だけを行単位で変換する。
+    一時ファイルは返したsnapshotの寿命まで保持される。
+    """
+    from mcblueprint.generator import GenerationLimits
+    from mcblueprint.terrain import RegionTerrainSnapshot
+
+    GenerationLimits(max_memory_mb=max_memory_mb)
+    path = Path(path)
+    if path.suffix.lower() not in (".schem", ".litematic"):
+        raise BlueprintError(f"未対応の地形ファイル形式: {path.suffix!r}")
+    budget = max_memory_mb * 1024 * 1024
+    try:
+        digest = terrain_file_hash(path)
+        with path.open("rb") as stream:
+            compressed = stream.read(2) == b"\x1f\x8b"
+        # nbtlibの配列読込時のbytesと配列、および変換行の余裕を含める。
+        opener = gzip.open if compressed else open
+        size = 0
+        with opener(path, "rb") as stream:
+            for chunk in iter(lambda: stream.read(65536), b""):
+                size += len(chunk)
+                if size * 3 + 1024 * 1024 > budget:
+                    raise BlueprintError("地形の入力配列が limits.max_memory_mb に収まりません")
+        with opener(path, "rb") as stream:
+            nbt = nbtlib.File.from_fileobj(stream)
+        decoded = (_decode_litematic(nbt, strict=True, compact=True)
+                   if path.suffix.lower() == ".litematic"
+                   else _decode_schem(nbt, strict=True, compact=True))
+        preparation = (size * 3 + len(decoded.palette) * 2048
+                       + decoded.size.x * 128 + 1024 * 1024)
+        if preparation > budget:
+            raise BlueprintError("地形の入力配列・変換行が limits.max_memory_mb に収まりません")
+        snapshot = RegionTerrainSnapshot(decoded, digest, max_memory_mb)
+        if terrain_file_hash(path) != digest:
+            raise BlueprintError("読取中に地形入力が変更されています")
+        return snapshot
+    except BlueprintError:
+        raise
+    except Exception as exc:
+        raise BlueprintError(f"地形ファイルを読み取れません: {path}: {exc}") from exc
+
+
+def terrain_file_hash(path: str | Path) -> str:
+    """入力全体を常駐させず、圧縮されたままのSHA-256を返す。"""
+    digest = hashlib.sha256()
+    with Path(path).open("rb") as stream:
+        for chunk in iter(lambda: stream.read(65536), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
 
 
 def _fill_volume(

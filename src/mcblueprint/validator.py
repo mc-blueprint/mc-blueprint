@@ -97,12 +97,13 @@ def validate(
 
 def validate_and_load(
     data: Mapping[str, Any], *, max_dimension: int = DEFAULT_MAX_DIMENSION,
-    base_dir: Path | None = None,
+    base_dir: Path | None = None, terrain_snapshot=None,
 ) -> tuple[Blueprint | None, list[ValidationError]]:
     """全段階を検証し、成功時は検証に使った同じモデルと空のエラー列を返す。
 
     失敗時のモデルはNone。base_dirは地形sourceの相対パス基準（既定cwd）。
     地形は一度だけ読み取り、生成時まで不変snapshotとして保持する。
+    terrain_snapshotはSiteで読取済みの地形を引き継ぐ内部パイプライン用。
     """
     errors = validate_schema(data)
     if errors:
@@ -111,7 +112,7 @@ def validate_and_load(
     if errors:
         return None, errors
     try:
-        blueprint = load_blueprint_dict(data, base_dir=base_dir)
+        blueprint = load_blueprint_dict(data, base_dir=base_dir, terrain_snapshot=terrain_snapshot)
     except BlueprintError as exc:
         return None, [ValidationError("", f"{exc}.")]
     errors = _validate_bounds(blueprint, max_dimension)
