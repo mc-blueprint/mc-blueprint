@@ -170,6 +170,17 @@ snapshotは上記の計画APIと従来の `generate` で施工してください
 柱連続率・平坦率・装飾密度・外壁混色率の正式集計は `not-implemented` と表示し、合格に数えません。
 Weatherの遷移診断はコードごとの件数をWARNとして返します。
 
+同梱配色パックがあればmakeが一度検証して読み込み、archetype・style・site.biomeで
+分布を選びます。役割ごとの固定ID、明示材質/色、パック、D28の順を守り、分布欠損だけを
+D28へ戻します。パック不在は従来どおり生成し、破損・hash不一致・ライセンス欠損は
+計画前にエラーとします。実パックの同梱は別工程です。
+
+パック使用時はrunの `colorpack` に版・hash・採用条件・関係検査・試行数・面積上限を残し、
+`palette_relation` にpack/d28別の適合数と分母を記録します。統計規則なしはpack評価n/aです。
+Weather後のcoreだけから建物別に対象role/全役割セルの面積比を測り、
+上限×`palette.accent` の超過や固定IDによる関係の解なしは成果を保存して終了3とします。
+詳細は [COLORPACK.md](COLORPACK.md) を参照してください。
+
 終了コードは合格 `0`、入力・構造予約の違反 `1`、引数・I/O・資源不足 `2`、生成後の評価不合格 `3`。
 `3` でも成果物を保存します。隣の `<出力名>.run.json` に合否・診断・合成設定・出所・seed・
 入力hash・engine版/hash・データlock/hashを記録します。出力は既存の原子的Exporterを使い、
@@ -202,6 +213,8 @@ Resolveは計画前に、計画各段はMaterialize前に保存するので、�
 `--resume` でも元のBuildSpecが必要です。Resolveで現在の合成設定を一度確認し、入力・設定・
 前段の連鎖・engine・データに差があれば拒否します。Site以降は保存済み計画を使い、
 Blueprintからの再開ではMaterializeも省略します。Generateは常に一度だけ実行します。
+配色パック使用時はパック・語彙・DATA_LICENSEの版と実内容hashも世代に含め、
+同版の内容変更でもresume・apply-edits・viewer再生成を拒否します。
 旧cacheの移行や同じ出力先を共有する実行の排他は提供しません。
 
 emitしたBlueprintは具体ブロック／既存Paletteと `metadata.generation` を持ちます。
