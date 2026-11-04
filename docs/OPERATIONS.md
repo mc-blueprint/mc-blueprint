@@ -5,6 +5,57 @@ Operation は Blueprint JSON の `operations` 配列に並べる建築の単位�
 
 本書が Operation の正本である。
 
+## building_junction
+
+異幅・異階数・直交屋根を持つ矩形棟と round/square 塔を接合する。
+旧 `join_buildings` の契約・出力は変更しない。具体例は
+[異階数接合](../examples/building_junction.json) と
+[床段差接合](../examples/building_junction_steps.json) を参照。
+
+| 項目 | 契約 |
+| --- | --- |
+| `element` / `owner` | 同じ一意な接合ID。共有面・支持・屋根の予約を所有する |
+| `buildings` | element を持つ building/tower、または内部計画の translate を2棟以上 |
+| `parts` | `{element, shape}`。施工する各棟を一度ずつ参照。shape は rectangle/round/square |
+| `contacts` | `{first, second, from, to}`。配置座標で両端を含む実共有輪郭を過不足なく指定 |
+| `nodes` | `{id, element, position}`。position は床の1セル上の足元 |
+| `passages` | `{from, to}`。nodes のIDを参照。各接触面に直線の内部通路を指定 |
+| `roofPolicy` | `envelope`、または従来の全幅妻面接合条件を満たす `join` |
+| `wall` / `frame` / `floor` / `stairs` | 共有壁、柱・受け梁、通路床、段差階段の具体ブロック |
+| `roof` | 計画済み translate の `join` で必要な共通の階段屋根材 |
+| `profiles` | translate 施工用の `{element, params, offset}`。内部計画 v2 の値を使用 |
+
+profiles の params は矩形なら width/depth、塔なら radius/shape と、floors/floor_height、
+必要に応じて angle/height/roof/battlement を持つ。角度は0/90/180/270度。
+translate の offset/rotation と profile は一致させる。
+contacts は既存の内部計画 v2 と同じく基礎床層を省略できる。施工側はその床層も所有する。
+矩形・円塔の接触帯には共通の
+`facade_projection.plan_facade_runs` を使い、円を矩形の外接範囲として扱わない。
+
+接触する内部同士の体積重複、偽の接触面、参照不整合、非接続棟、通路の矛盾、
+既存階段・到着域・構造柱・梁・支持柱への侵害、支持や頭上の不足は構造エラー。
+接合帯の生成は各棟から事前に除外し、一つのownerで施工する。外部予約は引き継がず拒否する。
+開口上の梁と端柱を残し、高棟の張り出し柱は低棟内の支持柱で受ける。
+床高差は低い節点の次セルから上り階段を置き、両端に足場を残す。
+通路は幅1、頭上は2セルを確保する。階段の半段上にも必要な頭上空間を確保する。
+新接合内の tower は、stairs が有効なら各階間を直線階段で結ぶ。
+その材は接合の stairs を使い、階高4以上かつ階高が `2 * radius - 4` 以下である必要がある。
+単独 tower の螺旋階段と出力は変更しない。
+
+屋根包絡は同一水平セルの最上面を採り、他棟の壁体に入る屋根と内部の余分な面を除く。
+低棟の妻壁は保持し、高さが切り替わる谷・壁際には wall 材の立上りを入れて閉鎖する。
+屋根・床・壁・trim の元の role は維持し、追加した立上りは wall_main とする。
+屋根の構造検査は owner・構造予約・非airを検査し、role を frame に置き換えない。
+正当な内部接触面だけを外壁評価から除外し、低棟より上の高棟外壁は残す。
+外周角は評価に残し、同じ向きの共有セルは安定した棟順で一度だけ数える。
+支持・梁・屋根の期待セルも評価し、欠損を接合マスクで隠さない。
+同じ棟を複数の接合レコードに含めず、L/T/中庭型は一つの複数棟接合にまとめる。
+
+内部計画 v2 の parts/contacts/passages/roofPolicy は変更しない。
+`materialize_plan` が棟別配色後に接合を施工へ写し、部材IDは実在IDを照合して所属棟へ解決する。
+共有材はID順で先頭の棟の選択材とする。床材に必要な階段形状がなければエラー。
+接合 passage は完成spoolの歩行検査にも含める。emit/resume の外部形式は変更しない。
+
 ## Materialize 前の役割入力
 
 生成計画では、ブロック値を `{"role": "wall_main", "shape": "full", "state": {}}` として指定できる。
