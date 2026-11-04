@@ -115,6 +115,13 @@ def apply_edits(scene: dict[str, Any], edits: dict[str, Any], source: dict[str, 
         from mcblueprint.planning import plan_buildspec
 
         planned = plan_buildspec(resolve_buildspec(result))
+        from mcblueprint.plan_contract import plan_buildings
+
+        known = {building["element"]: building for building in plan_buildings(planned.massing)}
+        for edit in edits["edits"]:
+            if edit["kind"] == "param" and (edit["element"] not in known
+                    or edit["param"] not in known[edit["element"]]["params"]):
+                raise _fail(f"ID {edit['id']!r} の要素またはparamが現在の計画にありません")
         for edit in edits["edits"]:
             if edit["kind"] not in ("replace", "delete"):
                 continue

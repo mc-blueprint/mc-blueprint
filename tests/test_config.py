@@ -135,9 +135,7 @@ def test_size_is_bounded_integer_triplet(value: object) -> None:
 @pytest.mark.parametrize(
     "values,reason",
     [
-        ({"archetype": "castle"}, "Massing"),
         ({"interior": "furnished"}, "Detail"),
-        ({"site": {"terrain": "mountain"}}, "Site"),
     ],
 )
 def test_unsupported_requests_name_stage_and_milestone(values: dict, reason: str) -> None:

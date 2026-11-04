@@ -76,6 +76,11 @@ Minecraft Java Edition 1.21.11の確認用ワールドで、配布した `manual
 
 ## makeの実測品質診断
 
+内部計画 v2 の階層・接続・棟別診断は [内部計画](INTERNAL_PLANNING.md) を参照。
+複数棟は柱・面の局所FAILを保持し、欠損を全棟平均で相殺しない。
+入口と階到着点の経路は接続辺ごとに検査する。地形・洞窟単独で棟を持たない計画の建物指標だけが
+n/a となり、建物計画の棟・柱・面・入口接続の欠落はエラーとする。
+
 `make` はWeather後の各coreを一度だけ集計し、計画した柱・梁・外壁・開口と照合する。
 支持・歩行は完成spoolから検査する。haloを最終状態とみなしたり、全体の属性付きvolumeを復元したりしない。
 出力隣の `<出力>.run.json` に既存の文字列 `diagnostics` と、`metrics`・`structuredDiagnostics` を保存する。

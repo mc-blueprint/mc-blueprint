@@ -16,6 +16,7 @@ from mcblueprint.exporters._spool import RegionSpool
 from mcblueprint.generator import GeneratedRegion
 from mcblueprint.model import AABB, BlockState, Vec3
 from mcblueprint.model.blueprint import Blueprint
+from mcblueprint.plan_contract import hierarchy
 from mcblueprint.scene import _source_descriptor, capture_sources, write_scene
 from mcblueprint.volume import CellAttributes, RegionVolume
 
@@ -27,7 +28,10 @@ ROOT = Path(__file__).resolve().parents[1]
 @pytest.mark.parametrize("spec", [True, False])
 def test_only_real_root_and_descendants_offer_params(element, spec):
     attr = CellAttributes(element=element, source="archetype.body", operation="body/0")
-    context = {"massing": {"element": "tower#1", "params": {"height": 14}}} if spec else {}
+    building = {"element": "tower#1", "params": {"height": 14}, "entrance": [0, 1, 0],
+                "arrivals": [], "columns": [{"id": "tower#1.column#1"}],
+                "facades": [{"id": "tower#1.facade.north"}]}
+    context = {"massing": hierarchy("tower", [building])} if spec else {}
     descriptor = _source_descriptor(attr, context)
     editable = spec and element in ("tower#1", "tower#1.body#1")
     if element:

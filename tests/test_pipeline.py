@@ -18,6 +18,7 @@ from mcblueprint.cli import main
 from mcblueprint.errors import BlueprintError
 from mcblueprint.importers import read_schematic
 from mcblueprint.model import BlockState, Vec3
+from mcblueprint.plan_contract import plan_buildings
 from mcblueprint.volume import CellAttributes
 
 FIXTURES = Path(__file__).parent / "data/buildspec"
@@ -423,6 +424,8 @@ def test_fixed_cases_make_matrix(tmp_path, capsys, version, format, archetype):
     assert all(d["code"] == "palette_relation" for d in record["structuredDiagnostics"]
                if d["severity"] in ("error", "fail"))
     assert record["metrics"]["column_continuity"]["value"] == 1
+    assert all(set(route) == {"from", "to", "status"}
+               for route in record["metrics"]["walkability"]["routes"])
     assert record["metrics"]["beam_continuity"]["value"] == 1
     assert record["metrics"]["decoration_density"]
     assert "status" not in record["metrics"]["decoration_density"]
@@ -484,7 +487,7 @@ def test_emit_build_and_every_resume_generate_once(tmp_path, monkeypatch, archet
         assert result.code == first.code
         assert json.loads(result.record.read_text(encoding="utf-8"))["metrics"] == expected_metrics
     materialized = json.loads(concrete.read_text(encoding="utf-8"))
-    assert materialized["metadata"]["planning"]["element"] == f"{archetype}#1"
+    assert plan_buildings(materialized["metadata"]["planning"])[0]["element"] == f"{archetype}#1"
     assert materialized["seed"] == 42
 
 
@@ -709,7 +712,7 @@ def test_critic_distinguishes_blocked_and_unsupported(tmp_path, monkeypatch, blo
     original = pipeline.generated_blueprint_regions
 
     def obstructed(blueprint, **kwargs):
-        point = Vec3.from_seq(blueprint.metadata["planning"]["arrivals"][-1])
+        point = Vec3.from_seq(plan_buildings(blueprint.metadata["planning"])[0]["arrivals"][-1])
         for region in original(blueprint, **kwargs):
             if region.core.contains(point):
                 region.volume.set(point, BlockState.of(block), region.volume.attributes(point))
@@ -775,7 +778,8 @@ def test_critic_failure_preserves_existing_artifacts(tmp_path, monkeypatch, fail
     original = pipeline.generated_blueprint_regions
 
     def broken(blueprint, **kwargs):
-        point = Vec3.from_seq(blueprint.metadata["planning"]["columns"][0]["from"])
+        column = plan_buildings(blueprint.metadata["planning"])[0]["columns"][0]
+        point = Vec3.from_seq(column["from"])
         for region in original(blueprint, **kwargs):
             if region.core.contains(point):
                 attr = region.volume.attributes(point)
@@ -892,10 +896,11 @@ def test_missing_facade_attributes_are_quality_failure(tmp_path, monkeypatch):
 
 
 def test_templates_and_help_match_resolve(tmp_path, capsys):
-    from mcblueprint.buildspec import resolve_buildspec
+    from mcblueprint.buildspec import SUPPORTED_ARCHETYPES, resolve_buildspec
 
     assert main(["archetypes"]) == 0
-    assert [line.split()[0] for line in capsys.readouterr().out.splitlines()] == ["house", "tower"]
+    assert [line.split()[0] for line in capsys.readouterr().out.splitlines()] == list(
+        SUPPORTED_ARCHETYPES)
     for archetype in ("house", "tower"):
         assert main(["spec-template", archetype, "--minecraft-version", "26.3"]) == 0
         text = capsys.readouterr().out

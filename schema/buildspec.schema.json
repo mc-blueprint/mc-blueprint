@@ -6,7 +6,7 @@
   "properties": {
     "formatVersion": {"const": 1},
     "minecraftVersion": {"enum": ["1.21.11", "26.1.2", "26.2", "26.3"]},
-    "archetype": {"enum": ["house", "tower"]},
+    "archetype": {"enum": ["house", "tower", "castle", "town", "terrain", "cave", "underground_city", "city"]},
     "style": {"type": "string", "minLength": 1},
     "scale": {"enum": ["tiny", "small", "medium", "large", "huge"]},
     "size": {"type": "array", "prefixItems": [
@@ -40,7 +40,13 @@
        "floors": {"type": "integer", "minimum": 1},
        "floor_height": {"type": "integer", "minimum": 4},
        "battlement": {"type": "boolean"}
-     }}}}}
+     }}}}},
+    {"if": {"properties": {"archetype": {"const": "castle"}}}, "then": {"properties": {"features": {"type": "object", "additionalProperties": false, "properties": {"curtain_wall": {"type": "boolean"}, "keep": {"type": "boolean"}, "gatehouse": {"type": "boolean"}, "moat": {"type": "boolean"}, "towers": {"type": "integer", "minimum": 0}}}}}},
+    {"if": {"properties": {"archetype": {"const": "town"}}}, "then": {"properties": {"features": {"type": "object", "additionalProperties": false, "properties": {"buildings": {"type": "integer", "minimum": 1}, "plaza": {"type": "boolean"}, "well": {"type": "boolean"}, "market": {"type": "boolean"}}}}}},
+    {"if": {"properties": {"archetype": {"const": "terrain"}}}, "then": {"properties": {"features": {"type": "object", "additionalProperties": false, "properties": {"overhangs": {"type": "boolean"}, "arches": {"type": "boolean"}}}}}},
+    {"if": {"properties": {"archetype": {"const": "cave"}}}, "then": {"properties": {"features": {"type": "object", "additionalProperties": false, "properties": {"entrances": {"type": "integer", "minimum": 1}}}}}},
+    {"if": {"properties": {"archetype": {"const": "underground_city"}}}, "then": {"properties": {"features": {"type": "object", "additionalProperties": false, "properties": {"buildings": {"type": "integer", "minimum": 1}, "entrances": {"type": "integer", "minimum": 1}, "supports": {"type": "boolean"}, "lights": {"type": "boolean"}}}}}},
+    {"if": {"properties": {"archetype": {"const": "city"}}}, "then": {"properties": {"features": {"type": "object", "additionalProperties": false, "properties": {"buildings": {"type": "integer", "minimum": 1}, "plaza": {"type": "boolean"}, "well": {"type": "boolean"}, "market": {"type": "boolean"}}}}}}
   ],
   "$defs": {
     "material": {"oneOf": [

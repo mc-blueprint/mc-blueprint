@@ -17,7 +17,7 @@ import numpy as np
 import yaml
 
 from mcblueprint import __version__, blockdata
-from mcblueprint.buildspec import ResolveResult, resolve_buildspec
+from mcblueprint.buildspec import SUPPORTED_TERRAINS, ResolveResult, resolve_buildspec
 from mcblueprint.colorpack import load_colorpack
 from mcblueprint.critic import CriticAccumulator, plan_from_metadata
 from mcblueprint.errors import BlueprintError
@@ -27,6 +27,7 @@ from mcblueprint.generator import GeneratedRegion, GenerationLimits, generate_re
 from mcblueprint.importers import terrain_file_hash
 from mcblueprint.model import AABB, Vec3
 from mcblueprint.operations.box_like import iter_box
+from mcblueprint.plan_contract import PLAN_VERSION, plan_buildings
 from mcblueprint.planning import plan_buildspec
 from mcblueprint.region_export import _export_spool
 from mcblueprint.scene import capture_sources, write_scene
@@ -158,6 +159,7 @@ def _environment(*, colorpack=...) -> dict:
     root = Path(__file__).parent
     result = {
         "engine": __version__,
+        "planVersion": PLAN_VERSION,
         "engineHash": _hash({p.relative_to(root).as_posix(): sha256(p.read_bytes()).hexdigest()
                              for p in sorted(root.rglob("*.py"))}),
         "lockHash": sha256((root / "data/lock.json").read_bytes()).hexdigest(),
@@ -196,7 +198,11 @@ def _read_checkpoint(
                 or sidecar["input"] != expected["input"]
                 or sidecar["sha256"] != _hash(data)
                 or sidecar["contextHash"] != _hash(sidecar["context"])):
-            raise PipelineError("Resume", "入力・engine・データ・中間出力のhashが一致しません")
+            raise PipelineError("Resume", "入力・engine・データ・中間出力のhashが一致しません。"
+                                "BuildSpecから再生成してください")
+        if sidecar.get("planVersion") != PLAN_VERSION:
+            raise PipelineError("Resume", "内部計画の版が一致しません。"
+                                "BuildSpecから再生成してください")
         previous = sidecar["previous"]
         index = STAGES.index(sidecar["stage"])
         context = sidecar["context"]
@@ -208,6 +214,9 @@ def _read_checkpoint(
             for key in ("site", "massing", "detail", "plannedBlueprint", "palette"):
                 if not isinstance(context[key], dict):
                     raise PipelineError("Resume", "保存済み計画が不正です")
+            for key in ("site", "massing", "detail"):
+                plan_buildings(context[key])
+            plan_buildings(context["plannedBlueprint"]["metadata"]["planning"])
         if index == 4:
             if not isinstance(context["materialDiagnostics"], list):
                 raise PipelineError("Resume", "保存済み材質診断が不正です")
@@ -357,7 +366,8 @@ def export_generated_blueprint(
 
 
 def _evaluate(window, blueprint, context, source, max_nodes, critic):
-    root = context["massing"]["element"]
+    buildings = plan_buildings(context["massing"])
+    root = buildings[0]["element"] if len(buildings) == 1 else context["massing"]["element"]
     metrics = dict(critic.metrics)
     diagnostics = []
 
@@ -382,28 +392,37 @@ def _evaluate(window, blueprint, context, source, max_nodes, critic):
     metrics["support"] = {"value": support_count}
     diagnostic("support", "support", "fail" if support_count else "ok", support_count, 0,
                detail=first)
-    points = context["massing"]
-    start = Vec3.from_seq(points["entrance"])
+    plan = context["massing"]
+    plan_buildings(plan)
+    nodes = {node["id"]: node for node in plan["connections"]["nodes"]}
     routes = []
-    for point in points["arrivals"]:
-        end = Vec3.from_seq(point)
+    for edge in plan["connections"]["edges"]:
+        start = Vec3.from_seq(nodes[edge["from"]]["position"])
+        end = Vec3.from_seq(nodes[edge["to"]]["position"])
         route = check_route(window, start, end, blueprint.minecraft_version, max_nodes=max_nodes)
         reason = route.issues[0].reason if route.issues else ""
-        routes.append({"from": start.to_list(), "to": end.to_list(), "status": route.status})
+        element = nodes[edge["from"]]["element"]
+        routes.append({**({"element": element} if len(buildings) > 1 else {}),
+                       "from": start.to_list(), "to": end.to_list(),
+                       "status": route.status})
         diagnostic("walkability", "walkability", "ok" if route.status == "reachable" else "fail",
-                   route.status, "reachable", position=end.to_list(), detail=reason)
-        start = end
+                   route.status, "reachable", element=element,
+                   position=end.to_list(), detail=reason)
     metrics["walkability"] = {"routes": routes}
+    if not buildings and not routes:
+        metrics["walkability"].update(value=None, status="n/a", reason="棟なしの敷地計画")
     for item in context.get("materialDiagnostics", []):
         diagnostics.append({**item, "metric": "palette_relation", "severity": "fail",
                             "relationMetric": item["metric"],
-                            "element": root, "source": str(source),
+                            "element": item.get("element", root), "source": str(source),
                             "actual": item.get("actual"),
                             "expected": {key: item[key] for key in ("minimum", "maximum")
                                          if key in item},
                             "repairPaths": ["config.palette.contrast",
                                             "config.palette.saturation"]})
     metrics["palette_relation"] = {"value": not bool(context.get("materialDiagnostics"))}
+    if not buildings and not context.get("materialDiagnostics"):
+        metrics["palette_relation"].update(value=None, status="n/a", reason="対象建物なし")
     if "colorpack" in context:
         checks = context["colorpack"]["relationChecks"]
         relation = {}
@@ -433,9 +452,10 @@ def _evaluate(window, blueprint, context, source, max_nodes, critic):
             reason = ("装飾指定Operationなし" if metric == "decoration_density" else
                       "固定ID役割は対象外、または外壁役割の測定対象なし")
             metrics[metric] = {"value": None, "status": "n/a", "reason": reason}
-    if metrics["beam_continuity"]["value"] is None:
+    if (metrics["beam_continuity"]["value"] is None
+            and metrics["beam_continuity"].get("status") != "n/a"):
         metrics["beam_continuity"].update(status="n/a", reason="計画梁なし")
-    if metrics["flat_ratio"]["value"] is None:
+    if metrics["flat_ratio"]["value"] is None and metrics["flat_ratio"].get("status") != "n/a":
         metrics["flat_ratio"].update(status="failed", reason="有効な外壁深度を測定できません")
     lines = [_diagnostic_line(d) for d in diagnostics]
     for metric, value in metrics.items():
@@ -503,13 +523,16 @@ def make(
         if out.resolve() == source:
             raise PipelineError(stage, "入力と出力は別のパスにしてください", 2)
         terrain_source = resolved.buildspec["site"]["terrain"]
-        if (terrain_source not in ("none", "flat")
+        if (terrain_source not in SUPPORTED_TERRAINS
                 and out.resolve() == Path(terrain_source).resolve()):
             raise PipelineError(stage, "元地形の入力と出力は別のパスにしてください", 2)
         # 出力先は解決後に分かるため、入力と合わせて一定順で取り直す。
         locks.enter_context(lock_paths(source, out))
         if source.read_bytes() != original:
             raise PipelineError(stage, "ロック取得中に入力が変更されています", 2)
+        if (resolved.buildspec["archetype"] not in ("house", "tower")
+                or terrain_source in SUPPORTED_TERRAINS[2:]):
+            plan_buildspec(resolved)
         colorpack = load_colorpack()
         expected = {"environment": _environment(colorpack=colorpack), "input": {
             "path": str(source), "basePath": str(source.parent),
@@ -517,7 +540,7 @@ def make(
             "resolvedHash": _hash(resolved.buildspec),
         }}
         terrain_hash = None
-        if terrain_source not in ("none", "flat"):
+        if terrain_source not in SUPPORTED_TERRAINS:
             terrain_hash = terrain_file_hash(terrain_source)
             expected["input"]["terrainHash"] = terrain_hash
         context = {"resolved": {"buildspec": resolved.buildspec,
@@ -551,7 +574,7 @@ def make(
             elif name != "blueprint":
                 saved.pop("materialDiagnostics", None)
                 saved.pop("maxAreaRatios", None)
-            meta = {"formatVersion": 1, "stage": name, **expected,
+            meta = {"formatVersion": 1, "planVersion": PLAN_VERSION, "stage": name, **expected,
                     "sha256": _hash(value), "previous": previous,
                     "context": saved, "contextHash": _hash(saved)}
             _atomic_json(path, value)
@@ -572,25 +595,34 @@ def make(
         for name in ("site", "massing", "detail"):
             checkpoint(name, context[name])
         if resumed < 4:
-            from mcblueprint.materialize import materialize
+            from mcblueprint.materialize import materialize_plan
 
             stage = "Materialize"
             if stage_hook:
                 stage_hook(stage)
-            material = materialize(context["plannedBlueprint"], style=spec["style"],
+            material = materialize_plan(context["plannedBlueprint"], style=spec["style"],
                                    biome=spec["site"]["biome"], palette=context["palette"],
                                    colorpack=colorpack.pack if colorpack is not None else None,
                                    building_type=spec["archetype"])
             concrete = material.blueprint
             context["materialDiagnostics"] = list(material.diagnostics)
             context["maxAreaRatios"] = material.max_area_ratios
+            context["buildingMaxAreaRatios"] = {
+                root: result.max_area_ratios for root, result in material.building_results.items()
+            }
             context["fixedRoles"] = sorted(material.fixed_roles)
+            context["buildingFixedRoles"] = {
+                root: sorted(result.fixed_roles)
+                for root, result in material.building_results.items()
+            }
             if colorpack is not None:
                 context["colorpack"] = {
                     **expected["environment"]["colorpack"],
                     "selectionSources": material.selection_sources,
                     "relationChecks": list(material.relation_checks),
                     "maxAreaRatios": material.max_area_ratios,
+                    **({"buildingMaxAreaRatios": context["buildingMaxAreaRatios"]}
+                       if material.building_results else {}),
                     "attempts": material.attempts,
                 }
             concrete.setdefault("metadata", {})["generation"] = {
@@ -650,10 +682,12 @@ def make(
                 blueprint.metadata["planning"], massing=context["massing"],
                 offset=context["site"]["offset"],
                 decoration_range=style["decoration"]["density"], fixed_roles=context["fixedRoles"],
+                building_fixed_roles=context.get("buildingFixedRoles", {}),
             )
             accumulator = CriticAccumulator(
                 critic_plan, max_memory_mb=config["limits"]["max_memory_mb"],
                 max_area_ratios=context["maxAreaRatios"] if colorpack is not None else None,
+                building_area_ratios=context.get("buildingMaxAreaRatios", {}),
             )
 
             def consume_regions():
@@ -677,8 +711,11 @@ def make(
                     structured.append(diagnostic)
                     lines.append(_diagnostic_line(diagnostic))
                 for code, count in sorted(weather_counts.items()):
+                    buildings = plan_buildings(context["massing"])
+                    root = (buildings[0]["element"] if len(buildings) == 1
+                            else context["massing"]["element"])
                     diagnostic = {"code": code, "metric": "weather_transition", "severity": "warn",
-                                  "source": str(source), "element": context["massing"]["element"],
+                                  "source": str(source), "element": root,
                                   "actual": count, "expected": 0, "repairPaths": []}
                     structured.append(diagnostic)
                     lines.append(_diagnostic_line(diagnostic))

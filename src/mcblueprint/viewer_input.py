@@ -164,14 +164,17 @@ def _spec_sources(scene: dict, resolved, *, massing: dict | None = None) -> None
     # 子要素しかセルを持たない場合も、編集対象の親要素をsource表へ残す。
     if massing is None:
         massing = plan_buildspec(resolved).massing
-    root = massing["element"]
-    if any(entry.get("element") == root for entry in scene["sources"]):
-        return
-    entry = {"element": root, "label": root, "params": sorted(massing["params"])}
-    ident = int.from_bytes(hashlib.sha256(_json(entry)).digest()[:4], "little") or 1
-    if any(entry["id"] == ident for entry in scene["sources"]):
-        raise BlueprintError("生成元IDが衝突しました")
-    scene["sources"].append({"id": ident, **entry})
+    from mcblueprint.plan_contract import plan_buildings
+
+    for building in plan_buildings(massing):
+        root = building["element"]
+        if any(entry.get("element") == root for entry in scene["sources"]):
+            continue
+        entry = {"element": root, "label": root, "params": sorted(building["params"])}
+        ident = int.from_bytes(hashlib.sha256(_json(entry)).digest()[:4], "little") or 1
+        if any(entry["id"] == ident for entry in scene["sources"]):
+            raise BlueprintError("生成元IDが衝突しました")
+        scene["sources"].append({"id": ident, **entry})
 
 
 @dataclass
