@@ -35,7 +35,7 @@ def test_missing_extra(monkeypatch):
         return original(name, *args, **kwargs)
 
     monkeypatch.setattr(builtins, "__import__", without_playwright)
-    with pytest.raises(BlueprintError, match=r"mc-blueprint\[render\]"):
+    with pytest.raises(BlueprintError, match=r'pip install "\.\[render\]"'):
         module.setup()
 
 
