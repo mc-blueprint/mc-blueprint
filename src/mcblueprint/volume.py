@@ -174,11 +174,12 @@ class RegionVolume:
 
     def set_box(
         self, box: AABB, states: tuple[BlockState, ...], choices: np.ndarray | None,
-        attributes: CellAttributes, *, on_conflict: str = "error",
+        attributes: CellAttributes, *, on_conflict: str = "error", mask: np.ndarray | None = None,
     ) -> None:
         """矩形へ一括配置する。choicesは(y,z,x)順のstates内添字、省略時は単一材。
 
-        予約の判定はsetと共通。skip対象は配置・属性とも保ち、予約種別も継承する。
+        maskも(y,z,x)順で、指定時はTrueのセルだけを書く。予約の判定はsetと共通。
+        skip対象は配置・属性とも保ち、予約種別も継承する。
         """
         if not self.region.contains(box.min) or not self.region.contains(box.max):
             raise BlueprintError(f"領域外へ配置できません: {box}")
@@ -188,19 +189,25 @@ class RegionVolume:
         indices = np.array([self._block_index(state) for state in states], dtype=np.uint32)
         values = indices[0] if choices is None else indices[choices]
         if not self._has_reservations:
-            blocks[...] = values
-            attrs[...] = self._attribute_id(attributes)
+            if mask is None:
+                blocks[...] = values
+                attrs[...] = self._attribute_id(attributes)
+            else:
+                blocks[mask] = values if choices is None else values[mask]
+                attrs[mask] = self._attribute_id(attributes)
             return
         previous = attrs.copy()
         writes = []
-        for old in np.unique(previous):
+        for old in np.unique(previous if mask is None else previous[mask]):
             incoming = _placement_attributes(self._attribute_palette[old], attributes, on_conflict)
             if incoming is not None:
                 writes.append((old, self._attribute_id(incoming)))
         for old, incoming in writes:
-            mask = previous == old
-            blocks[mask] = values if choices is None else values[mask]
-            attrs[mask] = incoming
+            selected = previous == old
+            if mask is not None:
+                selected &= mask
+            blocks[selected] = values if choices is None else values[selected]
+            attrs[selected] = incoming
 
     def get(self, pos: Vec3) -> BlockState | None:
         if not self.region.contains(pos):
