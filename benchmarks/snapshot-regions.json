@@ -1,0 +1,132 @@
+{
+  "definition": "snapshot-regions-v1",
+  "python": "3.12.15",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "numpy": "2.5.4",
+  "nbtlib": "2.0.4",
+  "scope": "圧縮入力の検査・NBTデコード・spool・造成/道路計画・全core生成。Weather/出力は除外。",
+  "records": [
+    {
+      "format": "schem",
+      "dimensions": [
+        64,
+        48,
+        64
+      ],
+      "offset": [
+        -32,
+        -16,
+        -32
+      ],
+      "input_sha256": "20518909b70c3a6b8f8d44b9a2c793e514b28eae1f0a5212d9422b20f1f6decc",
+      "max_memory_mb": 128,
+      "core": [
+        32,
+        16,
+        32
+      ],
+      "halo": 4,
+      "cores": 12,
+      "cells": 196608,
+      "prepare_seconds": 0.5775183000368997,
+      "seconds": 0.7461329000070691,
+      "process_peak_rss_bytes": 74907648,
+      "foundation_changed_cells": 256,
+      "road_changed_cells": 73
+    },
+    {
+      "format": "litematic",
+      "dimensions": [
+        64,
+        48,
+        64
+      ],
+      "offset": [
+        -32,
+        -16,
+        -32
+      ],
+      "input_sha256": "2d075b331bf76dfe997e0b0361dc64472868721b23563561b0ea862b8f193193",
+      "max_memory_mb": 128,
+      "core": [
+        32,
+        16,
+        32
+      ],
+      "halo": 4,
+      "cores": 12,
+      "cells": 196608,
+      "prepare_seconds": 0.5034671999746934,
+      "seconds": 0.6646411999827251,
+      "process_peak_rss_bytes": 73846784,
+      "foundation_changed_cells": 256,
+      "road_changed_cells": 73
+    },
+    {
+      "format": "schem",
+      "dimensions": [
+        256,
+        128,
+        256
+      ],
+      "offset": [
+        -128,
+        -16,
+        -128
+      ],
+      "input_sha256": "513c9ad4e76b12c85c04fa672495fdd6ca44f742c921bd2f9a4376277afe54e5",
+      "max_memory_mb": 128,
+      "core": [
+        32,
+        16,
+        32
+      ],
+      "halo": 4,
+      "cores": 512,
+      "cells": 8388608,
+      "prepare_seconds": 6.965465600020252,
+      "seconds": 17.755993900005706,
+      "process_peak_rss_bytes": 78901248,
+      "foundation_changed_cells": 256,
+      "road_changed_cells": 73
+    },
+    {
+      "format": "litematic",
+      "dimensions": [
+        256,
+        128,
+        256
+      ],
+      "offset": [
+        -128,
+        -16,
+        -128
+      ],
+      "input_sha256": "e0f6f44d0e79ef18b6cbb885a963fd0afb9d45293d18e66228f21b7957c8de32",
+      "max_memory_mb": 128,
+      "core": [
+        32,
+        16,
+        32
+      ],
+      "halo": 4,
+      "cores": 512,
+      "cells": 8388608,
+      "prepare_seconds": 10.525615200051107,
+      "seconds": 21.36108940001577,
+      "process_peak_rss_bytes": 73764864,
+      "foundation_changed_cells": 256,
+      "road_changed_cells": 73
+    }
+  ],
+  "source_sha256": {
+    "importers.py": "70754e691176ba41272922193232b40ca616d5b47652da2fb3824e41fbe5aa77",
+    "terrain.py": "02da315b7c6465ab4cc1ba5151acb30b1f1ea40f7b5e8b1b27b0a5785445e972",
+    "foundation.py": "67571b45586cc69139cc0ce58969af43b9afa3e2a06de1d81418c321d847ec89",
+    "surface_path.py": "a9eaf3a95ab5865f8ae4d0f2ffb226964d6fa0271f4dd26ea7c5232ae506c515",
+    "generator.py": "f42f68f4b6520fd6bca2f6422d590ecebeaf7718176395537681c9a3523275df",
+    "loader.py": "d3b6dd2964c4298ae1d2ffa2fd6b087c21af62da2508ef8bcf9ce2314d3e1b01",
+    "validator.py": "47b6ac26ab8aaca605086e6ff5109c01ca2ff38c4e67bbdb376fc47ae8b5f042",
+    "exporters/litematic.py": "5cfd11c66e523d7bf06362edfb7ff9e62ef34547dbc5e86dfc6804d81697c030"
+  }
+}

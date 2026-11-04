@@ -9,10 +9,10 @@ from mcblueprint import blockdata
 from mcblueprint.errors import BlueprintError
 from mcblueprint.foundation import AIR, STABLE_GROUND, FoundationPlan
 from mcblueprint.model.block import BlockState
-from mcblueprint.model.vec import Vec3
+from mcblueprint.model.vec import AABB, Vec3
 from mcblueprint.operations.base import BlockSpec
 from mcblueprint.operations.path import PathOperation, parse_points
-from mcblueprint.terrain import TerrainPlacement
+from mcblueprint.terrain import ColumnWrites, RegionTerrainSnapshot, TerrainPlacement
 from mcblueprint.volume import MAX_VOLUME, BlockVolume
 
 INTERACTIVE_DOORS = frozenset(
@@ -128,7 +128,7 @@ class SurfacePathResult:
 class SurfacePathPlan:
     """Blueprint座標の不変変更列。surfacesは道路本体、入口セルはentranceで別管理。"""
 
-    writes: tuple[tuple[Vec3, BlockState], ...]
+    writes: tuple[tuple[Vec3, BlockState], ...] | ColumnWrites
     surfaces: tuple[tuple[Vec3, BlockState], ...]
     head_tops: tuple[tuple[Vec3, int], ...]
     clearance: int
@@ -147,17 +147,27 @@ def plan_surface_path(
     """
     region = terrain.region
     first = Vec3(spec.points[0][0], spec.scan_min_y, spec.points[0][1])
+    compact = isinstance(terrain.snapshot, RegionTerrainSnapshot)
     if region.volume > MAX_VOLUME or spec.width > max(region.size.x, region.size.z):
         raise SurfacePathError((SurfacePathIssue(first, "施工セル数または幅が範囲上限を超えます"),))
+    if compact:
+        length = sum(abs(a[0] - b[0]) + abs(a[1] - b[1])
+                     for a, b in zip(spec.points, spec.points[1:], strict=False)) + 1
+        columns = length * spec.width + max(0, len(spec.points) - 2) * spec.width ** 2 + 1
+        if columns * 4096 > terrain.snapshot.plan_budget_bytes:
+            raise BlueprintError("道路の列検査・計画が limits.max_memory_mb に収まりません")
     blocks = blockdata.load_block_data(terrain.snapshot.minecraft_version)
     problem = blocks.check_state(spec.stairs)
     if problem is not None:
         raise SurfacePathError((SurfacePathIssue(first, problem),))
-    overlay = dict(foundation.writes) if foundation is not None else {}
+    overlay = (foundation.writes if foundation is not None
+               and isinstance(foundation.writes, ColumnWrites)
+               else dict(foundation.writes) if foundation is not None else {})
 
     def current(pos: Vec3) -> BlockState | None:
-        if pos in overlay:
-            return overlay[pos]
+        state = overlay.get(pos)
+        if state is not None:
+            return state
         return terrain.snapshot.get(terrain.snapshot.to_local(pos))
 
     raw_points = [Vec3(x, 0, z) for x, z in spec.points]
@@ -275,7 +285,7 @@ def plan_surface_path(
             for point in (a + across * k, b + across * k):
                 key = point.x, point.z
                 tops[key] = max(tops[key], max(a.y, b.y) + spec.clearance)
-    writes: dict[Vec3, BlockState] = {}
+    writes = ColumnWrites(terrain.snapshot.plan_budget_bytes) if compact else {}
     cut_cells = fill_cells = required_cut = required_fill = 0
     required_support = 1
     for key, (point, state) in road.items():
@@ -293,14 +303,18 @@ def plan_surface_path(
             pos = point.with_axis("y", y)
             target = AIR if y > point.y else (state if y == point.y else spec.block)
             if current(pos) != target:
-                writes[pos] = target
+                if compact:
+                    writes.append((pos, target))
+                else:
+                    writes[pos] = target
                 if y > point.y:
                     cut_cells += 1
                 elif y < point.y:
                     fill_cells += 1
     if issues:
         raise SurfacePathError(tuple(issues))
-    ordered = tuple(sorted(writes.items(), key=lambda item: (item[0].z, item[0].x, item[0].y)))
+    ordered = (writes if compact else
+               tuple(sorted(writes.items(), key=lambda item: (item[0].z, item[0].x, item[0].y))))
     return SurfacePathPlan(
         ordered, road_body, tuple((point, tops[key]) for key, (point, _) in road.items()),
         spec.clearance, SurfacePathResult(tuple(resolved), entry, spec.width, len(road),
@@ -310,7 +324,9 @@ def plan_surface_path(
     )
 
 
-def check_surface_path(volume: BlockVolume, plan: SurfacePathPlan) -> None:
+def check_surface_path(
+    volume: BlockVolume, plan: SurfacePathPlan, *, core: AABB | None = None,
+) -> None:
     """通常Operation適用後の全幅路面・支持・昇降遷移頭上・入口を確認する。
 
     入口の明示した木製・銅製ドアは開けて通る前提で許容する。鉄ドアや他の
@@ -320,22 +336,25 @@ def check_surface_path(volume: BlockVolume, plan: SurfacePathPlan) -> None:
     entry = plan.result.entrance
     floor = entry - Vec3(0, 1, 0)
     for pos, state in plan.surfaces:
+        if core is not None and not core.contains(pos):
+            continue
         if volume.get(pos) != state:
             issues.append(SurfacePathIssue(pos, "後続Operationが路面を変更しました"))
         below = volume.get(pos - Vec3(0, 1, 0))
         if below is None or below.id not in STABLE_GROUND:
             issues.append(SurfacePathIssue(pos, "道路全幅の支持がありません"))
     entry_floor = volume.get(floor)
-    if (entry_floor is None or (entry_floor.id not in STABLE_GROUND
+    check_entry = core is None or core.contains(floor)
+    if check_entry and (entry_floor is None or (entry_floor.id not in STABLE_GROUND
                                and not entry_floor.id.endswith("_planks"))):
         issues.append(SurfacePathIssue(floor, "入口足元の床が通常完全ブロックではありません"))
     entry_below = volume.get(floor - Vec3(0, 1, 0))
-    if entry_below is None or entry_below.id not in STABLE_GROUND:
+    if check_entry and (entry_below is None or entry_below.id not in STABLE_GROUND):
         issues.append(SurfacePathIssue(floor, "入口接続セルの支持がありません"))
     door = volume.get(entry)
     interactive_door = (door is not None and door.id in INTERACTIVE_DOORS
                         and door.get("half") in (None, "lower"))
-    if interactive_door:
+    if interactive_door and check_entry:
         upper = volume.get(entry + Vec3(0, 1, 0))
         direction = _step(plan.result.points[-1], entry)
         allowed = ("east", "west") if direction.x else ("north", "south")
@@ -350,6 +369,8 @@ def check_surface_path(volume: BlockVolume, plan: SurfacePathPlan) -> None:
     for pos, top in plan.head_tops:
         for y in range(pos.y + 1, top + 1):
             cell = pos.with_axis("y", y)
+            if core is not None and not core.contains(cell):
+                continue
             state = volume.get(cell)
             if state == AIR:
                 continue

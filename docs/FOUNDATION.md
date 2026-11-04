@@ -73,6 +73,8 @@ CLIは検証エラーで終了し出力ファイルを更新しない。成功�
   `required_cut` / `required_fill` / `required_support_depth`）。途中変更は残さない。
 - `FoundationPlan.writes` は重複のない `(Vec3, BlockState)` の不変tuple。
   座標はBlueprint座標、状態は指定の基礎材または通常air。元と同じ状態のセルは含まない。
+  make用snapshotの場合は同じセル列を反復できる内部の列区間計画を使い、全writesを
+  ボクセルtupleとして常駐させない。領域窓と交差する区間だけを展開する。
   z→x→y順で、全列の検査後に一括適用する。
 - `FoundationPlan.result` は不変の `FoundationResult`。`footprint`、`floor_y`、`entrance_y` と
   深さの最大値を持つ。`to_json()` でCLIと同じ辞書を返す。
