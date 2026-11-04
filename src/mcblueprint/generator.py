@@ -61,28 +61,32 @@ class GeneratedRegion:
     world_bounds: AABB | None = None
 
 
-def _check_local(operations: list[Operation]) -> tuple[int, bool]:
+def _check_local(operations: list[Operation]) -> tuple[int, bool, int]:
     count = 0
     has_palettes = False
+    local_memory = 0
     for operation in operations:
         if operation.type == "copy":
             raise BlueprintError(f"{operation.path}: copy は領域生成では未対応です")
         count += 1
         has_palettes |= bool(getattr(operation, "palettes", {}))
+        local_memory += getattr(operation, "generation_memory_bytes", 0)
         children = getattr(operation, "operations", None)
         if children is not None:
             multiplier = operation.count if operation.type == "repeat" else 1
             if operation.type == "mirror" and operation.keep_original:
                 multiplier = 2
-            child_count, child_palettes = _check_local(children)
+            child_count, child_palettes, child_memory = _check_local(children)
             count += multiplier * child_count
             has_palettes |= child_palettes
+            local_memory += child_memory
         expanded = getattr(operation, "expanded", None)
         if expanded is not None:
-            child_count, child_palettes = _check_local(expanded)
+            child_count, child_palettes, child_memory = _check_local(expanded)
             count += child_count
             has_palettes |= child_palettes
-    return count, has_palettes
+            local_memory += child_memory
+    return count, has_palettes, local_memory
 
 
 def generate_regions(
@@ -101,7 +105,7 @@ def generate_regions(
         raise BlueprintError("reference_radius は0以上の整数が必要です")
     if blueprint.terrain is not None or blueprint.foundation is not None or blueprint.surface_path:
         raise BlueprintError("元地形の施工は領域生成では未対応です")
-    operation_count, has_palettes = _check_local(blueprint.operations)
+    operation_count, has_palettes, local_memory = _check_local(blueprint.operations)
     has_palettes |= bool(blueprint.palettes)
     bounds = blueprint.bounds()
     halo = reference_radius if reference_radius else limits.halo
@@ -116,7 +120,7 @@ def generate_regions(
         cache = 2 * sampler.cache_limit if has_palettes else 0
         generation = cells * 64 + operation_count * 4096 + scratch + cache
         weather = estimate_weather_memory(cells)
-        return max(generation, weather)
+        return max(generation, weather) + local_memory
 
     while estimated_bytes() > budget:
         axis = max(range(3), key=lambda i: core_size[i])
