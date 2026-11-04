@@ -333,7 +333,7 @@ class TestCli:
         assert "bad.md (preset)" in out and "broken.json (component)" in out
         assert "ERROR json[0].palettes.wall[0].block" in out
         assert "WARNING [0, 1, 0] minecraft:lantern" in out
-        assert "24 files checked: 4 error(s), 1 warning(s)." in out
+        assert "27 files checked: 4 error(s), 1 warning(s)." in out
         assert "good.md" not in out and "lamp.json" not in out
 
     def test_check_explicit_paths_and_strict(

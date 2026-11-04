@@ -209,13 +209,13 @@ def test_layout_loader_check_and_schema_copies(tmp_path):
     root = tmp_path / "patterns"
     shutil.copytree(PATTERNS, root)
     directory = root / "layouts/medieval"
-    directory.mkdir(parents=True)
+    directory.mkdir(parents=True, exist_ok=True)
     path = directory / "town.yaml"
     path.write_text(yaml.safe_dump(layout()), encoding="utf-8")
     assert load_layout("medieval.town", root=root) == layout()
-    assert not next(r for r in check_patterns(root) if r.kind == "layout").errors
+    assert not next(r for r in check_patterns(root) if r.path == path).errors
     path.write_text(yaml.safe_dump({**layout(), "modules": ["missing.module"]}), encoding="utf-8")
-    assert next(r for r in check_patterns(root) if r.kind == "layout").errors
+    assert next(r for r in check_patterns(root) if r.path == path).errors
     package = Path("src/mcblueprint/schema/pattern-layout.schema.json")
     assert package.read_bytes() == Path("schema/pattern-layout.schema.json").read_bytes()
 
@@ -229,7 +229,7 @@ def test_layout_bundled_lock_and_duplicate_keys(tmp_path, monkeypatch):
     root = tmp_path / "data/patterns"
     shutil.copytree(layouts.PATTERNS, root)
     directory = root / "layouts/medieval"
-    directory.mkdir(parents=True)
+    directory.mkdir(parents=True, exist_ok=True)
     path = directory / "town.yaml"
     path.write_text(yaml.safe_dump(layout()), encoding="utf-8")
     digest = hashlib.sha256()
@@ -269,8 +269,11 @@ def test_closed_features_and_unimplemented_planner(tmp_path, archetype):
                                   "scale": "huge"}, project_dir=tmp_path)
     if "buildings" in resolved.buildspec["features"]:
         assert resolved.buildspec["features"]["buildings"] == 12
-    with pytest.raises(BlueprintError, match="Site/Massing.*未対応"):
-        single_plan(resolved)
+    if archetype == "castle":
+        assert len(plan_buildings(single_plan(resolved).massing)) == 9
+    else:
+        with pytest.raises(BlueprintError, match="Site/Massing.*未対応"):
+            single_plan(resolved)
     with pytest.raises(BlueprintError, match="未知"):
         resolve_buildspec({"minecraftVersion": "1.21.11", "archetype": archetype,
                            "features": {"unknown": True}}, project_dir=tmp_path)

@@ -1,4 +1,4 @@
-"""単独住宅・塔のSite、Massing、Detailを既存Operationで計画する。"""
+"""住宅・塔・城郭のSite、Massing、Detailを既存Operationで計画する。"""
 
 from __future__ import annotations
 
@@ -303,8 +303,38 @@ def _tower(params, root):
     return body, detail, Vec3(0, 1, -r), points
 
 
+def _plan_overrides(spec, scene_bounds):
+    overrides = []
+    seen = {}
+    for override in spec.get("overrides", []):
+        ident = override.get("id")
+        if (not isinstance(ident, str) or not ident
+                or set(override) - {"id", "at", "region", "block"}):
+            raise BlueprintError("Detail: overridesにはid・atまたはregion・blockが必要です")
+        if ident in seen:
+            if seen[ident] != override:
+                raise BlueprintError(f"Detail: overridesのIDが競合します: {ident}")
+            continue
+        seen[ident] = override
+        if (("at" in override) == ("region" in override)
+                or not isinstance(override.get("block"), str)):
+            raise BlueprintError(f"Detail: overrides.{ident}: atまたはregionとblockが必要です")
+        points = [override["at"]] * 2 if "at" in override else override["region"]
+        if (not isinstance(points, list) or len(points) != 2
+                or any(not isinstance(p, list) or len(p) != 3
+                       or any(type(v) is not int for v in p) for p in points)):
+            raise BlueprintError(f"Detail: overrides.{ident}: 座標が不正です")
+        box = AABB.of(*(Vec3.from_seq(p) + scene_bounds.min for p in points))
+        if not scene_bounds.contains(box.min) or not scene_bounds.contains(box.max):
+            raise BlueprintError(f"Detail: overrides.{ident}: sceneの範囲外です")
+        overrides.append(_tag({"type": "fill", "from": box.min.to_list(), "to": box.max.to_list(),
+                               "block": override["block"]}, f"override#{ident}", "override",
+                              f"overrides.{ident}"))
+    return overrides
+
+
 def plan_buildspec(resolved: ResolveResult) -> PlanningResult:
-    """Resolve結果から住宅・塔の計画を作る。入力を変更せず、生成は実行しない。
+    """Resolve結果から住宅・塔・城郭の計画を作る。入力を変更せず、生成は実行しない。
 
     寸法不足・未知のelements/param・不正なoverrideはBlueprintError。
     予約へのoverrideは生成時にも検査される。snapshotは領域読取用spoolを保持し、
@@ -313,6 +343,10 @@ def plan_buildspec(resolved: ResolveResult) -> PlanningResult:
     if resolved.buildspec is None:
         raise BlueprintError("Site: BuildSpecが必要です")
     spec = copy.deepcopy(resolved.buildspec)
+    if spec["archetype"] == "castle":
+        from mcblueprint.castle_planning import plan_castle
+
+        return plan_castle(resolved)
     if spec["archetype"] not in ("house", "tower"):
         raise BlueprintError(f"Site/Massing: {spec['archetype']} plannerは未対応です")
     if spec["site"]["terrain"] in ("hill", "mountain", "plateau", "valley", "island", "cave"):
@@ -444,32 +478,7 @@ def plan_buildspec(resolved: ResolveResult) -> PlanningResult:
                "id": root, "element": root, "source": "archetype"}
     bounds = _bounds([wrapper])
     scene_bounds = region if terrain_json else bounds
-    overrides = []
-    seen = {}
-    for override in spec.get("overrides", []):
-        ident = override.get("id")
-        if (not isinstance(ident, str) or not ident
-                or set(override) - {"id", "at", "region", "block"}):
-            raise BlueprintError("Detail: overridesにはid・atまたはregion・blockが必要です")
-        if ident in seen:
-            if seen[ident] != override:
-                raise BlueprintError(f"Detail: overridesのIDが競合します: {ident}")
-            continue
-        seen[ident] = override
-        if (("at" in override) == ("region" in override)
-                or not isinstance(override.get("block"), str)):
-            raise BlueprintError(f"Detail: overrides.{ident}: atまたはregionとblockが必要です")
-        points = [override["at"]] * 2 if "at" in override else override["region"]
-        if (not isinstance(points, list) or len(points) != 2
-                or any(not isinstance(p, list) or len(p) != 3
-                       or any(type(v) is not int for v in p) for p in points)):
-            raise BlueprintError(f"Detail: overrides.{ident}: 座標が不正です")
-        box = AABB.of(*(Vec3.from_seq(p) + scene_bounds.min for p in points))
-        if not scene_bounds.contains(box.min) or not scene_bounds.contains(box.max):
-            raise BlueprintError(f"Detail: overrides.{ident}: sceneの範囲外です")
-        overrides.append(_tag({"type": "fill", "from": box.min.to_list(), "to": box.max.to_list(),
-                               "block": override["block"]}, f"override#{ident}", "override",
-                              f"overrides.{ident}"))
+    overrides = _plan_overrides(spec, scene_bounds)
     palette = copy.deepcopy(resolved.config["palette"])
     seed = resolved.config["seed"] if resolved.config["seed"] is not None else spec["seed"]
     blueprint = {"formatVersion": 1, "minecraftVersion": spec["minecraftVersion"],

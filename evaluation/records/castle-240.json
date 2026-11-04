@@ -1,0 +1,324 @@
+{
+  "schemaVersion": 1,
+  "recordType": "castle-site-verification",
+  "issue": 240,
+  "baseCommit": "ec5a87863fd147da0e084439da2a69231252625a",
+  "command": "python -X utf8 -m pytest tests/test_castle_planning.py --basetemp=output/mcb-240-review-final-tests -q --tb=short",
+  "matrixCoverage": {
+    "versionFormat": {
+      "scale": "medium",
+      "seed": 42,
+      "conditions": 8
+    },
+    "scaleSeed": {
+      "minecraftVersion": "1.21.11",
+      "format": "schem",
+      "conditions": 6
+    }
+  },
+  "inputs": {
+    "tests/test_castle_planning.py": "278440e6b62cf112c9e01cca4d032baf600fbf70be902ca041e3434997478e7f",
+    "evaluation/cases/large-scale.json": "698a515d7bf3511559ac11af4d5ffb80f5b13a3d48b7b7265beb515853c49252",
+    "src/mcblueprint/castle_planning.py": "e96abb851d729a57b1f716b6dc89f87412d7868e02cacb29f88411661400e93d",
+    "src/mcblueprint/data/lock.json": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3"
+  },
+  "results": [
+    {
+      "test": "test_castle_blueprint_resume_p0",
+      "output": "first.schem",
+      "minecraftVersion": "1.21.11",
+      "scale": "medium",
+      "seed": 42,
+      "format": "schem",
+      "status": "passed",
+      "reachableRoutes": 38,
+      "environment": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "290225692f3f8f165642dfb288f194687123a19dda46ff9127eec04c176e027a",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "metricsSha256": "631f75c0036cb33f68f362ff01b0e3df29aebd9dea9d2780b269980f2154f55e"
+    },
+    {
+      "test": "test_castle_blueprint_resume_p0",
+      "output": "second.schem",
+      "minecraftVersion": "1.21.11",
+      "scale": "medium",
+      "seed": 42,
+      "format": "schem",
+      "status": "passed",
+      "reachableRoutes": 38,
+      "environment": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "290225692f3f8f165642dfb288f194687123a19dda46ff9127eec04c176e027a",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "metricsSha256": "631f75c0036cb33f68f362ff01b0e3df29aebd9dea9d2780b269980f2154f55e"
+    },
+    {
+      "test": "test_castle_fixed_all_versions0",
+      "output": "castle.schem",
+      "minecraftVersion": "1.21.11",
+      "scale": "medium",
+      "seed": 42,
+      "format": "schem",
+      "status": "passed",
+      "reachableRoutes": 38,
+      "environment": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "290225692f3f8f165642dfb288f194687123a19dda46ff9127eec04c176e027a",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "metricsSha256": "631f75c0036cb33f68f362ff01b0e3df29aebd9dea9d2780b269980f2154f55e"
+    },
+    {
+      "test": "test_castle_fixed_all_versions1",
+      "output": "castle.schem",
+      "minecraftVersion": "26.1.2",
+      "scale": "medium",
+      "seed": 42,
+      "format": "schem",
+      "status": "passed",
+      "reachableRoutes": 38,
+      "environment": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "290225692f3f8f165642dfb288f194687123a19dda46ff9127eec04c176e027a",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "metricsSha256": "631f75c0036cb33f68f362ff01b0e3df29aebd9dea9d2780b269980f2154f55e"
+    },
+    {
+      "test": "test_castle_fixed_all_versions2",
+      "output": "castle.schem",
+      "minecraftVersion": "26.2",
+      "scale": "medium",
+      "seed": 42,
+      "format": "schem",
+      "status": "passed",
+      "reachableRoutes": 38,
+      "environment": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "290225692f3f8f165642dfb288f194687123a19dda46ff9127eec04c176e027a",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "metricsSha256": "631f75c0036cb33f68f362ff01b0e3df29aebd9dea9d2780b269980f2154f55e"
+    },
+    {
+      "test": "test_castle_fixed_all_versions3",
+      "output": "castle.schem",
+      "minecraftVersion": "26.3",
+      "scale": "medium",
+      "seed": 42,
+      "format": "schem",
+      "status": "passed",
+      "reachableRoutes": 38,
+      "environment": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "290225692f3f8f165642dfb288f194687123a19dda46ff9127eec04c176e027a",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "metricsSha256": "e56a9b9deba53fca9a235f579e56c584e8598f3c098122d671a467e8a598e8de"
+    },
+    {
+      "test": "test_castle_fixed_all_versions4",
+      "output": "castle.litematic",
+      "minecraftVersion": "1.21.11",
+      "scale": "medium",
+      "seed": 42,
+      "format": "litematic",
+      "status": "passed",
+      "reachableRoutes": 38,
+      "environment": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "290225692f3f8f165642dfb288f194687123a19dda46ff9127eec04c176e027a",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "metricsSha256": "631f75c0036cb33f68f362ff01b0e3df29aebd9dea9d2780b269980f2154f55e"
+    },
+    {
+      "test": "test_castle_fixed_all_versions5",
+      "output": "castle.litematic",
+      "minecraftVersion": "26.1.2",
+      "scale": "medium",
+      "seed": 42,
+      "format": "litematic",
+      "status": "passed",
+      "reachableRoutes": 38,
+      "environment": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "290225692f3f8f165642dfb288f194687123a19dda46ff9127eec04c176e027a",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "metricsSha256": "631f75c0036cb33f68f362ff01b0e3df29aebd9dea9d2780b269980f2154f55e"
+    },
+    {
+      "test": "test_castle_fixed_all_versions6",
+      "output": "castle.litematic",
+      "minecraftVersion": "26.2",
+      "scale": "medium",
+      "seed": 42,
+      "format": "litematic",
+      "status": "passed",
+      "reachableRoutes": 38,
+      "environment": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "290225692f3f8f165642dfb288f194687123a19dda46ff9127eec04c176e027a",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "metricsSha256": "631f75c0036cb33f68f362ff01b0e3df29aebd9dea9d2780b269980f2154f55e"
+    },
+    {
+      "test": "test_castle_fixed_all_versions7",
+      "output": "castle.litematic",
+      "minecraftVersion": "26.3",
+      "scale": "medium",
+      "seed": 42,
+      "format": "litematic",
+      "status": "passed",
+      "reachableRoutes": 38,
+      "environment": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "290225692f3f8f165642dfb288f194687123a19dda46ff9127eec04c176e027a",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "metricsSha256": "e56a9b9deba53fca9a235f579e56c584e8598f3c098122d671a467e8a598e8de"
+    },
+    {
+      "test": "test_castle_fixed_scales_and_s0",
+      "output": "castle.schem",
+      "minecraftVersion": "1.21.11",
+      "scale": "medium",
+      "seed": 73,
+      "format": "schem",
+      "status": "passed",
+      "reachableRoutes": 38,
+      "environment": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "290225692f3f8f165642dfb288f194687123a19dda46ff9127eec04c176e027a",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "metricsSha256": "b43f2285c2225028f9fe324d8bb42657966056f0490e64759f159383d60bacb3"
+    },
+    {
+      "test": "test_castle_fixed_scales_and_s1",
+      "output": "castle.schem",
+      "minecraftVersion": "1.21.11",
+      "scale": "medium",
+      "seed": 101,
+      "format": "schem",
+      "status": "passed",
+      "reachableRoutes": 38,
+      "environment": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "290225692f3f8f165642dfb288f194687123a19dda46ff9127eec04c176e027a",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "metricsSha256": "dfa3c93a983cab31cd1a69c8046e3a30d7203bdd086084ee9563c2587294d7e7"
+    },
+    {
+      "test": "test_castle_fixed_scales_and_s2",
+      "output": "castle.schem",
+      "minecraftVersion": "1.21.11",
+      "scale": "huge",
+      "seed": 42,
+      "format": "schem",
+      "status": "passed",
+      "reachableRoutes": 38,
+      "environment": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "290225692f3f8f165642dfb288f194687123a19dda46ff9127eec04c176e027a",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "metricsSha256": "9edd5fd544e966ff96c9573e8bf20ca0650eb2f189fbb12cd4d59488c01af1c5"
+    },
+    {
+      "test": "test_castle_fixed_scales_and_s3",
+      "output": "castle.schem",
+      "minecraftVersion": "1.21.11",
+      "scale": "huge",
+      "seed": 73,
+      "format": "schem",
+      "status": "passed",
+      "reachableRoutes": 38,
+      "environment": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "290225692f3f8f165642dfb288f194687123a19dda46ff9127eec04c176e027a",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "metricsSha256": "2c667ba939018d513160273ca7ae5cc67fbfee9a8ff9a9b0611915e2152d2088"
+    },
+    {
+      "test": "test_castle_fixed_scales_and_s4",
+      "output": "castle.schem",
+      "minecraftVersion": "1.21.11",
+      "scale": "huge",
+      "seed": 101,
+      "format": "schem",
+      "status": "passed",
+      "reachableRoutes": 38,
+      "environment": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "290225692f3f8f165642dfb288f194687123a19dda46ff9127eec04c176e027a",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "metricsSha256": "f735ba102f97e68e89ebce843e24d991fce8bea5ec2690ad0dc1654e04be28d7"
+    }
+  ],
+  "blueprintResumeSceneSha256": "8f60ecf08f2c1db47603363df9052ffe0b08f2e3dcf50d9ed008804bc007ddfd",
+  "negativeTests": [
+    "gate_closure_and_moat_support",
+    "steep_terrain",
+    "small_site",
+    "requested_tower_capacity",
+    "building_junction_conflict",
+    "moat_tower_conflict",
+    "unknown_element"
+  ],
+  "existingRegression": {
+    "path": "evaluation/records/castle-240-regression.json",
+    "conditions": 24,
+    "sha256": "ce07a71b745a10604c2b571a3e879803879db4562731a30e15d05faf7c9090f3"
+  },
+  "reviewRegressions": {
+    "closedWall": 5,
+    "actualContacts": 3,
+    "fourSideTowerCapacity": 3,
+    "layoutRoadWidth": 4
+  },
+  "relatedPytest": {
+    "castle": 43,
+    "planningAndJunction": 96,
+    "reusedExistingFullSuite": 3028,
+    "sharedExtraChanges": false
+  }
+}
