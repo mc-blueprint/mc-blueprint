@@ -13,6 +13,8 @@ from mcblueprint.generator import GeneratedRegion
 from mcblueprint.model.block import BlockState
 from mcblueprint.model.vec import AABB
 
+_TILE_SIZE = 64
+
 
 class RegionSpool:
     def __init__(self, path: Path, bounds: AABB) -> None:
@@ -20,9 +22,13 @@ class RegionSpool:
         self.bounds = bounds
         self.palette: list[BlockState | None] = [None]
         self.index: dict[BlockState | None, int] = {None: 0}
+        self.complete = False
 
     def write(self, regions: Iterable[GeneratedRegion]) -> None:
+        self.complete = False
         boxes: list[AABB] = []
+        tiles: dict[tuple[int, int, int], list[int]] = {}
+        covered = 0
         with self.path.open("w+b") as stream:
             stream.truncate(self.bounds.volume * 4)
             iterator = iter(regions)
@@ -34,8 +40,14 @@ class RegionSpool:
                 core = region.core
                 if not self.bounds.contains(core.min) or not self.bounds.contains(core.max):
                     raise BlueprintError("出力範囲外のcoreです")
-                if any(all(core.min[i] <= box.max[i] and box.min[i] <= core.max[i]
-                           for i in range(3)) for box in boxes):
+                keys = [(x, y, z)
+                        for x in range(core.min.x // _TILE_SIZE, core.max.x // _TILE_SIZE + 1)
+                        for y in range(core.min.y // _TILE_SIZE, core.max.y // _TILE_SIZE + 1)
+                        for z in range(core.min.z // _TILE_SIZE, core.max.z // _TILE_SIZE + 1)]
+                candidates = {index for key in keys for index in tiles.get(key, ())}
+                if any(all(core.min[i] <= boxes[index].max[i]
+                           and boxes[index].min[i] <= core.max[i] for i in range(3))
+                       for index in candidates):
                     raise BlueprintError("出力coreが重複しています")
                 if not region.volume.region.contains(core.min) or not region.volume.region.contains(
                     core.max
@@ -62,10 +74,14 @@ class RegionSpool:
                         self._seek(stream, core.min.y + y, core.min.z + z, core.min.x)
                         stream.write(values.tobytes())
                 del row
+                for key in keys:
+                    tiles.setdefault(key, []).append(len(boxes))
                 boxes.append(core)
+                covered += core.volume
                 del region
-        if sum(box.volume for box in boxes) != self.bounds.volume:
+        if covered != self.bounds.volume:
             raise BlueprintError("出力coreが全体範囲を被覆していません")
+        self.complete = True
 
     def _seek(self, stream: BinaryIO, y: int, z: int, x: int) -> None:
         size, low = self.bounds.size, self.bounds.min

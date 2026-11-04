@@ -108,7 +108,10 @@ path = export_generated_regions(regions, blueprint, Path("output/build.schem"), 
 coreのセルを行単位で32bitのパレット添字へ変換し、出力先の親に作る内部spoolへ退避する。
 全体セル辞書・全volumeは作らず、消費後のvolumeへの参照を解放する。
 spoolは全体で1個の行アドレス付きファイルで、固定したY/Z/X順の読取窓はX方向の1行。
-常駐するのは生成側の現在の領域と、ブロック種類のパレット・core矩形の一覧・行バッファ。
+常駐するのは生成側の現在の領域と、ブロック種類のパレット・core矩形の一覧・タイル索引・行バッファ。
+重複検査は64ブロック幅の固定タイル索引で候補を絞り、矩形の交差を正確に判定する。
+粒度は列挙順や先頭coreの端数に依存しない。
+範囲内・非重複を確認したcoreの体積を累積し、全体の被覆を確認する。逆順も受け付ける。
 生成用coreと出力形式の領域数は独立し、litematicも単一の `Main` 領域になる。
 
 NBTには既存のnbtlibを使う。schemのBlockDataはbytearrayからnumpyのint8ビューへ渡し、
@@ -120,6 +123,10 @@ litematicのindicesはuint32配列、packingは64bit配列を
 NBT配列・シリアライズ時の一時コピー・gzipの作業メモリがゼロになるわけではない。
 spoolのディスク使用量は全セル数×4 bytesで、別に圧縮中の出力ファイルの空き容量が必要。
 内部spoolは一時物であり、公開データ形式や再開用の保存形式ではない。
+makeとemit Blueprintのbuildは、同じ処理内で書込みと被覆検査を完了したspoolを
+内部の共通出力経路へ渡す。小volumeへ復元せず、`export_rows`へ行とpaletteを直接渡す。
+未完成spoolは拒否し、別プロセス・別実行のspoolをキャッシュとして再利用しない。
+再開時の入力・配色identityを含むenvironment照合は従来のcheckpoint検査に従う。
 
 圧縮結果を `.出力名-*` 内へ書き終えてから、同じ親ディレクトリの完成パスへ置換する。
 gzipの圧縮レベルは1。既定の9よりファイルサイズを増やして書込み時間を短縮する。

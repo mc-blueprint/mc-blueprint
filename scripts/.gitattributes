@@ -1,1 +1,3 @@
 /evaluate_structure*.py text eol=lf
+/evaluate_make_performance.py text eol=lf
+/evaluate_spool_reuse.py text eol=lf

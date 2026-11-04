@@ -1,6 +1,8 @@
 """領域生成から単一schematicまでの契約試験。"""
 
 import gzip
+import hashlib
+import tracemalloc
 import weakref
 from dataclasses import replace
 
@@ -17,7 +19,7 @@ from mcblueprint.loader import load_blueprint_dict
 from mcblueprint.model.block import BlockState
 from mcblueprint.model.vec import AABB, Vec3
 from mcblueprint.operations.box_like import iter_box
-from mcblueprint.region_export import export_generated_regions
+from mcblueprint.region_export import _export_spool, export_generated_regions
 from mcblueprint.volume import RegionVolume
 
 
@@ -59,15 +61,21 @@ def test_compression_level_preserves_nbt_bytes(tmp_path, monkeypatch, fmt):
 @pytest.mark.parametrize("version", blockdata.supported_versions())
 @pytest.mark.parametrize("fmt", ["schem", "litematic"])
 @pytest.mark.parametrize("reverse", [False, True])
-def test_round_trip(tmp_path, version, fmt, reverse):
+@pytest.mark.parametrize("reuse", [False, True])
+def test_round_trip(tmp_path, version, fmt, reverse, reuse):
     bp = blueprint(version)
     old, new = tmp_path / f"old.{fmt}", tmp_path / f"new.{fmt}"
     volume = generate(bp)
     EXPORTERS[fmt]().export(volume, bp, old)
     limits = GenerationLimits(region=(3, 2, 4), halo=1)
-    result = export_generated_regions(
-        generate_regions(bp, limits=limits, reverse=reverse), bp, new, format=fmt,
-    )
+    regions = generate_regions(bp, limits=limits, reverse=reverse)
+    if reuse:
+        spool = RegionSpool(tmp_path / "cells", bp.bounds())
+        spool.write(regions)
+        result = _export_spool(spool, bp, new, format=fmt)
+        spool.path.unlink()
+    else:
+        result = export_generated_regions(regions, bp, new, format=fmt)
     assert result == new
     assert_same(old, new)
     snapshot = read_terrain(new)
@@ -145,7 +153,7 @@ def test_output_failure_preserves_completed_file(tmp_path, monkeypatch, fmt, fai
     assert list(tmp_path.iterdir()) == ([out] if existing else [])
 
 
-@pytest.mark.parametrize("mode", ["gap", "overlap", "outside", "generation", "spool"])
+@pytest.mark.parametrize("mode", ["gap", "overlap", "outside", "volume", "generation", "spool"])
 def test_bad_core_and_generation_or_spool_failure(tmp_path, monkeypatch, mode):
     bp = blueprint()
     regions = list(generate_regions(bp))
@@ -155,6 +163,8 @@ def test_bad_core_and_generation_or_spool_failure(tmp_path, monkeypatch, mode):
         regions *= 2
     elif mode == "outside":
         regions = [replace(regions[0], core=AABB(Vec3(-99, 0, 0), Vec3(99, 0, 0)))]
+    elif mode == "volume":
+        regions = [replace(regions[0], volume=RegionVolume(AABB(Vec3(0, 0, 0), Vec3(0, 0, 0))))]
     elif mode == "generation":
         first = regions[0]
         def interrupted():
@@ -171,3 +181,83 @@ def test_bad_core_and_generation_or_spool_failure(tmp_path, monkeypatch, mode):
         export_generated_regions(regions, bp, out)
     assert out.read_bytes() == b"completed"
     assert list(tmp_path.iterdir()) == [out]
+
+
+@pytest.mark.parametrize("mode", ["new", "gap", "rewrite", "truncated"])
+def test_incomplete_spool_cannot_replace_output(tmp_path, mode):
+    bp = blueprint()
+    spool = RegionSpool(tmp_path / "cells", bp.bounds())
+    out = tmp_path / "out.schem"
+    out.write_bytes(b"completed")
+    if mode in ("rewrite", "truncated"):
+        spool.write(generate_regions(bp))
+    if mode in ("gap", "rewrite"):
+        with pytest.raises(BlueprintError, match="被覆"):
+            spool.write([])
+    elif mode == "truncated":
+        spool.path.write_bytes(b"")
+    with pytest.raises(BlueprintError):
+        _export_spool(spool, bp, out)
+    assert out.read_bytes() == b"completed"
+
+
+@pytest.mark.parametrize("reverse", [False, True])
+@pytest.mark.parametrize("mode", ["valid", "overlap", "gap"])
+def test_irregular_cores_across_tiles(tmp_path, reverse, mode):
+    bp = blueprint(operations=[
+        {"type": "fill", "from": [-5, -2, -3], "to": [6, 1, 4], "block": "stone"},
+    ])
+    bounds = bp.bounds()
+    volume = next(generate_regions(bp)).volume
+    cores = [
+        AABB(bounds.min, Vec3(-3, 1, 4)),
+        AABB(Vec3(-2, -2, -3), Vec3(6, -1, 4)),
+        AABB(Vec3(-2, 0, -3), bounds.max),
+    ]
+    if mode == "overlap":
+        cores.append(AABB(Vec3(-4, -1, -2), Vec3(5, 0, 3)))
+    elif mode == "gap":
+        cores.pop()
+    if reverse:
+        cores.reverse()
+    spool = RegionSpool(tmp_path / "cells", bounds)
+    regions = [GeneratedRegion(core, volume) for core in cores]
+    if mode != "valid":
+        with pytest.raises(BlueprintError, match="重複" if mode == "overlap" else "被覆"):
+            spool.write(regions)
+    else:
+        spool.write(regions)
+        assert spool.complete
+        assert all(spool.palette[int(index)] == BlockState.parse("stone")
+                   for row in spool.rows() for index in row)
+
+
+@pytest.mark.parametrize("offset", [Vec3(0, 0, 0), Vec3(-17, -13, -9)])
+def test_ragged_first_core_does_not_expand_index_per_cell(tmp_path, offset):
+    bounds = AABB(offset, offset + Vec3(64, 64, 64))
+    cores = [AABB(offset + Vec3(x, y, z), offset + Vec3(
+        min(x + 63, 64), min(y + 63, 64), min(z + 63, 64),
+    )) for y in (0, 64) for z in (0, 64) for x in (0, 64)]
+    hashes = []
+    for reverse in (False, True):
+        ordered = list(reversed(cores)) if reverse else cores
+
+        def regions(ordered=ordered):
+            for core in ordered:
+                volume = RegionVolume(core)
+                volume.set(core.min, BlockState.parse("stone"))
+                yield GeneratedRegion(core, volume)
+                del volume
+
+        spool = RegionSpool(tmp_path / f"cells-{reverse}", bounds)
+        tracemalloc.start()
+        try:
+            spool.write(regions())
+            _, peak = tracemalloc.get_traced_memory()
+        finally:
+            tracemalloc.stop()
+        assert peak < 8 * 1024 * 1024
+        assert spool.complete
+        assert sum(int((row != 0).sum()) for row in spool.rows()) == 8
+        hashes.append(hashlib.sha256(spool.path.read_bytes()).hexdigest())
+    assert hashes[0] == hashes[1]

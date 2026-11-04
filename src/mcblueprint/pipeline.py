@@ -27,12 +27,11 @@ from mcblueprint.generator import GeneratedRegion, GenerationLimits, generate_re
 from mcblueprint.model import AABB, Vec3
 from mcblueprint.operations.box_like import iter_box
 from mcblueprint.planning import plan_buildspec
-from mcblueprint.region_export import export_generated_regions
+from mcblueprint.region_export import _export_spool
 from mcblueprint.scene import capture_sources, write_scene
 from mcblueprint.support import check_support
 from mcblueprint.traversal import check_route
 from mcblueprint.validator import validate_and_load
-from mcblueprint.volume import RegionVolume
 from mcblueprint.weather import apply_weather, required_halo
 
 STAGES = ("resolve", "site", "massing", "detail", "blueprint")
@@ -313,17 +312,6 @@ def _cores(bounds: AABB, limits: dict) -> Iterator[AABB]:
                 yield AABB(low, Vec3.min(bounds.max, low + Vec3(width - 1, height - 1, depth - 1)))
 
 
-def _spool_regions(window: _SpoolWindow, limits: dict) -> Iterator[GeneratedRegion]:
-    # 出力再読込にはhaloも属性も不要。生成時と独立した小さい窓を使う。
-    for core in _cores(window.bounds(), limits):
-        volume = RegionVolume(core)
-        for pos in iter_box(core):
-            state = window.get(pos)
-            if state is not None:
-                volume.set(pos, state)
-        yield GeneratedRegion(core, volume)
-
-
 def _support(window, limits):
     support_count = 0
     first = None
@@ -353,8 +341,7 @@ def export_generated_blueprint(
                 window = _SpoolWindow(spool, stream, 32)
                 count, first = _support(window, limits)
                 if not strict or not count:
-                    export_generated_regions(_spool_regions(window, limits), blueprint, path,
-                                             format=format)
+                    _export_spool(spool, blueprint, path, format=format)
                 return count, first
     except OSError as exc:
         raise BlueprintError(f"Blueprintの出力に失敗しました: {exc}") from exc
@@ -669,8 +656,7 @@ def make(
                 stage = "Export"
                 if stage_hook:
                     stage_hook(stage)
-                export_generated_regions(_spool_regions(window, config["limits"]), blueprint,
-                                         staged_out, format=fmt)
+                _export_spool(spool, blueprint, staged_out, format=fmt)
             input_kind = "spec" if source.suffix.lower() in (".yaml", ".yml") else "blueprint"
             scene_input = {"kind": input_kind, "path": str(source),
                            "sha256": expected["input"]["sha256"]}
