@@ -2,12 +2,14 @@
 
 from __future__ import annotations
 
+import hashlib
 import json
 import math
 from collections.abc import Mapping
 from dataclasses import dataclass
 from functools import cache
 from importlib import resources
+from importlib.resources.abc import Traversable
 from types import MappingProxyType
 from typing import Any
 
@@ -47,6 +49,95 @@ class ColorPack:
     relation_rule: tuple[Mapping[str, Any], ...]
     accent_rule: tuple[Mapping[str, Any], ...]
     provenance: Mapping[str, Any]
+
+
+@dataclass(frozen=True)
+class LoadedColorPack:
+    """同梱lockで版固定された配色パック。"""
+
+    pack: ColorPack
+    pack_version: str
+    taxonomy_version: str
+    vocabulary_version: str
+    pack_sha256: str
+    license_sha256: str
+    vocabulary_sha256: str
+
+
+def _data_root() -> Traversable:
+    return resources.files("mcblueprint").joinpath("data")
+
+
+def load_colorpack() -> LoadedColorPack | None:
+    """lockで版と内容を固定した同梱配色パックを読み込む。
+
+    パック・DATA_LICENSE・公開語彙のhashと、パックおよびlockの版を検査する。
+    配布物が完全に存在しない場合だけNoneを返し、不整合はBlueprintError、
+    リソース読取失敗はOSErrorを送出する。
+    """
+    data = _data_root()
+    colorpack = data.joinpath("colorpack")
+    files = {
+        "pack": colorpack.joinpath("colorpack.json"),
+        "license": colorpack.joinpath("DATA_LICENSE"),
+        "vocabulary": data.joinpath("colorpack-vocabulary.json"),
+    }
+    present = {name: resource.is_file() for name, resource in files.items()}
+    try:
+        lock_text = data.joinpath("lock.json").read_text(encoding="utf-8")
+    except FileNotFoundError:
+        if not present["pack"] and not present["license"]:
+            return None
+        raise BlueprintError("data/lock.jsonがありません") from None
+    try:
+        lock = json.loads(lock_text)
+    except ValueError as exc:
+        raise BlueprintError(f"data/lock.jsonが不正です: {exc}") from exc
+    if not isinstance(lock, dict):
+        raise BlueprintError("data/lock.jsonのルートはobjectである必要があります")
+    entry = lock.get("colorpack")
+    if entry is None and not present["pack"] and not present["license"]:
+        return None
+    if entry is None:
+        raise BlueprintError("data/lock.json: colorpack項目がありません")
+    if not isinstance(entry, dict):
+        raise BlueprintError("data/lock.json: colorpack項目はobjectである必要があります")
+    if not all(present.values()):
+        missing = ", ".join(name for name, exists in present.items() if not exists)
+        raise BlueprintError(f"同梱配色データがありません: {missing}")
+
+    contents = {name: resource.read_bytes() for name, resource in files.items()}
+    hashes = {name: hashlib.sha256(value).hexdigest() for name, value in contents.items()}
+    if entry.get("sha256") != hashes:
+        raise BlueprintError("配色パックのSHA-256がlockと一致しません")
+    try:
+        raw = json.loads(contents["pack"].decode("utf-8"))
+        vocabulary = json.loads(contents["vocabulary"].decode("utf-8"))
+    except (UnicodeDecodeError, ValueError) as exc:
+        raise BlueprintError(f"配色パックまたは語彙JSONが不正です: {exc}") from exc
+    if not isinstance(raw, dict) or not isinstance(vocabulary, dict):
+        raise BlueprintError("配色パックのlock・JSONルートはobjectである必要があります")
+    versions = {
+        "packVersion": raw.get("packVersion"),
+        "taxonomyVersion": raw.get("taxonomyVersion"),
+        "vocabularyVersion": raw.get("vocabularyVersion"),
+    }
+    for key, value in versions.items():
+        if entry.get(key) != value:
+            raise BlueprintError(f"data/lock.json: {key}がパックと一致しません")
+    if vocabulary.get("vocabularyVersion") != versions["vocabularyVersion"]:
+        raise BlueprintError("語彙のvocabularyVersionがパックと一致しません")
+    taxonomy = vocabulary.get("taxonomy")
+    if not isinstance(taxonomy, dict) or taxonomy.get("version") != versions["taxonomyVersion"]:
+        raise BlueprintError("語彙のtaxonomy versionがパックと一致しません")
+    return LoadedColorPack(
+        pack=parse_colorpack(contents["pack"].decode("utf-8")),
+        pack_version=versions["packVersion"],
+        taxonomy_version=versions["taxonomyVersion"],
+        vocabulary_version=versions["vocabularyVersion"],
+        pack_sha256=hashes["pack"], license_sha256=hashes["license"],
+        vocabulary_sha256=hashes["vocabulary"],
+    )
 
 
 def _fail(path: str, message: str) -> None:
