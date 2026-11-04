@@ -1,0 +1,1315 @@
+{
+  "schema_version": 1,
+  "base_commit": "43a5b27059a86b5efab53243f3234ab673401385",
+  "merged_commit": "0682f122c8c6b5bfe4e0257464067d2bdb4e79d2",
+  "method": "既存evaluate_projection.runで固定16件・様式/回転36件・core7逆順4件の4種hashを照合。性能は再測定しない。",
+  "script": {
+    "path": "scripts/evaluate_projection.py",
+    "sha256": "b7919f0b1b2023c4013dbb5f7a004997913aafaaed18468b0484518caa488c9c"
+  },
+  "before": [
+    {
+      "case": "single-house-1.21.11-schem",
+      "input_sha256": "cb0c67dbee9a083b80c20e4cdb5d2fe249685cede48be1c722a77e7cc8d1547a",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "830567bd08463fef1450705972e1334e5e5ea728d44a177649a15530d3a88e49",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "6b8c2d2fc279f46bf79bef151e5b3d039df3cc2fcafe1fdcb5927b3b4b84c3bc",
+        "scene_json_sha256": "37bd81804db9a132dc29f8e37c0b4357e6934128c8c31f9e28b19ff234f8e333"
+      }
+    },
+    {
+      "case": "single-house-1.21.11-litematic",
+      "input_sha256": "b8784023efc3867850a115134a72c1cadc7a2733772595ce79bc2bf0b9c242d1",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "830567bd08463fef1450705972e1334e5e5ea728d44a177649a15530d3a88e49",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "64ea98daa49a67822d08312b7e45ffce0c5c074993eb77282848e55f78f96a82",
+        "scene_json_sha256": "432ce43047829c40a4c883ca470693e7db92b7db3cf93e4f5e2d8107c18c779a"
+      }
+    },
+    {
+      "case": "single-house-26.1.2-schem",
+      "input_sha256": "c5855684a5f0e4e8d809808105e53ec5bdf8d38f3b869d048d9319ea3db58ab3",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "830567bd08463fef1450705972e1334e5e5ea728d44a177649a15530d3a88e49",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "333bc84e650dc1892ba4bff1aef914c69693d12906a16fee9e59b21e918bc877",
+        "scene_json_sha256": "5778f97e024381911d6c18e6d659c7138fe14189ad05ae1acaed9ab9625159d3"
+      }
+    },
+    {
+      "case": "single-house-26.1.2-litematic",
+      "input_sha256": "4eeded49b37c742f5758fbcc0417450b5ce19369fef7bbc694fa7720cd0682a9",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "830567bd08463fef1450705972e1334e5e5ea728d44a177649a15530d3a88e49",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "eef8ba9564bf3d5decce75a627b1c7c8bbaf45d0df8bfd1d6a8217be3bc2446c",
+        "scene_json_sha256": "02c1fbf78ecef12258d373a502d46895a643b86f89759ba60c687901da40f440"
+      }
+    },
+    {
+      "case": "single-house-26.2-schem",
+      "input_sha256": "73412c7599e63914e410a66bddcd2f553727017588cc499f128d2c90560361bf",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "830567bd08463fef1450705972e1334e5e5ea728d44a177649a15530d3a88e49",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "9d8575666511c107afd9e20a6409699c70c857b369c00b644a3930d0a4b31c29",
+        "scene_json_sha256": "3304de381b8db8a74b21915d987df6ba19d03c027ad8318d89d818517a2ee68e"
+      }
+    },
+    {
+      "case": "single-house-26.2-litematic",
+      "input_sha256": "f0da68d7c5e871098d049f00eb2b4ee741b1656847f47a49f6a29274f533baea",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "830567bd08463fef1450705972e1334e5e5ea728d44a177649a15530d3a88e49",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "0d77e625df9ede16f32df30b4f18ff88339c86047adbac4502e76f7cc49f0600",
+        "scene_json_sha256": "332fa5d0f88ecf52be5e712a9f48ab9bfb4ecef248c65ff0c6124f5f78653fb3"
+      }
+    },
+    {
+      "case": "single-house-26.3-schem",
+      "input_sha256": "cb2c9b8fa285d288f762bf0613fbc3c0e1bbd4a363e29db731da6a616ffc6c38",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "671674480641056e1e3734e0dbc0025547f19d1f806f522c9149d6fe77089a6e",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "3ad40ca9d77e60839563a5343565de0986e78b169d7432212b6530508311d1ef",
+        "scene_json_sha256": "f827358a3953e0dd7930945a099f9f6a7e931370839fe2b584f37d198304e295"
+      }
+    },
+    {
+      "case": "single-house-26.3-litematic",
+      "input_sha256": "e140f9c7c6bfdc511bf41ac0758144396b65677884132f42245b9326c65afe2c",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "671674480641056e1e3734e0dbc0025547f19d1f806f522c9149d6fe77089a6e",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "9f9b686563c29070f139cb3c4f4e3d52459e7fe1d6a9a975ea5a9337d9ef6bcd",
+        "scene_json_sha256": "7bb53f19e4638f1d0428ab5b4c306aa357184774bd8e5ec7730252273c10594e"
+      }
+    },
+    {
+      "case": "standalone-tower-1.21.11-schem",
+      "input_sha256": "350b0969681551f114a68681e9a0e89af38e55956b4672bfcb22402da4f729f4",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "d7b0a10694d241519f5f2cd1e1caac79bbe58c18d984a4d7ab4ea81f7b8d3154",
+        "metrics_sha256": "78afab02d5027ee6b270f48b09e90fd50fc0297b0a27e9cffdd25a384501e646",
+        "structured_diagnostics_sha256": "0b29cc1d7fb139add55dd5d0d470b0e6eb94ae84104050aa462847e91612808a",
+        "scene_json_sha256": "d404bcc1a81b81310d14317d1208ec4f349f7da53c3489f82605c2617ba8e5f3"
+      }
+    },
+    {
+      "case": "standalone-tower-1.21.11-litematic",
+      "input_sha256": "88f302c19597551b3e26edbd1568175f66093b56e503417e71b4bf4c0b95be3c",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "d7b0a10694d241519f5f2cd1e1caac79bbe58c18d984a4d7ab4ea81f7b8d3154",
+        "metrics_sha256": "78afab02d5027ee6b270f48b09e90fd50fc0297b0a27e9cffdd25a384501e646",
+        "structured_diagnostics_sha256": "ae7c8827fd7b9d9ea94a87e333112668e0f789a84e2c49f323041e16f8827991",
+        "scene_json_sha256": "22f78482ee15f69c49c3b44b68849571006044b70ea31c59cba5d6f699670eca"
+      }
+    },
+    {
+      "case": "standalone-tower-26.1.2-schem",
+      "input_sha256": "d825ab6d5142729c1ba242199de94d43d905ce7b3d4cba6e1fede59dd64e636a",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "d7b0a10694d241519f5f2cd1e1caac79bbe58c18d984a4d7ab4ea81f7b8d3154",
+        "metrics_sha256": "78afab02d5027ee6b270f48b09e90fd50fc0297b0a27e9cffdd25a384501e646",
+        "structured_diagnostics_sha256": "4ec43e6c75cb5e539f9626666c8f0429b042575d2392fbe1c9b392d2bd0c4da9",
+        "scene_json_sha256": "70bb78fd5b09a9d74fbdf103337fabfadb6f1bdce13221c43631d7e7cac3c111"
+      }
+    },
+    {
+      "case": "standalone-tower-26.1.2-litematic",
+      "input_sha256": "d186c4d6159fce108d360ff5191ccd05e459121a886a2e789c26197ea959c368",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "d7b0a10694d241519f5f2cd1e1caac79bbe58c18d984a4d7ab4ea81f7b8d3154",
+        "metrics_sha256": "78afab02d5027ee6b270f48b09e90fd50fc0297b0a27e9cffdd25a384501e646",
+        "structured_diagnostics_sha256": "b96f4d0c3e5483efa6d32cba437cc89a92e79230549b8eb24e56ee06e170414e",
+        "scene_json_sha256": "1333211bfdbcfa81cf9eea34ce80ac590bac9628bf148675d5fd531cf81673d2"
+      }
+    },
+    {
+      "case": "standalone-tower-26.2-schem",
+      "input_sha256": "aef508c3081529da4a8b08a3f9ee52660fdd9b403ba04061902b2745d8ca0446",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "d7b0a10694d241519f5f2cd1e1caac79bbe58c18d984a4d7ab4ea81f7b8d3154",
+        "metrics_sha256": "78afab02d5027ee6b270f48b09e90fd50fc0297b0a27e9cffdd25a384501e646",
+        "structured_diagnostics_sha256": "5d7596f1a28e58f52ef09aa504da8cfa44ae98d112887a0587d4366b2cefe8c8",
+        "scene_json_sha256": "0e61898cb2107a4bbfc99274641bd5c643e4843aed15d636eb5913aa1e075c12"
+      }
+    },
+    {
+      "case": "standalone-tower-26.2-litematic",
+      "input_sha256": "7a5fc18134e5a43c9dd5aa2140290aa5f7fb77864f4cf8d2a6d4560b9f235dde",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "d7b0a10694d241519f5f2cd1e1caac79bbe58c18d984a4d7ab4ea81f7b8d3154",
+        "metrics_sha256": "78afab02d5027ee6b270f48b09e90fd50fc0297b0a27e9cffdd25a384501e646",
+        "structured_diagnostics_sha256": "4701a1ccee7013454dccd2401ffa914a08f3d32ae0016507664e982523d41868",
+        "scene_json_sha256": "7c46089b9872437992a27abc46e2fb7d4250878cb4de0ce267f0d100bc1e1d63"
+      }
+    },
+    {
+      "case": "standalone-tower-26.3-schem",
+      "input_sha256": "a9782a8f8720d5ef20f1a3485bacbdf467971681c2bedc4b5481a09269cf85f8",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "1fe29499136648977ac2a50461675273d4877d3de7014a3388492c9909acebb5",
+        "metrics_sha256": "78afab02d5027ee6b270f48b09e90fd50fc0297b0a27e9cffdd25a384501e646",
+        "structured_diagnostics_sha256": "12ad1578f989440441bd09ddfeb5345549652545808caad4ba163383da88cf4e",
+        "scene_json_sha256": "a39a3c90dbeb893a8c01a8f286df2e94f99aa7535ab096552f65b99af0d89738"
+      }
+    },
+    {
+      "case": "standalone-tower-26.3-litematic",
+      "input_sha256": "9349c79e1bccecf5a88286af897e1813cc1b0f05ce12990a1d2228d6ec34902f",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "1fe29499136648977ac2a50461675273d4877d3de7014a3388492c9909acebb5",
+        "metrics_sha256": "78afab02d5027ee6b270f48b09e90fd50fc0297b0a27e9cffdd25a384501e646",
+        "structured_diagnostics_sha256": "7dc41908692ceb092b2220dd497de2fc1e4ec3995d31aeb44b24d2f65c528ddb",
+        "scene_json_sha256": "0f5b09940f69e251b68de96e3c1b69db3f13bd7aa5527abfeb730dbad5c8e203"
+      }
+    },
+    {
+      "case": "medieval-house-rectangle-0",
+      "input_sha256": "9ffaa002982e4fb72ab7b1fd123cbaef8b41221a098c4ed3c4409b90131d2275",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "830567bd08463fef1450705972e1334e5e5ea728d44a177649a15530d3a88e49",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "0ebbe618cf83961f125daa13c8263539abd7ee11619bd990ea61335578fa2d77",
+        "scene_json_sha256": "2bef4318821a54d43ab38cc76fe22dbf391bdd83c0e8bba2c3ebf59b588f12fc"
+      }
+    },
+    {
+      "case": "medieval-house-rectangle-90",
+      "input_sha256": "9ed577d6327a241f106ddedfb070ce7515916f09a5b095d6f7699e0f8bf302b6",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "6a8d17cfae451d0c1a8338c830fe786917b3d345e14f9ca42a62fe98322759e1",
+        "metrics_sha256": "b395c492a5023df0fb42d0c2efd4b7ed49ac6bd5b8ee598372dc9844bc572e75",
+        "structured_diagnostics_sha256": "ce78eb0af73acaa8503364d400d8f75993cda555839a336389f134f7f3474f05",
+        "scene_json_sha256": "db97fdad666a0f8580810844a38138c651ae91d8fd5605d991115760da303ca4"
+      }
+    },
+    {
+      "case": "medieval-house-rectangle-180",
+      "input_sha256": "1aadc005cd2844311fecc7d82b830b92f461014f4068e3a13ba73464b4f78a02",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "50e1129818f1f67087f3d57079ac46d550cff415b50caf4f5930a59d451b8dbf",
+        "metrics_sha256": "7405f9416a25e606bded4673cd04cdb41f211c3ca6303f297e9e49b8607fb779",
+        "structured_diagnostics_sha256": "ad7f6db052f930c6569841580e6e09149a093b1c30c479b14f09a28d2b8c3900",
+        "scene_json_sha256": "870ee728e0bd5b4075c1f2c14e310ca735c1358d69dbcf583be8e5f4183603e9"
+      }
+    },
+    {
+      "case": "medieval-house-rectangle-270",
+      "input_sha256": "c63b167e12076185155590a8eb6a68c2df6952f624ae132b26f0a81b7374447b",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "e8671807ad1e6581bc49f70da52a7f0c7c282562cd3505db7c018c3b9039737c",
+        "metrics_sha256": "e00b185294ccecfeb7433c591cf465cc0333577514c16587ff8b201c6523cca1",
+        "structured_diagnostics_sha256": "20b29457b39aa5d8e467b18e47e486d288636165753e9ab79101fe0a4dda4766",
+        "scene_json_sha256": "34ad08ae4fee4d550a387d4c26f85a63a1fde600003db526b5568d19ac32d76b"
+      }
+    },
+    {
+      "case": "medieval-tower-round-0",
+      "input_sha256": "b9354926fabda80c3afe6a3b7cdb51d8ed0b8136608a3487ae0002159ed642f0",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "d7b0a10694d241519f5f2cd1e1caac79bbe58c18d984a4d7ab4ea81f7b8d3154",
+        "metrics_sha256": "78afab02d5027ee6b270f48b09e90fd50fc0297b0a27e9cffdd25a384501e646",
+        "structured_diagnostics_sha256": "aed9b55793061976a3586eef13d84a7a866f3f1d720b2619f35787c922695cb4",
+        "scene_json_sha256": "1829c2018538ae52e705ebed64c64ba638a89c79c9e1e70648ece7d291c8893f"
+      }
+    },
+    {
+      "case": "medieval-tower-round-90",
+      "input_sha256": "422293a0cf1296df3af5fb84b322932b2454ac2d6a4971e7c084cf1499508162",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "af8bdca093bce7e398865322b72bcc4df08b495b3813f78a98754140fbb61087",
+        "metrics_sha256": "44d130a265bc08102b4b05dc58e07cc4d1b80b501226467eea532e744e24ecc4",
+        "structured_diagnostics_sha256": "417ef6a92ca2251a789ea61a0924f5e8fc201f46177be7a3f7642b9f11d78c92",
+        "scene_json_sha256": "334f655fa1094d9ed414779f4bd651ea3f5ecba34a6a23a03e5a3a6b2b8ae9b5"
+      }
+    },
+    {
+      "case": "medieval-tower-round-180",
+      "input_sha256": "73c755279cf36577606cc06aa2ed4435865dbc945e42d93a23e552043e9e0bdf",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "03735ced3c6b3e22cc585038b0b47df32f2eb67a18d61e0755f59a83b09d4bb5",
+        "metrics_sha256": "5a11bf0e06aa5a9c339a4abd87ed02484cd4a0162bed6f8625b71126b0d7ade5",
+        "structured_diagnostics_sha256": "105be51146a9b986df1023a5b7ab27286605d107623caf4783cb54e7f480999f",
+        "scene_json_sha256": "5363b736c22f35b4f75942142e8a5447d56b25dcfaa26f8adb0456d5e68be46c"
+      }
+    },
+    {
+      "case": "medieval-tower-round-270",
+      "input_sha256": "f68b15ef97d9ef585f35f8d2e61c60f0fef5a92f17625bf168da1ab0c21b7260",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "38cbb6b3d7f0cd8155128156fdb53af7a08ec5fb0e279878ff0d0d2796626340",
+        "metrics_sha256": "cb270661317a05b0b06e042a0b760ac4a25679cc98f16a03d79d1e668cbb180e",
+        "structured_diagnostics_sha256": "10b2dccc7193f348a514f6198a69bcfbca1c128ddb6306ef937426639ed6ce07",
+        "scene_json_sha256": "e7cf9b2e1e44516e3364fe9943717b64a331ceb5159728fbb944746dbaabddd0"
+      }
+    },
+    {
+      "case": "medieval-tower-square-0",
+      "input_sha256": "ed7eaa29069676381ad7d94983754ec9f8f99f976c4603eac28aa4532c357bd4",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "3782afeb5e08f2bf665bc4846c472fcb78c3522eec27c9d141853f673380ee5d",
+        "metrics_sha256": "02e40fffd4eeeba0379539f3ad0cea619bcac5190adaa5e5090cc7a80df3d218",
+        "structured_diagnostics_sha256": "2bffdedf5e36092069c5e468712dc89e75b0f743cef83fff7377fdb0123c4a54",
+        "scene_json_sha256": "a7c942adc903f31f84bc92b217eeba7ed919f93c912ab94d79e2aeb8535a041d"
+      }
+    },
+    {
+      "case": "medieval-tower-square-90",
+      "input_sha256": "5a62870e23bf7fe23a5c04201e05fcb94a705193713842e6bb88cdad395d7056",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "774db73c1fe76a8ddfe81ad5682dafb72db96cbe481fbb2888b19c0da594abcb",
+        "metrics_sha256": "d031fb3db10e8ca6745fe474e7ba9e4a207feccba5c4cf99ad2382acb93a1538",
+        "structured_diagnostics_sha256": "a677c6a53a8b4cab80df357d0126963de742cc7393fd706c652bf0a38d1d6d5d",
+        "scene_json_sha256": "46185f8dfea504e7c82b079999336ea1f8f753b5259fccf2f5ebb8bc202d4e89"
+      }
+    },
+    {
+      "case": "medieval-tower-square-180",
+      "input_sha256": "2f67d4655e583975d160eb803d331229ca89dfe18359e943a2614852d3571b6e",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "60801cbb49dda5d275f2c1b2e78af776f6c3bacf56bf2bdaeaa4ca5ce4557420",
+        "metrics_sha256": "6b3dc938b6f1b375dcf1c3f403c52741d322833cbcd62cb399460e9327917789",
+        "structured_diagnostics_sha256": "957ad9130eb5a0a72238be7cb12b393d85606ca943b1cb964d3e0a14aedaa2da",
+        "scene_json_sha256": "abe3c1d8eeb4cb0a29c5800fcf44196a5350f936a11c69f67d0c4aa2e6626a44"
+      }
+    },
+    {
+      "case": "medieval-tower-square-270",
+      "input_sha256": "2f608372633b427a7cd2216bc220c596e1ec6bd0c829d339ed041e71ec647502",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "db39c045dcd283862a26dbecf3e66fea06c70dd8fc147a3d9539c932737ce3db",
+        "metrics_sha256": "45b09869646ae7e1538f64ba6f58bb691ba9709b199899dc79039a6900afe337",
+        "structured_diagnostics_sha256": "7d6ef292e232e49df433b2df78bd36556e2cbdf21c104f2f5e9935fba8823f04",
+        "scene_json_sha256": "6252e94d5fa3d4edee34694a25cdbdf0a5b4986cc8c5b7afbf4ec2cd8922d4d0"
+      }
+    },
+    {
+      "case": "japanese-house-rectangle-0",
+      "input_sha256": "a874268ff937e165150d4cf0e0fcf7587ebf28546caefe40382b7e29af41a4c9",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "4d9f6c05218fceedd9e327a59cf1b6424f01661ac3778b7bc6abbc11ef097dae",
+        "metrics_sha256": "aba0cb456a7579f11dbb853d72350064e66c8c0668a7ebb0f912a6f2fea11d8d",
+        "structured_diagnostics_sha256": "a8ccff003e0d4862ef5bf9f78bd37015fc15900fe988d4dd17c431fccb0011c5",
+        "scene_json_sha256": "dd4282fae7faac7ffc41de43551762929d8988f0ad7abc3ccd8a202c9bc194e9"
+      }
+    },
+    {
+      "case": "japanese-house-rectangle-90",
+      "input_sha256": "41cd205e37de20cfa0a260121bf0125455d83e8197349d2e10bb6cfe763b93e3",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "bf2d6ca575fdabb3fc5854d3ffe5e40871e1145822920311397cbe09b0b2cabf",
+        "metrics_sha256": "4505934ea4bd69d3f8c2e8fec7e08ae96430cf4902cc393f008d97a02f363db1",
+        "structured_diagnostics_sha256": "834719003633bb3b416b891c3ff97fbbd728bd14c8ba02e153d190ce59348d04",
+        "scene_json_sha256": "c90735e52c9c792d3f3efffe7746cf8c2f4431874d249f332d069f6d9d149208"
+      }
+    },
+    {
+      "case": "japanese-house-rectangle-180",
+      "input_sha256": "70736594ab20d58f9db8b64405c06968e494b38d5713afda5b1f37915c4d507d",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "b88d763b620a301c2cc6d660284d9eefdb5e8d5d7b44e15b00397f08c2122135",
+        "metrics_sha256": "8f7f576aca4c66b2b9e8e3f5edae6f4f986264ca047eb37c78a1bb3d1dbb3060",
+        "structured_diagnostics_sha256": "6a772cfb15b9987f2b23ee10f53d19c8982785d9aff7831bd12553a7a6e223ce",
+        "scene_json_sha256": "537d155d3a4155dd3e1fa8a695da8554d5b6710e6ef3496cfcc8f2f067b73fc6"
+      }
+    },
+    {
+      "case": "japanese-house-rectangle-270",
+      "input_sha256": "4821ab2ab5eb493df0a8c3db62637777eecd144d89fb728f7b3857eea13ba5c4",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "07b2f26d17253f0ef0cc0a796ca266e1cb97e4bb27e1bf53afe5ab017ce1dfad",
+        "metrics_sha256": "d83cd32b6f847fa5e798e0a8780ef5e2d39137e6975e1bb5964371467a1f6d8b",
+        "structured_diagnostics_sha256": "772d36c5cd04ea3160d1908e75b65f3f4fcd6b9c53c26dea25f90dc2b30ec055",
+        "scene_json_sha256": "71043a69b1b2e86b8ec5eab4854fa156c58b19e6d455872b7b91b9201628330c"
+      }
+    },
+    {
+      "case": "japanese-tower-round-0",
+      "input_sha256": "0e1b6e8093cf39a972b28464cc58488e4c0c007deecb584db1e14a562ca9d0b3",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "bcdbe5671921dee28b70a8f78aad68391550092cad1bd1a925b00d8a1917dce1",
+        "metrics_sha256": "b045037e1196a6122b541e362ebc23dd254077a7754fa10c4979c8543c6574e6",
+        "structured_diagnostics_sha256": "0027bef9d0414105152765d441fa6d3c4d5621b16a1a911019cc85410d8bef00",
+        "scene_json_sha256": "53851a43040f869aa869c758feeb6ad3f3e4a86094dfb50e8e7d9c9c1409f931"
+      }
+    },
+    {
+      "case": "japanese-tower-round-90",
+      "input_sha256": "ad8b525e911dbe93549229f2e989f29052110fa659eda863eb6700a1e594f91d",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "05b24f78e0afd6e42fa4e0c79c62af4235f55d825e6aeb3c3bb08e8684a8f19b",
+        "metrics_sha256": "687b759f544be043b598f7d40424f3fc93e01592b7cb0d9e692382630df77639",
+        "structured_diagnostics_sha256": "0636a1430de9689d6a34bf4e70f745ba8e9ecf72670b07d750c16942b0c741cc",
+        "scene_json_sha256": "adcdf9861746a8e63b590e7896dbaadab7f25aea0900fe4569986bae5a2102bf"
+      }
+    },
+    {
+      "case": "japanese-tower-round-180",
+      "input_sha256": "e1357812395fd00a630b9f4d51080efbf45a9929d279b37b6cf3f8d5a9151cd0",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "897a4acb4ae24d1d7d50ff8b2800403a4abc7e4f06cc05b39f6f2879a7cfc7b4",
+        "metrics_sha256": "ea3ecd6d0774320685e88731ff62da9ccca89df9b5b457396e913d6aea90a7d0",
+        "structured_diagnostics_sha256": "77834e5b3d5816d98ed3143b7fab5b6ee107028cfed24c6d76ea4fdb09b086bd",
+        "scene_json_sha256": "adb50dd97bb1422bff4b9b318cb6d60cdf12bfa2e2441551c970f126a10f2dba"
+      }
+    },
+    {
+      "case": "japanese-tower-round-270",
+      "input_sha256": "d4d06520c3b787005971ebcb18bbaa2555ae4f6aca84d488f211b1408361c717",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "8c108e7b98a0b0b619ccd185cb7c04032a8b5a8074ca7c050b91348fb0c14893",
+        "metrics_sha256": "ffcab538f90164ade8e23dce45f9f06672ab51053ee158b20a6629691c4fb913",
+        "structured_diagnostics_sha256": "c31c62287ae50e9572f8cb81aed7a48f109191591a71eaed940bea8767ffb7a7",
+        "scene_json_sha256": "ab994af7c479672d4839e2e4b9021de7221508b480e8e2cc30dae2d866fe5f7e"
+      }
+    },
+    {
+      "case": "japanese-tower-square-0",
+      "input_sha256": "94edd48d1914701b32ce13a7f0d2486ab02ea6146c44b4c330f9b56183637af8",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "3580d9400c4b2f615c77e25044425ad06e19c86c2899a1160d4c23fb6b3669db",
+        "metrics_sha256": "00d5923d2487a2731e567a5550152f7861321096aba95400714425d232774587",
+        "structured_diagnostics_sha256": "658b79d657e54fda704290e42925a93334a5533764219cc5a558899af0b33422",
+        "scene_json_sha256": "3de496250e8f8d11b89ffa18944672d7d7fc624c4f7116c5ad73bd1d22c4c159"
+      }
+    },
+    {
+      "case": "japanese-tower-square-90",
+      "input_sha256": "6728152d6fd78d91c6514e88ad697c72d10e8fa1225a5d636abeafc60576081e",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "033661a38f1bd1be6fec3577ab8128d962de9182480d66917ec98fbb5be47b8c",
+        "metrics_sha256": "0d4221bcf11034cd6cb451023ff420d141b6cc3dbff32d357dd2a5887a007da5",
+        "structured_diagnostics_sha256": "7cc9e6c5fa1e8a97f7eca262a443c5820532539e33473deed9344749feea2690",
+        "scene_json_sha256": "caa06f3d2a2d82c69d4e8c2ea4db253bb8d4d2aadc0b7fbb61f78f78d7ac5e3b"
+      }
+    },
+    {
+      "case": "japanese-tower-square-180",
+      "input_sha256": "f4438f93878e086d0845de2585d4b93fb678c344573492f667814c35fb9ea585",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "fddc349a9026e56e57515d7f9c59ac87217326fd2c06477dcd101c132f974e48",
+        "metrics_sha256": "99dfad380962b797602451c2dd799264adb55913d6afb38de1d3e4a4694ff9bc",
+        "structured_diagnostics_sha256": "0080933be595d0dd98fb293c487ccabf9fe5faba7c34a5d91e3a50da95737550",
+        "scene_json_sha256": "a1253b3a0c0e7cdaa015d659adf1118f6f9eddcf37981849676db226e309f416"
+      }
+    },
+    {
+      "case": "japanese-tower-square-270",
+      "input_sha256": "90e71614ab814c43a0ab4b3841f896bc5c05ce1ca8eddb77a8f1e7fa958fe503",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "2fb141935f932dab1d25a6f37a68d511246ee4c0302ce76fa7645aa57906caab",
+        "metrics_sha256": "4fd3d7ea2245cc586fd4f2b8b311224e5ec31f929a93915066df89b95a0c8743",
+        "structured_diagnostics_sha256": "82e35c3ceb7f79d9a35d8c66805acddc51b768900fb7607e2e928694c038323d",
+        "scene_json_sha256": "3c86a792db3e76e533dac7307152a9900aee50a2c955586dd4682197a87450aa"
+      }
+    },
+    {
+      "case": "modern-house-rectangle-0",
+      "input_sha256": "8d8d2e611c661b5cb28d63b4e592acf207ccc0b1cb72283cd02ef0d830515569",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "d8d278ec008cd4115917c890e5f4f9605eec3b2b59c4ead55b53f87692408cf0",
+        "metrics_sha256": "7023328ac6c0fa11ff1a5ebc54b07244f612144dcbc35f73f5b009d86a32356a",
+        "structured_diagnostics_sha256": "d14e541b604ffeb88b9c55b7119fdc49525c6bac3891d09cf320802254a73069",
+        "scene_json_sha256": "ec09b4fdc6a1699df19be5e5d8ad4615fc4aeecfa3c8600e02d005f147192590"
+      }
+    },
+    {
+      "case": "modern-house-rectangle-90",
+      "input_sha256": "b15db9864465555c076104bd82974a7053786945fee8bdc0472e162aa4d6013a",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "ed02a767ddec04ed3c6cb52838efdee5adc244c7b800e6f5298be1784799512b",
+        "metrics_sha256": "627e964de41d322d3cba5f8d95d5f591717e9a1928b97227fcb6d041133932f4",
+        "structured_diagnostics_sha256": "d8d1ddb3ee44fe87a0e283da29c093d69ff26f9d3a255d867cb9a8982bf6978d",
+        "scene_json_sha256": "ed8eecd904cf273de955c8d5b9cb27448f595fcd39e659898b26ae2631f41aca"
+      }
+    },
+    {
+      "case": "modern-house-rectangle-180",
+      "input_sha256": "9bcf2bad082ef2d1c74232bccfa99f72867fe21d8a43c1d18d83c3544e19c497",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "3584297ceaabda84d919b75b7931a64ae72e5b3e3faa20f1a0760bd932c92d49",
+        "metrics_sha256": "fb25eabcfdaef29e02b3c2e727186f00adceee5e7fcff77cabc4cef2adf2e8e8",
+        "structured_diagnostics_sha256": "c2039c3c1e2788bf25c95d31daa934d49b0d00cc6de03737e9e33d8b65026f4d",
+        "scene_json_sha256": "ee9d719bb4b92e38622ddd1fbe8684507df9a4222d3c39b57a39fae7c47c9a23"
+      }
+    },
+    {
+      "case": "modern-house-rectangle-270",
+      "input_sha256": "ee370a4ea15a012d5e0c4a4988cfd36b41e535b217b6aa8a8149ab2b310eeefa",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "225569281d1f13b92fa590257e4833a11cb86f1e71f5c0bc05952a8f654e37d4",
+        "metrics_sha256": "1d3109fc92862741438912af4e5ae55a965e9653f71c4a6ef54e995378a696bb",
+        "structured_diagnostics_sha256": "89a9243dfb482eb6f7fcc595fec4ac7a7d3bac47d2554cfb85055340611a0c9d",
+        "scene_json_sha256": "25e9d6bc1dfe75c8e7b60e0e52561b10166f953ca683c839f8c3a4ccde91e97f"
+      }
+    },
+    {
+      "case": "modern-tower-round-0",
+      "input_sha256": "ab1b5a319dcff2bbad9f9ebeb219759a85334159f0bb5bbbae4469960557aacb",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "dd48f24ed7175fed625ced7585aa3a6a70462219381c84e53104513cff974428",
+        "metrics_sha256": "958cf93215dd6ae4f3e13850e847edfa20e454a4a6ed9ab6770316e9ccc38e1b",
+        "structured_diagnostics_sha256": "b3307c0d3ecf8ca5b91de481caa9e5098af3d62b7b2f65a2af37b1d3698b90f9",
+        "scene_json_sha256": "19546291fde1fa2c20fa2882010dfe09108e2c4404434e94c1a83e092e377eb5"
+      }
+    },
+    {
+      "case": "modern-tower-round-90",
+      "input_sha256": "fc038ec7cb3cf895811a826d4c5bb927687819e4173d6a836f28c66c97a84750",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "38d99cdb674158f9beb0e76f4c060dd1329089a44b77cf9c5845ebdc63594a42",
+        "metrics_sha256": "20fbfcf28840b0cd0397b3b0478e57d91a0acfcacb5ea8de8d752cc60f2bcfbf",
+        "structured_diagnostics_sha256": "1112b43cdf01fedab003e263dc34791b81c6be3310dbd123a434efbc9224f086",
+        "scene_json_sha256": "6a856bcc36e9db4b0620d97e1be5b65582ed8293610b16f26906c19c94e6e61e"
+      }
+    },
+    {
+      "case": "modern-tower-round-180",
+      "input_sha256": "54a92a28b030ee3e030be5c8d816d506d984fc4996d39d0ef88ad4368c990b67",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "e34dcb09c54b82fb2b2912089993508e42fa17caae02dd602794459a04422534",
+        "metrics_sha256": "46aa52f1420f554cc89e77b8dd076b586b39cb5211c0158cd7df22f4e44ad08a",
+        "structured_diagnostics_sha256": "897616f45260666c3e151fe21b8de5f210c00ccee8471393002b4a6761260d72",
+        "scene_json_sha256": "139f3a2bfb9379f71243b509f917dc9b671ae199cc1f7c30c1081e7b2ac78ebe"
+      }
+    },
+    {
+      "case": "modern-tower-round-270",
+      "input_sha256": "db31ff2c03b5991198741300c30bc4d9bde7ddf7c0a2b04c135236e905d74f38",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "0fc63e9e740d35dac56f14d25f5659b913f5af09a3fcaa03e8ef86d33feb4078",
+        "metrics_sha256": "f54ace59cce536f4e19b3d2ce8200a9f76160de6a0a3403cdb97d17d36c7d790",
+        "structured_diagnostics_sha256": "1c8114b04aaeade9909856a55d03f3a762682faab54ad0c280de1877f2117f39",
+        "scene_json_sha256": "9be367e8ac0e54c7545ce88dd586c79b927f61c6b82b199a72f58dcd5dc26e1d"
+      }
+    },
+    {
+      "case": "modern-tower-square-0",
+      "input_sha256": "218fd6af78c0091b65495e8233476bd5e7fa5e1d7521245d9973b5c95d86633b",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "4e4b069b465555102a0a9506c0ac111d3192fe94820d544b08d1b3e0735be27a",
+        "metrics_sha256": "282be043a3bf0529640689d907a63031efb23406a2858682c2f3e5613277a523",
+        "structured_diagnostics_sha256": "8df33cf83154b8405f49067643f9c19bd4a24f5ad3c1d960a64a4cc99af99a76",
+        "scene_json_sha256": "2a0cb76c0bb7d3aae3e9b74ee2fbcc851a1df35be328793b277ad418fe1abf32"
+      }
+    },
+    {
+      "case": "modern-tower-square-90",
+      "input_sha256": "06bb0b2e2eaff43624e8ee337fbb7e4dc6a44fce23aa63b27d87ed70d2a180a3",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "f5df5d925757ffc835e0a743dbb0491c599c6504d72ef8d04637719d1e09e7bc",
+        "metrics_sha256": "6671522be1bc2811ea5bd6a16a3ce89d3919a6be47cf8b2f6b97ffa78d3eb56d",
+        "structured_diagnostics_sha256": "57d49e3b06d8817544261719836337e6938fa1e17f805d34c3173184fb292e71",
+        "scene_json_sha256": "d1bffdcc97cedaead36067f5df9f5ed4a9f015faaedf8133aeaa76d8eb016756"
+      }
+    },
+    {
+      "case": "modern-tower-square-180",
+      "input_sha256": "c7fadb7daf2dc1e5d8c698a734df746c2305d0564ddca15a900bbf9a5ccb5c57",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "49254f22376612632ffca8d5008c53e9de96976616d15beb2a59108338b1e4e0",
+        "metrics_sha256": "a37f5b634382654a140aad10b417e84f42c58d57b4f75e1f569f9e62bacf6f16",
+        "structured_diagnostics_sha256": "e680d97ea20ce8dc40127d729000b26324305134f5363e29f76a12e047f69abd",
+        "scene_json_sha256": "92d921da35dad2e360c096ba55871668da018063f8fa84fd8bc432c9b6ac93ed"
+      }
+    },
+    {
+      "case": "modern-tower-square-270",
+      "input_sha256": "7e2aff460d08223e337b0158694052d686502ab327309d603cc15ce3fb3df5cd",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "a00fc96b4fc69fc563348ae4829dd988bbd22de347b4a78477324088df6fc709",
+        "metrics_sha256": "3129e297d63fb0d30ba688da99f4b64b60759cbb91714b13d9741999e81f5baf",
+        "structured_diagnostics_sha256": "9e470257d9be321f245fa0ff65ff040b1631f2f25f7af5ce15fe2d9d9cb38864",
+        "scene_json_sha256": "fcfc7bd919bb100f2570e1930d41e29edf791aec1b6559125a1e3e58f84d0130"
+      }
+    },
+    {
+      "case": "single-house-core7-False",
+      "input_sha256": "cb0c67dbee9a083b80c20e4cdb5d2fe249685cede48be1c722a77e7cc8d1547a",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "830567bd08463fef1450705972e1334e5e5ea728d44a177649a15530d3a88e49",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "6b8c2d2fc279f46bf79bef151e5b3d039df3cc2fcafe1fdcb5927b3b4b84c3bc",
+        "scene_json_sha256": "37bd81804db9a132dc29f8e37c0b4357e6934128c8c31f9e28b19ff234f8e333"
+      }
+    },
+    {
+      "case": "single-house-core7-True",
+      "input_sha256": "cb0c67dbee9a083b80c20e4cdb5d2fe249685cede48be1c722a77e7cc8d1547a",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "830567bd08463fef1450705972e1334e5e5ea728d44a177649a15530d3a88e49",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "6b8c2d2fc279f46bf79bef151e5b3d039df3cc2fcafe1fdcb5927b3b4b84c3bc",
+        "scene_json_sha256": "37bd81804db9a132dc29f8e37c0b4357e6934128c8c31f9e28b19ff234f8e333"
+      }
+    },
+    {
+      "case": "standalone-tower-core7-False",
+      "input_sha256": "350b0969681551f114a68681e9a0e89af38e55956b4672bfcb22402da4f729f4",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "d7b0a10694d241519f5f2cd1e1caac79bbe58c18d984a4d7ab4ea81f7b8d3154",
+        "metrics_sha256": "78afab02d5027ee6b270f48b09e90fd50fc0297b0a27e9cffdd25a384501e646",
+        "structured_diagnostics_sha256": "0b29cc1d7fb139add55dd5d0d470b0e6eb94ae84104050aa462847e91612808a",
+        "scene_json_sha256": "d404bcc1a81b81310d14317d1208ec4f349f7da53c3489f82605c2617ba8e5f3"
+      }
+    },
+    {
+      "case": "standalone-tower-core7-True",
+      "input_sha256": "350b0969681551f114a68681e9a0e89af38e55956b4672bfcb22402da4f729f4",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "d7b0a10694d241519f5f2cd1e1caac79bbe58c18d984a4d7ab4ea81f7b8d3154",
+        "metrics_sha256": "78afab02d5027ee6b270f48b09e90fd50fc0297b0a27e9cffdd25a384501e646",
+        "structured_diagnostics_sha256": "16bf21da5dc2c0fae49be49b33dc4fdc0b4d0401e5abd43ba76260ba735fad82",
+        "scene_json_sha256": "d404bcc1a81b81310d14317d1208ec4f349f7da53c3489f82605c2617ba8e5f3"
+      }
+    }
+  ],
+  "after": [
+    {
+      "case": "single-house-1.21.11-schem",
+      "input_sha256": "cb0c67dbee9a083b80c20e4cdb5d2fe249685cede48be1c722a77e7cc8d1547a",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "830567bd08463fef1450705972e1334e5e5ea728d44a177649a15530d3a88e49",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "6b8c2d2fc279f46bf79bef151e5b3d039df3cc2fcafe1fdcb5927b3b4b84c3bc",
+        "scene_json_sha256": "37bd81804db9a132dc29f8e37c0b4357e6934128c8c31f9e28b19ff234f8e333"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "single-house-1.21.11-litematic",
+      "input_sha256": "b8784023efc3867850a115134a72c1cadc7a2733772595ce79bc2bf0b9c242d1",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "830567bd08463fef1450705972e1334e5e5ea728d44a177649a15530d3a88e49",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "64ea98daa49a67822d08312b7e45ffce0c5c074993eb77282848e55f78f96a82",
+        "scene_json_sha256": "432ce43047829c40a4c883ca470693e7db92b7db3cf93e4f5e2d8107c18c779a"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "single-house-26.1.2-schem",
+      "input_sha256": "c5855684a5f0e4e8d809808105e53ec5bdf8d38f3b869d048d9319ea3db58ab3",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "830567bd08463fef1450705972e1334e5e5ea728d44a177649a15530d3a88e49",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "333bc84e650dc1892ba4bff1aef914c69693d12906a16fee9e59b21e918bc877",
+        "scene_json_sha256": "5778f97e024381911d6c18e6d659c7138fe14189ad05ae1acaed9ab9625159d3"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "single-house-26.1.2-litematic",
+      "input_sha256": "4eeded49b37c742f5758fbcc0417450b5ce19369fef7bbc694fa7720cd0682a9",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "830567bd08463fef1450705972e1334e5e5ea728d44a177649a15530d3a88e49",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "eef8ba9564bf3d5decce75a627b1c7c8bbaf45d0df8bfd1d6a8217be3bc2446c",
+        "scene_json_sha256": "02c1fbf78ecef12258d373a502d46895a643b86f89759ba60c687901da40f440"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "single-house-26.2-schem",
+      "input_sha256": "73412c7599e63914e410a66bddcd2f553727017588cc499f128d2c90560361bf",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "830567bd08463fef1450705972e1334e5e5ea728d44a177649a15530d3a88e49",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "9d8575666511c107afd9e20a6409699c70c857b369c00b644a3930d0a4b31c29",
+        "scene_json_sha256": "3304de381b8db8a74b21915d987df6ba19d03c027ad8318d89d818517a2ee68e"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "single-house-26.2-litematic",
+      "input_sha256": "f0da68d7c5e871098d049f00eb2b4ee741b1656847f47a49f6a29274f533baea",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "830567bd08463fef1450705972e1334e5e5ea728d44a177649a15530d3a88e49",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "0d77e625df9ede16f32df30b4f18ff88339c86047adbac4502e76f7cc49f0600",
+        "scene_json_sha256": "332fa5d0f88ecf52be5e712a9f48ab9bfb4ecef248c65ff0c6124f5f78653fb3"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "single-house-26.3-schem",
+      "input_sha256": "cb2c9b8fa285d288f762bf0613fbc3c0e1bbd4a363e29db731da6a616ffc6c38",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "671674480641056e1e3734e0dbc0025547f19d1f806f522c9149d6fe77089a6e",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "3ad40ca9d77e60839563a5343565de0986e78b169d7432212b6530508311d1ef",
+        "scene_json_sha256": "f827358a3953e0dd7930945a099f9f6a7e931370839fe2b584f37d198304e295"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "single-house-26.3-litematic",
+      "input_sha256": "e140f9c7c6bfdc511bf41ac0758144396b65677884132f42245b9326c65afe2c",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "671674480641056e1e3734e0dbc0025547f19d1f806f522c9149d6fe77089a6e",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "9f9b686563c29070f139cb3c4f4e3d52459e7fe1d6a9a975ea5a9337d9ef6bcd",
+        "scene_json_sha256": "7bb53f19e4638f1d0428ab5b4c306aa357184774bd8e5ec7730252273c10594e"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "standalone-tower-1.21.11-schem",
+      "input_sha256": "350b0969681551f114a68681e9a0e89af38e55956b4672bfcb22402da4f729f4",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "d7b0a10694d241519f5f2cd1e1caac79bbe58c18d984a4d7ab4ea81f7b8d3154",
+        "metrics_sha256": "78afab02d5027ee6b270f48b09e90fd50fc0297b0a27e9cffdd25a384501e646",
+        "structured_diagnostics_sha256": "0b29cc1d7fb139add55dd5d0d470b0e6eb94ae84104050aa462847e91612808a",
+        "scene_json_sha256": "d404bcc1a81b81310d14317d1208ec4f349f7da53c3489f82605c2617ba8e5f3"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "standalone-tower-1.21.11-litematic",
+      "input_sha256": "88f302c19597551b3e26edbd1568175f66093b56e503417e71b4bf4c0b95be3c",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "d7b0a10694d241519f5f2cd1e1caac79bbe58c18d984a4d7ab4ea81f7b8d3154",
+        "metrics_sha256": "78afab02d5027ee6b270f48b09e90fd50fc0297b0a27e9cffdd25a384501e646",
+        "structured_diagnostics_sha256": "ae7c8827fd7b9d9ea94a87e333112668e0f789a84e2c49f323041e16f8827991",
+        "scene_json_sha256": "22f78482ee15f69c49c3b44b68849571006044b70ea31c59cba5d6f699670eca"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "standalone-tower-26.1.2-schem",
+      "input_sha256": "d825ab6d5142729c1ba242199de94d43d905ce7b3d4cba6e1fede59dd64e636a",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "d7b0a10694d241519f5f2cd1e1caac79bbe58c18d984a4d7ab4ea81f7b8d3154",
+        "metrics_sha256": "78afab02d5027ee6b270f48b09e90fd50fc0297b0a27e9cffdd25a384501e646",
+        "structured_diagnostics_sha256": "4ec43e6c75cb5e539f9626666c8f0429b042575d2392fbe1c9b392d2bd0c4da9",
+        "scene_json_sha256": "70bb78fd5b09a9d74fbdf103337fabfadb6f1bdce13221c43631d7e7cac3c111"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "standalone-tower-26.1.2-litematic",
+      "input_sha256": "d186c4d6159fce108d360ff5191ccd05e459121a886a2e789c26197ea959c368",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "d7b0a10694d241519f5f2cd1e1caac79bbe58c18d984a4d7ab4ea81f7b8d3154",
+        "metrics_sha256": "78afab02d5027ee6b270f48b09e90fd50fc0297b0a27e9cffdd25a384501e646",
+        "structured_diagnostics_sha256": "b96f4d0c3e5483efa6d32cba437cc89a92e79230549b8eb24e56ee06e170414e",
+        "scene_json_sha256": "1333211bfdbcfa81cf9eea34ce80ac590bac9628bf148675d5fd531cf81673d2"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "standalone-tower-26.2-schem",
+      "input_sha256": "aef508c3081529da4a8b08a3f9ee52660fdd9b403ba04061902b2745d8ca0446",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "d7b0a10694d241519f5f2cd1e1caac79bbe58c18d984a4d7ab4ea81f7b8d3154",
+        "metrics_sha256": "78afab02d5027ee6b270f48b09e90fd50fc0297b0a27e9cffdd25a384501e646",
+        "structured_diagnostics_sha256": "5d7596f1a28e58f52ef09aa504da8cfa44ae98d112887a0587d4366b2cefe8c8",
+        "scene_json_sha256": "0e61898cb2107a4bbfc99274641bd5c643e4843aed15d636eb5913aa1e075c12"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "standalone-tower-26.2-litematic",
+      "input_sha256": "7a5fc18134e5a43c9dd5aa2140290aa5f7fb77864f4cf8d2a6d4560b9f235dde",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "d7b0a10694d241519f5f2cd1e1caac79bbe58c18d984a4d7ab4ea81f7b8d3154",
+        "metrics_sha256": "78afab02d5027ee6b270f48b09e90fd50fc0297b0a27e9cffdd25a384501e646",
+        "structured_diagnostics_sha256": "4701a1ccee7013454dccd2401ffa914a08f3d32ae0016507664e982523d41868",
+        "scene_json_sha256": "7c46089b9872437992a27abc46e2fb7d4250878cb4de0ce267f0d100bc1e1d63"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "standalone-tower-26.3-schem",
+      "input_sha256": "a9782a8f8720d5ef20f1a3485bacbdf467971681c2bedc4b5481a09269cf85f8",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "1fe29499136648977ac2a50461675273d4877d3de7014a3388492c9909acebb5",
+        "metrics_sha256": "78afab02d5027ee6b270f48b09e90fd50fc0297b0a27e9cffdd25a384501e646",
+        "structured_diagnostics_sha256": "12ad1578f989440441bd09ddfeb5345549652545808caad4ba163383da88cf4e",
+        "scene_json_sha256": "a39a3c90dbeb893a8c01a8f286df2e94f99aa7535ab096552f65b99af0d89738"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "standalone-tower-26.3-litematic",
+      "input_sha256": "9349c79e1bccecf5a88286af897e1813cc1b0f05ce12990a1d2228d6ec34902f",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "1fe29499136648977ac2a50461675273d4877d3de7014a3388492c9909acebb5",
+        "metrics_sha256": "78afab02d5027ee6b270f48b09e90fd50fc0297b0a27e9cffdd25a384501e646",
+        "structured_diagnostics_sha256": "7dc41908692ceb092b2220dd497de2fc1e4ec3995d31aeb44b24d2f65c528ddb",
+        "scene_json_sha256": "0f5b09940f69e251b68de96e3c1b69db3f13bd7aa5527abfeb730dbad5c8e203"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "medieval-house-rectangle-0",
+      "input_sha256": "9ffaa002982e4fb72ab7b1fd123cbaef8b41221a098c4ed3c4409b90131d2275",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "830567bd08463fef1450705972e1334e5e5ea728d44a177649a15530d3a88e49",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "0ebbe618cf83961f125daa13c8263539abd7ee11619bd990ea61335578fa2d77",
+        "scene_json_sha256": "2bef4318821a54d43ab38cc76fe22dbf391bdd83c0e8bba2c3ebf59b588f12fc"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "medieval-house-rectangle-90",
+      "input_sha256": "9ed577d6327a241f106ddedfb070ce7515916f09a5b095d6f7699e0f8bf302b6",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "6a8d17cfae451d0c1a8338c830fe786917b3d345e14f9ca42a62fe98322759e1",
+        "metrics_sha256": "b395c492a5023df0fb42d0c2efd4b7ed49ac6bd5b8ee598372dc9844bc572e75",
+        "structured_diagnostics_sha256": "ce78eb0af73acaa8503364d400d8f75993cda555839a336389f134f7f3474f05",
+        "scene_json_sha256": "db97fdad666a0f8580810844a38138c651ae91d8fd5605d991115760da303ca4"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "medieval-house-rectangle-180",
+      "input_sha256": "1aadc005cd2844311fecc7d82b830b92f461014f4068e3a13ba73464b4f78a02",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "50e1129818f1f67087f3d57079ac46d550cff415b50caf4f5930a59d451b8dbf",
+        "metrics_sha256": "7405f9416a25e606bded4673cd04cdb41f211c3ca6303f297e9e49b8607fb779",
+        "structured_diagnostics_sha256": "ad7f6db052f930c6569841580e6e09149a093b1c30c479b14f09a28d2b8c3900",
+        "scene_json_sha256": "870ee728e0bd5b4075c1f2c14e310ca735c1358d69dbcf583be8e5f4183603e9"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "medieval-house-rectangle-270",
+      "input_sha256": "c63b167e12076185155590a8eb6a68c2df6952f624ae132b26f0a81b7374447b",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "e8671807ad1e6581bc49f70da52a7f0c7c282562cd3505db7c018c3b9039737c",
+        "metrics_sha256": "e00b185294ccecfeb7433c591cf465cc0333577514c16587ff8b201c6523cca1",
+        "structured_diagnostics_sha256": "20b29457b39aa5d8e467b18e47e486d288636165753e9ab79101fe0a4dda4766",
+        "scene_json_sha256": "34ad08ae4fee4d550a387d4c26f85a63a1fde600003db526b5568d19ac32d76b"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "medieval-tower-round-0",
+      "input_sha256": "b9354926fabda80c3afe6a3b7cdb51d8ed0b8136608a3487ae0002159ed642f0",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "d7b0a10694d241519f5f2cd1e1caac79bbe58c18d984a4d7ab4ea81f7b8d3154",
+        "metrics_sha256": "78afab02d5027ee6b270f48b09e90fd50fc0297b0a27e9cffdd25a384501e646",
+        "structured_diagnostics_sha256": "aed9b55793061976a3586eef13d84a7a866f3f1d720b2619f35787c922695cb4",
+        "scene_json_sha256": "1829c2018538ae52e705ebed64c64ba638a89c79c9e1e70648ece7d291c8893f"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "medieval-tower-round-90",
+      "input_sha256": "422293a0cf1296df3af5fb84b322932b2454ac2d6a4971e7c084cf1499508162",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "af8bdca093bce7e398865322b72bcc4df08b495b3813f78a98754140fbb61087",
+        "metrics_sha256": "44d130a265bc08102b4b05dc58e07cc4d1b80b501226467eea532e744e24ecc4",
+        "structured_diagnostics_sha256": "417ef6a92ca2251a789ea61a0924f5e8fc201f46177be7a3f7642b9f11d78c92",
+        "scene_json_sha256": "334f655fa1094d9ed414779f4bd651ea3f5ecba34a6a23a03e5a3a6b2b8ae9b5"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "medieval-tower-round-180",
+      "input_sha256": "73c755279cf36577606cc06aa2ed4435865dbc945e42d93a23e552043e9e0bdf",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "03735ced3c6b3e22cc585038b0b47df32f2eb67a18d61e0755f59a83b09d4bb5",
+        "metrics_sha256": "5a11bf0e06aa5a9c339a4abd87ed02484cd4a0162bed6f8625b71126b0d7ade5",
+        "structured_diagnostics_sha256": "105be51146a9b986df1023a5b7ab27286605d107623caf4783cb54e7f480999f",
+        "scene_json_sha256": "5363b736c22f35b4f75942142e8a5447d56b25dcfaa26f8adb0456d5e68be46c"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "medieval-tower-round-270",
+      "input_sha256": "f68b15ef97d9ef585f35f8d2e61c60f0fef5a92f17625bf168da1ab0c21b7260",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "38cbb6b3d7f0cd8155128156fdb53af7a08ec5fb0e279878ff0d0d2796626340",
+        "metrics_sha256": "cb270661317a05b0b06e042a0b760ac4a25679cc98f16a03d79d1e668cbb180e",
+        "structured_diagnostics_sha256": "10b2dccc7193f348a514f6198a69bcfbca1c128ddb6306ef937426639ed6ce07",
+        "scene_json_sha256": "e7cf9b2e1e44516e3364fe9943717b64a331ceb5159728fbb944746dbaabddd0"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "medieval-tower-square-0",
+      "input_sha256": "ed7eaa29069676381ad7d94983754ec9f8f99f976c4603eac28aa4532c357bd4",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "3782afeb5e08f2bf665bc4846c472fcb78c3522eec27c9d141853f673380ee5d",
+        "metrics_sha256": "02e40fffd4eeeba0379539f3ad0cea619bcac5190adaa5e5090cc7a80df3d218",
+        "structured_diagnostics_sha256": "2bffdedf5e36092069c5e468712dc89e75b0f743cef83fff7377fdb0123c4a54",
+        "scene_json_sha256": "a7c942adc903f31f84bc92b217eeba7ed919f93c912ab94d79e2aeb8535a041d"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "medieval-tower-square-90",
+      "input_sha256": "5a62870e23bf7fe23a5c04201e05fcb94a705193713842e6bb88cdad395d7056",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "774db73c1fe76a8ddfe81ad5682dafb72db96cbe481fbb2888b19c0da594abcb",
+        "metrics_sha256": "d031fb3db10e8ca6745fe474e7ba9e4a207feccba5c4cf99ad2382acb93a1538",
+        "structured_diagnostics_sha256": "a677c6a53a8b4cab80df357d0126963de742cc7393fd706c652bf0a38d1d6d5d",
+        "scene_json_sha256": "46185f8dfea504e7c82b079999336ea1f8f753b5259fccf2f5ebb8bc202d4e89"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "medieval-tower-square-180",
+      "input_sha256": "2f67d4655e583975d160eb803d331229ca89dfe18359e943a2614852d3571b6e",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "60801cbb49dda5d275f2c1b2e78af776f6c3bacf56bf2bdaeaa4ca5ce4557420",
+        "metrics_sha256": "6b3dc938b6f1b375dcf1c3f403c52741d322833cbcd62cb399460e9327917789",
+        "structured_diagnostics_sha256": "957ad9130eb5a0a72238be7cb12b393d85606ca943b1cb964d3e0a14aedaa2da",
+        "scene_json_sha256": "abe3c1d8eeb4cb0a29c5800fcf44196a5350f936a11c69f67d0c4aa2e6626a44"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "medieval-tower-square-270",
+      "input_sha256": "2f608372633b427a7cd2216bc220c596e1ec6bd0c829d339ed041e71ec647502",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "db39c045dcd283862a26dbecf3e66fea06c70dd8fc147a3d9539c932737ce3db",
+        "metrics_sha256": "45b09869646ae7e1538f64ba6f58bb691ba9709b199899dc79039a6900afe337",
+        "structured_diagnostics_sha256": "7d6ef292e232e49df433b2df78bd36556e2cbdf21c104f2f5e9935fba8823f04",
+        "scene_json_sha256": "6252e94d5fa3d4edee34694a25cdbdf0a5b4986cc8c5b7afbf4ec2cd8922d4d0"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "japanese-house-rectangle-0",
+      "input_sha256": "a874268ff937e165150d4cf0e0fcf7587ebf28546caefe40382b7e29af41a4c9",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "4d9f6c05218fceedd9e327a59cf1b6424f01661ac3778b7bc6abbc11ef097dae",
+        "metrics_sha256": "aba0cb456a7579f11dbb853d72350064e66c8c0668a7ebb0f912a6f2fea11d8d",
+        "structured_diagnostics_sha256": "a8ccff003e0d4862ef5bf9f78bd37015fc15900fe988d4dd17c431fccb0011c5",
+        "scene_json_sha256": "dd4282fae7faac7ffc41de43551762929d8988f0ad7abc3ccd8a202c9bc194e9"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "japanese-house-rectangle-90",
+      "input_sha256": "41cd205e37de20cfa0a260121bf0125455d83e8197349d2e10bb6cfe763b93e3",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "bf2d6ca575fdabb3fc5854d3ffe5e40871e1145822920311397cbe09b0b2cabf",
+        "metrics_sha256": "4505934ea4bd69d3f8c2e8fec7e08ae96430cf4902cc393f008d97a02f363db1",
+        "structured_diagnostics_sha256": "834719003633bb3b416b891c3ff97fbbd728bd14c8ba02e153d190ce59348d04",
+        "scene_json_sha256": "c90735e52c9c792d3f3efffe7746cf8c2f4431874d249f332d069f6d9d149208"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "japanese-house-rectangle-180",
+      "input_sha256": "70736594ab20d58f9db8b64405c06968e494b38d5713afda5b1f37915c4d507d",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "b88d763b620a301c2cc6d660284d9eefdb5e8d5d7b44e15b00397f08c2122135",
+        "metrics_sha256": "8f7f576aca4c66b2b9e8e3f5edae6f4f986264ca047eb37c78a1bb3d1dbb3060",
+        "structured_diagnostics_sha256": "6a772cfb15b9987f2b23ee10f53d19c8982785d9aff7831bd12553a7a6e223ce",
+        "scene_json_sha256": "537d155d3a4155dd3e1fa8a695da8554d5b6710e6ef3496cfcc8f2f067b73fc6"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "japanese-house-rectangle-270",
+      "input_sha256": "4821ab2ab5eb493df0a8c3db62637777eecd144d89fb728f7b3857eea13ba5c4",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "07b2f26d17253f0ef0cc0a796ca266e1cb97e4bb27e1bf53afe5ab017ce1dfad",
+        "metrics_sha256": "d83cd32b6f847fa5e798e0a8780ef5e2d39137e6975e1bb5964371467a1f6d8b",
+        "structured_diagnostics_sha256": "772d36c5cd04ea3160d1908e75b65f3f4fcd6b9c53c26dea25f90dc2b30ec055",
+        "scene_json_sha256": "71043a69b1b2e86b8ec5eab4854fa156c58b19e6d455872b7b91b9201628330c"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "japanese-tower-round-0",
+      "input_sha256": "0e1b6e8093cf39a972b28464cc58488e4c0c007deecb584db1e14a562ca9d0b3",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "bcdbe5671921dee28b70a8f78aad68391550092cad1bd1a925b00d8a1917dce1",
+        "metrics_sha256": "b045037e1196a6122b541e362ebc23dd254077a7754fa10c4979c8543c6574e6",
+        "structured_diagnostics_sha256": "0027bef9d0414105152765d441fa6d3c4d5621b16a1a911019cc85410d8bef00",
+        "scene_json_sha256": "53851a43040f869aa869c758feeb6ad3f3e4a86094dfb50e8e7d9c9c1409f931"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "japanese-tower-round-90",
+      "input_sha256": "ad8b525e911dbe93549229f2e989f29052110fa659eda863eb6700a1e594f91d",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "05b24f78e0afd6e42fa4e0c79c62af4235f55d825e6aeb3c3bb08e8684a8f19b",
+        "metrics_sha256": "687b759f544be043b598f7d40424f3fc93e01592b7cb0d9e692382630df77639",
+        "structured_diagnostics_sha256": "0636a1430de9689d6a34bf4e70f745ba8e9ecf72670b07d750c16942b0c741cc",
+        "scene_json_sha256": "adcdf9861746a8e63b590e7896dbaadab7f25aea0900fe4569986bae5a2102bf"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "japanese-tower-round-180",
+      "input_sha256": "e1357812395fd00a630b9f4d51080efbf45a9929d279b37b6cf3f8d5a9151cd0",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "897a4acb4ae24d1d7d50ff8b2800403a4abc7e4f06cc05b39f6f2879a7cfc7b4",
+        "metrics_sha256": "ea3ecd6d0774320685e88731ff62da9ccca89df9b5b457396e913d6aea90a7d0",
+        "structured_diagnostics_sha256": "77834e5b3d5816d98ed3143b7fab5b6ee107028cfed24c6d76ea4fdb09b086bd",
+        "scene_json_sha256": "adb50dd97bb1422bff4b9b318cb6d60cdf12bfa2e2441551c970f126a10f2dba"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "japanese-tower-round-270",
+      "input_sha256": "d4d06520c3b787005971ebcb18bbaa2555ae4f6aca84d488f211b1408361c717",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "8c108e7b98a0b0b619ccd185cb7c04032a8b5a8074ca7c050b91348fb0c14893",
+        "metrics_sha256": "ffcab538f90164ade8e23dce45f9f06672ab51053ee158b20a6629691c4fb913",
+        "structured_diagnostics_sha256": "c31c62287ae50e9572f8cb81aed7a48f109191591a71eaed940bea8767ffb7a7",
+        "scene_json_sha256": "ab994af7c479672d4839e2e4b9021de7221508b480e8e2cc30dae2d866fe5f7e"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "japanese-tower-square-0",
+      "input_sha256": "94edd48d1914701b32ce13a7f0d2486ab02ea6146c44b4c330f9b56183637af8",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "3580d9400c4b2f615c77e25044425ad06e19c86c2899a1160d4c23fb6b3669db",
+        "metrics_sha256": "00d5923d2487a2731e567a5550152f7861321096aba95400714425d232774587",
+        "structured_diagnostics_sha256": "658b79d657e54fda704290e42925a93334a5533764219cc5a558899af0b33422",
+        "scene_json_sha256": "3de496250e8f8d11b89ffa18944672d7d7fc624c4f7116c5ad73bd1d22c4c159"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "japanese-tower-square-90",
+      "input_sha256": "6728152d6fd78d91c6514e88ad697c72d10e8fa1225a5d636abeafc60576081e",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "033661a38f1bd1be6fec3577ab8128d962de9182480d66917ec98fbb5be47b8c",
+        "metrics_sha256": "0d4221bcf11034cd6cb451023ff420d141b6cc3dbff32d357dd2a5887a007da5",
+        "structured_diagnostics_sha256": "7cc9e6c5fa1e8a97f7eca262a443c5820532539e33473deed9344749feea2690",
+        "scene_json_sha256": "caa06f3d2a2d82c69d4e8c2ea4db253bb8d4d2aadc0b7fbb61f78f78d7ac5e3b"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "japanese-tower-square-180",
+      "input_sha256": "f4438f93878e086d0845de2585d4b93fb678c344573492f667814c35fb9ea585",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "fddc349a9026e56e57515d7f9c59ac87217326fd2c06477dcd101c132f974e48",
+        "metrics_sha256": "99dfad380962b797602451c2dd799264adb55913d6afb38de1d3e4a4694ff9bc",
+        "structured_diagnostics_sha256": "0080933be595d0dd98fb293c487ccabf9fe5faba7c34a5d91e3a50da95737550",
+        "scene_json_sha256": "a1253b3a0c0e7cdaa015d659adf1118f6f9eddcf37981849676db226e309f416"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "japanese-tower-square-270",
+      "input_sha256": "90e71614ab814c43a0ab4b3841f896bc5c05ce1ca8eddb77a8f1e7fa958fe503",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "2fb141935f932dab1d25a6f37a68d511246ee4c0302ce76fa7645aa57906caab",
+        "metrics_sha256": "4fd3d7ea2245cc586fd4f2b8b311224e5ec31f929a93915066df89b95a0c8743",
+        "structured_diagnostics_sha256": "82e35c3ceb7f79d9a35d8c66805acddc51b768900fb7607e2e928694c038323d",
+        "scene_json_sha256": "3c86a792db3e76e533dac7307152a9900aee50a2c955586dd4682197a87450aa"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "modern-house-rectangle-0",
+      "input_sha256": "8d8d2e611c661b5cb28d63b4e592acf207ccc0b1cb72283cd02ef0d830515569",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "d8d278ec008cd4115917c890e5f4f9605eec3b2b59c4ead55b53f87692408cf0",
+        "metrics_sha256": "7023328ac6c0fa11ff1a5ebc54b07244f612144dcbc35f73f5b009d86a32356a",
+        "structured_diagnostics_sha256": "d14e541b604ffeb88b9c55b7119fdc49525c6bac3891d09cf320802254a73069",
+        "scene_json_sha256": "ec09b4fdc6a1699df19be5e5d8ad4615fc4aeecfa3c8600e02d005f147192590"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "modern-house-rectangle-90",
+      "input_sha256": "b15db9864465555c076104bd82974a7053786945fee8bdc0472e162aa4d6013a",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "ed02a767ddec04ed3c6cb52838efdee5adc244c7b800e6f5298be1784799512b",
+        "metrics_sha256": "627e964de41d322d3cba5f8d95d5f591717e9a1928b97227fcb6d041133932f4",
+        "structured_diagnostics_sha256": "d8d1ddb3ee44fe87a0e283da29c093d69ff26f9d3a255d867cb9a8982bf6978d",
+        "scene_json_sha256": "ed8eecd904cf273de955c8d5b9cb27448f595fcd39e659898b26ae2631f41aca"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "modern-house-rectangle-180",
+      "input_sha256": "9bcf2bad082ef2d1c74232bccfa99f72867fe21d8a43c1d18d83c3544e19c497",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "3584297ceaabda84d919b75b7931a64ae72e5b3e3faa20f1a0760bd932c92d49",
+        "metrics_sha256": "fb25eabcfdaef29e02b3c2e727186f00adceee5e7fcff77cabc4cef2adf2e8e8",
+        "structured_diagnostics_sha256": "c2039c3c1e2788bf25c95d31daa934d49b0d00cc6de03737e9e33d8b65026f4d",
+        "scene_json_sha256": "ee9d719bb4b92e38622ddd1fbe8684507df9a4222d3c39b57a39fae7c47c9a23"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "modern-house-rectangle-270",
+      "input_sha256": "ee370a4ea15a012d5e0c4a4988cfd36b41e535b217b6aa8a8149ab2b310eeefa",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "225569281d1f13b92fa590257e4833a11cb86f1e71f5c0bc05952a8f654e37d4",
+        "metrics_sha256": "1d3109fc92862741438912af4e5ae55a965e9653f71c4a6ef54e995378a696bb",
+        "structured_diagnostics_sha256": "89a9243dfb482eb6f7fcc595fec4ac7a7d3bac47d2554cfb85055340611a0c9d",
+        "scene_json_sha256": "25e9d6bc1dfe75c8e7b60e0e52561b10166f953ca683c839f8c3a4ccde91e97f"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "modern-tower-round-0",
+      "input_sha256": "ab1b5a319dcff2bbad9f9ebeb219759a85334159f0bb5bbbae4469960557aacb",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "dd48f24ed7175fed625ced7585aa3a6a70462219381c84e53104513cff974428",
+        "metrics_sha256": "958cf93215dd6ae4f3e13850e847edfa20e454a4a6ed9ab6770316e9ccc38e1b",
+        "structured_diagnostics_sha256": "b3307c0d3ecf8ca5b91de481caa9e5098af3d62b7b2f65a2af37b1d3698b90f9",
+        "scene_json_sha256": "19546291fde1fa2c20fa2882010dfe09108e2c4404434e94c1a83e092e377eb5"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "modern-tower-round-90",
+      "input_sha256": "fc038ec7cb3cf895811a826d4c5bb927687819e4173d6a836f28c66c97a84750",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "38d99cdb674158f9beb0e76f4c060dd1329089a44b77cf9c5845ebdc63594a42",
+        "metrics_sha256": "20fbfcf28840b0cd0397b3b0478e57d91a0acfcacb5ea8de8d752cc60f2bcfbf",
+        "structured_diagnostics_sha256": "1112b43cdf01fedab003e263dc34791b81c6be3310dbd123a434efbc9224f086",
+        "scene_json_sha256": "6a856bcc36e9db4b0620d97e1be5b65582ed8293610b16f26906c19c94e6e61e"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "modern-tower-round-180",
+      "input_sha256": "54a92a28b030ee3e030be5c8d816d506d984fc4996d39d0ef88ad4368c990b67",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "e34dcb09c54b82fb2b2912089993508e42fa17caae02dd602794459a04422534",
+        "metrics_sha256": "46aa52f1420f554cc89e77b8dd076b586b39cb5211c0158cd7df22f4e44ad08a",
+        "structured_diagnostics_sha256": "897616f45260666c3e151fe21b8de5f210c00ccee8471393002b4a6761260d72",
+        "scene_json_sha256": "139f3a2bfb9379f71243b509f917dc9b671ae199cc1f7c30c1081e7b2ac78ebe"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "modern-tower-round-270",
+      "input_sha256": "db31ff2c03b5991198741300c30bc4d9bde7ddf7c0a2b04c135236e905d74f38",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "0fc63e9e740d35dac56f14d25f5659b913f5af09a3fcaa03e8ef86d33feb4078",
+        "metrics_sha256": "f54ace59cce536f4e19b3d2ce8200a9f76160de6a0a3403cdb97d17d36c7d790",
+        "structured_diagnostics_sha256": "1c8114b04aaeade9909856a55d03f3a762682faab54ad0c280de1877f2117f39",
+        "scene_json_sha256": "9be367e8ac0e54c7545ce88dd586c79b927f61c6b82b199a72f58dcd5dc26e1d"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "modern-tower-square-0",
+      "input_sha256": "218fd6af78c0091b65495e8233476bd5e7fa5e1d7521245d9973b5c95d86633b",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "4e4b069b465555102a0a9506c0ac111d3192fe94820d544b08d1b3e0735be27a",
+        "metrics_sha256": "282be043a3bf0529640689d907a63031efb23406a2858682c2f3e5613277a523",
+        "structured_diagnostics_sha256": "8df33cf83154b8405f49067643f9c19bd4a24f5ad3c1d960a64a4cc99af99a76",
+        "scene_json_sha256": "2a0cb76c0bb7d3aae3e9b74ee2fbcc851a1df35be328793b277ad418fe1abf32"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "modern-tower-square-90",
+      "input_sha256": "06bb0b2e2eaff43624e8ee337fbb7e4dc6a44fce23aa63b27d87ed70d2a180a3",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "f5df5d925757ffc835e0a743dbb0491c599c6504d72ef8d04637719d1e09e7bc",
+        "metrics_sha256": "6671522be1bc2811ea5bd6a16a3ce89d3919a6be47cf8b2f6b97ffa78d3eb56d",
+        "structured_diagnostics_sha256": "57d49e3b06d8817544261719836337e6938fa1e17f805d34c3173184fb292e71",
+        "scene_json_sha256": "d1bffdcc97cedaead36067f5df9f5ed4a9f015faaedf8133aeaa76d8eb016756"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "modern-tower-square-180",
+      "input_sha256": "c7fadb7daf2dc1e5d8c698a734df746c2305d0564ddca15a900bbf9a5ccb5c57",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "49254f22376612632ffca8d5008c53e9de96976616d15beb2a59108338b1e4e0",
+        "metrics_sha256": "a37f5b634382654a140aad10b417e84f42c58d57b4f75e1f569f9e62bacf6f16",
+        "structured_diagnostics_sha256": "e680d97ea20ce8dc40127d729000b26324305134f5363e29f76a12e047f69abd",
+        "scene_json_sha256": "92d921da35dad2e360c096ba55871668da018063f8fa84fd8bc432c9b6ac93ed"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "modern-tower-square-270",
+      "input_sha256": "7e2aff460d08223e337b0158694052d686502ab327309d603cc15ce3fb3df5cd",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "a00fc96b4fc69fc563348ae4829dd988bbd22de347b4a78477324088df6fc709",
+        "metrics_sha256": "3129e297d63fb0d30ba688da99f4b64b60759cbb91714b13d9741999e81f5baf",
+        "structured_diagnostics_sha256": "9e470257d9be321f245fa0ff65ff040b1631f2f25f7af5ce15fe2d9d9cb38864",
+        "scene_json_sha256": "fcfc7bd919bb100f2570e1930d41e29edf791aec1b6559125a1e3e58f84d0130"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "single-house-core7-False",
+      "input_sha256": "cb0c67dbee9a083b80c20e4cdb5d2fe249685cede48be1c722a77e7cc8d1547a",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "830567bd08463fef1450705972e1334e5e5ea728d44a177649a15530d3a88e49",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "6b8c2d2fc279f46bf79bef151e5b3d039df3cc2fcafe1fdcb5927b3b4b84c3bc",
+        "scene_json_sha256": "37bd81804db9a132dc29f8e37c0b4357e6934128c8c31f9e28b19ff234f8e333"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "single-house-core7-True",
+      "input_sha256": "cb0c67dbee9a083b80c20e4cdb5d2fe249685cede48be1c722a77e7cc8d1547a",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "830567bd08463fef1450705972e1334e5e5ea728d44a177649a15530d3a88e49",
+        "metrics_sha256": "2b5987f8344671fc9ebdcb4dc0d975ed0f4ffb65a039d4bacd0cf08e9a1fb390",
+        "structured_diagnostics_sha256": "6b8c2d2fc279f46bf79bef151e5b3d039df3cc2fcafe1fdcb5927b3b4b84c3bc",
+        "scene_json_sha256": "37bd81804db9a132dc29f8e37c0b4357e6934128c8c31f9e28b19ff234f8e333"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "standalone-tower-core7-False",
+      "input_sha256": "350b0969681551f114a68681e9a0e89af38e55956b4672bfcb22402da4f729f4",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "d7b0a10694d241519f5f2cd1e1caac79bbe58c18d984a4d7ab4ea81f7b8d3154",
+        "metrics_sha256": "78afab02d5027ee6b270f48b09e90fd50fc0297b0a27e9cffdd25a384501e646",
+        "structured_diagnostics_sha256": "0b29cc1d7fb139add55dd5d0d470b0e6eb94ae84104050aa462847e91612808a",
+        "scene_json_sha256": "d404bcc1a81b81310d14317d1208ec4f349f7da53c3489f82605c2617ba8e5f3"
+      },
+      "matches_before": true
+    },
+    {
+      "case": "standalone-tower-core7-True",
+      "input_sha256": "350b0969681551f114a68681e9a0e89af38e55956b4672bfcb22402da4f729f4",
+      "code": 0,
+      "signature": {
+        "placement_sha256": "d7b0a10694d241519f5f2cd1e1caac79bbe58c18d984a4d7ab4ea81f7b8d3154",
+        "metrics_sha256": "78afab02d5027ee6b270f48b09e90fd50fc0297b0a27e9cffdd25a384501e646",
+        "structured_diagnostics_sha256": "16bf21da5dc2c0fae49be49b33dc4fdc0b4d0401e5abd43ba76260ba735fad82",
+        "scene_json_sha256": "d404bcc1a81b81310d14317d1208ec4f349f7da53c3489f82605c2617ba8e5f3"
+      },
+      "matches_before": true
+    }
+  ],
+  "source_sha256": {
+    "src/mcblueprint/exporters/_spool.py": "2716f20b18d6ed2d3371657bdddf43598974ed48ed30376256c76e07d0acaeb3",
+    "tests/test_generated_region_export.py": "4949bfe8b777210bb4270d485d5eb70a0b3a2dc48bb904e3c97562227cdbc0b0"
+  },
+  "dependencies": {
+    "numpy": "2.5.4",
+    "nbtlib": "2.0.4",
+    "jsonschema": "4.26.0",
+    "PyYAML": "6.0.3",
+    "pyfastnoiselite": "0.0.7"
+  },
+  "verified_cases": 56,
+  "performance_remeasured": false
+}

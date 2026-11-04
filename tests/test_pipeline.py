@@ -449,12 +449,19 @@ def test_emit_build_and_every_resume_generate_once(tmp_path, monkeypatch, archet
                                                "cracks": {"amount": 0}}})
     calls = []
     original = pipeline.generate_regions
+    writes = []
+    original_write = pipeline.RegionSpool.write
+
+    def write_once(self, regions):
+        writes.append(self.path)
+        return original_write(self, regions)
 
     def counted(*args, **kwargs):
         calls.append(1)
         yield from original(*args, **kwargs)
 
     monkeypatch.setattr(pipeline, "generate_regions", counted)
+    monkeypatch.setattr(pipeline.RegionSpool, "write", write_once)
     first = pipeline.make(source, output=tmp_path / "first.schem", emit=["blueprint"])
     expected = cells(first.output)
     expected_scene = (tmp_path / "first.scene.json.gz").read_bytes()
@@ -465,11 +472,13 @@ def test_emit_build_and_every_resume_generate_once(tmp_path, monkeypatch, archet
     assert main(["build", str(concrete), "-o", str(tmp_path / "built.schem")]) == 0
     assert cells(tmp_path / "built.schem") == expected
     assert len(calls) == 2
+    assert len(writes) == len(calls)
     for stage in pipeline.STAGES:
         before = len(calls)
         result = pipeline.make(source, output=tmp_path / f"{stage}.schem",
                                resume=tmp_path / f"first.{stage}.json")
         assert len(calls) == before + 1
+        assert len(writes) == len(calls)
         assert cells(result.output) == expected
         assert (tmp_path / f"{stage}.scene.json.gz").read_bytes() == expected_scene
         assert result.code == first.code

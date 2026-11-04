@@ -550,7 +550,9 @@ mcblueprint diff <a.json> <b.json> [--json] [--max-dimension N]
 Weatherの必要haloを渡し、更新したcoreを既存 `RegionSpool` に保存する。
 支持検査は小さいcoreだけを列挙し、隣接参照と全階の経路探索にはspoolの行キャッシュを使う。
 全体BlockVolumeは作らず、探索の境界・メモリを制限する。
-Exporterにはspoolから再読込したcoreを渡し、既存の原子的完成ファイル置換を再利用する。
+makeとemit Blueprintのbuildは、検査済みの完成spoolの行とpaletteを既存の
+`export_rows`へ直接渡す。出力用の小volume復元や二つ目のblock spoolは作らず、
+既存の原子的完成ファイル置換を再利用する。
 
 段階JSONとhash付きsidecarは入力・合成設定・engine・データlockと結び付ける。
 旧cacheの互換処理は持たない。emitしたBlueprintの `metadata.generation` は座標依存混色と
