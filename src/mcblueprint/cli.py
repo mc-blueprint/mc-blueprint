@@ -562,9 +562,13 @@ def _run_archetypes(args: argparse.Namespace, out: TextIO) -> int:
     print("house 住宅（1〜2階、gable/hip、最小内装）", file=out)
     print("tower 塔（round/square、階段・各階床・胸壁）", file=out)
     print("castle 城郭（medieval、medium以上、城壁・接合棟・塔・門・堀）", file=out)
+    for name in ("town", "city"):
+        print(f"{name} 街並み（medieval、接道区画・複合棟・広場・井戸・市場）", file=out)
     from mcblueprint.buildspec import SUPPORTED_ARCHETYPES
 
     for name in SUPPORTED_ARCHETYPES[3:]:
+        if name in ("town", "city"):
+            continue
         print(f"{name} 特徴語彙のみ対応（planner未対応）", file=out)
     return EXIT_OK
 
@@ -584,9 +588,12 @@ def _run_spec_template(args: argparse.Namespace, out: TextIO) -> int:
                 else "# このarchetypeのplannerは未対応です。")
     if args.archetype == "castle":
         elements = "# 主棟 house#1、付属棟 house#2/#3、塔 tower#1…を計画する。"
-    scale = "medium" if args.archetype == "castle" else "small"
-    size = "[64, 48, 64]" if args.archetype == "castle" else "[32, 32, 32]"
-    styles = ("castleはmedievalに対応。" if args.archetype == "castle"
+    if args.archetype in ("town", "city"):
+        elements = "# 区画内の棟 house#1…を計画する。L/T型は複数棟で構成する。"
+    site_planner = args.archetype in ("castle", "town", "city")
+    scale = "medium" if site_planner else "small"
+    size = "[64, 48, 64]" if site_planner else "[32, 32, 32]"
+    styles = (f"{args.archetype}はmedievalに対応。" if site_planner
               else "medieval / japanese / modern")
     print(f'''# 対象版を明示し、敷地は軒・胸壁を含む上限にする。
 formatVersion: 1

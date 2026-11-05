@@ -1,0 +1,533 @@
+{
+  "schemaVersion": 1,
+  "recordType": "town-site-review",
+  "issue": 241,
+  "baseCommit": "f413feca6255d0f9f5859cd8c8078a6f83312d96",
+  "completion": {
+    "huge": {
+      "buildingGroups": 8,
+      "buildings": 14,
+      "floors": [
+        1,
+        2
+      ],
+      "shapes": [
+        "rectangle",
+        "L",
+        "T"
+      ],
+      "reachableRoutes": 67
+    },
+    "medium": {
+      "buildingGroups": 8,
+      "buildings": 8,
+      "reachableRoutes": 28
+    },
+    "seeds": [
+      42,
+      73,
+      101
+    ],
+    "versionFormatConditions": 8,
+    "fixedOutputConditions": 13,
+    "record": "evaluation/records/town-241.json"
+  },
+  "tests": {
+    "collected": 3107,
+    "passed": 3107,
+    "failed": 0,
+    "skipped": 0,
+    "town": {
+      "passed": 36,
+      "failed": 0
+    },
+    "parallelProcesses": 4,
+    "executionJobs": 80,
+    "method": "全件収集後、城郭・街並みをノード単位で分離。残りは単一pytestで実行し、重複・欠落なし、全ログの成功件数と終了コードを照合。",
+    "nodeSetSha256": "d2468b60e585dea742531c0803d8f0debf9dc93a157d09e04e3abd6943a6a3d5",
+    "executionRecord": "output/town-241-review-tests/results.json"
+  },
+  "checks": {
+    "ruff": "passed",
+    "strict": "25 files checked: 0 errors, 0 warnings",
+    "diffCheck": "passed",
+    "wheel": "passed",
+    "encoding": "UTF-8、BOMなし、LF",
+    "lock": "HEADから変更なし",
+    "workflows": "変更なし",
+    "wheelRecovery": "隔離なしの試行はhatchling未導入で失敗。pyproject指定の通常の隔離ビルドは成功。",
+    "encodingOnlyChange": "先行ケース開始後、Criticの改行のみをCRLFからLFへ統一。構文木一致を確認し、Townの段階再開検証前に完了。"
+  },
+  "regression": {
+    "conditions": 32,
+    "archetypes": [
+      "house",
+      "tower",
+      "junction",
+      "castle"
+    ],
+    "hashes": [
+      "placement",
+      "metrics",
+      "structuredDiagnostics",
+      "scene"
+    ],
+    "baseAndCurrentCode": 0,
+    "allMatch": true,
+    "record": "evaluation/records/town-241-regression.json"
+  },
+  "review": [
+    "道路全幅と公共施設の干渉、区画重複、棟間非衝突、全入口・各階到達、core境界を確認。",
+    "接合後の露出面へDetailを再適用し、構造・通路・屋根帯を装飾候補から除外。",
+    "mediumの奇数seedで負になる道路余白を回帰テストで再現し修正。最小区画幅で8建物を収容するmedium固定3seedも成功。",
+    "区画分割はparcels.split_frontage、配置・造成・接合はsite_planningへ共有し、外部BuildSpec/scene/editsのv1と内部計画v2を維持。",
+    "3件の確認済み問題と異階数L/Tの支持柱評価を修正し、9回帰テストを追加。"
+  ],
+  "scopeLimits": [
+    "既存Weatherのセルごとの乱数導出が重い。H全体の性能受入と最終配色の達成判定は今回に含めない。"
+  ],
+  "reviewFixes": [
+    {
+      "finding": "主要道と建物外形の干渉",
+      "fix": "建物外形を先に導出し、主要道の全幅探索へ禁止域として渡す。",
+      "cases": [
+        "large/hill/73/8",
+        "large/valley/3/8"
+      ]
+    },
+    {
+      "finding": "中央連絡道の端点が探索範囲外",
+      "fix": "実際の主要道上の端点と道路半幅を探索範囲へ含める。",
+      "cases": [
+        "large/hill/0/8"
+      ]
+    },
+    {
+      "finding": "公共空間の水域を盛土",
+      "fix": "区画・道路・公共空間の全造成列を造成前に検査する。",
+      "cases": [
+        "plaza",
+        "well",
+        "market"
+      ]
+    }
+  ],
+  "roadNegativeControls": [
+    {
+      "disabledFix": "major",
+      "terrain": "hill",
+      "seed": 73,
+      "reproducedFailure": "Site: 道路上に建物が重なっています"
+    },
+    {
+      "disabledFix": "major",
+      "terrain": "valley",
+      "seed": 3,
+      "reproducedFailure": "Site: 道路上に建物が重なっています"
+    },
+    {
+      "disabledFix": "link",
+      "terrain": "hill",
+      "seed": 0,
+      "reproducedFailure": "Site: 街路端点が水域・保護域・道路全幅と干渉します"
+    }
+  ],
+  "mixedFloorJunction": {
+    "cause": "Criticのjunction_cellsに支持柱の所有権がなく、実在する支持柱を外壁面として数えていなかった。",
+    "fix": "共有構造として予約された支持柱をjunction_cellsへ追加。生成処理は変更しない。",
+    "diagnosis": [
+      {
+        "shape": "L",
+        "high": "house#1",
+        "low": "house#2",
+        "missingBeforeAfter": [
+          3,
+          0
+        ],
+        "visibleSupportCells": [
+          {
+            "position": [
+              85,
+              17,
+              108
+            ],
+            "block": "minecraft:birch_wood",
+            "owner": "junction#1",
+            "reserved": "structure"
+          },
+          {
+            "position": [
+              85,
+              18,
+              108
+            ],
+            "block": "minecraft:birch_wood",
+            "owner": "junction#1",
+            "reserved": "structure"
+          },
+          {
+            "position": [
+              85,
+              19,
+              108
+            ],
+            "block": "minecraft:birch_wood",
+            "owner": "junction#1",
+            "reserved": "structure"
+          },
+          {
+            "position": [
+              85,
+              20,
+              108
+            ],
+            "block": "minecraft:birch_wood",
+            "owner": "junction#1",
+            "reserved": "structure"
+          }
+        ]
+      },
+      {
+        "shape": "T",
+        "high": "house#3",
+        "low": "house#4",
+        "missingBeforeAfter": [
+          6,
+          0
+        ],
+        "visibleSupportCells": [
+          {
+            "position": [
+              109,
+              17,
+              108
+            ],
+            "block": "minecraft:jungle_wood",
+            "owner": "junction#2",
+            "reserved": "structure"
+          },
+          {
+            "position": [
+              109,
+              17,
+              116
+            ],
+            "block": "minecraft:jungle_wood",
+            "owner": "junction#2",
+            "reserved": "structure"
+          },
+          {
+            "position": [
+              109,
+              18,
+              108
+            ],
+            "block": "minecraft:jungle_wood",
+            "owner": "junction#2",
+            "reserved": "structure"
+          },
+          {
+            "position": [
+              109,
+              18,
+              116
+            ],
+            "block": "minecraft:jungle_wood",
+            "owner": "junction#2",
+            "reserved": "structure"
+          },
+          {
+            "position": [
+              109,
+              19,
+              108
+            ],
+            "block": "minecraft:jungle_wood",
+            "owner": "junction#2",
+            "reserved": "structure"
+          },
+          {
+            "position": [
+              109,
+              19,
+              116
+            ],
+            "block": "minecraft:jungle_wood",
+            "owner": "junction#2",
+            "reserved": "structure"
+          },
+          {
+            "position": [
+              109,
+              20,
+              108
+            ],
+            "block": "minecraft:jungle_wood",
+            "owner": "junction#2",
+            "reserved": "structure"
+          },
+          {
+            "position": [
+              109,
+              20,
+              116
+            ],
+            "block": "minecraft:jungle_wood",
+            "owner": "junction#2",
+            "reserved": "structure"
+          }
+        ]
+      }
+    ],
+    "negativeControl": "支持柱を削除すると構造欠損E101と外壁欠損を検出する。",
+    "weatherOutput": {
+      "code": 0,
+      "scale": "medium",
+      "terrain": "hill",
+      "mixedShapes": [
+        "L",
+        "T"
+      ],
+      "floors": [
+        2,
+        1
+      ],
+      "weatherIncluded": true,
+      "E101": 0,
+      "E203": 0,
+      "reachableRoutes": 34,
+      "environment": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "19c1aaef50da01a6da53abdb8108111a555128f7e712a1d7fae0c9edfd2fb8a2",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      }
+    }
+  },
+  "additionalWeatherCases": [
+    {
+      "scale": "large",
+      "terrain": "hill",
+      "seed": 0,
+      "environment": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "19c1aaef50da01a6da53abdb8108111a555128f7e712a1d7fae0c9edfd2fb8a2",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "reachableRoutes": 67,
+      "metricsSha256": "b741c540ae580d05c2e2da2395b18f0caf66823ae7d1b2fbfbd7d20397095220",
+      "diagnosticsSha256": "0f886af62c6671c811d97218d14810196de5486034a017e85be9769731948962"
+    },
+    {
+      "scale": "large",
+      "terrain": "hill",
+      "seed": 73,
+      "environment": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "19c1aaef50da01a6da53abdb8108111a555128f7e712a1d7fae0c9edfd2fb8a2",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "reachableRoutes": 67,
+      "metricsSha256": "4c2883ec840b32daac8ab3f6b40cf76b9874ac7f80d784b059046bee0f2027b3",
+      "diagnosticsSha256": "b3f2d8e07b254de8dfc2bcb24779c6555f6a1b5488bbe6d9e461e815476bef08"
+    },
+    {
+      "scale": "large",
+      "terrain": "valley",
+      "seed": 3,
+      "environment": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "19c1aaef50da01a6da53abdb8108111a555128f7e712a1d7fae0c9edfd2fb8a2",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "reachableRoutes": 67,
+      "metricsSha256": "79857fda263d1a4c19a92b6dbea9b0dd18d748c9118cadc9d073ec7230e6700f",
+      "diagnosticsSha256": "a05d314463604893c6d36e22694139018e3840285f05f4c241ad1d10b0bb39cf"
+    }
+  ],
+  "additionalWeatherPerformance": {
+    "samples": [
+      {
+        "terrain": "hill",
+        "seed": 73,
+        "scale": "large",
+        "reachableRoutes": 67,
+        "code": 0,
+        "make_runtime_seconds": 297.7539661999326,
+        "process_peak_rss_bytes": 262438912,
+        "stage_hook_samples": [
+          {
+            "stage": "Resolve",
+            "elapsed_seconds": 0.0012277999194338918,
+            "rss_at_stage_start_bytes": 53039104
+          },
+          {
+            "stage": "Site/Massing/Detail",
+            "elapsed_seconds": 5.078638699953444,
+            "rss_at_stage_start_bytes": 64733184
+          },
+          {
+            "stage": "Materialize",
+            "elapsed_seconds": 10.618425499997102,
+            "rss_at_stage_start_bytes": 69271552
+          },
+          {
+            "stage": "Generate",
+            "elapsed_seconds": 44.41861739999149,
+            "rss_at_stage_start_bytes": 138117120
+          },
+          {
+            "stage": "Critic",
+            "elapsed_seconds": 286.3259043999715,
+            "rss_at_stage_start_bytes": 148267008
+          },
+          {
+            "stage": "Export",
+            "elapsed_seconds": 296.0036407998996,
+            "rss_at_stage_start_bytes": 149131264
+          }
+        ],
+        "implementation": {
+          "pipeline": "H:\\mc-blueprint\\worktrees\\mcb-241\\mc-blueprint\\src\\mcblueprint\\pipeline.py",
+          "environment": {
+            "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+            "engine": "0.1.0",
+            "engineHash": "a277e1b5de60442c2fc08b18aa0df02a4513f4c86b424695d9386b3c74b4d2be",
+            "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+            "planVersion": 2
+          }
+        }
+      },
+      {
+        "terrain": "valley",
+        "seed": 3,
+        "scale": "large",
+        "reachableRoutes": 67,
+        "code": 0,
+        "make_runtime_seconds": 274.3925838000141,
+        "process_peak_rss_bytes": 262483968,
+        "stage_hook_samples": [
+          {
+            "stage": "Resolve",
+            "elapsed_seconds": 0.0014550000196322799,
+            "rss_at_stage_start_bytes": 53100544
+          },
+          {
+            "stage": "Site/Massing/Detail",
+            "elapsed_seconds": 4.1703627000097185,
+            "rss_at_stage_start_bytes": 65626112
+          },
+          {
+            "stage": "Materialize",
+            "elapsed_seconds": 9.283669500029646,
+            "rss_at_stage_start_bytes": 69320704
+          },
+          {
+            "stage": "Generate",
+            "elapsed_seconds": 40.40081320004538,
+            "rss_at_stage_start_bytes": 137572352
+          },
+          {
+            "stage": "Critic",
+            "elapsed_seconds": 263.27489010000136,
+            "rss_at_stage_start_bytes": 150794240
+          },
+          {
+            "stage": "Export",
+            "elapsed_seconds": 272.64939849998336,
+            "rss_at_stage_start_bytes": 151732224
+          }
+        ],
+        "implementation": {
+          "pipeline": "H:\\mc-blueprint\\worktrees\\mcb-241\\mc-blueprint\\src\\mcblueprint\\pipeline.py",
+          "environment": {
+            "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+            "engine": "0.1.0",
+            "engineHash": "a277e1b5de60442c2fc08b18aa0df02a4513f4c86b424695d9386b3c74b4d2be",
+            "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+            "planVersion": 2
+          }
+        }
+      },
+      {
+        "terrain": "hill",
+        "seed": 0,
+        "scale": "large",
+        "reachableRoutes": 67,
+        "code": 0,
+        "make_runtime_seconds": 272.5165373000782,
+        "process_peak_rss_bytes": 255545344,
+        "stage_hook_samples": [
+          {
+            "stage": "Resolve",
+            "elapsed_seconds": 0.0012610000558197498,
+            "rss_at_stage_start_bytes": 52789248
+          },
+          {
+            "stage": "Site/Massing/Detail",
+            "elapsed_seconds": 3.6351564000360668,
+            "rss_at_stage_start_bytes": 65523712
+          },
+          {
+            "stage": "Materialize",
+            "elapsed_seconds": 8.154589400044642,
+            "rss_at_stage_start_bytes": 69021696
+          },
+          {
+            "stage": "Generate",
+            "elapsed_seconds": 36.09877460007556,
+            "rss_at_stage_start_bytes": 136310784
+          },
+          {
+            "stage": "Critic",
+            "elapsed_seconds": 262.0518408000935,
+            "rss_at_stage_start_bytes": 147660800
+          },
+          {
+            "stage": "Export",
+            "elapsed_seconds": 270.84582280006725,
+            "rss_at_stage_start_bytes": 148475904
+          }
+        ],
+        "implementation": {
+          "pipeline": "H:\\mc-blueprint\\worktrees\\mcb-241\\mc-blueprint\\src\\mcblueprint\\pipeline.py",
+          "environment": {
+            "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+            "engine": "0.1.0",
+            "engineHash": "19c1aaef50da01a6da53abdb8108111a555128f7e712a1d7fae0c9edfd2fb8a2",
+            "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+            "planVersion": 2
+          }
+        }
+      }
+    ],
+    "measurement": "既存evaluate_make_performance.workerを独立プロセスで各1回実行。時間はmake全工程、RSSはプロセス全体のPeakWorkingSetSize。",
+    "limits": "他の検証と並行しており、性能受入基準の達成判定には使わない。"
+  },
+  "emitResume": {
+    "scale": "medium",
+    "terrain": "hill",
+    "buildingGroups": 4,
+    "stages": [
+      "resolve",
+      "site",
+      "massing",
+      "detail",
+      "blueprint"
+    ],
+    "matches": [
+      "placement",
+      "metrics",
+      "structuredDiagnostics",
+      "scene"
+    ],
+    "weatherIncluded": true
+  }
+}
