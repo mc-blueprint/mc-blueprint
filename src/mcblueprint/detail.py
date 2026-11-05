@@ -128,8 +128,12 @@ def _depth_operations(raw, style, strength):
     return result
 
 
-def plan_detail(params, style, config, root, body, detail, contract, projected_contract):
-    """detailへ装飾・開口後退を反映し、装飾計画・Palette・診断を返す。"""
+def plan_detail(params, style, config, root, body, detail, contract, projected_contract,
+                *, blocked=frozenset()):
+    """detailへ装飾・開口後退を反映し、装飾計画・Palette・診断を返す。
+
+    blockedはローカル座標の接合屋根・共有構造セル。装飾の配置候補から除く。
+    """
     settings = config["decoration"]
     modules = style["modules"]
     required = ("bay", "entrance", "roof_edge")
@@ -192,6 +196,8 @@ def plan_detail(params, style, config, root, body, detail, contract, projected_c
             kept = []
             for point in points:
                 world = transform.apply(point)
+                if world in blocked:
+                    continue
                 if op.get("role") == "frame" and world.y == level * height + 1:
                     continue
                 if any(box.contains(world) for box in circulation):
@@ -250,6 +256,7 @@ def plan_detail(params, style, config, root, body, detail, contract, projected_c
     placed, decorations = _facade_selection(
         placed, params, style, config, root, body, projected_contract, raw_modules, target,
         circulation,
+        blocked,
     )
     used_palettes = {op["palette"] for wrapper in placed for op in wrapper["operations"]
                      if "palette" in op}
@@ -260,7 +267,7 @@ def plan_detail(params, style, config, root, body, detail, contract, projected_c
 
 
 def _facade_selection(placed, params, style, config, root, body, contract, modules, target,
-                      circulation=()):
+                      circulation=(), blocked=frozenset()):
     """階境の帯を先に確保し、非開口面積の予算内で部品の装飾部位を選ぶ。"""
     plan = plan_from_metadata(
         {"element": root, "params": params, **contract},
@@ -278,6 +285,7 @@ def _facade_selection(placed, params, style, config, root, body, contract, modul
     rotation = Transform.rotation(params["angle"], Vec3(0, 0, 0))
     reverse = Transform.rotation(-params["angle"], Vec3(0, 0, 0))
     occupied = {point for run in (*plan.columns, *plan.beams) for point in run.cells}
+    occupied.update(rotation.apply(point) for point in blocked)
     circulation = [rotation.bounds(box) for box in circulation]
     footprint = set()
     if "radius" in params:

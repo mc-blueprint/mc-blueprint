@@ -136,6 +136,26 @@ class SurfacePathPlan:
     minecraft_version: str
 
 
+def surface_geometry(points, width, block, stairs, clearance=2):
+    """解決済みの路面経由点をpathへ写し、幅に応じた曲角の踊り場を検査する。
+
+    地表道路とSite plannerで共有する工学規則。材質はBlockState、pointsはVec3。
+    支持地盤・切盛土・水域の検査は呼出し側の責務。不正な経由点はBlueprintError、
+    踊り場不足はSurfacePathError。
+    """
+    parse_points({"points": [point.to_list() for point in points]}, "surfacePath")
+    path = PathOperation("surfacePath", points, BlockSpec(block=block), width=width,
+                         stairs=stairs, clearance=clearance)
+    line = path.centre_line()
+    radius = (width + 1) // 2
+    for corner in points[1:-1]:
+        index = next(i for i, (point, _) in enumerate(line) if point == corner)
+        if any(point.y != corner.y for point, _ in line[max(0, index - radius):index + radius + 1]):
+            raise SurfacePathError((SurfacePathIssue(
+                corner, "曲がり角の前後は幅に応じた平坦な踊り場が必要です"),))
+    return path
+
+
 def plan_surface_path(
     spec: SurfacePathSpec, terrain: TerrainPlacement, foundation: FoundationPlan | None = None,
 ) -> SurfacePathPlan:
@@ -241,16 +261,8 @@ def plan_surface_path(
         parse_points({"points": [point.to_list() for point in resolved]}, "surfacePath")
     except BlueprintError as exc:
         raise SurfacePathError((SurfacePathIssue(resolved[-1], str(exc)),)) from exc
-    path = PathOperation("surfacePath", resolved, BlockSpec(block=spec.block), width=spec.width,
-                         stairs=spec.stairs, clearance=spec.clearance)
+    path = surface_geometry(resolved, spec.width, spec.block, spec.stairs, spec.clearance)
     line = path.centre_line()
-    radius = (spec.width + 1) // 2
-    for corner in resolved[1:-1]:
-        index = next(i for i, (point, _) in enumerate(line) if point == corner)
-        if any(point.y != corner.y for point, _ in line[max(0, index - radius):index + radius + 1]):
-            issues.append(SurfacePathIssue(
-                corner, "曲がり角の前後は幅に応じた平坦な踊り場が必要です",
-            ))
     road: dict[tuple[int, int], tuple[Vec3, BlockState]] = {}
     for operation in path.expand():
         if operation["type"] != "set":
