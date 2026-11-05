@@ -1,0 +1,857 @@
+{
+  "schemaVersion": 1,
+  "recordType": "underground-site-verification",
+  "issue": 242,
+  "baseCommit": "a408105",
+  "designCommit": "b9129db",
+  "method": "Python 3.12の独立した49ノードを担当venvで実行。本記録はpytestの成功成果を読み取り、生成は繰り返さない。性能判定は対象外。",
+  "commands": [
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_underground_reproducible_surfaces_and_reservations[cave-42]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-079",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-079.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_underground_reproducible_surfaces_and_reservations[cave-73]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-080",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-080.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_underground_reproducible_surfaces_and_reservations[cave-101]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-081",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-081.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_underground_reproducible_surfaces_and_reservations[underground_city-42]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-082",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-082.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_underground_reproducible_surfaces_and_reservations[underground_city-73]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-083",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-083.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_underground_reproducible_surfaces_and_reservations[underground_city-101]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-084",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-084.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_underground_routes_preserve_buildings",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-085",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-085.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_underground_fixed_versions_formats[schem-1.21.11-cave]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-086",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-086.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_underground_fixed_versions_formats[schem-26.1.2-cave]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-088",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-088.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_underground_fixed_versions_formats[schem-1.21.11-underground_city]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-087",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-087.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_underground_fixed_versions_formats[schem-26.2-cave]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-090",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-090.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_underground_fixed_versions_formats[schem-26.1.2-underground_city]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-089",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-089.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_underground_fixed_versions_formats[schem-26.2-underground_city]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-091",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-091.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_underground_fixed_versions_formats[schem-26.3-cave]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-092",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-092.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_underground_fixed_versions_formats[litematic-1.21.11-cave]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-094",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-094.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_underground_fixed_versions_formats[schem-26.3-underground_city]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-093",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-093.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_underground_fixed_versions_formats[litematic-26.1.2-cave]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-096",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-096.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_underground_fixed_versions_formats[litematic-1.21.11-underground_city]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-095",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-095.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_underground_fixed_versions_formats[litematic-26.2-cave]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-098",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-098.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_underground_fixed_versions_formats[litematic-26.1.2-underground_city]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-097",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-097.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_underground_fixed_versions_formats[litematic-26.3-cave]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-100",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-100.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_underground_fixed_versions_formats[litematic-26.2-underground_city]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-099",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-099.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_underground_rejects_unusable_sites[changes0-\\u4e3b\\u7a7a\\u6d1e]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-106",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-106.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_underground_rejects_unusable_sites[changes1-\\u5929\\u4e95]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-107",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-107.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_underground_rejects_unusable_sites[changes2-\\u6c34\\u6ca1]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-108",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-108.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_underground_rejects_unusable_sites[changes3-\\u5165\\u53e3\\u6570]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-109",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-109.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_underground_rejects_unusable_sites[changes4-\\u533a\\u753b]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-110",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-110.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_underground_rejects_unusable_sites[changes5-\\u5929\\u4e95]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-111",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-111.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_underground_rejects_unusable_sites[changes6-\\u672a\\u77e5]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-112",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-112.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_underground_overrides_cannot_cut_support_or_close_entrance[support]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-113",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-113.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_underground_other_seeds_and_branches[73-cave]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-102",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-102.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_underground_overrides_cannot_cut_support_or_close_entrance[footing]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-114",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-114.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_underground_fixed_versions_formats[litematic-26.3-underground_city]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-101",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-101.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_underground_overrides_cannot_cut_support_or_close_entrance[bearing]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-115",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-115.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_underground_overrides_cannot_cut_support_or_close_entrance[entrance]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-116",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-116.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_underground_overrides_cannot_cut_support_or_close_entrance[surface]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-117",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-117.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_weather_uses_underground_floor_and_voxel_water_distance[ground]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-119",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-119.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_weather_uses_underground_floor_and_voxel_water_distance[water]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-120",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-120.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_cave_critic_detects_broken_rock_connections[point0]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-122",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-122.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_cave_critic_detects_broken_rock_connections[point1]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-123",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-123.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_cave_selects_connected_floor_and_reaches_real_surface[48-8]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-124",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-124.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_cave_selects_connected_floor_and_reaches_real_surface[40-7]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-125",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-125.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_cave_missing_support_expectation_requires_regeneration",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-126",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-126.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_cave_emit_resume_and_four_entrances",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-118",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-118.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_underground_city_resume_keeps_weather_and_scene",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-121",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-121.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_underground_other_seeds_and_branches[101-cave]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-104",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-104.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_underground_other_seeds_and_branches[73-underground_city]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-103",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-103.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_underground_other_seeds_and_branches[101-underground_city]",
+      "--basetemp=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\temp-105",
+      "--junitxml=H:\\mc-blueprint\\worktrees\\mcb-242\\mc-blueprint\\output\\pytest-full-242-review\\result-105.xml"
+    ],
+    [
+      "H:\\mc-blueprint\\worktrees\\mcb-242\\.venv\\Scripts\\python.exe",
+      "-X",
+      "utf8",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_underground_planning.py::test_cave_floor_search_includes_surface_access",
+      "--basetemp=output/pytest-242-surface-constraint",
+      "--junitxml=output/pytest-full-242-review/result-supplemental.xml"
+    ]
+  ],
+  "suiteSummary": {
+    "tests": 3156,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "passed": 3156,
+    "executionUnits": 206,
+    "parallelProcesses": 6,
+    "supplemental": "全件収集後に追加した地表階段を含む床高探索の1件を別途実行"
+  },
+  "testSummary": {
+    "passed": 49,
+    "failed": 0
+  },
+  "matrixCoverage": {
+    "versionFormat": {
+      "archetypes": [
+        "cave",
+        "underground_city"
+      ],
+      "scale": "huge",
+      "seed": 42,
+      "conditions": 16
+    },
+    "otherSeeds": {
+      "seeds": [
+        73,
+        101
+      ],
+      "conditions": 4,
+      "additionalBranches": 1
+    }
+  },
+  "inputs": {
+    "tests/test_underground_planning.py": "ae4399942eda0f8c4045cab0da857532b66ee179cf4614bcba30a79add0d4cc9",
+    "src/mcblueprint/underground_planning.py": "47c342499a4ca43f975812b4ad0fc5981d4f1dd4e41ea7753fd237bab12a6e15",
+    "src/mcblueprint/critic.py": "f8cfe50f761e98256ad7fdb0282603712df613205ec9dc6a76159cd8838954d3",
+    "src/mcblueprint/plan_contract.py": "748013465c1becbd20313f1fd51885c24d22b7dff0724e567fb85b57f51d2535",
+    "evaluation/cases/large-scale.json": "698a515d7bf3511559ac11af4d5ffb80f5b13a3d48b7b7265beb515853c49252",
+    "src/mcblueprint/data/lock.json": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+    "src/mcblueprint/data/patterns/layouts/medieval/underground_city.yaml": "77dbeea1e4331342f5b092604532e871105b0d5be16af81c496c62ddc7bfb47d"
+  },
+  "results": [
+    {
+      "archetype": "cave",
+      "scale": "huge",
+      "minecraftVersion": "1.21.11",
+      "format": "schem",
+      "seed": 42,
+      "status": "passed",
+      "reachableRoutes": 2,
+      "environment": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "de2b2d763f5d74e54664713ebd8437a01297a430dafcbac0c9eb2dcae93264ad",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "metricsSha256": "4a91b39142bc1fcc6084ac9b081d658f79840f48ef493cf4993a0642a0845727",
+      "diagnosticsSha256": "3001f8a611edfdf024ae4525fd6afc1175c26e0b2843d24452562ee4866a1bc3"
+    },
+    {
+      "archetype": "underground_city",
+      "scale": "huge",
+      "minecraftVersion": "1.21.11",
+      "format": "schem",
+      "seed": 42,
+      "status": "passed",
+      "reachableRoutes": 26,
+      "environment": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "de2b2d763f5d74e54664713ebd8437a01297a430dafcbac0c9eb2dcae93264ad",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "metricsSha256": "f6218a2d354bc76b389751d8d2775619ae9d767b0585ae9e19fd7451f8c78054",
+      "diagnosticsSha256": "9581e091ecf553d77f89a828d95fd65b57a7686325813ce2cb98523f6d6a98ff"
+    },
+    {
+      "archetype": "cave",
+      "scale": "huge",
+      "minecraftVersion": "26.1.2",
+      "format": "schem",
+      "seed": 42,
+      "status": "passed",
+      "reachableRoutes": 2,
+      "environment": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "de2b2d763f5d74e54664713ebd8437a01297a430dafcbac0c9eb2dcae93264ad",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "metricsSha256": "4a91b39142bc1fcc6084ac9b081d658f79840f48ef493cf4993a0642a0845727",
+      "diagnosticsSha256": "f2a7763a79785132c0e443a3bcf4934ca8c88126b201a138f83f51d4caeebf1a"
+    },
+    {
+      "archetype": "underground_city",
+      "scale": "huge",
+      "minecraftVersion": "26.1.2",
+      "format": "schem",
+      "seed": 42,
+      "status": "passed",
+      "reachableRoutes": 26,
+      "environment": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "de2b2d763f5d74e54664713ebd8437a01297a430dafcbac0c9eb2dcae93264ad",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "metricsSha256": "f6218a2d354bc76b389751d8d2775619ae9d767b0585ae9e19fd7451f8c78054",
+      "diagnosticsSha256": "ec76ae62ab3c89afab56477c8faa675870b72a0d28718a1445ae6b6e4460d890"
+    },
+    {
+      "archetype": "cave",
+      "scale": "huge",
+      "minecraftVersion": "26.2",
+      "format": "schem",
+      "seed": 42,
+      "status": "passed",
+      "reachableRoutes": 2,
+      "environment": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "de2b2d763f5d74e54664713ebd8437a01297a430dafcbac0c9eb2dcae93264ad",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "metricsSha256": "4a91b39142bc1fcc6084ac9b081d658f79840f48ef493cf4993a0642a0845727",
+      "diagnosticsSha256": "c0e17fca6f33425bd50c18da7d5db162d5ae724a5b53b27e09f291dcdf682f7d"
+    },
+    {
+      "archetype": "underground_city",
+      "scale": "huge",
+      "minecraftVersion": "26.2",
+      "format": "schem",
+      "seed": 42,
+      "status": "passed",
+      "reachableRoutes": 26,
+      "environment": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "de2b2d763f5d74e54664713ebd8437a01297a430dafcbac0c9eb2dcae93264ad",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "metricsSha256": "f6218a2d354bc76b389751d8d2775619ae9d767b0585ae9e19fd7451f8c78054",
+      "diagnosticsSha256": "506da694c6bb3e1f49d1706f35c2b9ddc293f3b1c7e92fa8735f894ceb237e0c"
+    },
+    {
+      "archetype": "cave",
+      "scale": "huge",
+      "minecraftVersion": "26.3",
+      "format": "schem",
+      "seed": 42,
+      "status": "passed",
+      "reachableRoutes": 2,
+      "environment": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "de2b2d763f5d74e54664713ebd8437a01297a430dafcbac0c9eb2dcae93264ad",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "metricsSha256": "4a91b39142bc1fcc6084ac9b081d658f79840f48ef493cf4993a0642a0845727",
+      "diagnosticsSha256": "005a190c19a4f64e98ed9a84984c4ac5a94f5c44f384c64fd1d7211c55521a69"
+    },
+    {
+      "archetype": "underground_city",
+      "scale": "huge",
+      "minecraftVersion": "26.3",
+      "format": "schem",
+      "seed": 42,
+      "status": "passed",
+      "reachableRoutes": 26,
+      "environment": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "de2b2d763f5d74e54664713ebd8437a01297a430dafcbac0c9eb2dcae93264ad",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "metricsSha256": "018639bf2c98e6a984b672f8dc1ca94b3a2830a2673fed7ca154c9f4706d3199",
+      "diagnosticsSha256": "8f733444a40b2163ccd9685cb8b9191b2cf353eb283b01d972e3850bacc9f56f"
+    },
+    {
+      "archetype": "cave",
+      "scale": "huge",
+      "minecraftVersion": "1.21.11",
+      "format": "litematic",
+      "seed": 42,
+      "status": "passed",
+      "reachableRoutes": 2,
+      "environment": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "de2b2d763f5d74e54664713ebd8437a01297a430dafcbac0c9eb2dcae93264ad",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "metricsSha256": "4a91b39142bc1fcc6084ac9b081d658f79840f48ef493cf4993a0642a0845727",
+      "diagnosticsSha256": "94b7222049d629bbcc22cd9860d1df542c8b6e5e0eda18495e275ebf38d08d81"
+    },
+    {
+      "archetype": "underground_city",
+      "scale": "huge",
+      "minecraftVersion": "1.21.11",
+      "format": "litematic",
+      "seed": 42,
+      "status": "passed",
+      "reachableRoutes": 26,
+      "environment": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "de2b2d763f5d74e54664713ebd8437a01297a430dafcbac0c9eb2dcae93264ad",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "metricsSha256": "f6218a2d354bc76b389751d8d2775619ae9d767b0585ae9e19fd7451f8c78054",
+      "diagnosticsSha256": "9047ef0d9df74c74bfdfa3c459fe95512d368074dc5c5523acf7e5623f1f37b9"
+    },
+    {
+      "archetype": "cave",
+      "scale": "huge",
+      "minecraftVersion": "26.1.2",
+      "format": "litematic",
+      "seed": 42,
+      "status": "passed",
+      "reachableRoutes": 2,
+      "environment": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "de2b2d763f5d74e54664713ebd8437a01297a430dafcbac0c9eb2dcae93264ad",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "metricsSha256": "4a91b39142bc1fcc6084ac9b081d658f79840f48ef493cf4993a0642a0845727",
+      "diagnosticsSha256": "71105222adf6d8cd2ea959c5b50a5e2dbe83875236a600915d2919cc915806c3"
+    },
+    {
+      "archetype": "underground_city",
+      "scale": "huge",
+      "minecraftVersion": "26.1.2",
+      "format": "litematic",
+      "seed": 42,
+      "status": "passed",
+      "reachableRoutes": 26,
+      "environment": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "de2b2d763f5d74e54664713ebd8437a01297a430dafcbac0c9eb2dcae93264ad",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "metricsSha256": "f6218a2d354bc76b389751d8d2775619ae9d767b0585ae9e19fd7451f8c78054",
+      "diagnosticsSha256": "7296ce0fafdd12b5d864a9d79d1774010e2bb765193228ade144a9b294a256f5"
+    },
+    {
+      "archetype": "cave",
+      "scale": "huge",
+      "minecraftVersion": "26.2",
+      "format": "litematic",
+      "seed": 42,
+      "status": "passed",
+      "reachableRoutes": 2,
+      "environment": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "de2b2d763f5d74e54664713ebd8437a01297a430dafcbac0c9eb2dcae93264ad",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "metricsSha256": "4a91b39142bc1fcc6084ac9b081d658f79840f48ef493cf4993a0642a0845727",
+      "diagnosticsSha256": "d5a194edd329e4f48e4e6f311f102111012fe9016c8984a76d2304330a38ed11"
+    },
+    {
+      "archetype": "underground_city",
+      "scale": "huge",
+      "minecraftVersion": "26.2",
+      "format": "litematic",
+      "seed": 42,
+      "status": "passed",
+      "reachableRoutes": 26,
+      "environment": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "de2b2d763f5d74e54664713ebd8437a01297a430dafcbac0c9eb2dcae93264ad",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "metricsSha256": "f6218a2d354bc76b389751d8d2775619ae9d767b0585ae9e19fd7451f8c78054",
+      "diagnosticsSha256": "077758da08423cda313e24d7f24e2a1b7545e76357db92bd0950f9dd521e27d7"
+    },
+    {
+      "archetype": "cave",
+      "scale": "huge",
+      "minecraftVersion": "26.3",
+      "format": "litematic",
+      "seed": 42,
+      "status": "passed",
+      "reachableRoutes": 2,
+      "environment": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "de2b2d763f5d74e54664713ebd8437a01297a430dafcbac0c9eb2dcae93264ad",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "metricsSha256": "4a91b39142bc1fcc6084ac9b081d658f79840f48ef493cf4993a0642a0845727",
+      "diagnosticsSha256": "87c8dd2d35788c7f6eeabe7de39c8ddf504e0ec86f84e9751e24bc7496d3167c"
+    },
+    {
+      "archetype": "underground_city",
+      "scale": "huge",
+      "minecraftVersion": "26.3",
+      "format": "litematic",
+      "seed": 42,
+      "status": "passed",
+      "reachableRoutes": 26,
+      "environment": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "de2b2d763f5d74e54664713ebd8437a01297a430dafcbac0c9eb2dcae93264ad",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "metricsSha256": "018639bf2c98e6a984b672f8dc1ca94b3a2830a2673fed7ca154c9f4706d3199",
+      "diagnosticsSha256": "de125efa6b01b6ce72d5380d55f8ef50bca663345b4e7800046370a68a50f9ba"
+    },
+    {
+      "archetype": "cave",
+      "scale": "huge",
+      "minecraftVersion": "1.21.11",
+      "format": "schem",
+      "seed": 73,
+      "status": "passed",
+      "reachableRoutes": 2,
+      "environment": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "de2b2d763f5d74e54664713ebd8437a01297a430dafcbac0c9eb2dcae93264ad",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "metricsSha256": "4a91b39142bc1fcc6084ac9b081d658f79840f48ef493cf4993a0642a0845727",
+      "diagnosticsSha256": "4e7056b5b7d619ea8cbecf0565329f05f6eb5634ace7c4a601da6543c1148f25"
+    },
+    {
+      "archetype": "underground_city",
+      "scale": "huge",
+      "minecraftVersion": "1.21.11",
+      "format": "schem",
+      "seed": 73,
+      "status": "passed",
+      "reachableRoutes": 26,
+      "environment": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "de2b2d763f5d74e54664713ebd8437a01297a430dafcbac0c9eb2dcae93264ad",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "metricsSha256": "4ea0501d2ef45f3e01236f068bee596a27e5efcdefd54eb14bafbd1525a5abce",
+      "diagnosticsSha256": "4a188ac5df8ee0befbb36f5a46bfc75cec970fb44c310e8ad2e94a311389ffea"
+    },
+    {
+      "archetype": "cave",
+      "scale": "huge",
+      "minecraftVersion": "1.21.11",
+      "format": "schem",
+      "seed": 101,
+      "status": "passed",
+      "reachableRoutes": 2,
+      "environment": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "de2b2d763f5d74e54664713ebd8437a01297a430dafcbac0c9eb2dcae93264ad",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "metricsSha256": "4a91b39142bc1fcc6084ac9b081d658f79840f48ef493cf4993a0642a0845727",
+      "diagnosticsSha256": "a9f5004113ff68b0c545af831621c5c2e91a6b3a8ab7b75a0a45a74e115dc0fd"
+    },
+    {
+      "archetype": "underground_city",
+      "scale": "huge",
+      "minecraftVersion": "1.21.11",
+      "format": "schem",
+      "seed": 101,
+      "status": "passed",
+      "reachableRoutes": 26,
+      "environment": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "de2b2d763f5d74e54664713ebd8437a01297a430dafcbac0c9eb2dcae93264ad",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "metricsSha256": "13c1d302b034eecc39b8fcdc3888a904529da235967d0afa76b37f1428a6035b",
+      "diagnosticsSha256": "e1826d69f85e9bc09690201fca4ce91b0a1026b4901fab2147a85aa916d31744"
+    }
+  ]
+}
