@@ -271,6 +271,8 @@ def test_closed_features_and_unimplemented_planner(tmp_path, archetype):
         assert resolved.buildspec["features"]["buildings"] == 12
     if archetype == "castle":
         assert len(plan_buildings(single_plan(resolved).massing)) == 9
+    elif archetype in ("town", "city"):
+        assert len(single_plan(resolved).massing["parcels"]) == 12
     else:
         with pytest.raises(BlueprintError, match="Site/Massing.*未対応"):
             single_plan(resolved)

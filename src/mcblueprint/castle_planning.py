@@ -3,11 +3,10 @@
 from __future__ import annotations
 
 import copy
-import json
 from collections import deque
 from itertools import combinations, product
 
-from mcblueprint.buildspec import SUPPORTED_TERRAINS, resolve_buildspec
+from mcblueprint.buildspec import SUPPORTED_TERRAINS
 from mcblueprint.errors import BlueprintError
 from mcblueprint.layouts import load_layout
 from mcblueprint.model import AABB, Vec3
@@ -17,13 +16,11 @@ from mcblueprint.operations.transform import Transform
 from mcblueprint.plan_contract import hierarchy, plan_buildings
 from mcblueprint.planning import (
     PlanningResult,
-    _house,
-    _plan_contract,
     _plan_overrides,
     _ref,
     _tag,
-    plan_buildspec,
 )
+from mcblueprint.site_planning import _place, connect_houses, grade_columns
 from mcblueprint.terrain_density import plan_density
 from mcblueprint.terrain_field import plan_terrain
 
@@ -97,42 +94,6 @@ def _courtyard_path(start, goal, blocked, area):
     return [point for i, point in enumerate(cells) if i in (0, len(cells) - 1)
             or (point[0] - cells[i - 1][0], point[1] - cells[i - 1][1])
             != (cells[i + 1][0] - point[0], cells[i + 1][1] - point[1])]
-
-
-def _place(resolved, kind, root, offset, angle, features, changes):
-    spec = resolved.buildspec
-    if "angle" in changes and changes["angle"] != angle:
-        raise BlueprintError(f"Site: {root}: 回転変更が入口と城壁の接続に干渉します")
-    result = plan_buildspec(resolve_buildspec({
-        "minecraftVersion": spec["minecraftVersion"], "archetype": kind,
-        "style": spec["style"], "size": [64, spec["size"][1], 64],
-        "seed": spec["seed"], "config": resolved.config, "interior": spec["interior"],
-        "features": features, "elements": {f"{kind}#1": {**changes, "angle": angle}},
-    }))
-    data, diagnostics = json.loads(json.dumps(
-        [result.blueprint, result.diagnostics]).replace(f"{kind}#1", root))
-    building = plan_buildings(data["metadata"]["planning"])[0]
-    wrapper = data["operations"][0]
-    old = Transform.rotation(angle, Vec3(0, 0, 0)).then(
-        Transform.translation(Vec3.from_seq(building["offset"])))
-    transform = Transform.rotation(angle, Vec3(0, 0, 0)).then(
-        Transform.translation(Vec3.from_seq(offset)))
-    wrapper["offset"] = offset
-    body = building["operations"]
-    for operation in [*body, *wrapper["operations"]]:
-        if operation["element"].endswith(".threshold"):
-            operation.update(reserved="circulation", owner="site#1.paths")
-    detail = [op for op in wrapper["operations"] if op not in body]
-    layout = _house(building["params"], root)[2] if kind == "house" else None
-    contract = _plan_contract(root, body, detail, transform, building["params"], layout)
-    delta = transform.offset - old.offset
-    building.update(contract, offset=offset,
-                    entrance=(Vec3.from_seq(building["entrance"]) + delta).to_list(),
-                    arrivals=[(Vec3.from_seq(p) + delta).to_list() for p in building["arrivals"]])
-    for decoration in building["decorations"]:
-        decoration["operation"] = decoration["operation"].replace(
-            f"@:{old.rows}:{old.offset}", f"@:{transform.rows}:{transform.offset}")
-    return building, wrapper, data["palettes"], diagnostics
 
 
 def plan_castle(resolved) -> PlanningResult:
@@ -212,16 +173,9 @@ def plan_castle(resolved) -> PlanningResult:
         field, overhangs=False).to_dict(), "minecraftVersion": spec["minecraftVersion"]},
         "terrain#1", "ground", "site.terrain")]
     # 中庭全体を同じ床高に造成する。元地形場は別に保持する。
-    for z in range(north - 10, south + 6):
-        for x in range(west - 5, east + 6):
-            top = int(field.heights[z, x])
-            operations.append(_tag({"type": "fill", "from": [x, min(top, floor), z],
-                                    "to": [x, floor, z], "block": _ref("foundation")},
-                                   "foundation#1", "foundation", "site.terrain"))
-            if top > floor:
-                operations.append(_tag({"type": "fill", "from": [x, floor + 1, z],
-                                        "to": [x, top + 1, z], "block": "air"},
-                                       "grading#1", "ground", "site.terrain"))
+    operations.extend(grade_columns(field, (
+        (x, z) for z in range(north - 10, south + 6)
+        for x in range(west - 5, east + 6)), floor))
     notch = 2 + spec["seed"] % 2
     polygon = [[west, north], [east, north], [east, south], [cx + notch, south],
                [cx + notch, south - 1], [cx - notch, south - 1],
@@ -295,43 +249,7 @@ def plan_castle(resolved) -> PlanningResult:
                                    "moat#1", "ground", "features.moat"))
     # 接触面と通路候補は実寸・期待構造・既存階段から決める。
     houses = [b for b in buildings if b["archetype"] == "house"]
-    contacts, passages = [], []
-    for i, (a, b) in enumerate(zip(houses, houses[1:], strict=False)):
-        x, y, z = b["offset"]
-        if (a["offset"][0] + a["params"]["width"] - 1 != x
-                or a["offset"][2] != z):
-            raise BlueprintError("Site: 棟の寸法変更が接合位置に干渉します")
-        top = min(c["offset"][1] + c["params"]["floors"] * c["params"]["floor_height"]
-                  for c in (a, b))
-        back = min(c["offset"][2] + c["params"]["depth"] - 1 for c in (a, b))
-        contacts.append({"first": a["element"], "second": b["element"],
-                         "from": [x, y, z], "to": [x, top, back]})
-        occupied = []
-        for c in (a, b):
-            occupied.extend(AABB.of(Vec3.from_seq(run["from"]), Vec3.from_seq(run["to"]))
-                            for key in ("columns", "beams") for run in c[key])
-            transform = Transform.translation(Vec3.from_seq(c["offset"]))
-            occupied.extend(transform.bounds(build_operation(op, "castle.junction").bounds())
-                            for op in c["operations"] if op.get("reserved") == "circulation")
-        passage_z = next((cz for cz in sorted(range(z + 1, back), key=lambda cz: abs(cz - z - 7))
-                          if not any(box.contains(Vec3(px, py, cz)) for box in occupied
-                                     for px in range(x - 1, x + 2) for py in range(y, y + 3))),
-                         None)
-        if passage_z is None:
-            raise BlueprintError("Site: 柱・梁・階段を避ける接合通路を収容できません")
-        for suffix, building, dx in (("a", a, -1), ("b", b, 1)):
-            nodes.append({"id": f"junction#1.{i}.{suffix}", "element": building["element"],
-                          "position": [x + dx, y + 1, passage_z]})
-            edges.append({"id": f"junction#1.{i}.{suffix}.walk", "kind": "walk",
-                          "from": f"junction#1.{i}.{suffix}",
-                          "to": building["element"] + ".walk#1"})
-        passage = {"from": f"junction#1.{i}.a", "to": f"junction#1.{i}.b"}
-        passages.append(passage)
-        edges.append({"id": f"junction#1.route#{i}", "kind": "walk", **passage})
-    plan["junctions"] = [{"element": "junction#1", "owner": "junction#1",
-                           "parts": [{"element": b["element"], "shape": "rectangle"}
-                                     for b in houses],
-                           "contacts": contacts, "passages": passages, "roofPolicy": "envelope"}]
+    connect_houses(plan, houses, "junction#1")
 
     def route(ident, points, target, *, width=1, start="gate#1.inside", kind="walk"):
         points = [p for i, p in enumerate(points) if not i or p != points[i - 1]]
