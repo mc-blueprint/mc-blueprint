@@ -581,7 +581,9 @@ def _run_spec_template(args: argparse.Namespace, out: TextIO) -> int:
 
         from mcblueprint.buildspec import feature_defaults
 
-        features = yaml.safe_dump(feature_defaults(args.archetype), sort_keys=False).rstrip()
+        defaults = feature_defaults(args.archetype,
+                                    "huge" if args.archetype == "underground_city" else "small")
+        features = yaml.safe_dump(defaults, sort_keys=False).rstrip()
         features = "\n".join("  " + line for line in features.splitlines())
     elements = (f"# 既知の棟IDのパラメータだけ編集できる。\n# elements:\n"
                 f"#   {args.archetype}#1:\n#     angle: 90" if args.archetype in ("house", "tower")
@@ -590,9 +592,15 @@ def _run_spec_template(args: argparse.Namespace, out: TextIO) -> int:
         elements = "# 主棟 house#1、付属棟 house#2/#3、塔 tower#1…を計画する。"
     if args.archetype in ("town", "city"):
         elements = "# 区画内の棟 house#1…を計画する。L/T型は複数棟で構成する。"
-    site_planner = args.archetype in ("castle", "town", "city")
+    if args.archetype == "underground_city":
+        elements = "# 地下区画の棟 house#1…を計画する。屋根と天井の余裕が必要。"
+    if args.archetype == "cave":
+        elements = "# 主空洞と入口経路を計画する。entrancesは1〜4。"
+    site_planner = args.archetype in ("castle", "town", "city", "cave", "underground_city")
     scale = "medium" if site_planner else "small"
     size = "[64, 48, 64]" if site_planner else "[32, 32, 32]"
+    if args.archetype == "underground_city":
+        scale, size = "huge", "[256, 128, 256]"
     styles = (f"{args.archetype}はmedievalに対応。" if site_planner
               else "medieval / japanese / modern")
     print(f'''# 対象版を明示し、敷地は軒・胸壁を含む上限にする。
