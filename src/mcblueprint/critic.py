@@ -140,6 +140,7 @@ def _convert_plan(planning, massing, offset, decoration_range, fixed_roles):
              if value in targets},
             tuple(decoration_range), frozenset(fixed_roles), not buildings,
             junction_cells={**{point: j.element for j in junctions for point in j.shared},
+                            **{point: j.element for j in junctions for point in j.supports},
                             **{point: run.owner for run in roof_runs for point in run.cells}},
         )
     shapes = {}
