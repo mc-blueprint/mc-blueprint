@@ -86,6 +86,8 @@ def _convert_plan(planning, massing, offset, decoration_range, fixed_roles):
         shapes = {b["element"]: b for b in plan_buildings(massing)} if massing is not None else {}
         if massing is not None and set(shapes) != {b["element"] for b in buildings}:
             raise BlueprintError("Critic計画とMassingの棟IDが一致しません")
+        if massing is not None and planning.get("supports", []) != massing.get("supports", []):
+            raise BlueprintError("Critic計画とMassingの敷地支柱が一致しません")
         plans = [_convert_plan(b, shapes.get(b["element"]), b["offset"],
                                decoration_range, fixed_roles) for b in buildings]
         from mcblueprint.junctions import junction_geometry
@@ -111,6 +113,8 @@ def _convert_plan(planning, massing, offset, decoration_range, fixed_roles):
             ExecutionContext(BlockVolume(), random.Random(0), {}))), None) for j in junctions)
         support_runs = tuple(StructuralRun(j.element, tuple(j.supports))
                              for j in junctions if j.supports)
+        site_supports = tuple(StructuralRun(item["owner"], tuple(iter_box(box(item))))
+                              for item in planning.get("supports", ()))
         jamb_runs = tuple(StructuralRun(j.element, tuple(j.jambs - j.passages.keys()))
                           for j in junctions if j.jambs - j.passages.keys())
         transferred.update(point for run in roof_runs for point in run.cells)
@@ -132,7 +136,8 @@ def _convert_plan(planning, massing, offset, decoration_range, fixed_roles):
                     facades.append(replace(facade, cells=tuple(cells)))
         targets = {(f.element, f.face) for f in facades}
         return CriticPlan(
-            retain(run for p in plans for run in p.columns) + support_runs + jamb_runs,
+            retain(run for p in plans for run in p.columns)
+            + support_runs + jamb_runs + site_supports,
             retain(run for p in plans for run in p.beams) + junction_beams
             + tuple(run for run in roof_runs if run.cells),
             tuple(facades),
@@ -359,7 +364,7 @@ class CriticAccumulator:
 
     def finalize(self) -> CriticResult:
         """全coreの集計値から指標と診断を返す。"""
-        if self.plan.terrain_only:
+        if self.plan.terrain_only and not self.structural_runs:
             return CriticResult({name: {"value": None, "status": "n/a",
                                         "reason": "棟なしの敷地計画"}
                                  for name in ("column_continuity", "beam_continuity", "flat_ratio",
@@ -572,6 +577,9 @@ class CriticAccumulator:
                     "value": len(self.missing_surface),
                     "denominator": sum(self.facade_area.values()),
                 },
+                **({name: {"value": None, "status": "n/a", "reason": "棟なしの敷地計画"}
+                    for name in ("flat_ratio", "decoration_density", "facade_mix",
+                                 "facade_surface_missing")} if self.plan.terrain_only else {}),
             },
             tuple(self.diagnostics),
         )

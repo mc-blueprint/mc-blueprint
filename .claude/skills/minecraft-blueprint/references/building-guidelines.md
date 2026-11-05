@@ -6,6 +6,8 @@ Blueprint を「見栄えのする建物」にするための指針。仕様で�
 
 街並みは `mcblueprint spec-template town`（cityも同じplanner）を使う。区画・複合棟・街路の対応条件は [街並みの生成](../../../../docs/TOWN.md) を参照。
 
+巨大洞窟・地下都市は `mcblueprint spec-template cave` / `underground_city` を使う。乾いた床・天井余裕・入口経路の条件は [地下の生成](../../../../docs/UNDERGROUND.md) を参照。
+
 ## 設計の進め方
 
 1. **寸法を決める**: 幅・奥行き・高さと階数。1 階の天井高は 4〜5 ブロック（床から天井まで 3〜4 の空間）。人が通る通路は幅 2 以上、ドアは高さ 2。

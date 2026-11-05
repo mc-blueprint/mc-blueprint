@@ -20,6 +20,12 @@ def plan_buildings(plan):
 
     try:
         register(plan)
+        if plan["archetype"] in ("cave", "underground_city") and "supports" not in plan:
+            raise BlueprintError("地下の敷地支柱計画がありません。BuildSpecから再生成してください")
+        for support in plan.get("supports", ()):
+            register(support)
+            if support["owner"] != support["element"]:
+                raise BlueprintError("敷地支柱の予約ownerが一致しません")
         for parcel in plan["parcels"]:
             register(parcel)
             for group in parcel["groups"]:
@@ -116,5 +122,7 @@ def hierarchy(archetype, buildings):
             "parcels": [{"element": "parcel#1", "groups": [
                 {"element": "group#1", "buildings": buildings}]}],
             "connections": {"nodes": nodes, "edges": edges}, "junctions": []}
+    if archetype in ("cave", "underground_city"):
+        plan["supports"] = []
     plan_buildings(plan)
     return plan

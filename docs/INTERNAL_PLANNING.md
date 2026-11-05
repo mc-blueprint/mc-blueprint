@@ -38,6 +38,11 @@ edits は scene の許可一覧と現在の計画の両方で ID とパラメー
 Critic は期待構造・外壁を棟ごとに変換し、各面・柱の不合格を保持する。
 一棟の欠損を他棟の平均で合格にしない。歩行は接続辺ごとに完成 spool から検査する。
 棟が必須でない archetype は `terrain` と `cave`。この二種類の棟なし計画は建物指標の n/a を許す。
+敷地の`supports`は`element/id/owner/from/to/reserved`を持つ世界座標の期待柱。
+地下計画では必須キーとし、支柱を省略する地下都市では空配列を記録する。
+上下の接続岩を含めてstructure予約とframe役割を検査する。棟なしでも宣言した支柱は
+柱の連続性検査の対象であり、建物指標のn/aを理由に検査を省略しない。
+地下計画の`supports`が欠落したcheckpointは再生成を要求する。
 house/tower/castle/town/city/underground_city の棟なし計画は拒否する。
 建物課題の棟・期待柱・外壁・入口接続の欠落は計画エラー。
 
@@ -79,6 +84,8 @@ Operation は敷地分を含めて入力順を維持し、固定役割は棟別�
 snapshot・`groundHeight` は既存 Site の契約をそのまま使用する。
 
 castle は [城郭の生成](CASTLE.md) に従って専用Site plannerで計画する。
-town/city/terrain/cave/underground_city の特徴語彙は Resolve と雛形で扱うが、
-各 planner は未実装であり Site/Massing 段で明示的に拒否する。
-複数棟検証は既存住宅・塔の合成固定ケースであり、街並み生成の実装ではない。
+town/city は [街並み](TOWN.md)、cave/underground_city は [地下](UNDERGROUND.md) の
+専用Site plannerで計画する。地下床のWeather基準場は既存のheightfield形式を使う。
+空洞の密度計画は地表場を保持し、造成・通路の列だけ地下床基準場の高さを更新する。
+外部BuildSpec/scene/editsと内部計画v2の形式は変更しない。
+terrain の専用plannerは未実装であり Site/Massing 段で明示的に拒否する。
