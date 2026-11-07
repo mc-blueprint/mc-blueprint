@@ -98,25 +98,26 @@ class PaletteSampler:
         self._head, self._tail = template.replace(b'%d', b'%s', 1).split(b'%s')
 
     def tiles(self, box: AABB, prefix, palette: Palette) -> Iterator[tuple[AABB, np.ndarray]]:
-        """世界座標のboxを覆うタイルと、Palette内の抽選添字を返す。"""
+        """世界座標のbox内のタイルと、Palette内の抽選添字を返す。"""
         width = self.tile_size
         for ty in range(box.min.y // width, box.max.y // width + 1):
             for tx in range(box.min.x // width, box.max.x // width + 1):
                 for tz in range(box.min.z // width, box.max.z // width + 1):
                     low = Vec3(tx * width, ty * width, tz * width)
-                    tile = AABB(Vec3.max(low, self.bounds.min), Vec3.min(
-                        low + Vec3(width - 1, width - 1, width - 1), self.bounds.max,
+                    tile = AABB(Vec3.max(low, box.min), Vec3.min(
+                        low + Vec3(width - 1, width - 1, width - 1), box.max,
                     ))
-                    key = prefix.digest(), palette, tx, ty, tz
+                    key = prefix.digest(), palette, tile
                     choices = self._cache.pop(key, None)
                     if choices is None:
                         choices = self._sample(tile, prefix, palette)
-                        if choices.nbytes <= self.cache_limit:
-                            while self._cache_bytes + choices.nbytes > self.cache_limit:
+                        entry_bytes = choices.nbytes + 1024
+                        if entry_bytes <= self.cache_limit:
+                            while self._cache_bytes + entry_bytes > self.cache_limit:
                                 _, expired = self._cache.popitem(last=False)
-                                self._cache_bytes -= expired.nbytes
-                            self._cache_bytes += choices.nbytes
-                    if choices.nbytes <= self.cache_limit:
+                                self._cache_bytes -= expired.nbytes + 1024
+                            self._cache_bytes += entry_bytes
+                    if choices.nbytes + 1024 <= self.cache_limit:
                         self._cache[key] = choices
                     yield tile, choices
 

@@ -58,7 +58,9 @@ reference_radius=0, reverse=False)` は `GeneratedRegion(core, volume)` を逐�
   MT19937の整数seed初期化と初回53bit抽選をNumPyでまとめ、累積重みをsearchsortedで選ぶ。
   初回値は[CPythonの整数seed実装](https://github.com/python/cpython/blob/3.12/Modules/_randommodule.c)
   に合わせる。旧経路のRandomと領域経路の修正前の値を変えない。
-- haloを縮めず、32立方以下の抽選添字だけを上限24MiBのLRUで再利用する。
+- haloを縮めず、32立方以下のタイルと要求矩形の交差部分だけ抽選し、
+  同じ矩形・seed・Paletteの抽選添字を上限24MiBのLRUで再利用する。
+  小矩形のキー・配列ヘッダ等も1件1024 bytesとして予算に含める。
   属性や全体BlockVolumeはキャッシュしない。低メモリではタイルとMTのバッチを小さくする。
 - join_buildingsの子もregistryで共通属性を読み、専用実行時も子の属性スコープを適用する。
   共有面・接合屋根はjoinが所有する。接合内の後段屋根が最終配置するセルは、宣言矩形を
@@ -74,6 +76,29 @@ reference_radius=0, reverse=False)` は `GeneratedRegion(core, volume)` を逐�
   最小coreと必要haloでも収まらなければBlueprintError。haloや精度は縮めない。
   予算は生成用の見積りであり、入力・Pythonランタイムを含むRSSの強制上限ではない。
   `volume.nbytes` は2本のセル配列だけの実バイト数で、RSSとは区別する。
+
+makeでは計画・入力の共有参照を一度だけ数え、Python・同梱データ・圧縮用の64MiBを
+上限から引く。残予算の1/2を生成とWeather、1/4をCriticの計画索引・要約、1/4を
+scene出典表・spoolパレットと行処理へ配賦する。Critic確定後は索引・要約を解放し、
+歩行探索へ1/2、行キャッシュへ最大1/8を使う。出典表は1件4096 bytes、出力パレットは
+1状態2048 bytesとして上限を検査する。emit Blueprintのbuildでも入力を差し引き、
+生成へ残予算の3/4、検査・出力へ1/4を残す。NBT出力には、この1/4から出典表・
+spoolパレット・行キャッシュの保持分を引いた上限を渡す。Litematicの全セル添字と
+packed配列、SchemのVarInt列、NBT直列化時の複製・一時領域を確保前に見積り、
+収まらなければBlueprintError。出力の符号化・順序は変えない。保持計画や必要haloが収まらない場合は
+明示失敗し、領域配列だけが収まることを全体予算の成立とみなさない。
+これらは保持量と作業領域の見積りであり、OSのRSS強制上限ではない。
+独立プロセスのピークRSSは性能記録で別に確認する。
+
+Weatherは限定領域のuint配列で半径打切りのL1水距離と6面の露出を求め、遷移可能な
+配置セルと植生の支持候補に隣接する空セルだけを元の(y,z,x)順で検査する。
+予約air、導出乱数、snapshotからの候補決定と同時適用は維持する。
+Criticの構造・外壁計画は32×16×32のタイルで候補を絞り、任意AABBのcore内だけを
+集計する。投影規則は既存実装を使い、同じセル・建物の最寄り面距離を再利用する。
+歩行は不変の完成spoolに対する複数経路で立位判定を件数上限付きで再利用し、
+各経路の探索順・経路・診断順を保つ。
+支持検査の完成spool走査は行ごとにキャッシュを参照し、未配置だけを配列で除く。
+明示air、coreの切詰め、(y,z,x)の列挙順は維持する。
 
 NumPyは既存nbtlibの間接依存を利用するだけでなく、Python 3.12対応の下限1.26を
 直接依存として宣言する。NBT実装・設定フレームワークは追加しない。

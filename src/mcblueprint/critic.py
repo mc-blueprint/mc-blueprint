@@ -20,6 +20,7 @@ from mcblueprint.operations.transform import Transform
 from mcblueprint.plan_contract import plan_buildings
 
 _AIR = {"minecraft:air", "minecraft:cave_air", "minecraft:void_air"}
+_WALL_ROLES = frozenset({"wall_main", "wall_secondary", "frame", "trim", "window_frame", "accent"})
 
 
 @dataclass(frozen=True)
@@ -218,8 +219,8 @@ class CriticAccumulator:
         if max_memory_mb <= 0:
             raise ValueError("max_memory_mb は正数が必要です")
         facade_cells = sum(len(f.cells) for f in self.plan.facades)
-        estimated = facade_cells * 1024 + sum(
-            len(run.cells) * 256 for run in (*plan.columns, *plan.beams)
+        estimated = facade_cells * 1152 + sum(
+            len(run.cells) * 384 for run in (*plan.columns, *plan.beams)
         )
         if estimated > max_memory_mb * 1024 * 1024:
             raise BlueprintError("Criticの面要約が max_memory_mb に収まりません")
@@ -244,6 +245,12 @@ class CriticAccumulator:
             for kind, runs in (("column", self.plan.columns), ("beam", self.plan.beams))
             for index, run in enumerate(runs)
         ]
+        self.structural_tiles = {}
+        for kind, index, run in self.structural_runs:
+            for pi, pos in enumerate(run.cells):
+                tile = pos.x // 32, pos.y // 16, pos.z // 32
+                self.structural_tiles.setdefault(tile, []).append((kind, index, pi, pos, run))
+        self.facade_tiles = {}
         self.facade_blocks: dict[tuple[str, str, str], Counter] = {}
         self.facade_seen: set[tuple[int, int]] = set()
         self.surface_present: set[tuple[int, int]] = set()
@@ -257,41 +264,52 @@ class CriticAccumulator:
             for ci, cell in enumerate(facade.cells):
                 if cell.opening:
                     continue
+                pos = cell.pos
+                tile = pos.x // 32, pos.y // 16, pos.z // 32
+                self.facade_tiles.setdefault(tile, []).append((fi, ci, cell))
                 axis = facade.ray_axis
                 self.projections.setdefault((axis, *facade.ray_key(cell.pos)), []).append((fi, ci))
+
+    @staticmethod
+    def _core_items(index, core):
+        for x in range(core.min.x // 32, core.max.x // 32 + 1):
+            for y in range(core.min.y // 16, core.max.y // 16 + 1):
+                for z in range(core.min.z // 32, core.max.z // 32 + 1):
+                    yield from index.get((x, y, z), ())
 
     def consume(self, region: GeneratedRegion) -> None:
         """同じcoreの再入力は重複計数せず、haloは参照しない。"""
         count_color = self.max_area_ratios is not None and region.core not in self.color_cores
         if count_color:
             self.color_cores.add(region.core)
-        for kind, index, run in self.structural_runs:
-            for pos_index, pos in enumerate(run.cells):
-                if not region.core.contains(pos):
-                    continue
-                key = (kind, index, pos_index)
-                if key in self.structural_seen:
-                    continue
-                state, attr = _state(region, pos)
-                self.structural_seen[key] = (
-                    _present(state)
-                    and attr.owner == run.owner
-                    and attr.reserved == "structure"
-                    and (run.role is None or attr.role == run.role)
-                )
+        for kind, index, pos_index, pos, run in self._core_items(
+            self.structural_tiles, region.core,
+        ):
+            if not region.core.contains(pos):
+                continue
+            key = (kind, index, pos_index)
+            if key in self.structural_seen:
+                continue
+            state, attr = _state(region, pos)
+            self.structural_seen[key] = (
+                _present(state)
+                and attr.owner == run.owner
+                and attr.reserved == "structure"
+                and (run.role is None or attr.role == run.role)
+            )
 
-        for fi, facade in enumerate(self.plan.facades):
-            for ci, cell in enumerate(facade.cells):
-                if not cell.opening and region.core.contains(cell.pos):
-                    key = fi, ci
-                    if key in self.facade_seen:
-                        continue
-                    self.facade_seen.add(key)
-                    state, attr = _state(region, cell.pos)
-                    if not _present(state) and (attr.source or attr.operation):
-                        self.missing_sources[key] = {
-                            "source": attr.source, "operation": attr.operation,
-                        }
+        for fi, ci, cell in self._core_items(self.facade_tiles, region.core):
+            if not region.core.contains(cell.pos):
+                continue
+            key = fi, ci
+            if key in self.facade_seen:
+                continue
+            self.facade_seen.add(key)
+            state, attr = _state(region, cell.pos)
+            if not _present(state) and (attr.source or attr.operation):
+                self.missing_sources[key] = {
+                    "source": attr.source, "operation": attr.operation,
+                }
         for pos, state in region.volume:
             if not region.core.contains(pos) or not _present(state):
                 continue
@@ -305,8 +323,16 @@ class CriticAccumulator:
             if target is not None and pos not in self.decorated_seen:
                 self.decorated_seen.add(pos)
                 self.decorated[target] += 1
+            if attr.role not in _WALL_ROLES and not (
+                attr.reserved == "structure" and self.plan.junction_cells.get(pos) == attr.owner
+            ):
+                continue
             for axis in (0, 2):
-                for fi, ci in self.projections.get((axis, pos[axis], pos.y), ()):
+                projected = self.projections.get((axis, pos[axis], pos.y), ())
+                if not projected:
+                    continue
+                nearest_by_building = {}
+                for fi, ci in projected:
                     facade = self.plan.facades[fi]
                     cell = facade.cells[ci]
                     if attr.face is not None and attr.face != facade.face:
@@ -321,14 +347,7 @@ class CriticAccumulator:
                         and attr.reserved == "structure"
                     ):
                         continue
-                    if attr.role not in (
-                        "wall_main",
-                        "wall_secondary",
-                        "frame",
-                        "trim",
-                        "window_frame",
-                        "accent",
-                    ):
+                    if attr.role not in _WALL_ROLES:
                         if not (pos == cell.pos and attr.reserved == "structure"
                                 and self.plan.junction_cells.get(pos) == attr.owner):
                             continue
@@ -336,11 +355,15 @@ class CriticAccumulator:
                     if facade.building and not element.startswith(facade.element):
                         depth_axis = 2 if axis == 0 else 0
                         distance = abs(pos[depth_axis] - cell.pos[depth_axis])
-                        nearest = min(
-                            abs(pos[depth_axis] - self.plan.facades[fj].cells[cj].pos[depth_axis])
-                            for fj, cj in self.projections[(axis, pos[axis], pos.y)]
-                            if self.plan.facades[fj].building == facade.building
-                        )
+                        nearest = nearest_by_building.get(facade.building)
+                        if nearest is None:
+                            nearest = min(
+                                abs(pos[depth_axis]
+                                    - self.plan.facades[fj].cells[cj].pos[depth_axis])
+                                for fj, cj in self.projections[(axis, pos[axis], pos.y)]
+                                if self.plan.facades[fj].building == facade.building
+                            )
+                            nearest_by_building[facade.building] = nearest
                         if distance != nearest:
                             continue
                     key = fi, ci
