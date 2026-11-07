@@ -8,6 +8,18 @@
 
 Criticの面要約は計画された投影セル数から常駐量を見積もり、`max_memory_mb` を超える計画を拒否する。全体集計は分子・分母を保持し、局所FAILを全体平均で打ち消さない。既存の`palette_relation`、`support`、`walkability`判定は従来の処理を維持する。
 
+構造・外壁計画はタイル索引でcore候補を絞る。任意AABBの境界はセルごとに確認し、
+逆順やcoreの再入力でも同じ指標・診断にする。makeは入力・計画を除いた合計予算の
+1/4をCriticへ配賦し、確定後に索引・要約を解放する。歩行検査は完成spoolの
+立位判定を上限付きで再利用し、各経路の探索順・経路・診断順を保つ。
+
+`scripts/evaluate_region_performance.py` は各結果へ実装・測定器・基準commitの
+provenanceと入力hashを保存する。測定器の指紋には本スクリプト・
+`evaluate_make_performance.py`・共通の`benchmark.py`・`evaluate_structure.py`を含む。
+同じphaseの既存結果は指紋が一致するときだけ再利用し、
+入力変更・指紋不一致・指紋のない旧記録は測定前に拒否する。旧記録は退避して残し、
+新しい測定とは分離する。比較基準として参照するbeforeのhashと、再開時の結果再利用は区別する。
+
 ## 目的と範囲
 
 この評価は Blueprint を出力したモデル、モデルの設定、seed、修正履歴を記録し、同じ課題の結果を追跡・比較するためのもの。課題は [fixed-cases.json](../evaluation/cases/fixed-cases.json)、このリポジトリで取った初期証跡は [baseline.json](../evaluation/records/baseline.json) に置く。既存 examples は構文・Operationの参照資料として使い、評価対象の正解や美観の正本とはみなさない。

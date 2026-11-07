@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections import deque
+from collections.abc import Iterable, Iterator
 from dataclasses import dataclass
 from typing import Literal
 
@@ -75,6 +76,9 @@ class _Walker:
         bounds = volume.bounds()
         self.bounds = AABB(bounds.min + UP, bounds.max + UP) if bounds is not None else None
         self.kinds: dict[BlockState | None, str] = {}
+        self.stands: dict[Vec3, TraversalIssue | None] = {}
+        self.cache_limit = 4096 if max_nodes is None else min(16384, max_nodes // 8)
+        self.facings: dict[BlockState, str | None] = {}
 
     def kind(self, state: BlockState | None) -> str:
         if state in self.kinds:
@@ -135,6 +139,16 @@ class _Walker:
         return None
 
     def stand(self, feet: Vec3) -> TraversalIssue | None:
+        if feet in self.stands:
+            return self.stands[feet]
+        issue = self._stand(feet)
+        if self.cache_limit:
+            if len(self.stands) == self.cache_limit:
+                self.stands.clear()
+            self.stands[feet] = issue
+        return issue
+
+    def _stand(self, feet: Vec3) -> TraversalIssue | None:
         if self.bounds is None or not self.bounds.contains(feet):
             return self.issue(feet, "outside_search_bounds")
         for pos in (feet, feet + UP):
@@ -154,7 +168,9 @@ class _Walker:
         if self.kind(state) != "stairs":
             return None
         assert state is not None
-        return self.blocks.complete(state).get("facing")
+        if state not in self.facings:
+            self.facings[state] = self.blocks.complete(state).get("facing")
+        return self.facings[state]
 
     def route(self, start: Vec3, end: Vec3) -> TraversalResult:
         for feet in (start, end):
@@ -244,6 +260,20 @@ def check_building(
 
     外側のネスト変換がある場合は、呼出し元が変換済みlayoutを渡す。
     """
-    walker = _Walker(volume, minecraft_version)
     points = (layout.entrance, *layout.arrivals)
-    return tuple(walker.route(a, b) for a, b in zip(points, points[1:], strict=False))
+    return tuple(check_routes(volume, zip(points, points[1:], strict=False), minecraft_version))
+
+
+def check_routes(
+    volume: BlockVolume, pairs: Iterable[tuple[Vec3, Vec3]], minecraft_version: str,
+    *, max_nodes: int | None = None,
+) -> Iterator[TraversalResult]:
+    """不変のvolumeに対する複数経路を入力順に遅延検査する。
+
+    check_routeと同じ判定・経路・診断順を保ち、立位判定を上限付きで再利用する。
+    反復中はvolumeを変更しない。max_nodesは各経路の探索状態上限であり、
+    キャッシュはその1/8件（最大16384件）まで。上限超過はBlueprintError。
+    """
+    walker = _Walker(volume, minecraft_version, max_nodes=max_nodes)
+    for start, end in pairs:
+        yield walker.route(start, end)

@@ -58,6 +58,41 @@ def test_compression_level_preserves_nbt_bytes(tmp_path, monkeypatch, fmt):
     assert gzip.decompress(fast.read_bytes()) == gzip.decompress(default.read_bytes())
 
 
+@pytest.mark.parametrize("fmt", ["schem", "litematic"])
+def test_export_budget_rejects_full_arrays_before_reading_rows(tmp_path, monkeypatch, fmt):
+    bp = blueprint()
+    bounds = AABB(Vec3(0, 0, 0), Vec3(399, 249, 399))
+    path = tmp_path / f"keep.{fmt}"
+    path.write_bytes(b"completed")
+
+    def rows():
+        pytest.fail("予算超過時に入力行を消費してはいけません")
+        yield
+
+    def allocate(*args, **kwargs):
+        pytest.fail("予算超過時に全体配列を確保してはいけません")
+
+    monkeypatch.setattr("mcblueprint.exporters.litematic.np.empty", allocate)
+    with pytest.raises(BlueprintError, match="NBT.*max_memory_mb"):
+        EXPORTERS[fmt]().export_rows(rows(), bounds, bp, path, palette=[None],
+                                     max_memory_bytes=128 * 1024 * 1024)
+    assert path.read_bytes() == b"completed"
+    assert set(tmp_path.iterdir()) == {path}
+
+
+@pytest.mark.parametrize("version", blockdata.supported_versions())
+@pytest.mark.parametrize("fmt", ["schem", "litematic"])
+def test_budgeted_spool_preserves_exact_nbt(tmp_path, monkeypatch, version, fmt):
+    bp = blueprint(version)
+    spool = RegionSpool(tmp_path / "cells", bp.bounds())
+    spool.write(generate_regions(bp))
+    first, second = tmp_path / f"old.{fmt}", tmp_path / f"new.{fmt}"
+    monkeypatch.setattr("mcblueprint.exporters.litematic.time.time", lambda: 1700000000.0)
+    _export_spool(spool, bp, first, format=fmt)
+    _export_spool(spool, bp, second, format=fmt, max_memory_bytes=16 * 1024 * 1024)
+    assert gzip.decompress(first.read_bytes()) == gzip.decompress(second.read_bytes())
+
+
 @pytest.mark.parametrize("version", blockdata.supported_versions())
 @pytest.mark.parametrize("fmt", ["schem", "litematic"])
 @pytest.mark.parametrize("reverse", [False, True])
