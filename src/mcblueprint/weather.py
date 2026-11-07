@@ -5,9 +5,10 @@ from __future__ import annotations
 import json
 import math
 import random
-from collections import deque
 from collections.abc import Mapping
 from typing import Any
+
+import numpy as np
 
 from mcblueprint.blockdata import BlockData
 from mcblueprint.errors import BlueprintError
@@ -34,24 +35,68 @@ def _random(seed: int, element: str | None, pos: Vec3, purpose: str) -> float:
     return random.Random(value).random()
 
 
-def _water_distances(volume, radius: int) -> dict[Vec3, int]:
-    distances: dict[Vec3, int] = {}
-    queue: deque[Vec3] = deque()
-    for pos, state in volume:
-        if state.id in _WATER:
-            distances[pos] = 0
-            queue.append(pos)
-    while queue:
-        pos = queue.popleft()
-        distance = distances[pos]
-        if distance == radius:
-            continue
-        for offset, _ in _NEIGHBORS:
-            adjacent = pos + offset
-            if volume.region.contains(adjacent) and adjacent not in distances:
-                distances[adjacent] = distance + 1
-                queue.append(adjacent)
+def _water_distances(volume, radius: int) -> np.ndarray | None:
+    limit = min(radius, sum(n - 1 for n in volume._blocks.shape))
+    water = np.array([state is not None and state.id in _WATER for state in volume._palette])
+    sources = water[volume._blocks]
+    if not np.any(sources):
+        return None
+    distances = np.full(volume._blocks.shape, limit + 1, dtype=np.min_scalar_type(limit + 2))
+    distances[sources] = 0
+    for axis in range(3):
+        rows = np.moveaxis(distances, axis, 0)
+        for i in range(1, len(rows)):
+            np.minimum(rows[i], rows[i - 1] + 1, out=rows[i])
+        for i in range(len(rows) - 2, -1, -1):
+            np.minimum(rows[i], rows[i + 1] + 1, out=rows[i])
     return distances
+
+
+def _weather_fields(volume, world_bounds, *, moss, cracks, missing, vegetation, block_data):
+    blocks = volume._blocks
+    palette = volume._palette
+    air = np.array([state is None or state.id in _AIR_IDS for state in palette])[blocks]
+    solid = np.array([state is not None and state.id not in _NON_SOLID
+                      for state in palette])[blocks]
+    vacant = ((blocks == 0) | (np.array([state == _AIR for state in palette])[blocks]
+              & np.array([attr.operation is None for attr in volume._attribute_palette])[
+                  volume._attrs]))
+    eligible = []
+    for state in palette:
+        info = block_data.get(state.id) if state is not None else None
+        eligible.append(bool(info and (moss and info.weathering.get("moss")
+                                       or cracks and info.weathering.get("crack") or missing)))
+    candidates = np.array(eligible)[blocks] & ~vacant
+    exposure = np.zeros(blocks.shape, dtype=np.uint8)
+    bounds = volume.region
+    coordinates = (np.arange(bounds.min.x, bounds.max.x + 1)[None, None, :],
+                   np.arange(bounds.min.y, bounds.max.y + 1)[:, None, None],
+                   np.arange(bounds.min.z, bounds.max.z + 1)[None, :, None])
+    for bit, (offset, _) in enumerate(_NEIGHBORS):
+        axis = 2 if offset.x else 0 if offset.y else 1
+        step = offset.x or offset.y or offset.z
+        current, adjacent = [slice(None)] * 3, [slice(None)] * 3
+        current[axis] = slice(None, -1) if step > 0 else slice(1, None)
+        adjacent[axis] = slice(1, None) if step > 0 else slice(None, -1)
+        current, adjacent = tuple(current), tuple(adjacent)
+        exposure[current] |= air[adjacent].astype(np.uint8) << bit
+        if vegetation:
+            candidates[current] |= vacant[current] & solid[adjacent]
+        inside = np.ones(blocks.shape, dtype=bool)
+        for i, values in enumerate(coordinates):
+            inside &= ((values + offset[i] >= world_bounds.min[i])
+                       & (values + offset[i] <= world_bounds.max[i]))
+        exposure[~inside] |= 1 << bit
+    return candidates, exposure
+
+
+def _candidate_cells(candidates, bounds, low, high):
+    for y in range(low.y, high.y + 1):
+        for z in range(low.z, high.z + 1):
+            row = candidates[y - bounds.min.y, z - bounds.min.z,
+                             low.x - bounds.min.x:high.x - bounds.min.x + 1]
+            for x in np.flatnonzero(row):
+                yield low.x + int(x), y, z
 
 
 def _unit(value: Any, name: str) -> float:
@@ -126,160 +171,158 @@ def apply_weather(
     world_bounds = region.world_bounds or bounds
     check_min = Vec3.max(region.core.min - Vec3(1, 1, 1), bounds.min)
     check_max = Vec3.min(region.core.max + Vec3(1, 1, 1), bounds.max)
-    distances = _water_distances(volume, water_radius) if water_radius else {}
+    distances = _water_distances(volume, water_radius) if water_radius else None
+    candidates, exposure = _weather_fields(
+        volume, world_bounds, moss=moss_amount, cracks=crack_amount,
+        missing=missing_amount * age, vegetation=vegetation_amount * age, block_data=block_data,
+    )
     diagnostics: list[dict[str, Any]] = []
 
-    for y in range(check_min.y, check_max.y + 1):
-        for z in range(check_min.z, check_max.z + 1):
-            for x in range(check_min.x, check_max.x + 1):
-                pos = Vec3(x, y, z)
-                original = volume.get(pos)
-                if (original is None or original == _AIR
-                        and volume.attributes(pos).operation is None):
-                    if not region.core.contains(pos):
+    for x, y, z in _candidate_cells(candidates, bounds, check_min, check_max):
+        pos = Vec3(x, y, z)
+        original = volume.get(pos)
+        if (original is None or original == _AIR
+                and volume.attributes(pos).operation is None):
+            if not region.core.contains(pos):
+                continue
+            if volume.attributes(pos).reserved is not None:
+                continue
+            below = volume.get(pos + Vec3(0, -1, 0))
+            below_attr = volume.attributes(pos + Vec3(0, -1, 0))
+            if (below_attr.role in ("floor", "path")
+                    or below and below.id.endswith(("_stairs", "_door"))):
+                continue
+            if _random(seed, None, pos, "vegetation") >= vegetation_amount * age:
+                continue
+            for offset, face in _NEIGHBORS:
+                support = pos + offset
+                support_state = volume.get(support)
+                support_attr = volume.attributes(support)
+                if (support_state is None or support_attr.reserved is not None
+                        or support_state.id in _NON_SOLID
+                        or support_attr.role in ("floor", "path")
+                        or support_state.id.endswith(("_stairs", "_door"))):
+                    continue
+                plant_ids = (("minecraft:short_grass", "minecraft:fern")
+                             if face == "bottom" and
+                             support_state.id.removeprefix("minecraft:") in DIRT_LIKE else
+                             ("minecraft:vine", "minecraft:oak_leaves")
+                             if face in ("north", "south", "east", "west") else ())
+                candidates = []
+                for plant_id in plant_ids:
+                    plant = block_data.get(plant_id)
+                    if plant is None:
                         continue
-                    if volume.attributes(pos).reserved is not None:
-                        continue
-                    below = volume.get(pos + Vec3(0, -1, 0))
-                    below_attr = volume.attributes(pos + Vec3(0, -1, 0))
-                    if (below_attr.role in ("floor", "path")
-                            or below and below.id.endswith(("_stairs", "_door"))):
-                        continue
-                    if _random(seed, None, pos, "vegetation") >= vegetation_amount * age:
-                        continue
-                    for offset, face in _NEIGHBORS:
-                        support = pos + offset
-                        support_state = volume.get(support)
-                        support_attr = volume.attributes(support)
-                        if (support_state is None or support_attr.reserved is not None
-                                or support_state.id in _NON_SOLID
-                                or support_attr.role in ("floor", "path")
-                                or support_state.id.endswith(("_stairs", "_door"))):
+                    candidate = BlockState(plant_id)
+                    if plant_id == "minecraft:vine":
+                        if face not in plant.properties:
                             continue
-                        plant_ids = (("minecraft:short_grass", "minecraft:fern")
-                                     if face == "bottom" and
-                                     support_state.id.removeprefix("minecraft:") in DIRT_LIKE else
-                                     ("minecraft:vine", "minecraft:oak_leaves")
-                                     if face in ("north", "south", "east", "west") else ())
-                        candidates = []
-                        for plant_id in plant_ids:
-                            plant = block_data.get(plant_id)
-                            if plant is None:
-                                continue
-                            candidate = BlockState(plant_id)
-                            if plant_id == "minecraft:vine":
-                                if face not in plant.properties:
-                                    continue
-                                candidate = candidate.with_property(face, "true")
-                            elif plant_id == "minecraft:oak_leaves":
-                                for key, value in (("distance", "1"), ("persistent", "true")):
-                                    if key in plant.properties and value in plant.properties[key]:
-                                        candidate = candidate.with_property(key, value)
-                            if not block_data.check_state(candidate):
-                                candidates.append(candidate)
-                        if candidates:
-                            choice = min(
-                                int(_random(seed, None, pos, "plant-kind") * len(candidates)),
-                                len(candidates) - 1,
-                            )
-                            plants.append((
-                                pos, candidates[choice], volume.attributes(pos), support,
-                            ))
-                            break
-                    continue
-                attr = volume.attributes(pos)
-                info = block_data.get(original.id)
-                if info is None:
-                    continue
-                exposed = set()
-                for offset, face in _NEIGHBORS:
-                    adjacent = pos + offset
-                    neighbor = volume.get(adjacent)
-                    if (not world_bounds.contains(adjacent)
-                            or bounds.contains(adjacent) and (
-                                neighbor is None or neighbor.id in _AIR_IDS
-                            )):
-                        exposed.add(face)
-                reserved = attr.reserved
-                if reserved == "circulation":
-                    continue
-                if reserved == "structure" and attr.owner is None:
-                    continue
-                protected = (
-                    attr.role in ("floor", "path")
-                    or original.id.endswith(("_stairs", "_door"))
-                )
-                water_factor = 0.0
-                if water_radius and pos in distances:
-                    water_factor = water_weight * max(0.0, 1 - distances[pos] / water_radius)
-                base_y = (ground_height[(x, z)] if isinstance(ground_height, Mapping)
-                          else ground_height)
-                ground_factor = (ground_weight * max(
-                    0.0, 1 - max(0, y - base_y) / ground_range,
-                ) if ground_range else 0.0)
-                moss_probability = moss_amount * (
-                    age + water_factor + ground_factor + (north_weight if "north" in exposed else 0)
-                )
-                crack_probability = crack_amount * (
-                    age + crack_exposure * bool(
-                        exposed.intersection({"top", "north", "south", "east", "west"}),
+                        candidate = candidate.with_property(face, "true")
+                    elif plant_id == "minecraft:oak_leaves":
+                        for key, value in (("distance", "1"), ("persistent", "true")):
+                            if key in plant.properties and value in plant.properties[key]:
+                                candidate = candidate.with_property(key, value)
+                    if not block_data.check_state(candidate):
+                        candidates.append(candidate)
+                if candidates:
+                    choice = min(
+                        int(_random(seed, None, pos, "plant-kind") * len(candidates)),
+                        len(candidates) - 1,
                     )
-                )
-                if moss_amount:
-                    moss_probability = min(1.0, moss_probability + randomness * _random(
-                        seed, attr.element, pos, "moss-noise",
+                    plants.append((
+                        pos, candidates[choice], volume.attributes(pos), support,
                     ))
-                else:
-                    moss_probability = 0.0
-                if crack_amount:
-                    crack_probability = min(1.0, crack_probability + randomness * _random(
-                        seed, attr.element, pos, "crack-noise",
-                    ))
-                else:
-                    crack_probability = 0.0
-                transition = info.weathering
-                target = original
-                can_moss = reserved is None
-                crack_id = transition.get("crack")
-                can_crack = reserved != "structure" or bool(crack_id and block_data.get(crack_id))
-                moss_id = transition.get("moss")
-                moss_hit = can_moss and bool(moss_id) and _random(
-                    seed, attr.element, pos, "moss",
-                ) < moss_probability
-                crack_hit = can_crack and bool(crack_id) and _random(
-                    seed, attr.element, pos, "crack",
-                ) < crack_probability
-                selected = "moss" if moss_hit and (
-                    not crack_hit or moss_probability >= crack_probability
-                ) else "crack" if crack_hit else None
-                selected_id = (moss_id if selected == "moss" else crack_id) if selected else None
-                if selected_id:
-                    candidate = BlockState(selected_id, original.properties)
-                    candidate_info = block_data.get(candidate.id)
-                    preserves = candidate_info and all(
-                        key in candidate_info.properties and value in candidate_info.properties[key]
-                        for key, value in original.properties
-                    )
-                    if (candidate_info and candidate_info.shape == info.shape and preserves
-                            and not block_data.check_state(candidate)):
-                        target = candidate
-                    else:
-                        diagnostics.append({
-                            "code": "weather_transition",
-                            "position": pos.to_list(),
-                            "source": original.to_string(),
-                            "target": candidate.to_string(),
-                        })
-                side_exposed = bool(exposed.intersection({"north", "south", "east", "west"}))
-                if (reserved is None and not protected and target == original and side_exposed
-                        and _random(
-                    seed, attr.element, pos, "missing",
-                ) < missing_amount * age):
-                    target = _AIR
-                if target.id in _AIR_IDS:
-                    removed.add(pos)
-                if target != original and region.core.contains(pos):
-                    results.append((pos, target, attr))
+                    break
+            continue
+        attr = volume.attributes(pos)
+        info = block_data.get(original.id)
+        if info is None:
+            continue
+        index = volume._offset(pos)
+        flags = int(exposure[index])
+        exposed = {face for bit, (_, face) in enumerate(_NEIGHBORS) if flags & (1 << bit)}
+        reserved = attr.reserved
+        if reserved == "circulation":
+            continue
+        if reserved == "structure" and attr.owner is None:
+            continue
+        protected = (
+            attr.role in ("floor", "path")
+            or original.id.endswith(("_stairs", "_door"))
+        )
+        water_factor = 0.0
+        if distances is not None:
+            distance = int(distances[index])
+            if distance <= water_radius:
+                water_factor = water_weight * max(0.0, 1 - distance / water_radius)
+        base_y = (ground_height[(x, z)] if isinstance(ground_height, Mapping)
+                  else ground_height)
+        ground_factor = (ground_weight * max(
+            0.0, 1 - max(0, y - base_y) / ground_range,
+        ) if ground_range else 0.0)
+        moss_probability = moss_amount * (
+            age + water_factor + ground_factor + (north_weight if "north" in exposed else 0)
+        )
+        crack_probability = crack_amount * (
+            age + crack_exposure * bool(
+                exposed.intersection({"top", "north", "south", "east", "west"}),
+            )
+        )
+        if moss_amount:
+            moss_probability = min(1.0, moss_probability + randomness * _random(
+                seed, attr.element, pos, "moss-noise",
+            ))
+        else:
+            moss_probability = 0.0
+        if crack_amount:
+            crack_probability = min(1.0, crack_probability + randomness * _random(
+                seed, attr.element, pos, "crack-noise",
+            ))
+        else:
+            crack_probability = 0.0
+        transition = info.weathering
+        target = original
+        can_moss = reserved is None
+        crack_id = transition.get("crack")
+        can_crack = reserved != "structure" or bool(crack_id and block_data.get(crack_id))
+        moss_id = transition.get("moss")
+        moss_hit = can_moss and bool(moss_id) and _random(
+            seed, attr.element, pos, "moss",
+        ) < moss_probability
+        crack_hit = can_crack and bool(crack_id) and _random(
+            seed, attr.element, pos, "crack",
+        ) < crack_probability
+        selected = "moss" if moss_hit and (
+            not crack_hit or moss_probability >= crack_probability
+        ) else "crack" if crack_hit else None
+        selected_id = (moss_id if selected == "moss" else crack_id) if selected else None
+        if selected_id:
+            candidate = BlockState(selected_id, original.properties)
+            candidate_info = block_data.get(candidate.id)
+            preserves = candidate_info and all(
+                key in candidate_info.properties and value in candidate_info.properties[key]
+                for key, value in original.properties
+            )
+            if (candidate_info and candidate_info.shape == info.shape and preserves
+                    and not block_data.check_state(candidate)):
+                target = candidate
+            else:
+                diagnostics.append({
+                    "code": "weather_transition",
+                    "position": pos.to_list(),
+                    "source": original.to_string(),
+                    "target": candidate.to_string(),
+                })
+        side_exposed = bool(exposed.intersection({"north", "south", "east", "west"}))
+        if (reserved is None and not protected and target == original and side_exposed
+                and _random(
+            seed, attr.element, pos, "missing",
+        ) < missing_amount * age):
+            target = _AIR
+        if target.id in _AIR_IDS:
+            removed.add(pos)
+        if target != original and region.core.contains(pos):
+            results.append((pos, target, attr))
 
     results.extend(
         (pos, state, attr) for pos, state, attr, support in plants if support not in removed

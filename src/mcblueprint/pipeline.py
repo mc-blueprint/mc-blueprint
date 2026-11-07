@@ -5,11 +5,12 @@ from __future__ import annotations
 import json
 import os
 import shutil
+import sys
 import tempfile
 from collections import OrderedDict
 from collections.abc import Callable, Iterator
 from contextlib import ExitStack
-from dataclasses import dataclass
+from dataclasses import dataclass, fields, is_dataclass
 from hashlib import sha256
 from pathlib import Path
 
@@ -26,13 +27,12 @@ from mcblueprint.exporters._spool import RegionSpool
 from mcblueprint.generator import GeneratedRegion, GenerationLimits, generate_regions
 from mcblueprint.importers import terrain_file_hash
 from mcblueprint.model import AABB, Vec3
-from mcblueprint.operations.box_like import iter_box
 from mcblueprint.plan_contract import PLAN_VERSION, plan_buildings
 from mcblueprint.planning import plan_buildspec
 from mcblueprint.region_export import _export_spool
 from mcblueprint.scene import capture_sources, write_scene
 from mcblueprint.support import check_support
-from mcblueprint.traversal import check_route
+from mcblueprint.traversal import check_routes
 from mcblueprint.validator import validate_and_load
 from mcblueprint.weather import apply_weather, required_halo
 
@@ -117,6 +117,34 @@ def _json(value) -> bytes:
 
 def _hash(value) -> str:
     return sha256(_json(value)).hexdigest()
+
+
+def _working_budget(max_memory_mb, *retained):
+    pending = list(retained)
+    seen = set()
+    used = 64 * 1024 * 1024  # Python・同梱データ・圧縮処理の余裕。
+    while pending:
+        value = pending.pop()
+        if id(value) in seen:
+            continue
+        seen.add(id(value))
+        used += sys.getsizeof(value)
+        if isinstance(value, dict):
+            pending.extend(value.keys())
+            pending.extend(value.values())
+        elif isinstance(value, list | tuple | set | frozenset):
+            pending.extend(value)
+        elif isinstance(value, np.ndarray):
+            if value.base is not None:
+                pending.append(value.base)
+        elif is_dataclass(value) and not isinstance(value, type):
+            pending.extend(getattr(value, item.name) for item in fields(value))
+        elif hasattr(value, "__dict__"):
+            pending.append(vars(value))
+    available = int(max_memory_mb * 1024 * 1024) - used
+    if available <= 0:
+        raise BlueprintError("計画・入力と実行環境が limits.max_memory_mb に収まりません")
+    return available
 
 
 def _cli_overrides(resolved: ResolveResult) -> dict:
@@ -240,11 +268,13 @@ def _read_checkpoint(
 
 def generated_blueprint_regions(
     blueprint, *, seed=None, on_diagnostic: Callable[[dict], None] | None = None,
+    max_memory_mb: float | None = None,
 ) -> Iterator[GeneratedRegion]:
     """make由来Blueprintの混色とWeatherを再現する。旧Blueprintには使用しない。
 
     metadata.generationはmakeが保存した合成設定・基準面・実装方式を持つ。
     編集後も呼出し元でvalidate_and_loadを行う。各volumeは次の反復前に解放する。
+    max_memory_mbは呼出し元が配賦した有限の正の生成・Weather予算。保存設定の上限も超えない。
     """
     metadata = (blueprint.metadata or {}).get("generation", {})
     if not isinstance(metadata, dict) or metadata.get("mode") != GENERATION:
@@ -271,6 +301,10 @@ def generated_blueprint_regions(
     if not {"region", "halo", "max_memory_mb"} <= config["limits"].keys():
         raise BlueprintError("metadata.generation.config.limitsに合成済み上限が必要です")
     limits = GenerationLimits(**{**config["limits"], "region": tuple(config["limits"]["region"])})
+    if max_memory_mb is not None:
+        allocated = GenerationLimits(limits.region, limits.halo, max_memory_mb)
+        if allocated.max_memory_mb < limits.max_memory_mb:
+            limits = allocated
     blocks = blockdata.load_block_data(blueprint.minecraft_version)
     for region in generate_regions(blueprint, limits=limits, seed=seed,
                                    reference_radius=required_halo(config["weathering"])):
@@ -311,10 +345,14 @@ class _SpoolWindow:
     def get(self, pos):
         if not self.spool.bounds.contains(pos):
             return None
-        key = pos.y, pos.z
+        row = self._row(pos.y, pos.z)
+        return self.spool.palette[row[pos.x - self.spool.bounds.min.x]]
+
+    def _row(self, y, z):
+        key = y, z
         row = self.rows.get(key)
         if row is None:
-            self.spool._seek(self.stream, pos.y, pos.z, self.spool.bounds.min.x)
+            self.spool._seek(self.stream, y, z, self.spool.bounds.min.x)
             raw = self.stream.read(self.spool.bounds.size.x * 4)
             if len(raw) != self.spool.bounds.size.x * 4:
                 raise BlueprintError("評価spoolの行が欠落しています")
@@ -324,13 +362,20 @@ class _SpoolWindow:
                 self.rows.popitem(last=False)
         else:
             self.rows.move_to_end(key)
-        return self.spool.palette[row[pos.x - self.spool.bounds.min.x]]
+        return row
 
     def __iter__(self):
-        for pos in iter_box(self.core):
-            state = self.get(pos)
-            if state is not None:
-                yield pos, state
+        bounds, core = self.spool.bounds, self.core
+        start = max(0, core.min.x - bounds.min.x)
+        stop = min(bounds.size.x, core.max.x - bounds.min.x + 1)
+        if start >= stop:
+            return
+        for y in range(max(core.min.y, bounds.min.y), min(core.max.y, bounds.max.y) + 1):
+            for z in range(max(core.min.z, bounds.min.z), min(core.max.z, bounds.max.z) + 1):
+                row = self._row(y, z)
+                for relative_x in np.flatnonzero(row[start:stop]):
+                    x = start + int(relative_x)
+                    yield Vec3(bounds.min.x + x, y, z), self.spool.palette[row[x]]
 
 
 def _cores(bounds: AABB, limits: dict) -> Iterator[AABB]:
@@ -367,13 +412,20 @@ def export_generated_blueprint(
         path.parent.mkdir(parents=True, exist_ok=True)
         with tempfile.TemporaryDirectory(prefix=f".{path.name}-build-", dir=path.parent) as tmp:
             spool = RegionSpool(Path(tmp) / "cells", blueprint.bounds())
-            spool.write(generated_blueprint_regions(blueprint, seed=seed))
             limits = blueprint.metadata["generation"]["config"]["limits"]
+            available = _working_budget(limits["max_memory_mb"], blueprint)
+            spool.write(generated_blueprint_regions(
+                blueprint, seed=seed, max_memory_mb=available * 3 / 4 / (1024 * 1024),
+            ))
             with spool.path.open("rb") as stream:
                 window = _SpoolWindow(spool, stream, 32)
                 count, first = _support(window, limits)
                 if not strict or not count:
-                    _export_spool(spool, blueprint, path, format=format)
+                    _export_spool(
+                        spool, blueprint, path, format=format,
+                        max_memory_bytes=(available // 4 - len(spool.palette) * 2048
+                                          - 32 * (spool.bounds.size.x * 4 + 256)),
+                    )
                 return count, first
     except OSError as exc:
         raise BlueprintError(f"Blueprintの出力に失敗しました: {exc}") from exc
@@ -418,10 +470,12 @@ def _evaluate(window, blueprint, context, source, max_nodes, critic):
             if pair not in pairs:
                 edges.append(passage)
                 pairs.add(pair)
-    for edge in edges:
-        start = Vec3.from_seq(nodes[edge["from"]]["position"])
-        end = Vec3.from_seq(nodes[edge["to"]]["position"])
-        route = check_route(window, start, end, blueprint.minecraft_version, max_nodes=max_nodes)
+    pairs = ((Vec3.from_seq(nodes[edge["from"]]["position"]),
+              Vec3.from_seq(nodes[edge["to"]]["position"])) for edge in edges)
+    for edge, route in zip(edges, check_routes(
+        window, pairs, blueprint.minecraft_version, max_nodes=max_nodes,
+    ) if edges else (), strict=True):
+        start, end = route.start, route.end
         reason = route.issues[0].reason if route.issues else ""
         element = nodes[edge["from"]]["element"]
         routes.append({**({"element": element} if len(buildings) > 1 else {}),
@@ -669,7 +723,8 @@ def make(
                 and blueprint.terrain.snapshot.input_sha256 != terrain_hash):
             raise PipelineError(stage, "計画中に地形入力が変更されています", 2)
         bounds = blueprint.bounds()
-        budget = config["limits"]["max_memory_mb"] * 1024 * 1024
+        budget = _working_budget(config["limits"]["max_memory_mb"],
+                                 context, blueprint, concrete, resolved)
         if stage_hook:
             stage_hook(stage)
         out.parent.mkdir(parents=True, exist_ok=True)
@@ -697,7 +752,10 @@ def make(
                 code = diagnostic["code"]
                 weather_counts[code] = weather_counts.get(code, 0) + 1
 
-            regions = generated_blueprint_regions(blueprint, on_diagnostic=weather_diagnostic)
+            regions = generated_blueprint_regions(
+                blueprint, on_diagnostic=weather_diagnostic,
+                max_memory_mb=budget / 2 / (1024 * 1024),
+            )
             style_path = Path(__file__).parent / "data/patterns/styles" / f"{spec['style']}.yaml"
             style = yaml.safe_load(style_path.read_text(encoding="utf-8"))
             critic_plan = plan_from_metadata(
@@ -707,7 +765,7 @@ def make(
                 building_fixed_roles=context.get("buildingFixedRoles", {}),
             )
             accumulator = CriticAccumulator(
-                critic_plan, max_memory_mb=config["limits"]["max_memory_mb"],
+                critic_plan, max_memory_mb=budget / 4 / (1024 * 1024),
                 max_area_ratios=context["maxAreaRatios"] if colorpack is not None else None,
                 building_area_ratios=context.get("buildingMaxAreaRatios", {}),
             )
@@ -715,19 +773,30 @@ def make(
             def consume_regions():
                 for region in regions:
                     accumulator.consume(region)
+                    check_tables()
                     yield region
+
+            def check_tables():
+                if len(scene_sources) * 4096 + len(spool.palette) * 2048 > budget / 4:
+                    raise BlueprintError(
+                        "出典表・出力パレットが limits.max_memory_mb に収まりません",
+                    )
 
             spool.write(capture_sources(consume_regions(), bounds, source_spool, context,
                                         scene_sources))
+            check_tables()
             stage = "Critic"
             if stage_hook:
                 stage_hook(stage)
+            critic_result = accumulator.finalize()
+            accumulator = None
+            del critic_plan
             with spool.path.open("rb") as stream:
                 max_rows = max(1, min(128, int(budget // (bounds.size.x * 4 + 256) // 8)))
                 window = _SpoolWindow(spool, stream, max_rows)
                 failed, lines, metrics, structured = _evaluate(
-                    window, blueprint, context, source, max_nodes=max(1, int(budget // 2048)),
-                    critic=accumulator.finalize(),
+                    window, blueprint, context, source, max_nodes=max(1, int(budget // 2 // 2048)),
+                    critic=critic_result,
                 )
                 for diagnostic in context["detail"]["diagnostics"]:
                     structured.append(diagnostic)
@@ -744,7 +813,12 @@ def make(
                 stage = "Export"
                 if stage_hook:
                     stage_hook(stage)
-                _export_spool(spool, blueprint, staged_out, format=fmt)
+                _export_spool(
+                    spool, blueprint, staged_out, format=fmt,
+                    max_memory_bytes=(budget // 4 - len(scene_sources) * 4096
+                                      - len(spool.palette) * 2048
+                                      - max_rows * (bounds.size.x * 4 + 256)),
+                )
             input_kind = "spec" if source.suffix.lower() in (".yaml", ".yml") else "blueprint"
             scene_input = {"kind": input_kind, "path": str(source),
                            "sha256": expected["input"]["sha256"]}

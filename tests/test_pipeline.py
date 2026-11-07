@@ -646,6 +646,31 @@ def test_failed_export_keeps_completed_file(tmp_path, monkeypatch):
     assert not list(tmp_path.glob(".keep.schem-*-*"))
 
 
+def test_make_and_emit_build_assign_nbt_budget(tmp_path, monkeypatch):
+    import json
+
+    from mcblueprint.validator import validate_and_load
+
+    export = pipeline._export_spool
+    budgets = []
+
+    def capture(*args, **kwargs):
+        budgets.append(kwargs["max_memory_bytes"])
+        return export(*args, **kwargs)
+
+    monkeypatch.setattr(pipeline, "_export_spool", capture)
+    source = spec_file(tmp_path)
+    output = tmp_path / "budget.schem"
+    pipeline.make(source, output=output, emit=["blueprint"])
+    bp, errors = validate_and_load(json.loads((tmp_path / "budget.blueprint.json").read_bytes()),
+                                   base_dir=tmp_path)
+    assert not errors
+    pipeline.export_generated_blueprint(bp, tmp_path / "budget.litematic", format="litematic")
+    assert len(budgets) == 2
+    assert all(0 < value < bp.metadata["generation"]["config"]["limits"]["max_memory_mb"]
+               * 1024 * 1024 / 4 for value in budgets)
+
+
 @pytest.mark.parametrize("failure", ("record", "output", "record_publish"))
 def test_failed_publish_keeps_existing_output_and_record(tmp_path, monkeypatch, failure):
     source = spec_file(tmp_path)
