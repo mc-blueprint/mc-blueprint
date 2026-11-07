@@ -71,11 +71,19 @@ class SchemExporter(Exporter):
     def export_rows(
         self, rows: Iterable[np.ndarray], bounds: AABB,
         blueprint: Blueprint, out_path: Path, *, palette: list[BlockState | None],
+        max_memory_bytes: int | None = None,
     ) -> None:
-        """boundsを覆うY/Z/X順の添字行とpaletteを出力する。Noneはair。"""
+        """Y/Z/X順の行を出力する。予算指定時はNBT作業量を確保前に検査する。"""
         size = bounds.size
         if max(size.x, size.y, size.z) > MAX_SHORT:
             raise BlueprintError(f"Structure too large for .schem: {size.x} x {size.y} x {size.z}")
+
+        if max_memory_bytes is not None:
+            width = max(1, (max(0, len(palette) - 1).bit_length() + 6) // 7)
+            # bytearrayの拡張余裕、NBT配列と直列化時の複製、行の一時領域。
+            required = bounds.volume * width * 4 + size.x * 128 + len(palette) * 4096
+            if required > max_memory_bytes:
+                raise BlueprintError("NBT出力の作業配列が limits.max_memory_mb に収まりません")
 
         blocks = blockdata.load_block_data(blueprint.minecraft_version)
         palette_index: dict[str, int] = {}

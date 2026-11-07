@@ -14,6 +14,10 @@ mcblueprint.weather.apply_weather は GeneratedRegion の生成直後の RegionV
 ground_height は元地形または基準面のY座標です。一定の整数、または (x, z) からY座標を返すMappingを渡します。領域は参照に必要なhaloを含めて生成し、Weather後もcore外は変更しません。
 max_memory_mb はWeatherの作業領域に使う上限（既定2048 MiB）です。Generateは生成とWeatherのセル当たり作業量の大きい方でcore寸法を縮小します。Weather単体も領域配列・距離場・候補保持の概算が上限を超える場合は処理を開始せずエラーになります。
 
+makeでは保持中の計画・入力を差し引いた合計予算からGenerate/Weatherへ配賦します。
+各段がそれぞれ設定上限の全額を使う扱いにはしません。配賦とRSS測定の区別は
+[ARCHITECTURE.md](ARCHITECTURE.md) の領域生成の説明を参照してください。
+
 ## 処理規則
 
 - 水距離は water_proximity.radius までの6近傍L1距離です。水・露出・支持判定は変更前volumeから読み取ります。

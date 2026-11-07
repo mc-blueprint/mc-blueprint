@@ -52,11 +52,13 @@ def export_generated_regions(
 
 def _export_spool(
     spool: RegionSpool, blueprint: Blueprint, out_path: Path, *, format: str = "schem",
+    max_memory_bytes: int | None = None,
 ) -> Path:
     """同じ処理内で検査・書込みを完了したspoolを出力する。所有側が寿命を管理する。
 
     再生成や再退避は行わない。未完成spoolと未対応形式はBlueprintError、
     I/O失敗もBlueprintErrorとし、既存ファイルはexport_rowsの原子的保存で保つ。
+    max_memory_bytesは呼出し元が残したNBT出力用予算。指定時は配列確保前に検査する。
     """
     if format not in EXPORTERS:
         raise BlueprintError(f"未対応の出力形式: {format}")
@@ -65,6 +67,7 @@ def _export_spool(
     try:
         EXPORTERS[format]().export_rows(
             spool.rows(), spool.bounds, blueprint, out_path, palette=spool.palette,
+            max_memory_bytes=max_memory_bytes,
         )
     except OSError as exc:
         raise BlueprintError(f"領域生成の出力に失敗しました: {exc}") from exc

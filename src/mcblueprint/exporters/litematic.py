@@ -85,9 +85,18 @@ class LitematicExporter(Exporter):
     def export_rows(
         self, rows: Iterable[np.ndarray], bounds: AABB,
         blueprint: Blueprint, out_path: Path, *, palette: list[BlockState | None],
+        max_memory_bytes: int | None = None,
     ) -> None:
-        """boundsを覆うY/Z/X順の添字行とpaletteを出力する。Noneはair。"""
+        """Y/Z/X順の行を出力する。予算指定時はNBT作業量を確保前に検査する。"""
         size = bounds.size
+        if max_memory_bytes is not None:
+            packed = ((bounds.volume * bits_for(len(palette) + 1) + 63) // 64) * 8
+            # 添字、packing・NBTの配列と直列化時の複製、行・バッチの一時領域。
+            required = (bounds.volume * 4 + packed * 3
+                        + 128 * (min(bounds.volume, 65536) + size.x)
+                        + len(palette) * 4096)
+            if required > max_memory_bytes:
+                raise BlueprintError("NBT出力の作業配列が limits.max_memory_mb に収まりません")
         blocks = blockdata.load_block_data(blueprint.minecraft_version)
 
         # palette index 0 is always air (Litematica treats it as the empty state)
