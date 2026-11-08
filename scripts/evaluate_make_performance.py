@@ -61,7 +61,8 @@ def worker(source, output, profile):
     run_record = json.loads(result.record.read_bytes())
     return {"code": result.code, "make_runtime_seconds": elapsed,
             "process_peak_rss_bytes": peak, "stage_hook_samples": samples,
-            "implementation": {"pipeline": str(Path(structure.pipeline.__file__).resolve()),
+            "implementation": {"pipeline": benchmark._record_path(
+                Path(structure.pipeline.__file__).resolve()),
                                "environment": run_record["environment"]}}
 
 
@@ -69,7 +70,7 @@ def profile_summary(path):
     stats = pstats.Stats(str(path))
     rows = []
     for (filename, line, name), (primitive, calls, own, cumulative, _) in stats.stats.items():
-        rows.append({"file": filename.replace(str(ROOT), "."), "line": line,
+        rows.append({"file": benchmark._record_path(filename), "line": line,
                      "function": name, "primitive_calls": primitive, "calls": calls,
                      "own_seconds": own, "cumulative_seconds": cumulative})
     return {"total_seconds": stats.total_tt, "total_calls": stats.total_calls,
