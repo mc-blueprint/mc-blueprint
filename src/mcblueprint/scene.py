@@ -28,6 +28,7 @@ def capture_sources(regions, bounds: AABB, path: Path, context: dict,
             core = region.core
             low = core.min - region.volume.region.min
             size = core.size
+            source_ids = {0: 0}
             for y in range(size.y):
                 for z in range(size.z):
                     indices = region.volume._attrs[
@@ -35,22 +36,22 @@ def capture_sources(regions, bounds: AABB, path: Path, context: dict,
                     ]
                     row = np.zeros(size.x, dtype="<u4")
                     for index in np.unique(indices):
-                        if index == 0:
-                            continue
-                        attr = region.volume._attribute_palette[int(index)]
-                        if attr == EMPTY_ATTRIBUTES:
-                            continue
-                        descriptor = _source_descriptor(attr, context)
-                        if descriptor is None:
-                            continue
-                        raw = json.dumps(descriptor, ensure_ascii=False, sort_keys=True,
-                                         separators=(",", ":")).encode("utf-8")
-                        ident = int.from_bytes(sha256(raw).digest()[:4], "little") or 1
-                        descriptor["id"] = ident
-                        collision = table.get(ident)
-                        if collision is not None and collision != descriptor:
-                            raise BlueprintError("生成元IDが衝突しました")
-                        table[ident] = descriptor
+                        if index not in source_ids:
+                            attr = region.volume._attribute_palette[int(index)]
+                            descriptor = (_source_descriptor(attr, context)
+                                          if attr != EMPTY_ATTRIBUTES else None)
+                            ident = 0
+                            if descriptor is not None:
+                                raw = json.dumps(descriptor, ensure_ascii=False, sort_keys=True,
+                                                 separators=(",", ":")).encode("utf-8")
+                                ident = int.from_bytes(sha256(raw).digest()[:4], "little") or 1
+                                descriptor["id"] = ident
+                                collision = table.get(ident)
+                                if collision is not None and collision != descriptor:
+                                    raise BlueprintError("生成元IDが衝突しました")
+                                table[ident] = descriptor
+                            source_ids[index] = ident
+                        ident = source_ids[index]
                         row[indices == index] = ident
                     offset = (((core.min.y + y - bounds.min.y) * bounds.size.z
                                + core.min.z - bounds.min.z + z) * bounds.size.x

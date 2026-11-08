@@ -10,6 +10,7 @@ import pstats
 import statistics
 import subprocess
 import sys
+from datetime import UTC, datetime
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -17,7 +18,8 @@ WORK = ROOT / "benchmarks/.tmp/issue-243"
 RECORD = ROOT / "evaluation/records/region-performance-243.json"
 BASE = "5f0518a"
 MODULES = ("volume", "generator", "weather", "critic", "traversal", "pipeline",
-           "operations.randomness", "region_export", "exporters.schem", "exporters.litematic")
+           "operations.randomness", "region_export", "exporters.schem", "exporters.litematic",
+           "scene")
 
 
 class BaselineLoader(importlib.abc.MetaPathFinder, importlib.abc.Loader):
@@ -139,23 +141,34 @@ def run(args):
     selected = [(name, source, fmt) for name, source, fmt in cases(args.suite)
                 if not args.case or any(token in name for token in args.case)]
     for name, source, _ in selected:
-        if name in entries and entries[name]["input_sha256"] != structure.digest(source):
+        input_hash = structure.digest(source)
+        if name in entries and entries[name]["input_sha256"] != input_hash:
             raise ValueError(f"既存結果の入力hashが一致しません: {name}")
+        if args.phase == "after":
+            before = record["results"][key].get("before", {}).get(name, {})
+            if before.get("provenance") != provenance:
+                raise ValueError(f"before側のprovenanceが一致しません: {name}")
+            if before.get("input_sha256") != input_hash:
+                raise ValueError(f"before側の入力hashが一致しません: {name}")
     record[args.phase + "_provenance"] = implementation
     record["script"] = script
     record["h01_script"] = h01_script
     for name, source, fmt in selected:
-        if name in entries:
+        repetitions = 1 if args.suite == "matrix" or args.profile else args.repetitions
+        if name in entries and len(entries[name]["samples"]) >= repetitions:
             continue
         output = source.parent / f"result.{fmt}"
-        samples = []
-        for index in range(1 if args.suite == "matrix" or args.profile else 3):
+        samples = list(entries.get(name, {}).get("samples", []))
+        for index in range(len(samples), repetitions):
             command = [sys.executable, "-X", "utf8", str(Path(__file__).resolve()),
-                       "--worker", str(source), str(output), "--phase", args.phase]
+                       "--worker", str(source), str(output), "--phase", args.phase,
+                       "--base", BASE]
             profile = source.parent / f"{args.phase}.prof"
             if args.profile:
                 command.append("--profile")
+            started = datetime.now(UTC).isoformat()
             elapsed, sample = benchmark._isolated(command)
+            sample["started_at"] = started
             sample["seconds"] = elapsed
             sample["signature"] = (None if "failure" in sample else performance.signature(output))
             samples.append(sample)
@@ -195,15 +208,32 @@ def run(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--phase", choices=("before", "after"), required=True)
+    parser.add_argument("--phase", choices=("before", "after", "paired"), required=True)
+    parser.add_argument("--base", default=BASE)
+    parser.add_argument("--record", type=Path, default=RECORD)
+    parser.add_argument("--work", type=Path, default=WORK)
     parser.add_argument("--suite", choices=("timing", "matrix"), default="timing")
     parser.add_argument("--case", action="append")
     parser.add_argument("--profile", action="store_true")
     parser.add_argument("--worker", nargs=2, type=Path)
     args = parser.parse_args()
+    BASE, RECORD, WORK = args.base, args.record, args.work
+    args.repetitions = 3
     if args.worker:
+        if args.phase == "paired":
+            parser.error("workerにはbeforeかafterを指定してください")
         source, output = args.worker
         profile = source.parent / f"{args.phase}.prof" if args.profile else None
         print(json.dumps(worker(source, output, args.phase, profile)))
+    elif args.phase == "paired":
+        selected = [name for name, _, _ in cases(args.suite)
+                    if not args.case or any(token in name for token in args.case)]
+        for name in selected:
+            args.case = [name]
+            for count in range(1, (1 if args.suite == "matrix" or args.profile else 3) + 1):
+                args.repetitions = count
+                for phase in ("before", "after"):
+                    args.phase = phase
+                    run(args)
     else:
         run(args)

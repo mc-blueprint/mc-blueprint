@@ -1,0 +1,3782 @@
+{
+  "base_commit": "4e9ce5e",
+  "environment": {
+    "os": "Windows-11-10.0.26200-SP0",
+    "cpu": "AMD Ryzen 7 5700X 8-Core Processor",
+    "cpu_reason": null,
+    "logical_cpu_count": 16,
+    "memory_total_bytes": 68640256000,
+    "memory_reason": null,
+    "gpu": "NVIDIA GeForce RTX 4070 SUPER",
+    "gpu_reason": null,
+    "python": "3.12.15 (main, Oct 21 2026, 17:48:33) [MSC v.1944 64 bit (AMD64)]",
+    "python_version": "3.12.15"
+  },
+  "method": "H01 worker/独立プロセス/3反復。matrixは各1反復、cProfileは別実行。入力と出力先は前後同一。stage_hookの隣接差分は段時間、RSSは段開始時。beforeは対象モジュールを起点commitからロードする。基準端末のNFR判定ではない。",
+  "results": {
+    "timing-profile": {
+      "before": {
+        "castle-medium-1.21.11-schem": {
+          "input_sha256": "0799c22418fdf02beb06de7fa309729071e1bc405b94b8dca25f539f121ec097",
+          "provenance": {
+            "implementation": {
+              "commit": "4e9ce5eebdb71c25542f86a6f199f0fdfeaf7477",
+              "engine_sha256": "d76227340cb4453fe986b02554a14edf60e5207f9bca0e5bb108feecc685ba66",
+              "lock_sha256": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+              "default_config_sha256": "17f5c240ead94ebb8c410f045b3344f07d07ec9c29a8a769645f853b5ea28d64"
+            },
+            "base_commit": "4e9ce5e",
+            "python": "3.12.15 (main, Oct 21 2026, 17:48:33) [MSC v.1944 64 bit (AMD64)]",
+            "script_sha256": "27bd30f810480051819f88700a256d133888082a0fb72cdba4221dd3bbe683bb",
+            "h01_script_sha256": "2b45c7c38960c3fc43fc97376d6d29eefef5e9bd377f017c99d8c252c8c61ea3",
+            "common_scripts_sha256": {
+              "benchmark": "9cc6c994c1a8b44457146bd518206cd0c38390b221b2c5b89c9223cb9ba8cfcd",
+              "evaluate_structure": "2f50fcf13604f4d9e5c8dbce4b68a8a4a6b402fd64e5e098370df346495d33e8"
+            }
+          },
+          "samples": [
+            {
+              "code": 0,
+              "make_runtime_seconds": 121.10253050000028,
+              "process_peak_rss_bytes": 128745472,
+              "stage_hook_samples": [
+                {
+                  "stage": "Resolve",
+                  "elapsed_seconds": 0.003687199998239521,
+                  "rss_at_stage_start_bytes": 52297728
+                },
+                {
+                  "stage": "Site/Massing/Detail",
+                  "elapsed_seconds": 3.7220743999932893,
+                  "rss_at_stage_start_bytes": 64045056
+                },
+                {
+                  "stage": "Materialize",
+                  "elapsed_seconds": 8.052410799995414,
+                  "rss_at_stage_start_bytes": 65040384
+                },
+                {
+                  "stage": "Generate",
+                  "elapsed_seconds": 41.10027199999604,
+                  "rss_at_stage_start_bytes": 120029184
+                },
+                {
+                  "stage": "Critic",
+                  "elapsed_seconds": 117.59257729999808,
+                  "rss_at_stage_start_bytes": 122019840
+                },
+                {
+                  "stage": "Export",
+                  "elapsed_seconds": 120.59795669999585,
+                  "rss_at_stage_start_bytes": 121462784
+                }
+              ],
+              "implementation": {
+                "pipeline": "H:\\mc-blueprint\\worktrees\\mcb-261\\mc-blueprint\\src\\mcblueprint\\pipeline.py",
+                "environment": {
+                  "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+                  "engine": "0.1.0",
+                  "engineHash": "307295ae42febcd04f563fc076bc9b53708eb38b17d5cc6e1ceee095c41214d6",
+                  "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+                  "planVersion": 2
+                }
+              },
+              "started_at": "2026-11-08T09:06:25.541190+00:00",
+              "seconds": 122.90487779999967,
+              "signature": {
+                "placement_sha256": "72be0ba5857df42093856e8bdba9422198b19096b0f4e71b32d15610e494462c",
+                "metrics_sha256": "df7f9e69277c3b367e4ad4a325b1ed717a30b2107b4eb0ea02e19bcb2d17c245",
+                "structured_diagnostics_sha256": "f707b42390bb943b067071d03c453574208c595d73d79b0bcdffc1fad321d83c",
+                "scene_json_sha256": "0a0197b15a19147f43b413babf9a5ecafa052817936650c7ea1fe6eee22b5cf8"
+              }
+            }
+          ],
+          "seconds_median": 122.90487779999967,
+          "rss_median": 128745472,
+          "profile": {
+            "total_seconds": 118.50364620000012,
+            "total_calls": 99123592,
+            "focus_functions": [
+              {
+                "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\pathlib.py",
+                "line": 1228,
+                "function": "resolve",
+                "primitive_calls": 7,
+                "calls": 7,
+                "own_seconds": 4.2000000000000004e-05,
+                "cumulative_seconds": 0.0034552000000000003
+              },
+              {
+                "file": ".\\src\\mcblueprint\\components.py",
+                "line": 69,
+                "function": "resolve",
+                "primitive_calls": 90,
+                "calls": 90,
+                "own_seconds": 0.0006034,
+                "cumulative_seconds": 0.0130798
+              },
+              {
+                "file": ".\\src\\mcblueprint\\detail.py",
+                "line": 269,
+                "function": "_facade_selection",
+                "primitive_calls": 18,
+                "calls": 18,
+                "own_seconds": 0.1065055,
+                "cumulative_seconds": 0.9439637000000001
+              },
+              {
+                "file": ".\\src\\mcblueprint\\scene.py",
+                "line": 82,
+                "function": "write_scene",
+                "primitive_calls": 1,
+                "calls": 1,
+                "own_seconds": 0.0013668,
+                "cumulative_seconds": 0.35520850000000004
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\yaml\\resolver.py",
+                "line": 143,
+                "function": "resolve",
+                "primitive_calls": 4532,
+                "calls": 4532,
+                "own_seconds": 0.0063016,
+                "cumulative_seconds": 0.0102825
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\referencing\\jsonschema.py",
+                "line": 604,
+                "function": "resolve",
+                "primitive_calls": 772,
+                "calls": 772,
+                "own_seconds": 0.004524800000000001,
+                "cumulative_seconds": 0.0130153
+              },
+              {
+                "file": ".\\src\\mcblueprint\\planning.py",
+                "line": 86,
+                "function": "_plan_contract",
+                "primitive_calls": 72,
+                "calls": 72,
+                "own_seconds": 0.0035145000000000003,
+                "cumulative_seconds": 0.20161210000000002
+              },
+              {
+                "file": ".\\src\\mcblueprint\\planning.py",
+                "line": 336,
+                "function": "plan_buildspec",
+                "primitive_calls": 2,
+                "calls": 20,
+                "own_seconds": 0.013830700000000001,
+                "cumulative_seconds": 7.9231018
+              },
+              {
+                "file": ".\\src\\mcblueprint\\viewer_input.py",
+                "line": 163,
+                "function": "_spec_sources",
+                "primitive_calls": 1,
+                "calls": 1,
+                "own_seconds": 2.71e-05,
+                "cumulative_seconds": 0.0027027
+              },
+              {
+                "file": ".\\src\\mcblueprint\\detail.py",
+                "line": 131,
+                "function": "plan_detail",
+                "primitive_calls": 18,
+                "calls": 18,
+                "own_seconds": 0.013198600000000001,
+                "cumulative_seconds": 1.5551127
+              },
+              {
+                "file": ".\\src\\mcblueprint\\materialize.py",
+                "line": 499,
+                "function": "resolve",
+                "primitive_calls": 10,
+                "calls": 102871,
+                "own_seconds": 0.1249148,
+                "cumulative_seconds": 0.28817200000000004
+              },
+              {
+                "file": ".\\src\\mcblueprint\\critic.py",
+                "line": 280,
+                "function": "consume",
+                "primitive_calls": 1,
+                "calls": 1,
+                "own_seconds": 0.23160370000000002,
+                "cumulative_seconds": 1.3095927
+              },
+              {
+                "file": ".\\src\\mcblueprint\\materialize.py",
+                "line": 258,
+                "function": "materialize",
+                "primitive_calls": 10,
+                "calls": 10,
+                "own_seconds": 0.07497970000000001,
+                "cumulative_seconds": 3.5668598
+              },
+              {
+                "file": ".\\src\\mcblueprint\\operations\\base.py",
+                "line": 144,
+                "function": "resolve",
+                "primitive_calls": 2431,
+                "calls": 2431,
+                "own_seconds": 0.00040950000000000003,
+                "cumulative_seconds": 0.00040950000000000003
+              },
+              {
+                "file": ".\\src\\mcblueprint\\scene.py",
+                "line": 22,
+                "function": "capture_sources",
+                "primitive_calls": 2,
+                "calls": 2,
+                "own_seconds": 0.2844632,
+                "cumulative_seconds": 75.9222331
+              },
+              {
+                "file": ".\\src\\mcblueprint\\materialize.py",
+                "line": 190,
+                "function": "_distance",
+                "primitive_calls": 8820,
+                "calls": 8820,
+                "own_seconds": 0.0064391000000000006,
+                "cumulative_seconds": 0.1376504
+              }
+            ],
+            "top_cumulative": [
+              {
+                "file": ".\\src\\mcblueprint\\pipeline.py",
+                "line": 564,
+                "function": "make",
+                "primitive_calls": 1,
+                "calls": 1,
+                "own_seconds": 0.0243277,
+                "cumulative_seconds": 121.06840380000001
+              },
+              {
+                "file": "~",
+                "line": 0,
+                "function": "<built-in method builtins.next>",
+                "primitive_calls": 465407,
+                "calls": 473805,
+                "own_seconds": 0.1440255,
+                "cumulative_seconds": 84.64752530000001
+              },
+              {
+                "file": ".\\src\\mcblueprint\\exporters\\_spool.py",
+                "line": 27,
+                "function": "write",
+                "primitive_calls": 1,
+                "calls": 1,
+                "own_seconds": 0.012484400000000001,
+                "cumulative_seconds": 75.9731251
+              },
+              {
+                "file": ".\\src\\mcblueprint\\scene.py",
+                "line": 22,
+                "function": "capture_sources",
+                "primitive_calls": 2,
+                "calls": 2,
+                "own_seconds": 0.2844632,
+                "cumulative_seconds": 75.9222331
+              },
+              {
+                "file": ".\\src\\mcblueprint\\pipeline.py",
+                "line": 773,
+                "function": "consume_regions",
+                "primitive_calls": 2,
+                "calls": 2,
+                "own_seconds": 0.0001507,
+                "cumulative_seconds": 61.13817280000001
+              },
+              {
+                "file": ".\\src\\mcblueprint\\pipeline.py",
+                "line": 269,
+                "function": "generated_blueprint_regions",
+                "primitive_calls": 2,
+                "calls": 2,
+                "own_seconds": 0.0102439,
+                "cumulative_seconds": 59.8284225
+              },
+              {
+                "file": ".\\src\\mcblueprint\\generator.py",
+                "line": 93,
+                "function": "generate_regions",
+                "primitive_calls": 2,
+                "calls": 2,
+                "own_seconds": 0.0148693,
+                "cumulative_seconds": 59.695636900000004
+              },
+              {
+                "file": ".\\src\\mcblueprint\\operations\\base.py",
+                "line": 118,
+                "function": "execute",
+                "primitive_calls": 4629,
+                "calls": 7815,
+                "own_seconds": 0.1037933,
+                "cumulative_seconds": 59.573869800000004
+              },
+              {
+                "file": ".\\src\\mcblueprint\\operations\\fill.py",
+                "line": 26,
+                "function": "apply",
+                "primitive_calls": 5399,
+                "calls": 5399,
+                "own_seconds": 0.016826,
+                "cumulative_seconds": 56.9859202
+              },
+              {
+                "file": ".\\src\\mcblueprint\\operations\\base.py",
+                "line": 181,
+                "function": "fill",
+                "primitive_calls": 5291,
+                "calls": 5291,
+                "own_seconds": 0.13086730000000002,
+                "cumulative_seconds": 56.8205972
+              },
+              {
+                "file": ".\\src\\mcblueprint\\operations\\randomness.py",
+                "line": 100,
+                "function": "tiles",
+                "primitive_calls": 9198,
+                "calls": 9198,
+                "own_seconds": 0.17477230000000002,
+                "cumulative_seconds": 55.50599750000001
+              },
+              {
+                "file": ".\\src\\mcblueprint\\operations\\randomness.py",
+                "line": 124,
+                "function": "_sample",
+                "primitive_calls": 4568,
+                "calls": 4568,
+                "own_seconds": 0.16611250000000002,
+                "cumulative_seconds": 55.1383859
+              },
+              {
+                "file": ".\\src\\mcblueprint\\operations\\randomness.py",
+                "line": 23,
+                "function": "first_draws",
+                "primitive_calls": 4568,
+                "calls": 4568,
+                "own_seconds": 0.3912706,
+                "cumulative_seconds": 54.4430526
+              },
+              {
+                "file": ".\\src\\mcblueprint\\operations\\randomness.py",
+                "line": 39,
+                "function": "_first_draws",
+                "primitive_calls": 4568,
+                "calls": 4568,
+                "own_seconds": 53.5922453,
+                "cumulative_seconds": 53.7299506
+              },
+              {
+                "file": ".\\src\\mcblueprint\\validator.py",
+                "line": 99,
+                "function": "validate_and_load",
+                "primitive_calls": 1,
+                "calls": 1,
+                "own_seconds": 3.6e-05,
+                "cumulative_seconds": 25.809510900000003
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "line": 349,
+                "function": "iter_errors",
+                "primitive_calls": 140,
+                "calls": 464272,
+                "own_seconds": 0.6381581000000001,
+                "cumulative_seconds": 25.5391386
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "line": 396,
+                "function": "descend",
+                "primitive_calls": 1134,
+                "calls": 883559,
+                "own_seconds": 2.8120163000000002,
+                "cumulative_seconds": 25.533543700000003
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "line": 290,
+                "function": "properties",
+                "primitive_calls": 444,
+                "calls": 480206,
+                "own_seconds": 0.6465233,
+                "cumulative_seconds": 25.5292464
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "line": 274,
+                "function": "ref",
+                "primitive_calls": 2847,
+                "calls": 60512,
+                "own_seconds": 0.1003796,
+                "cumulative_seconds": 25.3738449
+              },
+              {
+                "file": ".\\src\\mcblueprint\\validator.py",
+                "line": 123,
+                "function": "validate_schema",
+                "primitive_calls": 1,
+                "calls": 1,
+                "own_seconds": 1.84e-05,
+                "cumulative_seconds": 25.1878101
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "line": 59,
+                "function": "items",
+                "primitive_calls": 990,
+                "calls": 13594,
+                "own_seconds": 0.09557790000000001,
+                "cumulative_seconds": 25.1816761
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "line": 332,
+                "function": "allOf",
+                "primitive_calls": 4642,
+                "calls": 6945,
+                "own_seconds": 0.2570037,
+                "cumulative_seconds": 23.051325300000002
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "line": 382,
+                "function": "if_",
+                "primitive_calls": 157334,
+                "calls": 235534,
+                "own_seconds": 0.4818659,
+                "cumulative_seconds": 20.8412252
+              },
+              {
+                "file": ".\\src\\mcblueprint\\scene.py",
+                "line": 63,
+                "function": "_source_descriptor",
+                "primitive_calls": 8325,
+                "calls": 8325,
+                "own_seconds": 0.0239294,
+                "cumulative_seconds": 14.003095
+              },
+              {
+                "file": ".\\src\\mcblueprint\\plan_contract.py",
+                "line": 103,
+                "function": "building_for_element",
+                "primitive_calls": 8325,
+                "calls": 8325,
+                "own_seconds": 0.1263678,
+                "cumulative_seconds": 13.967984900000001
+              },
+              {
+                "file": ".\\src\\mcblueprint\\plan_contract.py",
+                "line": 9,
+                "function": "plan_buildings",
+                "primitive_calls": 8411,
+                "calls": 8411,
+                "own_seconds": 7.6083723,
+                "cumulative_seconds": 13.8221675
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "line": 485,
+                "function": "is_valid",
+                "primitive_calls": 235537,
+                "calls": 235537,
+                "own_seconds": 0.8583412,
+                "cumulative_seconds": 9.644121100000001
+              },
+              {
+                "file": ".\\src\\mcblueprint\\planning.py",
+                "line": 336,
+                "function": "plan_buildspec",
+                "primitive_calls": 2,
+                "calls": 20,
+                "own_seconds": 0.013830700000000001,
+                "cumulative_seconds": 7.9231018
+              },
+              {
+                "file": ".\\src\\mcblueprint\\castle_planning.py",
+                "line": 99,
+                "function": "plan_castle",
+                "primitive_calls": 2,
+                "calls": 2,
+                "own_seconds": 0.0254115,
+                "cumulative_seconds": 7.884425200000001
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "line": 339,
+                "function": "evolve",
+                "primitive_calls": 887786,
+                "calls": 887786,
+                "own_seconds": 2.7239660000000003,
+                "cumulative_seconds": 5.8554187
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "line": 459,
+                "function": "_validate_reference",
+                "primitive_calls": 60609,
+                "calls": 60609,
+                "own_seconds": 0.07074330000000001,
+                "cumulative_seconds": 5.8269997
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\referencing\\_core.py",
+                "line": 653,
+                "function": "lookup",
+                "primitive_calls": 60609,
+                "calls": 60609,
+                "own_seconds": 0.18742050000000002,
+                "cumulative_seconds": 5.756256400000001
+              },
+              {
+                "file": ".\\src\\mcblueprint\\materialize.py",
+                "line": 580,
+                "function": "materialize_plan",
+                "primitive_calls": 1,
+                "calls": 1,
+                "own_seconds": 0.0320078,
+                "cumulative_seconds": 4.3843592000000005
+              },
+              {
+                "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\copy.py",
+                "line": 118,
+                "function": "deepcopy",
+                "primitive_calls": 27391,
+                "calls": 1835330,
+                "own_seconds": 1.9617968000000001,
+                "cumulative_seconds": 4.1956824
+              },
+              {
+                "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\copy.py",
+                "line": 217,
+                "function": "_deepcopy_dict",
+                "primitive_calls": 26387,
+                "calls": 190680,
+                "own_seconds": 0.5889391,
+                "cumulative_seconds": 4.121726600000001
+              }
+            ],
+            "top_own": [
+              {
+                "file": ".\\src\\mcblueprint\\operations\\randomness.py",
+                "line": 39,
+                "function": "_first_draws",
+                "primitive_calls": 4568,
+                "calls": 4568,
+                "own_seconds": 53.5922453,
+                "cumulative_seconds": 53.7299506
+              },
+              {
+                "file": ".\\src\\mcblueprint\\plan_contract.py",
+                "line": 9,
+                "function": "plan_buildings",
+                "primitive_calls": 8411,
+                "calls": 8411,
+                "own_seconds": 7.6083723,
+                "cumulative_seconds": 13.8221675
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "line": 396,
+                "function": "descend",
+                "primitive_calls": 1134,
+                "calls": 883559,
+                "own_seconds": 2.8120163000000002,
+                "cumulative_seconds": 25.533543700000003
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "line": 339,
+                "function": "evolve",
+                "primitive_calls": 887786,
+                "calls": 887786,
+                "own_seconds": 2.7239660000000003,
+                "cumulative_seconds": 5.8554187
+              },
+              {
+                "file": "~",
+                "line": 0,
+                "function": "<method 'get' of 'dict' objects>",
+                "primitive_calls": 12789456,
+                "calls": 12789456,
+                "own_seconds": 2.7106700000000004,
+                "cumulative_seconds": 2.7669673
+              },
+              {
+                "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\copy.py",
+                "line": 118,
+                "function": "deepcopy",
+                "primitive_calls": 27391,
+                "calls": 1835330,
+                "own_seconds": 1.9617968000000001,
+                "cumulative_seconds": 4.1956824
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "line": 282,
+                "function": "__attrs_post_init__",
+                "primitive_calls": 887926,
+                "calls": 887926,
+                "own_seconds": 1.4861158,
+                "cumulative_seconds": 1.6573387000000002
+              },
+              {
+                "file": "~",
+                "line": 0,
+                "function": "<method 'extend' of 'list' objects>",
+                "primitive_calls": 5958316,
+                "calls": 5958316,
+                "own_seconds": 1.4596533,
+                "cumulative_seconds": 3.3153162000000003
+              },
+              {
+                "file": "~",
+                "line": 0,
+                "function": "<method 'add' of 'set' objects>",
+                "primitive_calls": 7056336,
+                "calls": 7056336,
+                "own_seconds": 1.3787009000000001,
+                "cumulative_seconds": 1.4390616
+              },
+              {
+                "file": ".\\src\\mcblueprint\\pipeline.py",
+                "line": 122,
+                "function": "_working_budget",
+                "primitive_calls": 1,
+                "calls": 1,
+                "own_seconds": 1.3504666,
+                "cumulative_seconds": 2.7362698
+              },
+              {
+                "file": "~",
+                "line": 0,
+                "function": "<method 'pop' of 'list' objects>",
+                "primitive_calls": 6818078,
+                "calls": 6818078,
+                "own_seconds": 1.2852876,
+                "cumulative_seconds": 1.2852876
+              },
+              {
+                "file": "~",
+                "line": 0,
+                "function": "<built-in method builtins.getattr>",
+                "primitive_calls": 6017356,
+                "calls": 6017356,
+                "own_seconds": 1.0510834,
+                "cumulative_seconds": 1.0511572
+              },
+              {
+                "file": "~",
+                "line": 0,
+                "function": "<built-in method builtins.isinstance>",
+                "primitive_calls": 5034410,
+                "calls": 5034410,
+                "own_seconds": 1.0272156000000001,
+                "cumulative_seconds": 1.3478045
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\exceptions.py",
+                "line": 165,
+                "function": "_set",
+                "primitive_calls": 459905,
+                "calls": 459905,
+                "own_seconds": 0.9629902,
+                "cumulative_seconds": 1.5198284000000002
+              },
+              {
+                "file": ".\\src\\mcblueprint\\terrain_field.py",
+                "line": 57,
+                "function": "_bilinear",
+                "primitive_calls": 210148,
+                "calls": 210148,
+                "own_seconds": 0.9406222000000001,
+                "cumulative_seconds": 1.018775
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\referencing\\_core.py",
+                "line": 165,
+                "function": "create_resource",
+                "primitive_calls": 968845,
+                "calls": 968845,
+                "own_seconds": 0.9243221,
+                "cumulative_seconds": 1.7614527000000002
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\exceptions.py",
+                "line": 55,
+                "function": "__init__",
+                "primitive_calls": 230638,
+                "calls": 230638,
+                "own_seconds": 0.9164884000000001,
+                "cumulative_seconds": 0.9164884000000001
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "line": 485,
+                "function": "is_valid",
+                "primitive_calls": 235537,
+                "calls": 235537,
+                "own_seconds": 0.8583412,
+                "cumulative_seconds": 9.644121100000001
+              },
+              {
+                "file": "<attrs generated methods referencing._core.Resource>",
+                "line": 29,
+                "function": "__init__",
+                "primitive_calls": 968845,
+                "calls": 968845,
+                "own_seconds": 0.8371306000000001,
+                "cumulative_seconds": 0.8371306000000001
+              },
+              {
+                "file": ".\\src\\mcblueprint\\terrain_field.py",
+                "line": 68,
+                "function": "_transfer",
+                "primitive_calls": 107532,
+                "calls": 107532,
+                "own_seconds": 0.6509304,
+                "cumulative_seconds": 0.7981188
+              }
+            ],
+            "region_functions": [
+              {
+                "file": "randomness.py",
+                "function": "__init__",
+                "calls": 1,
+                "own_seconds": 2.01e-05,
+                "cumulative_seconds": 3.0500000000000003e-05
+              },
+              {
+                "file": "pipeline.py",
+                "function": "__iter__",
+                "calls": 196620,
+                "own_seconds": 0.24676460000000003,
+                "cumulative_seconds": 0.6056836
+              },
+              {
+                "file": "pipeline.py",
+                "function": "_row",
+                "calls": 85777,
+                "own_seconds": 0.0851167,
+                "cumulative_seconds": 0.3194426
+              },
+              {
+                "file": "randomness.py",
+                "function": "_sample",
+                "calls": 4568,
+                "own_seconds": 0.16611250000000002,
+                "cumulative_seconds": 55.1383859
+              },
+              {
+                "file": "critic.py",
+                "function": "finalize",
+                "calls": 1,
+                "own_seconds": 0.005561600000000001,
+                "cumulative_seconds": 0.007550500000000001
+              },
+              {
+                "file": "traversal.py",
+                "function": "_stand",
+                "calls": 6333,
+                "own_seconds": 0.0129943,
+                "cumulative_seconds": 0.14845560000000002
+              },
+              {
+                "file": "pipeline.py",
+                "function": "_working_budget",
+                "calls": 1,
+                "own_seconds": 1.3504666,
+                "cumulative_seconds": 2.7362698
+              },
+              {
+                "file": "randomness.py",
+                "function": "first_draws",
+                "calls": 4568,
+                "own_seconds": 0.3912706,
+                "cumulative_seconds": 54.4430526
+              },
+              {
+                "file": "randomness.py",
+                "function": "tiles",
+                "calls": 9198,
+                "own_seconds": 0.17477230000000002,
+                "cumulative_seconds": 55.50599750000001
+              },
+              {
+                "file": "weather.py",
+                "function": "apply_weather",
+                "calls": 1,
+                "own_seconds": 0.0012807,
+                "cumulative_seconds": 0.0432554
+              },
+              {
+                "file": "critic.py",
+                "function": "__init__",
+                "calls": 1,
+                "own_seconds": 0.0082536,
+                "cumulative_seconds": 0.015604900000000001
+              },
+              {
+                "file": "weather.py",
+                "function": "_water_distances",
+                "calls": 1,
+                "own_seconds": 0.0043006,
+                "cumulative_seconds": 0.0044964
+              },
+              {
+                "file": "critic.py",
+                "function": "consume",
+                "calls": 1,
+                "own_seconds": 0.23160370000000002,
+                "cumulative_seconds": 1.3095927
+              },
+              {
+                "file": "weather.py",
+                "function": "_weather_fields",
+                "calls": 1,
+                "own_seconds": 0.007100700000000001,
+                "cumulative_seconds": 0.008292200000000001
+              },
+              {
+                "file": "traversal.py",
+                "function": "route",
+                "calls": 38,
+                "own_seconds": 0.2011396,
+                "cumulative_seconds": 1.2954327
+              },
+              {
+                "file": "support.py",
+                "function": "check_support",
+                "calls": 12,
+                "own_seconds": 0.1025626,
+                "cumulative_seconds": 1.6843669000000001
+              },
+              {
+                "file": "traversal.py",
+                "function": "stand",
+                "calls": 56482,
+                "own_seconds": 0.0712851,
+                "cumulative_seconds": 0.2930527
+              },
+              {
+                "file": "pipeline.py",
+                "function": "__init__",
+                "calls": 1,
+                "own_seconds": 7.6e-06,
+                "cumulative_seconds": 7.6e-06
+              },
+              {
+                "file": "pipeline.py",
+                "function": "get",
+                "calls": 79840,
+                "own_seconds": 0.0791498,
+                "cumulative_seconds": 0.2733776
+              },
+              {
+                "file": "traversal.py",
+                "function": "__init__",
+                "calls": 1,
+                "own_seconds": 1.3700000000000001e-05,
+                "cumulative_seconds": 2.0300000000000002e-05
+              },
+              {
+                "file": "pipeline.py",
+                "function": "_support",
+                "calls": 1,
+                "own_seconds": 6.09e-05,
+                "cumulative_seconds": 1.6846510000000001
+              }
+            ],
+            "measured_functions": [
+              {
+                "file": "randomness.py",
+                "function": "first_draws",
+                "calls": 4568,
+                "own_seconds": 0.3912706,
+                "cumulative_seconds": 54.4430526
+              },
+              {
+                "file": "scene.py",
+                "function": "_source_descriptor",
+                "calls": 8325,
+                "own_seconds": 0.0239294,
+                "cumulative_seconds": 14.003095
+              },
+              {
+                "file": "critic.py",
+                "function": "consume",
+                "calls": 1,
+                "own_seconds": 0.23160370000000002,
+                "cumulative_seconds": 1.3095927
+              },
+              {
+                "file": "support.py",
+                "function": "check_support",
+                "calls": 12,
+                "own_seconds": 0.1025626,
+                "cumulative_seconds": 1.6843669000000001
+              },
+              {
+                "file": "validator.py",
+                "function": "validate_schema",
+                "calls": 1,
+                "own_seconds": 1.84e-05,
+                "cumulative_seconds": 25.1878101
+              }
+            ]
+          }
+        },
+        "castle-huge-1.21.11-schem": {
+          "input_sha256": "8d69a6e8843ddda1cc466e19bb8aceef8a9c30a1e588008d1fbdcd7c0374950d",
+          "provenance": {
+            "implementation": {
+              "commit": "4e9ce5eebdb71c25542f86a6f199f0fdfeaf7477",
+              "engine_sha256": "d76227340cb4453fe986b02554a14edf60e5207f9bca0e5bb108feecc685ba66",
+              "lock_sha256": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+              "default_config_sha256": "17f5c240ead94ebb8c410f045b3344f07d07ec9c29a8a769645f853b5ea28d64"
+            },
+            "base_commit": "4e9ce5e",
+            "python": "3.12.15 (main, Oct 21 2026, 17:48:33) [MSC v.1944 64 bit (AMD64)]",
+            "script_sha256": "27bd30f810480051819f88700a256d133888082a0fb72cdba4221dd3bbe683bb",
+            "h01_script_sha256": "2b45c7c38960c3fc43fc97376d6d29eefef5e9bd377f017c99d8c252c8c61ea3",
+            "common_scripts_sha256": {
+              "benchmark": "9cc6c994c1a8b44457146bd518206cd0c38390b221b2c5b89c9223cb9ba8cfcd",
+              "evaluate_structure": "2f50fcf13604f4d9e5c8dbce4b68a8a4a6b402fd64e5e098370df346495d33e8"
+            }
+          },
+          "samples": [
+            {
+              "code": 0,
+              "make_runtime_seconds": 1014.3762342000045,
+              "process_peak_rss_bytes": 163004416,
+              "stage_hook_samples": [
+                {
+                  "stage": "Resolve",
+                  "elapsed_seconds": 0.001881700001831632,
+                  "rss_at_stage_start_bytes": 53633024
+                },
+                {
+                  "stage": "Site/Massing/Detail",
+                  "elapsed_seconds": 6.458970300001965,
+                  "rss_at_stage_start_bytes": 64917504
+                },
+                {
+                  "stage": "Materialize",
+                  "elapsed_seconds": 12.983161100004509,
+                  "rss_at_stage_start_bytes": 69775360
+                },
+                {
+                  "stage": "Generate",
+                  "elapsed_seconds": 70.29030420000345,
+                  "rss_at_stage_start_bytes": 132870144
+                },
+                {
+                  "stage": "Critic",
+                  "elapsed_seconds": 877.4683111000049,
+                  "rss_at_stage_start_bytes": 141217792
+                },
+                {
+                  "stage": "Export",
+                  "elapsed_seconds": 993.3745789000022,
+                  "rss_at_stage_start_bytes": 142487552
+                }
+              ],
+              "implementation": {
+                "pipeline": "H:\\mc-blueprint\\worktrees\\mcb-261\\mc-blueprint\\src\\mcblueprint\\pipeline.py",
+                "environment": {
+                  "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+                  "engine": "0.1.0",
+                  "engineHash": "307295ae42febcd04f563fc076bc9b53708eb38b17d5cc6e1ceee095c41214d6",
+                  "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+                  "planVersion": 2
+                }
+              },
+              "started_at": "2026-11-08T09:09:30.004141+00:00",
+              "seconds": 1016.7378806999986,
+              "signature": {
+                "placement_sha256": "f4bdff66c5f2f2b280eafefd5261345e5c9f61a381d3ed3813f0a6b568345a63",
+                "metrics_sha256": "6dadad20f39e6d25beae6852879567f95783bc4958c21f7e7ac7df8ac1031596",
+                "structured_diagnostics_sha256": "23cec7a551cd533a5c9ea514389b648f02f75a830edf43295ddedf0d8542a5be",
+                "scene_json_sha256": "35db003161746747c359c204555ac84d68758d2a4f088d2a1fa0b9bc5fdbaf39"
+              }
+            }
+          ],
+          "seconds_median": 1016.7378806999986,
+          "rss_median": 163004416,
+          "profile": {
+            "total_seconds": 957.890693899998,
+            "total_calls": 805440592,
+            "focus_functions": [
+              {
+                "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\pathlib.py",
+                "line": 1228,
+                "function": "resolve",
+                "primitive_calls": 7,
+                "calls": 7,
+                "own_seconds": 3.38e-05,
+                "cumulative_seconds": 0.0027131
+              },
+              {
+                "file": ".\\src\\mcblueprint\\viewer_input.py",
+                "line": 163,
+                "function": "_spec_sources",
+                "primitive_calls": 1,
+                "calls": 1,
+                "own_seconds": 7.81e-05,
+                "cumulative_seconds": 0.007423000000000001
+              },
+              {
+                "file": ".\\src\\mcblueprint\\components.py",
+                "line": 69,
+                "function": "resolve",
+                "primitive_calls": 90,
+                "calls": 90,
+                "own_seconds": 0.0008368000000000001,
+                "cumulative_seconds": 0.015599400000000001
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\referencing\\jsonschema.py",
+                "line": 604,
+                "function": "resolve",
+                "primitive_calls": 772,
+                "calls": 772,
+                "own_seconds": 0.005244,
+                "cumulative_seconds": 0.0171514
+              },
+              {
+                "file": ".\\src\\mcblueprint\\detail.py",
+                "line": 269,
+                "function": "_facade_selection",
+                "primitive_calls": 18,
+                "calls": 18,
+                "own_seconds": 0.1551409,
+                "cumulative_seconds": 1.3228904000000001
+              },
+              {
+                "file": ".\\src\\mcblueprint\\scene.py",
+                "line": 82,
+                "function": "write_scene",
+                "primitive_calls": 1,
+                "calls": 1,
+                "own_seconds": 0.008923,
+                "cumulative_seconds": 19.7140491
+              },
+              {
+                "file": ".\\src\\mcblueprint\\materialize.py",
+                "line": 499,
+                "function": "resolve",
+                "primitive_calls": 10,
+                "calls": 215999,
+                "own_seconds": 0.42173750000000004,
+                "cumulative_seconds": 0.7382524
+              },
+              {
+                "file": ".\\src\\mcblueprint\\critic.py",
+                "line": 280,
+                "function": "consume",
+                "primitive_calls": 16,
+                "calls": 16,
+                "own_seconds": 13.758519900000001,
+                "cumulative_seconds": 100.01589670000001
+              },
+              {
+                "file": ".\\src\\mcblueprint\\materialize.py",
+                "line": 258,
+                "function": "materialize",
+                "primitive_calls": 10,
+                "calls": 10,
+                "own_seconds": 0.102411,
+                "cumulative_seconds": 6.3711055000000005
+              },
+              {
+                "file": ".\\src\\mcblueprint\\scene.py",
+                "line": 22,
+                "function": "capture_sources",
+                "primitive_calls": 17,
+                "calls": 17,
+                "own_seconds": 11.8293374,
+                "cumulative_seconds": 803.526603
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\yaml\\resolver.py",
+                "line": 143,
+                "function": "resolve",
+                "primitive_calls": 4532,
+                "calls": 4532,
+                "own_seconds": 0.0079929,
+                "cumulative_seconds": 0.0130509
+              },
+              {
+                "file": ".\\src\\mcblueprint\\planning.py",
+                "line": 336,
+                "function": "plan_buildspec",
+                "primitive_calls": 2,
+                "calls": 20,
+                "own_seconds": 0.0189788,
+                "cumulative_seconds": 12.841756400000001
+              },
+              {
+                "file": ".\\src\\mcblueprint\\detail.py",
+                "line": 131,
+                "function": "plan_detail",
+                "primitive_calls": 18,
+                "calls": 18,
+                "own_seconds": 0.0160981,
+                "cumulative_seconds": 2.1861058
+              },
+              {
+                "file": ".\\src\\mcblueprint\\planning.py",
+                "line": 86,
+                "function": "_plan_contract",
+                "primitive_calls": 72,
+                "calls": 72,
+                "own_seconds": 0.004428700000000001,
+                "cumulative_seconds": 0.29802270000000003
+              },
+              {
+                "file": ".\\src\\mcblueprint\\operations\\base.py",
+                "line": 144,
+                "function": "resolve",
+                "primitive_calls": 4713,
+                "calls": 4713,
+                "own_seconds": 0.0008858000000000001,
+                "cumulative_seconds": 0.0008858000000000001
+              },
+              {
+                "file": ".\\src\\mcblueprint\\materialize.py",
+                "line": 190,
+                "function": "_distance",
+                "primitive_calls": 8820,
+                "calls": 8820,
+                "own_seconds": 0.0075614,
+                "cumulative_seconds": 0.1754145
+              }
+            ],
+            "top_cumulative": [
+              {
+                "file": ".\\src\\mcblueprint\\pipeline.py",
+                "line": 564,
+                "function": "make",
+                "primitive_calls": 1,
+                "calls": 1,
+                "own_seconds": 0.037578,
+                "cumulative_seconds": 1014.3099059000001
+              },
+              {
+                "file": "~",
+                "line": 0,
+                "function": "<built-in method builtins.next>",
+                "primitive_calls": 701164,
+                "calls": 844273,
+                "own_seconds": 0.46541360000000004,
+                "cumulative_seconds": 819.0070073
+              },
+              {
+                "file": ".\\src\\mcblueprint\\exporters\\_spool.py",
+                "line": 27,
+                "function": "write",
+                "primitive_calls": 1,
+                "calls": 1,
+                "own_seconds": 0.905428,
+                "cumulative_seconds": 806.9052585000001
+              },
+              {
+                "file": ".\\src\\mcblueprint\\scene.py",
+                "line": 22,
+                "function": "capture_sources",
+                "primitive_calls": 17,
+                "calls": 17,
+                "own_seconds": 11.8293374,
+                "cumulative_seconds": 803.526603
+              },
+              {
+                "file": ".\\src\\mcblueprint\\pipeline.py",
+                "line": 773,
+                "function": "consume_regions",
+                "primitive_calls": 17,
+                "calls": 17,
+                "own_seconds": 0.000585,
+                "cumulative_seconds": 396.8794452
+              },
+              {
+                "file": ".\\src\\mcblueprint\\scene.py",
+                "line": 63,
+                "function": "_source_descriptor",
+                "primitive_calls": 143036,
+                "calls": 143036,
+                "own_seconds": 0.6625121,
+                "cumulative_seconds": 371.7494998
+              },
+              {
+                "file": ".\\src\\mcblueprint\\plan_contract.py",
+                "line": 103,
+                "function": "building_for_element",
+                "primitive_calls": 143036,
+                "calls": 143036,
+                "own_seconds": 4.147542700000001,
+                "cumulative_seconds": 370.9453338
+              },
+              {
+                "file": ".\\src\\mcblueprint\\plan_contract.py",
+                "line": 9,
+                "function": "plan_buildings",
+                "primitive_calls": 143122,
+                "calls": 143122,
+                "own_seconds": 196.6157267,
+                "cumulative_seconds": 365.1119062
+              },
+              {
+                "file": ".\\src\\mcblueprint\\pipeline.py",
+                "line": 269,
+                "function": "generated_blueprint_regions",
+                "primitive_calls": 17,
+                "calls": 17,
+                "own_seconds": 0.2768331,
+                "cumulative_seconds": 296.8628957
+              },
+              {
+                "file": ".\\src\\mcblueprint\\generator.py",
+                "line": 93,
+                "function": "generate_regions",
+                "primitive_calls": 17,
+                "calls": 17,
+                "own_seconds": 0.1088954,
+                "cumulative_seconds": 292.8572318
+              },
+              {
+                "file": ".\\src\\mcblueprint\\operations\\base.py",
+                "line": 118,
+                "function": "execute",
+                "primitive_calls": 128406,
+                "calls": 135991,
+                "own_seconds": 0.5603819,
+                "cumulative_seconds": 292.59195900000003
+              },
+              {
+                "file": ".\\src\\mcblueprint\\operations\\fill.py",
+                "line": 26,
+                "function": "apply",
+                "primitive_calls": 12619,
+                "calls": 12619,
+                "own_seconds": 0.0419841,
+                "cumulative_seconds": 249.45385040000002
+              },
+              {
+                "file": ".\\src\\mcblueprint\\operations\\base.py",
+                "line": 181,
+                "function": "fill",
+                "primitive_calls": 12350,
+                "calls": 12350,
+                "own_seconds": 0.4636487,
+                "cumulative_seconds": 249.03311150000002
+              },
+              {
+                "file": ".\\src\\mcblueprint\\operations\\randomness.py",
+                "line": 100,
+                "function": "tiles",
+                "primitive_calls": 30451,
+                "calls": 30451,
+                "own_seconds": 0.6961915000000001,
+                "cumulative_seconds": 244.06492480000003
+              },
+              {
+                "file": ".\\src\\mcblueprint\\operations\\randomness.py",
+                "line": 124,
+                "function": "_sample",
+                "primitive_calls": 14527,
+                "calls": 14527,
+                "own_seconds": 0.6767007,
+                "cumulative_seconds": 242.35316890000001
+              },
+              {
+                "file": ".\\src\\mcblueprint\\operations\\randomness.py",
+                "line": 23,
+                "function": "first_draws",
+                "primitive_calls": 14527,
+                "calls": 14527,
+                "own_seconds": 1.5723554000000002,
+                "cumulative_seconds": 239.481635
+              },
+              {
+                "file": ".\\src\\mcblueprint\\operations\\randomness.py",
+                "line": 39,
+                "function": "_first_draws",
+                "primitive_calls": 14527,
+                "calls": 14527,
+                "own_seconds": 236.1683724,
+                "cumulative_seconds": 236.72947770000002
+              },
+              {
+                "file": ".\\src\\mcblueprint\\pipeline.py",
+                "line": 434,
+                "function": "_evaluate",
+                "primitive_calls": 1,
+                "calls": 1,
+                "own_seconds": 0.0027440000000000003,
+                "cumulative_seconds": 115.88664820000001
+              },
+              {
+                "file": ".\\src\\mcblueprint\\pipeline.py",
+                "line": 392,
+                "function": "_support",
+                "primitive_calls": 1,
+                "calls": 1,
+                "own_seconds": 0.0019042000000000002,
+                "cumulative_seconds": 113.0554843
+              },
+              {
+                "file": ".\\src\\mcblueprint\\support.py",
+                "line": 255,
+                "function": "check_support",
+                "primitive_calls": 512,
+                "calls": 512,
+                "own_seconds": 6.9619279,
+                "cumulative_seconds": 113.0428497
+              },
+              {
+                "file": ".\\src\\mcblueprint\\critic.py",
+                "line": 280,
+                "function": "consume",
+                "primitive_calls": 16,
+                "calls": 16,
+                "own_seconds": 13.758519900000001,
+                "cumulative_seconds": 100.01589670000001
+              },
+              {
+                "file": ".\\src\\mcblueprint\\volume.py",
+                "line": 228,
+                "function": "__iter__",
+                "primitive_calls": 11829264,
+                "calls": 11829264,
+                "own_seconds": 30.909253500000002,
+                "cumulative_seconds": 70.0776853
+              },
+              {
+                "file": ".\\src\\mcblueprint\\support.py",
+                "line": 275,
+                "function": "_check_one",
+                "primitive_calls": 8388608,
+                "calls": 8388608,
+                "own_seconds": 26.4272518,
+                "cumulative_seconds": 62.015979
+              },
+              {
+                "file": ".\\src\\mcblueprint\\validator.py",
+                "line": 99,
+                "function": "validate_and_load",
+                "primitive_calls": 1,
+                "calls": 1,
+                "own_seconds": 8.33e-05,
+                "cumulative_seconds": 45.335483100000005
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "line": 349,
+                "function": "iter_errors",
+                "primitive_calls": 140,
+                "calls": 692206,
+                "own_seconds": 1.1549555,
+                "cumulative_seconds": 44.5687901
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "line": 396,
+                "function": "descend",
+                "primitive_calls": 1134,
+                "calls": 1316117,
+                "own_seconds": 5.1022686,
+                "cumulative_seconds": 44.5613076
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "line": 290,
+                "function": "properties",
+                "primitive_calls": 444,
+                "calls": 714944,
+                "own_seconds": 1.1667091,
+                "cumulative_seconds": 44.5565159
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "line": 274,
+                "function": "ref",
+                "primitive_calls": 2847,
+                "calls": 91298,
+                "own_seconds": 0.19305090000000003,
+                "cumulative_seconds": 44.3451248
+              },
+              {
+                "file": ".\\src\\mcblueprint\\validator.py",
+                "line": 123,
+                "function": "validate_schema",
+                "primitive_calls": 1,
+                "calls": 1,
+                "own_seconds": 2.2000000000000003e-05,
+                "cumulative_seconds": 44.0967622
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "line": 59,
+                "function": "items",
+                "primitive_calls": 990,
+                "calls": 20398,
+                "own_seconds": 0.1716935,
+                "cumulative_seconds": 44.0844869
+              },
+              {
+                "file": ".\\src\\mcblueprint\\pipeline.py",
+                "line": 367,
+                "function": "__iter__",
+                "primitive_calls": 8389120,
+                "calls": 8389120,
+                "own_seconds": 17.7254791,
+                "cumulative_seconds": 44.064280100000005
+              },
+              {
+                "file": "~",
+                "line": 0,
+                "function": "<method 'get' of 'dict' objects>",
+                "primitive_calls": 112043875,
+                "calls": 112043875,
+                "own_seconds": 41.6625905,
+                "cumulative_seconds": 41.7560286
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "line": 332,
+                "function": "allOf",
+                "primitive_calls": 8044,
+                "calls": 10347,
+                "own_seconds": 0.47326690000000005,
+                "cumulative_seconds": 40.212294500000006
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "line": 382,
+                "function": "if_",
+                "primitive_calls": 273002,
+                "calls": 351202,
+                "own_seconds": 0.9026918,
+                "cumulative_seconds": 34.8646112
+              },
+              {
+                "file": ".\\src\\mcblueprint\\operations\\terrain_density.py",
+                "line": 79,
+                "function": "apply",
+                "primitive_calls": 16,
+                "calls": 16,
+                "own_seconds": 0.45422100000000004,
+                "cumulative_seconds": 33.3215941
+              }
+            ],
+            "top_own": [
+              {
+                "file": ".\\src\\mcblueprint\\operations\\randomness.py",
+                "line": 39,
+                "function": "_first_draws",
+                "primitive_calls": 14527,
+                "calls": 14527,
+                "own_seconds": 236.1683724,
+                "cumulative_seconds": 236.72947770000002
+              },
+              {
+                "file": ".\\src\\mcblueprint\\plan_contract.py",
+                "line": 9,
+                "function": "plan_buildings",
+                "primitive_calls": 143122,
+                "calls": 143122,
+                "own_seconds": 196.6157267,
+                "cumulative_seconds": 365.1119062
+              },
+              {
+                "file": "~",
+                "line": 0,
+                "function": "<method 'get' of 'dict' objects>",
+                "primitive_calls": 112043875,
+                "calls": 112043875,
+                "own_seconds": 41.6625905,
+                "cumulative_seconds": 41.7560286
+              },
+              {
+                "file": "~",
+                "line": 0,
+                "function": "<method 'add' of 'set' objects>",
+                "primitive_calls": 115717821,
+                "calls": 115717821,
+                "own_seconds": 32.0095769,
+                "cumulative_seconds": 32.131349900000004
+              },
+              {
+                "file": ".\\src\\mcblueprint\\volume.py",
+                "line": 228,
+                "function": "__iter__",
+                "primitive_calls": 11829264,
+                "calls": 11829264,
+                "own_seconds": 30.909253500000002,
+                "cumulative_seconds": 70.0776853
+              },
+              {
+                "file": "~",
+                "line": 0,
+                "function": "<method 'extend' of 'list' objects>",
+                "primitive_calls": 95080235,
+                "calls": 95080235,
+                "own_seconds": 30.1078422,
+                "cumulative_seconds": 32.7441029
+              },
+              {
+                "file": "~",
+                "line": 0,
+                "function": "<method 'pop' of 'list' objects>",
+                "primitive_calls": 98813910,
+                "calls": 98813910,
+                "own_seconds": 26.477300800000002,
+                "cumulative_seconds": 26.477300800000002
+              },
+              {
+                "file": ".\\src\\mcblueprint\\support.py",
+                "line": 275,
+                "function": "_check_one",
+                "primitive_calls": 8388608,
+                "calls": 8388608,
+                "own_seconds": 26.4272518,
+                "cumulative_seconds": 62.015979
+              },
+              {
+                "file": "~",
+                "line": 0,
+                "function": "<method 'endswith' of 'str' objects>",
+                "primitive_calls": 67108712,
+                "calls": 67108712,
+                "own_seconds": 21.450253800000002,
+                "cumulative_seconds": 21.450253800000002
+              },
+              {
+                "file": ".\\src\\mcblueprint\\pipeline.py",
+                "line": 367,
+                "function": "__iter__",
+                "primitive_calls": 8389120,
+                "calls": 8389120,
+                "own_seconds": 17.7254791,
+                "cumulative_seconds": 44.064280100000005
+              },
+              {
+                "file": ".\\src\\mcblueprint\\critic.py",
+                "line": 280,
+                "function": "consume",
+                "primitive_calls": 16,
+                "calls": 16,
+                "own_seconds": 13.758519900000001,
+                "cumulative_seconds": 100.01589670000001
+              },
+              {
+                "file": ".\\src\\mcblueprint\\plan_contract.py",
+                "line": 78,
+                "function": "<genexpr>",
+                "primitive_calls": 30757470,
+                "calls": 30757470,
+                "own_seconds": 12.0649102,
+                "cumulative_seconds": 13.716348600000002
+              },
+              {
+                "file": ".\\src\\mcblueprint\\scene.py",
+                "line": 22,
+                "function": "capture_sources",
+                "primitive_calls": 17,
+                "calls": 17,
+                "own_seconds": 11.8293374,
+                "cumulative_seconds": 803.526603
+              },
+              {
+                "file": ".\\src\\mcblueprint\\model\\vec.py",
+                "line": 34,
+                "function": "__add__",
+                "primitive_calls": 13981631,
+                "calls": 13981631,
+                "own_seconds": 11.134387700000001,
+                "cumulative_seconds": 27.0776247
+              },
+              {
+                "file": "~",
+                "line": 0,
+                "function": "<method 'startswith' of 'str' objects>",
+                "primitive_calls": 25922252,
+                "calls": 25922252,
+                "own_seconds": 10.085980900000001,
+                "cumulative_seconds": 10.085980900000001
+              },
+              {
+                "file": ".\\src\\mcblueprint\\scene.py",
+                "line": 107,
+                "function": "chunks",
+                "primitive_calls": 585,
+                "calls": 585,
+                "own_seconds": 9.9081291,
+                "cumulative_seconds": 19.0459956
+              },
+              {
+                "file": "~",
+                "line": 0,
+                "function": "<method 'update' of 'set' objects>",
+                "primitive_calls": 1299022,
+                "calls": 1299022,
+                "own_seconds": 8.456293800000001,
+                "cumulative_seconds": 22.179506800000002
+              },
+              {
+                "file": ".\\src\\mcblueprint\\support.py",
+                "line": 195,
+                "function": "short_id",
+                "primitive_calls": 8396900,
+                "calls": 8396900,
+                "own_seconds": 7.0533649,
+                "cumulative_seconds": 14.055782200000001
+              },
+              {
+                "file": ".\\src\\mcblueprint\\model\\vec.py",
+                "line": 109,
+                "function": "contains",
+                "primitive_calls": 13844544,
+                "calls": 13844544,
+                "own_seconds": 6.996008700000001,
+                "cumulative_seconds": 6.996008700000001
+              },
+              {
+                "file": ".\\src\\mcblueprint\\support.py",
+                "line": 255,
+                "function": "check_support",
+                "primitive_calls": 512,
+                "calls": 512,
+                "own_seconds": 6.9619279,
+                "cumulative_seconds": 113.0428497
+              }
+            ],
+            "region_functions": [
+              {
+                "file": "randomness.py",
+                "function": "first_draws",
+                "calls": 14527,
+                "own_seconds": 1.5723554000000002,
+                "cumulative_seconds": 239.481635
+              },
+              {
+                "file": "pipeline.py",
+                "function": "__iter__",
+                "calls": 8389120,
+                "own_seconds": 17.7254791,
+                "cumulative_seconds": 44.064280100000005
+              },
+              {
+                "file": "pipeline.py",
+                "function": "_row",
+                "calls": 380397,
+                "own_seconds": 2.2426941,
+                "cumulative_seconds": 12.804445300000001
+              },
+              {
+                "file": "randomness.py",
+                "function": "_sample",
+                "calls": 14527,
+                "own_seconds": 0.6767007,
+                "cumulative_seconds": 242.35316890000001
+              },
+              {
+                "file": "randomness.py",
+                "function": "__init__",
+                "calls": 1,
+                "own_seconds": 2.8700000000000003e-05,
+                "cumulative_seconds": 4.47e-05
+              },
+              {
+                "file": "pipeline.py",
+                "function": "_working_budget",
+                "calls": 1,
+                "own_seconds": 1.9577525000000002,
+                "cumulative_seconds": 4.0528663
+              },
+              {
+                "file": "weather.py",
+                "function": "_water_distances",
+                "calls": 16,
+                "own_seconds": 0.1624575,
+                "cumulative_seconds": 0.16703880000000002
+              },
+              {
+                "file": "critic.py",
+                "function": "finalize",
+                "calls": 1,
+                "own_seconds": 0.0066798000000000005,
+                "cumulative_seconds": 0.009926
+              },
+              {
+                "file": "randomness.py",
+                "function": "tiles",
+                "calls": 30451,
+                "own_seconds": 0.6961915000000001,
+                "cumulative_seconds": 244.06492480000003
+              },
+              {
+                "file": "weather.py",
+                "function": "apply_weather",
+                "calls": 16,
+                "own_seconds": 0.013344300000000002,
+                "cumulative_seconds": 2.2196507000000003
+              },
+              {
+                "file": "traversal.py",
+                "function": "_stand",
+                "calls": 8422,
+                "own_seconds": 0.026117,
+                "cumulative_seconds": 0.2852913
+              },
+              {
+                "file": "critic.py",
+                "function": "consume",
+                "calls": 16,
+                "own_seconds": 13.758519900000001,
+                "cumulative_seconds": 100.01589670000001
+              },
+              {
+                "file": "critic.py",
+                "function": "__init__",
+                "calls": 1,
+                "own_seconds": 0.005959000000000001,
+                "cumulative_seconds": 0.011023100000000001
+              },
+              {
+                "file": "weather.py",
+                "function": "_weather_fields",
+                "calls": 16,
+                "own_seconds": 0.6623608000000001,
+                "cumulative_seconds": 0.727369
+              },
+              {
+                "file": "support.py",
+                "function": "check_support",
+                "calls": 512,
+                "own_seconds": 6.9619279,
+                "cumulative_seconds": 113.0428497
+              },
+              {
+                "file": "traversal.py",
+                "function": "stand",
+                "calls": 77776,
+                "own_seconds": 0.1436521,
+                "cumulative_seconds": 0.5886569
+              },
+              {
+                "file": "pipeline.py",
+                "function": "__init__",
+                "calls": 1,
+                "own_seconds": 6.5000000000000004e-06,
+                "cumulative_seconds": 6.5000000000000004e-06
+              },
+              {
+                "file": "pipeline.py",
+                "function": "get",
+                "calls": 118253,
+                "own_seconds": 0.20194510000000002,
+                "cumulative_seconds": 0.6798158000000001
+              },
+              {
+                "file": "traversal.py",
+                "function": "__init__",
+                "calls": 1,
+                "own_seconds": 1.25e-05,
+                "cumulative_seconds": 1.97e-05
+              },
+              {
+                "file": "pipeline.py",
+                "function": "_support",
+                "calls": 1,
+                "own_seconds": 0.0019042000000000002,
+                "cumulative_seconds": 113.0554843
+              },
+              {
+                "file": "traversal.py",
+                "function": "route",
+                "calls": 38,
+                "own_seconds": 0.45143750000000005,
+                "cumulative_seconds": 2.8196033000000003
+              }
+            ],
+            "measured_functions": [
+              {
+                "file": "randomness.py",
+                "function": "first_draws",
+                "calls": 14527,
+                "own_seconds": 1.5723554000000002,
+                "cumulative_seconds": 239.481635
+              },
+              {
+                "file": "scene.py",
+                "function": "_source_descriptor",
+                "calls": 143036,
+                "own_seconds": 0.6625121,
+                "cumulative_seconds": 371.7494998
+              },
+              {
+                "file": "critic.py",
+                "function": "consume",
+                "calls": 16,
+                "own_seconds": 13.758519900000001,
+                "cumulative_seconds": 100.01589670000001
+              },
+              {
+                "file": "support.py",
+                "function": "check_support",
+                "calls": 512,
+                "own_seconds": 6.9619279,
+                "cumulative_seconds": 113.0428497
+              },
+              {
+                "file": "validator.py",
+                "function": "validate_schema",
+                "calls": 1,
+                "own_seconds": 2.2000000000000003e-05,
+                "cumulative_seconds": 44.0967622
+              }
+            ]
+          }
+        }
+      },
+      "after": {
+        "castle-medium-1.21.11-schem": {
+          "input_sha256": "0799c22418fdf02beb06de7fa309729071e1bc405b94b8dca25f539f121ec097",
+          "provenance": {
+            "implementation": {
+              "commit": "4e9ce5eebdb71c25542f86a6f199f0fdfeaf7477",
+              "engine_sha256": "d76227340cb4453fe986b02554a14edf60e5207f9bca0e5bb108feecc685ba66",
+              "lock_sha256": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+              "default_config_sha256": "17f5c240ead94ebb8c410f045b3344f07d07ec9c29a8a769645f853b5ea28d64"
+            },
+            "base_commit": "4e9ce5e",
+            "python": "3.12.15 (main, Oct 21 2026, 17:48:33) [MSC v.1944 64 bit (AMD64)]",
+            "script_sha256": "27bd30f810480051819f88700a256d133888082a0fb72cdba4221dd3bbe683bb",
+            "h01_script_sha256": "2b45c7c38960c3fc43fc97376d6d29eefef5e9bd377f017c99d8c252c8c61ea3",
+            "common_scripts_sha256": {
+              "benchmark": "9cc6c994c1a8b44457146bd518206cd0c38390b221b2c5b89c9223cb9ba8cfcd",
+              "evaluate_structure": "2f50fcf13604f4d9e5c8dbce4b68a8a4a6b402fd64e5e098370df346495d33e8"
+            }
+          },
+          "samples": [
+            {
+              "code": 0,
+              "make_runtime_seconds": 53.60401080000156,
+              "process_peak_rss_bytes": 128901120,
+              "stage_hook_samples": [
+                {
+                  "stage": "Resolve",
+                  "elapsed_seconds": 0.0021885999958612956,
+                  "rss_at_stage_start_bytes": 52592640
+                },
+                {
+                  "stage": "Site/Massing/Detail",
+                  "elapsed_seconds": 4.379054500001075,
+                  "rss_at_stage_start_bytes": 63455232
+                },
+                {
+                  "stage": "Materialize",
+                  "elapsed_seconds": 9.036818699998548,
+                  "rss_at_stage_start_bytes": 64536576
+                },
+                {
+                  "stage": "Generate",
+                  "elapsed_seconds": 40.33300690000033,
+                  "rss_at_stage_start_bytes": 119914496
+                },
+                {
+                  "stage": "Critic",
+                  "elapsed_seconds": 49.60385149999638,
+                  "rss_at_stage_start_bytes": 120680448
+                },
+                {
+                  "stage": "Export",
+                  "elapsed_seconds": 53.026946599995426,
+                  "rss_at_stage_start_bytes": 120815616
+                }
+              ],
+              "implementation": {
+                "pipeline": "H:\\mc-blueprint\\worktrees\\mcb-261\\mc-blueprint\\src\\mcblueprint\\pipeline.py",
+                "environment": {
+                  "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+                  "engine": "0.1.0",
+                  "engineHash": "307295ae42febcd04f563fc076bc9b53708eb38b17d5cc6e1ceee095c41214d6",
+                  "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+                  "planVersion": 2
+                }
+              },
+              "started_at": "2026-11-08T09:08:30.352502+00:00",
+              "seconds": 55.53390860000218,
+              "signature": {
+                "placement_sha256": "72be0ba5857df42093856e8bdba9422198b19096b0f4e71b32d15610e494462c",
+                "metrics_sha256": "df7f9e69277c3b367e4ad4a325b1ed717a30b2107b4eb0ea02e19bcb2d17c245",
+                "structured_diagnostics_sha256": "f707b42390bb943b067071d03c453574208c595d73d79b0bcdffc1fad321d83c",
+                "scene_json_sha256": "0a0197b15a19147f43b413babf9a5ecafa052817936650c7ea1fe6eee22b5cf8"
+              }
+            }
+          ],
+          "seconds_median": 55.53390860000218,
+          "rss_median": 128901120,
+          "matches_before": true,
+          "profile": {
+            "total_seconds": 50.95301319999986,
+            "total_calls": 77278644,
+            "focus_functions": [
+              {
+                "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\pathlib.py",
+                "line": 1228,
+                "function": "resolve",
+                "primitive_calls": 7,
+                "calls": 7,
+                "own_seconds": 3.0600000000000005e-05,
+                "cumulative_seconds": 0.0026075
+              },
+              {
+                "file": ".\\src\\mcblueprint\\components.py",
+                "line": 69,
+                "function": "resolve",
+                "primitive_calls": 90,
+                "calls": 90,
+                "own_seconds": 0.0006355,
+                "cumulative_seconds": 0.015162700000000001
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\referencing\\jsonschema.py",
+                "line": 604,
+                "function": "resolve",
+                "primitive_calls": 772,
+                "calls": 772,
+                "own_seconds": 0.0037986,
+                "cumulative_seconds": 0.011874000000000001
+              },
+              {
+                "file": ".\\src\\mcblueprint\\critic.py",
+                "line": 280,
+                "function": "consume",
+                "primitive_calls": 1,
+                "calls": 1,
+                "own_seconds": 0.26888850000000003,
+                "cumulative_seconds": 1.4848559000000001
+              },
+              {
+                "file": ".\\src\\mcblueprint\\viewer_input.py",
+                "line": 163,
+                "function": "_spec_sources",
+                "primitive_calls": 1,
+                "calls": 1,
+                "own_seconds": 5.39e-05,
+                "cumulative_seconds": 0.0034618
+              },
+              {
+                "file": ".\\src\\mcblueprint\\detail.py",
+                "line": 269,
+                "function": "_facade_selection",
+                "primitive_calls": 18,
+                "calls": 18,
+                "own_seconds": 0.12318290000000001,
+                "cumulative_seconds": 1.136987
+              },
+              {
+                "file": ".\\src\\mcblueprint\\planning.py",
+                "line": 86,
+                "function": "_plan_contract",
+                "primitive_calls": 72,
+                "calls": 72,
+                "own_seconds": 0.0037598,
+                "cumulative_seconds": 0.23277730000000002
+              },
+              {
+                "file": ".\\src\\mcblueprint\\scene.py",
+                "line": 83,
+                "function": "write_scene",
+                "primitive_calls": 1,
+                "calls": 1,
+                "own_seconds": 0.0016925000000000002,
+                "cumulative_seconds": 0.4043968
+              },
+              {
+                "file": ".\\src\\mcblueprint\\materialize.py",
+                "line": 258,
+                "function": "materialize",
+                "primitive_calls": 10,
+                "calls": 10,
+                "own_seconds": 0.09156800000000001,
+                "cumulative_seconds": 4.0593009
+              },
+              {
+                "file": ".\\src\\mcblueprint\\detail.py",
+                "line": 131,
+                "function": "plan_detail",
+                "primitive_calls": 18,
+                "calls": 18,
+                "own_seconds": 0.0137634,
+                "cumulative_seconds": 1.8566900000000002
+              },
+              {
+                "file": ".\\src\\mcblueprint\\scene.py",
+                "line": 22,
+                "function": "capture_sources",
+                "primitive_calls": 2,
+                "calls": 2,
+                "own_seconds": 0.12110080000000001,
+                "cumulative_seconds": 8.8943259
+              },
+              {
+                "file": ".\\src\\mcblueprint\\materialize.py",
+                "line": 499,
+                "function": "resolve",
+                "primitive_calls": 10,
+                "calls": 102871,
+                "own_seconds": 0.13647710000000002,
+                "cumulative_seconds": 0.3247853
+              },
+              {
+                "file": ".\\src\\mcblueprint\\operations\\base.py",
+                "line": 144,
+                "function": "resolve",
+                "primitive_calls": 2431,
+                "calls": 2431,
+                "own_seconds": 0.00034970000000000004,
+                "cumulative_seconds": 0.00034970000000000004
+              },
+              {
+                "file": ".\\src\\mcblueprint\\planning.py",
+                "line": 336,
+                "function": "plan_buildspec",
+                "primitive_calls": 2,
+                "calls": 20,
+                "own_seconds": 0.0153714,
+                "cumulative_seconds": 8.910058300000001
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\yaml\\resolver.py",
+                "line": 143,
+                "function": "resolve",
+                "primitive_calls": 4532,
+                "calls": 4532,
+                "own_seconds": 0.0065926000000000005,
+                "cumulative_seconds": 0.0106157
+              },
+              {
+                "file": ".\\src\\mcblueprint\\materialize.py",
+                "line": 190,
+                "function": "_distance",
+                "primitive_calls": 8820,
+                "calls": 8820,
+                "own_seconds": 0.0071301,
+                "cumulative_seconds": 0.1594779
+              }
+            ],
+            "top_cumulative": [
+              {
+                "file": ".\\src\\mcblueprint\\pipeline.py",
+                "line": 564,
+                "function": "make",
+                "primitive_calls": 1,
+                "calls": 1,
+                "own_seconds": 0.0246595,
+                "cumulative_seconds": 53.5654594
+              },
+              {
+                "file": ".\\src\\mcblueprint\\validator.py",
+                "line": 99,
+                "function": "validate_and_load",
+                "primitive_calls": 1,
+                "calls": 1,
+                "own_seconds": 3.09e-05,
+                "cumulative_seconds": 24.1533826
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "line": 349,
+                "function": "iter_errors",
+                "primitive_calls": 140,
+                "calls": 464272,
+                "own_seconds": 0.6035605,
+                "cumulative_seconds": 24.094653500000003
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "line": 396,
+                "function": "descend",
+                "primitive_calls": 1134,
+                "calls": 883559,
+                "own_seconds": 2.6884105000000003,
+                "cumulative_seconds": 24.088016800000002
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "line": 290,
+                "function": "properties",
+                "primitive_calls": 444,
+                "calls": 480206,
+                "own_seconds": 0.6071956000000001,
+                "cumulative_seconds": 24.0845877
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "line": 274,
+                "function": "ref",
+                "primitive_calls": 2847,
+                "calls": 60512,
+                "own_seconds": 0.09030600000000001,
+                "cumulative_seconds": 23.9110252
+              },
+              {
+                "file": ".\\src\\mcblueprint\\validator.py",
+                "line": 123,
+                "function": "validate_schema",
+                "primitive_calls": 1,
+                "calls": 1,
+                "own_seconds": 1.7800000000000002e-05,
+                "cumulative_seconds": 23.6996895
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "line": 59,
+                "function": "items",
+                "primitive_calls": 990,
+                "calls": 13594,
+                "own_seconds": 0.0870962,
+                "cumulative_seconds": 23.693583500000003
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "line": 332,
+                "function": "allOf",
+                "primitive_calls": 4642,
+                "calls": 6945,
+                "own_seconds": 0.24757700000000002,
+                "cumulative_seconds": 21.1974114
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "line": 382,
+                "function": "if_",
+                "primitive_calls": 157334,
+                "calls": 235534,
+                "own_seconds": 0.45040820000000004,
+                "cumulative_seconds": 18.7591775
+              },
+              {
+                "file": "~",
+                "line": 0,
+                "function": "<built-in method builtins.next>",
+                "primitive_calls": 465407,
+                "calls": 467350,
+                "own_seconds": 0.1342575,
+                "cumulative_seconds": 17.094378000000003
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "line": 485,
+                "function": "is_valid",
+                "primitive_calls": 235537,
+                "calls": 235537,
+                "own_seconds": 0.7809684,
+                "cumulative_seconds": 8.9575561
+              },
+              {
+                "file": ".\\src\\mcblueprint\\exporters\\_spool.py",
+                "line": 27,
+                "function": "write",
+                "primitive_calls": 1,
+                "calls": 1,
+                "own_seconds": 0.0148047,
+                "cumulative_seconds": 8.955068500000001
+              },
+              {
+                "file": ".\\src\\mcblueprint\\planning.py",
+                "line": 336,
+                "function": "plan_buildspec",
+                "primitive_calls": 2,
+                "calls": 20,
+                "own_seconds": 0.0153714,
+                "cumulative_seconds": 8.910058300000001
+              },
+              {
+                "file": ".\\src\\mcblueprint\\scene.py",
+                "line": 22,
+                "function": "capture_sources",
+                "primitive_calls": 2,
+                "calls": 2,
+                "own_seconds": 0.12110080000000001,
+                "cumulative_seconds": 8.8943259
+              },
+              {
+                "file": ".\\src\\mcblueprint\\castle_planning.py",
+                "line": 99,
+                "function": "plan_castle",
+                "primitive_calls": 2,
+                "calls": 2,
+                "own_seconds": 0.0265657,
+                "cumulative_seconds": 8.871505500000001
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "line": 459,
+                "function": "_validate_reference",
+                "primitive_calls": 60609,
+                "calls": 60609,
+                "own_seconds": 0.06768400000000001,
+                "cumulative_seconds": 5.6196627
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\referencing\\_core.py",
+                "line": 653,
+                "function": "lookup",
+                "primitive_calls": 60609,
+                "calls": 60609,
+                "own_seconds": 0.17995150000000001,
+                "cumulative_seconds": 5.5519787
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "line": 339,
+                "function": "evolve",
+                "primitive_calls": 887786,
+                "calls": 887786,
+                "own_seconds": 2.5093051,
+                "cumulative_seconds": 5.4329049000000005
+              },
+              {
+                "file": ".\\src\\mcblueprint\\pipeline.py",
+                "line": 773,
+                "function": "consume_regions",
+                "primitive_calls": 2,
+                "calls": 2,
+                "own_seconds": 0.0001582,
+                "cumulative_seconds": 5.346073400000001
+              },
+              {
+                "file": ".\\src\\mcblueprint\\materialize.py",
+                "line": 580,
+                "function": "materialize_plan",
+                "primitive_calls": 1,
+                "calls": 1,
+                "own_seconds": 0.028687200000000003,
+                "cumulative_seconds": 4.8886686
+              },
+              {
+                "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\copy.py",
+                "line": 118,
+                "function": "deepcopy",
+                "primitive_calls": 27391,
+                "calls": 1835330,
+                "own_seconds": 2.2373784000000003,
+                "cumulative_seconds": 4.7642884
+              },
+              {
+                "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\copy.py",
+                "line": 217,
+                "function": "_deepcopy_dict",
+                "primitive_calls": 26387,
+                "calls": 190680,
+                "own_seconds": 0.6657413000000001,
+                "cumulative_seconds": 4.6797665
+              },
+              {
+                "file": ".\\src\\mcblueprint\\site_planning.py",
+                "line": 14,
+                "function": "_place",
+                "primitive_calls": 18,
+                "calls": 18,
+                "own_seconds": 0.010686000000000001,
+                "cumulative_seconds": 4.3720362
+              },
+              {
+                "file": ".\\src\\mcblueprint\\materialize.py",
+                "line": 258,
+                "function": "materialize",
+                "primitive_calls": 10,
+                "calls": 10,
+                "own_seconds": 0.09156800000000001,
+                "cumulative_seconds": 4.0593009
+              },
+              {
+                "file": ".\\src\\mcblueprint\\pipeline.py",
+                "line": 269,
+                "function": "generated_blueprint_regions",
+                "primitive_calls": 2,
+                "calls": 2,
+                "own_seconds": 0.0097201,
+                "cumulative_seconds": 3.8610561000000003
+              },
+              {
+                "file": ".\\src\\mcblueprint\\generator.py",
+                "line": 93,
+                "function": "generate_regions",
+                "primitive_calls": 2,
+                "calls": 2,
+                "own_seconds": 0.0037713000000000004,
+                "cumulative_seconds": 3.7457451
+              },
+              {
+                "file": ".\\src\\mcblueprint\\operations\\base.py",
+                "line": 118,
+                "function": "execute",
+                "primitive_calls": 4629,
+                "calls": 7815,
+                "own_seconds": 0.054522,
+                "cumulative_seconds": 3.6532206
+              },
+              {
+                "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\copy.py",
+                "line": 191,
+                "function": "_deepcopy_list",
+                "primitive_calls": 49568,
+                "calls": 146832,
+                "own_seconds": 0.33277710000000005,
+                "cumulative_seconds": 3.5787233
+              },
+              {
+                "file": ".\\src\\mcblueprint\\pipeline.py",
+                "line": 434,
+                "function": "_evaluate",
+                "primitive_calls": 1,
+                "calls": 1,
+                "own_seconds": 0.0020788,
+                "cumulative_seconds": 3.4024342
+              },
+              {
+                "file": ".\\src\\mcblueprint\\scene.py",
+                "line": 64,
+                "function": "_source_descriptor",
+                "primitive_calls": 1870,
+                "calls": 1870,
+                "own_seconds": 0.0068387000000000005,
+                "cumulative_seconds": 3.2249137
+              },
+              {
+                "file": ".\\src\\mcblueprint\\plan_contract.py",
+                "line": 103,
+                "function": "building_for_element",
+                "primitive_calls": 1870,
+                "calls": 1870,
+                "own_seconds": 0.0316719,
+                "cumulative_seconds": 3.2139445
+              },
+              {
+                "file": ".\\src\\mcblueprint\\plan_contract.py",
+                "line": 9,
+                "function": "plan_buildings",
+                "primitive_calls": 1956,
+                "calls": 1956,
+                "own_seconds": 1.7485682,
+                "cumulative_seconds": 3.2072143000000004
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "line": 278,
+                "function": "dynamicRef",
+                "primitive_calls": 772,
+                "calls": 772,
+                "own_seconds": 0.0048718,
+                "cumulative_seconds": 3.0384513
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\referencing\\_core.py",
+                "line": 456,
+                "function": "anchor",
+                "primitive_calls": 1544,
+                "calls": 1544,
+                "own_seconds": 0.0050807000000000005,
+                "cumulative_seconds": 2.9624248
+              }
+            ],
+            "top_own": [
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "line": 396,
+                "function": "descend",
+                "primitive_calls": 1134,
+                "calls": 883559,
+                "own_seconds": 2.6884105000000003,
+                "cumulative_seconds": 24.088016800000002
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "line": 339,
+                "function": "evolve",
+                "primitive_calls": 887786,
+                "calls": 887786,
+                "own_seconds": 2.5093051,
+                "cumulative_seconds": 5.4329049000000005
+              },
+              {
+                "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\copy.py",
+                "line": 118,
+                "function": "deepcopy",
+                "primitive_calls": 27391,
+                "calls": 1835330,
+                "own_seconds": 2.2373784000000003,
+                "cumulative_seconds": 4.7642884
+              },
+              {
+                "file": "~",
+                "line": 0,
+                "function": "<method 'get' of 'dict' objects>",
+                "primitive_calls": 8296776,
+                "calls": 8296776,
+                "own_seconds": 1.8557253,
+                "cumulative_seconds": 1.9238095000000002
+              },
+              {
+                "file": ".\\src\\mcblueprint\\plan_contract.py",
+                "line": 9,
+                "function": "plan_buildings",
+                "primitive_calls": 1956,
+                "calls": 1956,
+                "own_seconds": 1.7485682,
+                "cumulative_seconds": 3.2072143000000004
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "line": 282,
+                "function": "__attrs_post_init__",
+                "primitive_calls": 887926,
+                "calls": 887926,
+                "own_seconds": 1.3811304,
+                "cumulative_seconds": 1.5431051
+              },
+              {
+                "file": ".\\src\\mcblueprint\\pipeline.py",
+                "line": 122,
+                "function": "_working_budget",
+                "primitive_calls": 1,
+                "calls": 1,
+                "own_seconds": 1.0459011,
+                "cumulative_seconds": 2.1451662000000002
+              },
+              {
+                "file": ".\\src\\mcblueprint\\terrain_field.py",
+                "line": 57,
+                "function": "_bilinear",
+                "primitive_calls": 210148,
+                "calls": 210148,
+                "own_seconds": 1.0017731,
+                "cumulative_seconds": 1.0856670000000002
+              },
+              {
+                "file": "~",
+                "line": 0,
+                "function": "<built-in method builtins.getattr>",
+                "primitive_calls": 6008220,
+                "calls": 6008220,
+                "own_seconds": 0.9651357,
+                "cumulative_seconds": 0.9652121
+              },
+              {
+                "file": "~",
+                "line": 0,
+                "function": "<built-in method builtins.isinstance>",
+                "primitive_calls": 4985673,
+                "calls": 4985673,
+                "own_seconds": 0.9618978,
+                "cumulative_seconds": 1.2669338
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\exceptions.py",
+                "line": 165,
+                "function": "_set",
+                "primitive_calls": 459905,
+                "calls": 459905,
+                "own_seconds": 0.912926,
+                "cumulative_seconds": 1.4277429000000001
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\referencing\\_core.py",
+                "line": 165,
+                "function": "create_resource",
+                "primitive_calls": 968845,
+                "calls": 968845,
+                "own_seconds": 0.8629339,
+                "cumulative_seconds": 1.6636515
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\exceptions.py",
+                "line": 55,
+                "function": "__init__",
+                "primitive_calls": 230638,
+                "calls": 230638,
+                "own_seconds": 0.8412914,
+                "cumulative_seconds": 0.8412914
+              },
+              {
+                "file": "<attrs generated methods referencing._core.Resource>",
+                "line": 29,
+                "function": "__init__",
+                "primitive_calls": 968845,
+                "calls": 968845,
+                "own_seconds": 0.8007176,
+                "cumulative_seconds": 0.8007176
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "line": 485,
+                "function": "is_valid",
+                "primitive_calls": 235537,
+                "calls": 235537,
+                "own_seconds": 0.7809684,
+                "cumulative_seconds": 8.9575561
+              },
+              {
+                "file": ".\\src\\mcblueprint\\terrain_field.py",
+                "line": 68,
+                "function": "_transfer",
+                "primitive_calls": 107532,
+                "calls": 107532,
+                "own_seconds": 0.6778791000000001,
+                "cumulative_seconds": 0.8306692
+              },
+              {
+                "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\copy.py",
+                "line": 217,
+                "function": "_deepcopy_dict",
+                "primitive_calls": 26387,
+                "calls": 190680,
+                "own_seconds": 0.6657413000000001,
+                "cumulative_seconds": 4.6797665
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "line": 290,
+                "function": "properties",
+                "primitive_calls": 444,
+                "calls": 480206,
+                "own_seconds": 0.6071956000000001,
+                "cumulative_seconds": 24.0845877
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "line": 349,
+                "function": "iter_errors",
+                "primitive_calls": 140,
+                "calls": 464272,
+                "own_seconds": 0.6035605,
+                "cumulative_seconds": 24.094653500000003
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_types.py",
+                "line": 94,
+                "function": "is_type",
+                "primitive_calls": 463677,
+                "calls": 463677,
+                "own_seconds": 0.5460871,
+                "cumulative_seconds": 0.8074728000000001
+              }
+            ],
+            "region_functions": [
+              {
+                "file": "pipeline.py",
+                "function": "__iter__",
+                "calls": 196620,
+                "own_seconds": 0.2873656,
+                "cumulative_seconds": 0.6997840000000001
+              },
+              {
+                "file": "weather.py",
+                "function": "_water_distances",
+                "calls": 1,
+                "own_seconds": 0.0037241,
+                "cumulative_seconds": 0.0038914
+              },
+              {
+                "file": "weather.py",
+                "function": "apply_weather",
+                "calls": 1,
+                "own_seconds": 0.001302,
+                "cumulative_seconds": 0.044012
+              },
+              {
+                "file": "traversal.py",
+                "function": "route",
+                "calls": 38,
+                "own_seconds": 0.2449597,
+                "cumulative_seconds": 1.5271279000000002
+              },
+              {
+                "file": "critic.py",
+                "function": "consume",
+                "calls": 1,
+                "own_seconds": 0.26888850000000003,
+                "cumulative_seconds": 1.4848559000000001
+              },
+              {
+                "file": "randomness.py",
+                "function": "first_draws",
+                "calls": 4568,
+                "own_seconds": 0.015156500000000002,
+                "cumulative_seconds": 0.2852257
+              },
+              {
+                "file": "randomness.py",
+                "function": "__init__",
+                "calls": 1,
+                "own_seconds": 2.4200000000000002e-05,
+                "cumulative_seconds": 4.05e-05
+              },
+              {
+                "file": "randomness.py",
+                "function": "_sample",
+                "calls": 4568,
+                "own_seconds": 0.08227100000000001,
+                "cumulative_seconds": 0.7019664
+              },
+              {
+                "file": "pipeline.py",
+                "function": "_row",
+                "calls": 85777,
+                "own_seconds": 0.1001587,
+                "cumulative_seconds": 0.3796334
+              },
+              {
+                "file": "randomness.py",
+                "function": "tiles",
+                "calls": 9198,
+                "own_seconds": 0.057447200000000004,
+                "cumulative_seconds": 0.8773291000000001
+              },
+              {
+                "file": "critic.py",
+                "function": "__init__",
+                "calls": 1,
+                "own_seconds": 0.005500700000000001,
+                "cumulative_seconds": 0.009991400000000001
+              },
+              {
+                "file": "traversal.py",
+                "function": "_stand",
+                "calls": 6333,
+                "own_seconds": 0.015459100000000002,
+                "cumulative_seconds": 0.1795535
+              },
+              {
+                "file": "pipeline.py",
+                "function": "_working_budget",
+                "calls": 1,
+                "own_seconds": 1.0459011,
+                "cumulative_seconds": 2.1451662000000002
+              },
+              {
+                "file": "weather.py",
+                "function": "_weather_fields",
+                "calls": 1,
+                "own_seconds": 0.006883200000000001,
+                "cumulative_seconds": 0.008038400000000001
+              },
+              {
+                "file": "critic.py",
+                "function": "finalize",
+                "calls": 1,
+                "own_seconds": 0.0068291,
+                "cumulative_seconds": 0.0089414
+              },
+              {
+                "file": "support.py",
+                "function": "check_support",
+                "calls": 12,
+                "own_seconds": 0.116667,
+                "cumulative_seconds": 1.8657180000000002
+              },
+              {
+                "file": "traversal.py",
+                "function": "stand",
+                "calls": 56482,
+                "own_seconds": 0.08223130000000001,
+                "cumulative_seconds": 0.3454683
+              },
+              {
+                "file": "pipeline.py",
+                "function": "__init__",
+                "calls": 1,
+                "own_seconds": 7.2000000000000005e-06,
+                "cumulative_seconds": 7.2000000000000005e-06
+              },
+              {
+                "file": "pipeline.py",
+                "function": "get",
+                "calls": 79840,
+                "own_seconds": 0.0996789,
+                "cumulative_seconds": 0.3358221
+              },
+              {
+                "file": "traversal.py",
+                "function": "__init__",
+                "calls": 1,
+                "own_seconds": 1.58e-05,
+                "cumulative_seconds": 2.5300000000000002e-05
+              },
+              {
+                "file": "pipeline.py",
+                "function": "_support",
+                "calls": 1,
+                "own_seconds": 7.81e-05,
+                "cumulative_seconds": 1.8660416000000002
+              }
+            ],
+            "measured_functions": [
+              {
+                "file": "critic.py",
+                "function": "consume",
+                "calls": 1,
+                "own_seconds": 0.26888850000000003,
+                "cumulative_seconds": 1.4848559000000001
+              },
+              {
+                "file": "randomness.py",
+                "function": "first_draws",
+                "calls": 4568,
+                "own_seconds": 0.015156500000000002,
+                "cumulative_seconds": 0.2852257
+              },
+              {
+                "file": "scene.py",
+                "function": "_source_descriptor",
+                "calls": 1870,
+                "own_seconds": 0.0068387000000000005,
+                "cumulative_seconds": 3.2249137
+              },
+              {
+                "file": "support.py",
+                "function": "check_support",
+                "calls": 12,
+                "own_seconds": 0.116667,
+                "cumulative_seconds": 1.8657180000000002
+              },
+              {
+                "file": "validator.py",
+                "function": "validate_schema",
+                "calls": 1,
+                "own_seconds": 1.7800000000000002e-05,
+                "cumulative_seconds": 23.6996895
+              }
+            ]
+          }
+        },
+        "castle-huge-1.21.11-schem": {
+          "input_sha256": "8d69a6e8843ddda1cc466e19bb8aceef8a9c30a1e588008d1fbdcd7c0374950d",
+          "provenance": {
+            "implementation": {
+              "commit": "4e9ce5eebdb71c25542f86a6f199f0fdfeaf7477",
+              "engine_sha256": "d76227340cb4453fe986b02554a14edf60e5207f9bca0e5bb108feecc685ba66",
+              "lock_sha256": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+              "default_config_sha256": "17f5c240ead94ebb8c410f045b3344f07d07ec9c29a8a769645f853b5ea28d64"
+            },
+            "base_commit": "4e9ce5e",
+            "python": "3.12.15 (main, Oct 21 2026, 17:48:33) [MSC v.1944 64 bit (AMD64)]",
+            "script_sha256": "27bd30f810480051819f88700a256d133888082a0fb72cdba4221dd3bbe683bb",
+            "h01_script_sha256": "2b45c7c38960c3fc43fc97376d6d29eefef5e9bd377f017c99d8c252c8c61ea3",
+            "common_scripts_sha256": {
+              "benchmark": "9cc6c994c1a8b44457146bd518206cd0c38390b221b2c5b89c9223cb9ba8cfcd",
+              "evaluate_structure": "2f50fcf13604f4d9e5c8dbce4b68a8a4a6b402fd64e5e098370df346495d33e8"
+            }
+          },
+          "samples": [
+            {
+              "code": 0,
+              "make_runtime_seconds": 370.154128999995,
+              "process_peak_rss_bytes": 161021952,
+              "stage_hook_samples": [
+                {
+                  "stage": "Resolve",
+                  "elapsed_seconds": 0.004440099997736979,
+                  "rss_at_stage_start_bytes": 53604352
+                },
+                {
+                  "stage": "Site/Massing/Detail",
+                  "elapsed_seconds": 8.948395299994445,
+                  "rss_at_stage_start_bytes": 63832064
+                },
+                {
+                  "stage": "Materialize",
+                  "elapsed_seconds": 17.16195709999738,
+                  "rss_at_stage_start_bytes": 68956160
+                },
+                {
+                  "stage": "Generate",
+                  "elapsed_seconds": 78.8188267000005,
+                  "rss_at_stage_start_bytes": 132997120
+                },
+                {
+                  "stage": "Critic",
+                  "elapsed_seconds": 237.90309880000132,
+                  "rss_at_stage_start_bytes": 138203136
+                },
+                {
+                  "stage": "Export",
+                  "elapsed_seconds": 348.5381157000011,
+                  "rss_at_stage_start_bytes": 139350016
+                }
+              ],
+              "implementation": {
+                "pipeline": "H:\\mc-blueprint\\worktrees\\mcb-261\\mc-blueprint\\src\\mcblueprint\\pipeline.py",
+                "environment": {
+                  "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+                  "engine": "0.1.0",
+                  "engineHash": "307295ae42febcd04f563fc076bc9b53708eb38b17d5cc6e1ceee095c41214d6",
+                  "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+                  "planVersion": 2
+                }
+              },
+              "started_at": "2026-11-08T09:27:00.200044+00:00",
+              "seconds": 373.2473624999984,
+              "signature": {
+                "placement_sha256": "f4bdff66c5f2f2b280eafefd5261345e5c9f61a381d3ed3813f0a6b568345a63",
+                "metrics_sha256": "6dadad20f39e6d25beae6852879567f95783bc4958c21f7e7ac7df8ac1031596",
+                "structured_diagnostics_sha256": "23cec7a551cd533a5c9ea514389b648f02f75a830edf43295ddedf0d8542a5be",
+                "scene_json_sha256": "35db003161746747c359c204555ac84d68758d2a4f088d2a1fa0b9bc5fdbaf39"
+              }
+            }
+          ],
+          "seconds_median": 373.2473624999984,
+          "rss_median": 161021952,
+          "matches_before": true,
+          "profile": {
+            "total_seconds": 317.8928934,
+            "total_calls": 325076261,
+            "focus_functions": [
+              {
+                "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\pathlib.py",
+                "line": 1228,
+                "function": "resolve",
+                "primitive_calls": 7,
+                "calls": 7,
+                "own_seconds": 6.280000000000001e-05,
+                "cumulative_seconds": 0.0068195
+              },
+              {
+                "file": ".\\src\\mcblueprint\\components.py",
+                "line": 69,
+                "function": "resolve",
+                "primitive_calls": 90,
+                "calls": 90,
+                "own_seconds": 0.0008883000000000001,
+                "cumulative_seconds": 0.0214423
+              },
+              {
+                "file": ".\\src\\mcblueprint\\critic.py",
+                "line": 280,
+                "function": "consume",
+                "primitive_calls": 16,
+                "calls": 16,
+                "own_seconds": 12.2117023,
+                "cumulative_seconds": 90.21098
+              },
+              {
+                "file": ".\\src\\mcblueprint\\materialize.py",
+                "line": 258,
+                "function": "materialize",
+                "primitive_calls": 10,
+                "calls": 10,
+                "own_seconds": 0.10831,
+                "cumulative_seconds": 7.1420798
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\yaml\\resolver.py",
+                "line": 143,
+                "function": "resolve",
+                "primitive_calls": 4532,
+                "calls": 4532,
+                "own_seconds": 0.010738500000000002,
+                "cumulative_seconds": 0.0163778
+              },
+              {
+                "file": ".\\src\\mcblueprint\\scene.py",
+                "line": 83,
+                "function": "write_scene",
+                "primitive_calls": 1,
+                "calls": 1,
+                "own_seconds": 0.0096433,
+                "cumulative_seconds": 20.3105997
+              },
+              {
+                "file": ".\\src\\mcblueprint\\planning.py",
+                "line": 86,
+                "function": "_plan_contract",
+                "primitive_calls": 72,
+                "calls": 72,
+                "own_seconds": 0.005462900000000001,
+                "cumulative_seconds": 0.3657463
+              },
+              {
+                "file": ".\\src\\mcblueprint\\detail.py",
+                "line": 269,
+                "function": "_facade_selection",
+                "primitive_calls": 18,
+                "calls": 18,
+                "own_seconds": 0.1894057,
+                "cumulative_seconds": 1.6069856
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\referencing\\jsonschema.py",
+                "line": 604,
+                "function": "resolve",
+                "primitive_calls": 772,
+                "calls": 772,
+                "own_seconds": 0.0063880000000000004,
+                "cumulative_seconds": 0.0198147
+              },
+              {
+                "file": ".\\src\\mcblueprint\\detail.py",
+                "line": 131,
+                "function": "plan_detail",
+                "primitive_calls": 18,
+                "calls": 18,
+                "own_seconds": 0.016694,
+                "cumulative_seconds": 2.6563827
+              },
+              {
+                "file": ".\\src\\mcblueprint\\viewer_input.py",
+                "line": 163,
+                "function": "_spec_sources",
+                "primitive_calls": 1,
+                "calls": 1,
+                "own_seconds": 7.840000000000001e-05,
+                "cumulative_seconds": 0.0076705
+              },
+              {
+                "file": ".\\src\\mcblueprint\\materialize.py",
+                "line": 499,
+                "function": "resolve",
+                "primitive_calls": 10,
+                "calls": 215999,
+                "own_seconds": 0.5162829,
+                "cumulative_seconds": 0.8750154000000001
+              },
+              {
+                "file": ".\\src\\mcblueprint\\operations\\base.py",
+                "line": 144,
+                "function": "resolve",
+                "primitive_calls": 4713,
+                "calls": 4713,
+                "own_seconds": 0.0008035000000000001,
+                "cumulative_seconds": 0.0008035000000000001
+              },
+              {
+                "file": ".\\src\\mcblueprint\\planning.py",
+                "line": 336,
+                "function": "plan_buildspec",
+                "primitive_calls": 2,
+                "calls": 20,
+                "own_seconds": 0.020862500000000003,
+                "cumulative_seconds": 16.9412969
+              },
+              {
+                "file": ".\\src\\mcblueprint\\scene.py",
+                "line": 22,
+                "function": "capture_sources",
+                "primitive_calls": 17,
+                "calls": 17,
+                "own_seconds": 2.3929603,
+                "cumulative_seconds": 155.52517540000002
+              },
+              {
+                "file": ".\\src\\mcblueprint\\materialize.py",
+                "line": 190,
+                "function": "_distance",
+                "primitive_calls": 8820,
+                "calls": 8820,
+                "own_seconds": 0.0087198,
+                "cumulative_seconds": 0.18422750000000002
+              }
+            ],
+            "top_cumulative": [
+              {
+                "file": ".\\src\\mcblueprint\\pipeline.py",
+                "line": 564,
+                "function": "make",
+                "primitive_calls": 1,
+                "calls": 1,
+                "own_seconds": 0.0354352,
+                "cumulative_seconds": 370.05079190000004
+              },
+              {
+                "file": "~",
+                "line": 0,
+                "function": "<built-in method builtins.next>",
+                "primitive_calls": 701168,
+                "calls": 703395,
+                "own_seconds": 0.3353799,
+                "cumulative_seconds": 172.5693076
+              },
+              {
+                "file": ".\\src\\mcblueprint\\exporters\\_spool.py",
+                "line": 27,
+                "function": "write",
+                "primitive_calls": 1,
+                "calls": 1,
+                "own_seconds": 0.8661415,
+                "cumulative_seconds": 158.8378189
+              },
+              {
+                "file": ".\\src\\mcblueprint\\scene.py",
+                "line": 22,
+                "function": "capture_sources",
+                "primitive_calls": 17,
+                "calls": 17,
+                "own_seconds": 2.3929603,
+                "cumulative_seconds": 155.52517540000002
+              },
+              {
+                "file": ".\\src\\mcblueprint\\pipeline.py",
+                "line": 773,
+                "function": "consume_regions",
+                "primitive_calls": 17,
+                "calls": 17,
+                "own_seconds": 0.0008810000000000001,
+                "cumulative_seconds": 141.8000216
+              },
+              {
+                "file": ".\\src\\mcblueprint\\pipeline.py",
+                "line": 434,
+                "function": "_evaluate",
+                "primitive_calls": 1,
+                "calls": 1,
+                "own_seconds": 0.0021969000000000003,
+                "cumulative_seconds": 110.61020470000001
+              },
+              {
+                "file": ".\\src\\mcblueprint\\pipeline.py",
+                "line": 392,
+                "function": "_support",
+                "primitive_calls": 1,
+                "calls": 1,
+                "own_seconds": 0.0016437000000000001,
+                "cumulative_seconds": 108.02410320000001
+              },
+              {
+                "file": ".\\src\\mcblueprint\\support.py",
+                "line": 255,
+                "function": "check_support",
+                "primitive_calls": 512,
+                "calls": 512,
+                "own_seconds": 6.8401993,
+                "cumulative_seconds": 108.005249
+              },
+              {
+                "file": ".\\src\\mcblueprint\\critic.py",
+                "line": 280,
+                "function": "consume",
+                "primitive_calls": 16,
+                "calls": 16,
+                "own_seconds": 12.2117023,
+                "cumulative_seconds": 90.21098
+              },
+              {
+                "file": ".\\src\\mcblueprint\\volume.py",
+                "line": 228,
+                "function": "__iter__",
+                "primitive_calls": 11829264,
+                "calls": 11829264,
+                "own_seconds": 27.4671364,
+                "cumulative_seconds": 63.1940814
+              },
+              {
+                "file": ".\\src\\mcblueprint\\support.py",
+                "line": 275,
+                "function": "_check_one",
+                "primitive_calls": 8388608,
+                "calls": 8388608,
+                "own_seconds": 24.852297500000002,
+                "cumulative_seconds": 58.687012
+              },
+              {
+                "file": ".\\src\\mcblueprint\\pipeline.py",
+                "line": 269,
+                "function": "generated_blueprint_regions",
+                "primitive_calls": 17,
+                "calls": 17,
+                "own_seconds": 0.251188,
+                "cumulative_seconds": 51.587391800000006
+              },
+              {
+                "file": ".\\src\\mcblueprint\\validator.py",
+                "line": 99,
+                "function": "validate_and_load",
+                "primitive_calls": 1,
+                "calls": 1,
+                "own_seconds": 7.48e-05,
+                "cumulative_seconds": 49.090785000000004
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "line": 349,
+                "function": "iter_errors",
+                "primitive_calls": 140,
+                "calls": 692206,
+                "own_seconds": 1.2328988,
+                "cumulative_seconds": 48.6417433
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "line": 396,
+                "function": "descend",
+                "primitive_calls": 1134,
+                "calls": 1316117,
+                "own_seconds": 5.5005250000000006,
+                "cumulative_seconds": 48.6329031
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "line": 290,
+                "function": "properties",
+                "primitive_calls": 444,
+                "calls": 714944,
+                "own_seconds": 1.253633,
+                "cumulative_seconds": 48.6270468
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "line": 274,
+                "function": "ref",
+                "primitive_calls": 2847,
+                "calls": 91298,
+                "own_seconds": 0.1912085,
+                "cumulative_seconds": 48.336671100000004
+              },
+              {
+                "file": ".\\src\\mcblueprint\\validator.py",
+                "line": 123,
+                "function": "validate_schema",
+                "primitive_calls": 1,
+                "calls": 1,
+                "own_seconds": 3.8e-05,
+                "cumulative_seconds": 48.0301613
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "line": 59,
+                "function": "items",
+                "primitive_calls": 990,
+                "calls": 20398,
+                "own_seconds": 0.1958727,
+                "cumulative_seconds": 48.0029382
+              },
+              {
+                "file": ".\\src\\mcblueprint\\generator.py",
+                "line": 93,
+                "function": "generate_regions",
+                "primitive_calls": 17,
+                "calls": 17,
+                "own_seconds": 0.0867743,
+                "cumulative_seconds": 47.774370000000005
+              },
+              {
+                "file": ".\\src\\mcblueprint\\operations\\base.py",
+                "line": 118,
+                "function": "execute",
+                "primitive_calls": 128406,
+                "calls": 135991,
+                "own_seconds": 0.43676220000000004,
+                "cumulative_seconds": 47.5269995
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "line": 332,
+                "function": "allOf",
+                "primitive_calls": 8044,
+                "calls": 10347,
+                "own_seconds": 0.5148210000000001,
+                "cumulative_seconds": 43.271300100000005
+              },
+              {
+                "file": ".\\src\\mcblueprint\\pipeline.py",
+                "line": 367,
+                "function": "__iter__",
+                "primitive_calls": 8389120,
+                "calls": 8389120,
+                "own_seconds": 17.0962538,
+                "cumulative_seconds": 42.4773628
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "line": 382,
+                "function": "if_",
+                "primitive_calls": 273002,
+                "calls": 351202,
+                "own_seconds": 0.9523863,
+                "cumulative_seconds": 37.3662444
+              },
+              {
+                "file": ".\\src\\mcblueprint\\operations\\terrain_density.py",
+                "line": 79,
+                "function": "apply",
+                "primitive_calls": 16,
+                "calls": 16,
+                "own_seconds": 0.41761600000000004,
+                "cumulative_seconds": 30.839080000000003
+              },
+              {
+                "file": ".\\src\\mcblueprint\\model\\vec.py",
+                "line": 34,
+                "function": "__add__",
+                "primitive_calls": 13981631,
+                "calls": 13981631,
+                "own_seconds": 10.2427121,
+                "cumulative_seconds": 24.9028442
+              },
+              {
+                "file": ".\\src\\mcblueprint\\terrain_field.py",
+                "line": 191,
+                "function": "column",
+                "primitive_calls": 213520,
+                "calls": 213520,
+                "own_seconds": 4.6871788,
+                "cumulative_seconds": 22.219679000000003
+              },
+              {
+                "file": "~",
+                "line": 0,
+                "function": "<method 'endswith' of 'str' objects>",
+                "primitive_calls": 67108712,
+                "calls": 67108712,
+                "own_seconds": 20.353101300000002,
+                "cumulative_seconds": 20.353101300000002
+              },
+              {
+                "file": ".\\src\\mcblueprint\\scene.py",
+                "line": 83,
+                "function": "write_scene",
+                "primitive_calls": 1,
+                "calls": 1,
+                "own_seconds": 0.0096433,
+                "cumulative_seconds": 20.3105997
+              },
+              {
+                "file": ".\\src\\mcblueprint\\operations\\terrain_density.py",
+                "line": 122,
+                "function": "_vegetation",
+                "primitive_calls": 144,
+                "calls": 144,
+                "own_seconds": 0.8203755,
+                "cumulative_seconds": 19.954471400000003
+              },
+              {
+                "file": ".\\src\\mcblueprint\\scene.py",
+                "line": 108,
+                "function": "chunks",
+                "primitive_calls": 585,
+                "calls": 585,
+                "own_seconds": 10.2993427,
+                "cumulative_seconds": 19.6384699
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "line": 485,
+                "function": "is_valid",
+                "primitive_calls": 351205,
+                "calls": 351205,
+                "own_seconds": 1.5803335,
+                "cumulative_seconds": 18.803388
+              },
+              {
+                "file": ".\\src\\mcblueprint\\planning.py",
+                "line": 336,
+                "function": "plan_buildspec",
+                "primitive_calls": 2,
+                "calls": 20,
+                "own_seconds": 0.020862500000000003,
+                "cumulative_seconds": 16.9412969
+              },
+              {
+                "file": ".\\src\\mcblueprint\\castle_planning.py",
+                "line": 99,
+                "function": "plan_castle",
+                "primitive_calls": 2,
+                "calls": 2,
+                "own_seconds": 0.052466500000000006,
+                "cumulative_seconds": 16.8959571
+              },
+              {
+                "file": ".\\src\\mcblueprint\\support.py",
+                "line": 195,
+                "function": "short_id",
+                "primitive_calls": 8396900,
+                "calls": 8396900,
+                "own_seconds": 6.6693851,
+                "cumulative_seconds": 13.3871596
+              }
+            ],
+            "top_own": [
+              {
+                "file": ".\\src\\mcblueprint\\volume.py",
+                "line": 228,
+                "function": "__iter__",
+                "primitive_calls": 11829264,
+                "calls": 11829264,
+                "own_seconds": 27.4671364,
+                "cumulative_seconds": 63.1940814
+              },
+              {
+                "file": ".\\src\\mcblueprint\\support.py",
+                "line": 275,
+                "function": "_check_one",
+                "primitive_calls": 8388608,
+                "calls": 8388608,
+                "own_seconds": 24.852297500000002,
+                "cumulative_seconds": 58.687012
+              },
+              {
+                "file": "~",
+                "line": 0,
+                "function": "<method 'endswith' of 'str' objects>",
+                "primitive_calls": 67108712,
+                "calls": 67108712,
+                "own_seconds": 20.353101300000002,
+                "cumulative_seconds": 20.353101300000002
+              },
+              {
+                "file": ".\\src\\mcblueprint\\pipeline.py",
+                "line": 367,
+                "function": "__iter__",
+                "primitive_calls": 8389120,
+                "calls": 8389120,
+                "own_seconds": 17.0962538,
+                "cumulative_seconds": 42.4773628
+              },
+              {
+                "file": ".\\src\\mcblueprint\\critic.py",
+                "line": 280,
+                "function": "consume",
+                "primitive_calls": 16,
+                "calls": 16,
+                "own_seconds": 12.2117023,
+                "cumulative_seconds": 90.21098
+              },
+              {
+                "file": ".\\src\\mcblueprint\\scene.py",
+                "line": 108,
+                "function": "chunks",
+                "primitive_calls": 585,
+                "calls": 585,
+                "own_seconds": 10.2993427,
+                "cumulative_seconds": 19.6384699
+              },
+              {
+                "file": ".\\src\\mcblueprint\\model\\vec.py",
+                "line": 34,
+                "function": "__add__",
+                "primitive_calls": 13981631,
+                "calls": 13981631,
+                "own_seconds": 10.2427121,
+                "cumulative_seconds": 24.9028442
+              },
+              {
+                "file": ".\\src\\mcblueprint\\support.py",
+                "line": 255,
+                "function": "check_support",
+                "primitive_calls": 512,
+                "calls": 512,
+                "own_seconds": 6.8401993,
+                "cumulative_seconds": 108.005249
+              },
+              {
+                "file": ".\\src\\mcblueprint\\support.py",
+                "line": 195,
+                "function": "short_id",
+                "primitive_calls": 8396900,
+                "calls": 8396900,
+                "own_seconds": 6.6693851,
+                "cumulative_seconds": 13.3871596
+              },
+              {
+                "file": ".\\src\\mcblueprint\\model\\vec.py",
+                "line": 109,
+                "function": "contains",
+                "primitive_calls": 13844544,
+                "calls": 13844544,
+                "own_seconds": 6.3205092,
+                "cumulative_seconds": 6.3205092
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "line": 396,
+                "function": "descend",
+                "primitive_calls": 1134,
+                "calls": 1316117,
+                "own_seconds": 5.5005250000000006,
+                "cumulative_seconds": 48.6329031
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "line": 339,
+                "function": "evolve",
+                "primitive_calls": 1323746,
+                "calls": 1323746,
+                "own_seconds": 5.1893012,
+                "cumulative_seconds": 11.2876033
+              },
+              {
+                "file": ".\\src\\mcblueprint\\terrain_field.py",
+                "line": 191,
+                "function": "column",
+                "primitive_calls": 213520,
+                "calls": 213520,
+                "own_seconds": 4.6871788,
+                "cumulative_seconds": 22.219679000000003
+              },
+              {
+                "file": "~",
+                "line": 0,
+                "function": "<method 'get' of 'dict' objects>",
+                "primitive_calls": 13990003,
+                "calls": 13990003,
+                "own_seconds": 4.48348,
+                "cumulative_seconds": 4.5798547
+              },
+              {
+                "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\copy.py",
+                "line": 118,
+                "function": "deepcopy",
+                "primitive_calls": 40999,
+                "calls": 2870302,
+                "own_seconds": 4.4213606,
+                "cumulative_seconds": 9.4861242
+              },
+              {
+                "file": "~",
+                "line": 0,
+                "function": "<method 'read' of '_io.BufferedReader' objects>",
+                "primitive_calls": 1346295,
+                "calls": 1346295,
+                "own_seconds": 4.1146137000000005,
+                "cumulative_seconds": 4.1146137000000005
+              },
+              {
+                "file": ".\\src\\mcblueprint\\terrain_field.py",
+                "line": 201,
+                "function": "<genexpr>",
+                "primitive_calls": 2956393,
+                "calls": 2956393,
+                "own_seconds": 4.0662746,
+                "cumulative_seconds": 5.6138285
+              },
+              {
+                "file": "~",
+                "line": 0,
+                "function": "<method 'startswith' of 'str' objects>",
+                "primitive_calls": 8883980,
+                "calls": 8883980,
+                "own_seconds": 3.5960838,
+                "cumulative_seconds": 3.5960838
+              },
+              {
+                "file": "~",
+                "line": 0,
+                "function": "<method 'split' of 'str' objects>",
+                "primitive_calls": 8504375,
+                "calls": 8504375,
+                "own_seconds": 3.4073035000000003,
+                "cumulative_seconds": 3.4073035000000003
+              },
+              {
+                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "line": 282,
+                "function": "__attrs_post_init__",
+                "primitive_calls": 1323886,
+                "calls": 1323886,
+                "own_seconds": 2.9046582,
+                "cumulative_seconds": 3.2189984000000003
+              }
+            ],
+            "region_functions": [
+              {
+                "file": "randomness.py",
+                "function": "tiles",
+                "calls": 30451,
+                "own_seconds": 0.30883710000000003,
+                "cumulative_seconds": 4.4051527
+              },
+              {
+                "file": "pipeline.py",
+                "function": "__iter__",
+                "calls": 8389120,
+                "own_seconds": 17.0962538,
+                "cumulative_seconds": 42.4773628
+              },
+              {
+                "file": "randomness.py",
+                "function": "_sample",
+                "calls": 14527,
+                "own_seconds": 0.38221710000000003,
+                "cumulative_seconds": 3.3749631
+              },
+              {
+                "file": "pipeline.py",
+                "function": "_row",
+                "calls": 380397,
+                "own_seconds": 2.2137902,
+                "cumulative_seconds": 12.319636500000001
+              },
+              {
+                "file": "critic.py",
+                "function": "consume",
+                "calls": 16,
+                "own_seconds": 12.2117023,
+                "cumulative_seconds": 90.21098
+              },
+              {
+                "file": "randomness.py",
+                "function": "__init__",
+                "calls": 1,
+                "own_seconds": 2.9800000000000003e-05,
+                "cumulative_seconds": 4.78e-05
+              },
+              {
+                "file": "randomness.py",
+                "function": "first_draws",
+                "calls": 14527,
+                "own_seconds": 0.07651240000000001,
+                "cumulative_seconds": 1.4823794000000001
+              },
+              {
+                "file": "weather.py",
+                "function": "apply_weather",
+                "calls": 16,
+                "own_seconds": 0.0145511,
+                "cumulative_seconds": 2.1794923
+              },
+              {
+                "file": "critic.py",
+                "function": "__init__",
+                "calls": 1,
+                "own_seconds": 0.007079500000000001,
+                "cumulative_seconds": 0.0130703
+              },
+              {
+                "file": "pipeline.py",
+                "function": "_working_budget",
+                "calls": 1,
+                "own_seconds": 1.7106079,
+                "cumulative_seconds": 3.5492626
+              },
+              {
+                "file": "weather.py",
+                "function": "_water_distances",
+                "calls": 16,
+                "own_seconds": 0.1647065,
+                "cumulative_seconds": 0.1706291
+              },
+              {
+                "file": "traversal.py",
+                "function": "_stand",
+                "calls": 8422,
+                "own_seconds": 0.0256522,
+                "cumulative_seconds": 0.28270120000000004
+              },
+              {
+                "file": "critic.py",
+                "function": "finalize",
+                "calls": 1,
+                "own_seconds": 0.0079538,
+                "cumulative_seconds": 0.0105857
+              },
+              {
+                "file": "traversal.py",
+                "function": "route",
+                "calls": 38,
+                "own_seconds": 0.41389190000000003,
+                "cumulative_seconds": 2.5754548
+              },
+              {
+                "file": "support.py",
+                "function": "check_support",
+                "calls": 512,
+                "own_seconds": 6.8401993,
+                "cumulative_seconds": 108.005249
+              },
+              {
+                "file": "traversal.py",
+                "function": "stand",
+                "calls": 77776,
+                "own_seconds": 0.1384254,
+                "cumulative_seconds": 0.5580772
+              },
+              {
+                "file": "pipeline.py",
+                "function": "__init__",
+                "calls": 1,
+                "own_seconds": 6.300000000000001e-06,
+                "cumulative_seconds": 6.300000000000001e-06
+              },
+              {
+                "file": "pipeline.py",
+                "function": "get",
+                "calls": 118253,
+                "own_seconds": 0.1911123,
+                "cumulative_seconds": 0.6267020000000001
+              },
+              {
+                "file": "traversal.py",
+                "function": "__init__",
+                "calls": 1,
+                "own_seconds": 1.6100000000000002e-05,
+                "cumulative_seconds": 8.04e-05
+              },
+              {
+                "file": "pipeline.py",
+                "function": "_support",
+                "calls": 1,
+                "own_seconds": 0.0016437000000000001,
+                "cumulative_seconds": 108.02410320000001
+              },
+              {
+                "file": "weather.py",
+                "function": "_weather_fields",
+                "calls": 16,
+                "own_seconds": 0.6467225000000001,
+                "cumulative_seconds": 0.710997
+              }
+            ],
+            "measured_functions": [
+              {
+                "file": "critic.py",
+                "function": "consume",
+                "calls": 16,
+                "own_seconds": 12.2117023,
+                "cumulative_seconds": 90.21098
+              },
+              {
+                "file": "randomness.py",
+                "function": "first_draws",
+                "calls": 14527,
+                "own_seconds": 0.07651240000000001,
+                "cumulative_seconds": 1.4823794000000001
+              },
+              {
+                "file": "scene.py",
+                "function": "_source_descriptor",
+                "calls": 2154,
+                "own_seconds": 0.011968000000000001,
+                "cumulative_seconds": 5.237926900000001
+              },
+              {
+                "file": "support.py",
+                "function": "check_support",
+                "calls": 512,
+                "own_seconds": 6.8401993,
+                "cumulative_seconds": 108.005249
+              },
+              {
+                "file": "validator.py",
+                "function": "validate_schema",
+                "calls": 1,
+                "own_seconds": 3.8e-05,
+                "cumulative_seconds": 48.0301613
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "before_provenance": {
+    "commit": "4e9ce5eebdb71c25542f86a6f199f0fdfeaf7477",
+    "engine_sha256": "d76227340cb4453fe986b02554a14edf60e5207f9bca0e5bb108feecc685ba66",
+    "lock_sha256": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+    "default_config_sha256": "17f5c240ead94ebb8c410f045b3344f07d07ec9c29a8a769645f853b5ea28d64"
+  },
+  "script": {
+    "path": "scripts/evaluate_region_performance.py",
+    "sha256": "27bd30f810480051819f88700a256d133888082a0fb72cdba4221dd3bbe683bb"
+  },
+  "h01_script": {
+    "path": "scripts/evaluate_make_performance.py",
+    "sha256": "2b45c7c38960c3fc43fc97376d6d29eefef5e9bd377f017c99d8c252c8c61ea3"
+  },
+  "after_provenance": {
+    "commit": "4e9ce5eebdb71c25542f86a6f199f0fdfeaf7477",
+    "engine_sha256": "d76227340cb4453fe986b02554a14edf60e5207f9bca0e5bb108feecc685ba66",
+    "lock_sha256": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+    "default_config_sha256": "17f5c240ead94ebb8c410f045b3344f07d07ec9c29a8a769645f853b5ea28d64"
+  },
+  "comparison_limits": [
+    "基準commitは4e9ce5e。変更した乱数・sceneを含む対象モジュールをgit showで切り替える。",
+    "同じPython 3.12 venv・入力・出力先でbefore→afterを交互に独立プロセスで実行。",
+    "同じ端末で#262・#263のテストが並行し、CPU負荷は制御していない。",
+    "profile・matrix・通常計時の一部は自分の全件pytestや固定課題照合とも並行。負荷は固定できていない。",
+    "段時間はstage_hookの隣接差分、最終段の終点はmakeの復帰。GenerateはWeatherとCritic.consumeを含む。",
+    "RSSはプロセス全体のピーク。段開始RSSを段別ピークと解釈しない。",
+    "この端末はNFRの達成認定用ではない。最終判定は基準端末で#244が行う。"
+  ],
+  "dependencies": {
+    "numpy": "2.5.4",
+    "jsonschema": "4.26.0",
+    "nbtlib": "2.0.4",
+    "PyYAML": "6.0.3",
+    "pyfastnoiselite": "0.0.7",
+    "pytest": "9.2.0",
+    "ruff": "0.17.4"
+  },
+  "verified_cases": 2,
+  "verified_hashes": 8,
+  "source_normalization": {
+    "method": "測定完了後、変更ファイルだけCRLFからLFへ統一。Python構文木とLF正規化engine hashの同一性を確認。",
+    "measured_engine_sha256": "d76227340cb4453fe986b02554a14edf60e5207f9bca0e5bb108feecc685ba66",
+    "final_engine_sha256": "9e07675eeaf2d0af634eb0d41b00d24d457b0b3b0340db70860b02647a8a52ae",
+    "lf_canonical_engine_sha256": "0e34b87e15dc087b4c63ef906a1a80d0ba1781a46dde13570125fe3ffcfd9581",
+    "measured_script_sha256": "27bd30f810480051819f88700a256d133888082a0fb72cdba4221dd3bbe683bb",
+    "final_script_sha256": "da8fd60d10e9b260063b1ffdfb4b661e6403bb4c5e7ebf3ff874e9d7668fc840",
+    "files": [
+      {
+        "path": "docs/PERFORMANCE.md",
+        "pre_lf_sha256": "7de43202e444814018c6b2e3da23ddca99818eae858114f2437ce27ea973d243",
+        "final_sha256": "36b600b39eacbd17837c9cc6636006d711560a3bfb52cd13a911be3a56bf9207",
+        "only_crlf_to_lf": true
+      },
+      {
+        "path": "scripts/evaluate_region_performance.py",
+        "pre_lf_sha256": "27bd30f810480051819f88700a256d133888082a0fb72cdba4221dd3bbe683bb",
+        "final_sha256": "da8fd60d10e9b260063b1ffdfb4b661e6403bb4c5e7ebf3ff874e9d7668fc840",
+        "only_crlf_to_lf": true,
+        "python_ast_unchanged": true
+      },
+      {
+        "path": "src/mcblueprint/operations/randomness.py",
+        "pre_lf_sha256": "0629532bd2ef56c8c0ebeaf84131d2e7a72dc045a7425820b0ac0415c488c354",
+        "final_sha256": "f85ce00710adc57772f25834f21509896571d9e8af24cab4a6402f3bc0f60f15",
+        "only_crlf_to_lf": true,
+        "python_ast_unchanged": true
+      },
+      {
+        "path": "src/mcblueprint/scene.py",
+        "pre_lf_sha256": "36973e84f9e0e6188e1b1d916da9d41a61c020d9adabed33f0c61d4426566373",
+        "final_sha256": "c629b0c78bbdd80dfd47f612299eb06b5f97c941fd80794cce4254fa6252d58f",
+        "only_crlf_to_lf": true,
+        "python_ast_unchanged": true
+      },
+      {
+        "path": "tests/test_generation_regions.py",
+        "pre_lf_sha256": "607d5099797227c9e623a65326c99148edde9119a7645fdd951b8ae1e14f7f7d",
+        "final_sha256": "9eda33449224640ad5daaf7b4b8fd96a4de8ab8140816405f4184856ff66d86e",
+        "only_crlf_to_lf": true,
+        "python_ast_unchanged": true
+      },
+      {
+        "path": "tests/test_region_performance_resume.py",
+        "pre_lf_sha256": "2455c6b62d88c2bc76b6aa6f1b100f97659d8a25b6d8403ff8af6a19873304ed",
+        "final_sha256": "68e34e55e98682714c3705403a63fe184c5d89a390ad3002c82ec09605ff2716",
+        "only_crlf_to_lf": true,
+        "python_ast_unchanged": true
+      },
+      {
+        "path": "tests/test_scene.py",
+        "pre_lf_sha256": "8dbac9cebf154253880e1f3349374e25bb74d9375f9245b888fc7ed4fd03013a",
+        "final_sha256": "b302f5eea6e208c9e87270a296803ba0901c07a9f2c4e2274e2ff17a2add9a59",
+        "only_crlf_to_lf": true,
+        "python_ast_unchanged": true
+      }
+    ]
+  },
+  "post_measurement_script": {
+    "path": "scripts/evaluate_region_performance.py",
+    "previous_sha256": "da8fd60d10e9b260063b1ffdfb4b661e6403bb4c5e7ebf3ff874e9d7668fc840",
+    "sha256": "df84c01109bf99962c90a0951a40339002aa84c4054c54e71d8a029fcaf22b16",
+    "change": "測定後、after開始前のbefore provenance・入力hash照合を追加。worker・計時境界・測定値は変更なし。"
+  }
+}
