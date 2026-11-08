@@ -1,0 +1,81 @@
+{
+  "formatVersion": 1,
+  "packVersion": "1.0.0",
+  "taxonomyVersion": "0.1.0",
+  "vocabularyVersion": "1.0.0",
+  "palettePrior": [
+    {
+      "when": {
+        "style": "modern"
+      },
+      "roles": {
+        "frame": {
+          "oklab": {
+            "L": [
+              0.95,
+              0.95,
+              0.95,
+              0.95,
+              0.95
+            ],
+            "a": [
+              0,
+              0,
+              0,
+              0,
+              0
+            ],
+            "b": [
+              0,
+              0,
+              0,
+              0,
+              0
+            ]
+          },
+          "n": 16,
+          "subjects": 16,
+          "nEff": 16
+        }
+      }
+    }
+  ],
+  "materialPrior": [
+    {
+      "when": {
+        "style": "modern"
+      },
+      "roles": {
+        "frame": {
+          "metal": 1
+        }
+      }
+    }
+  ],
+  "relationRule": [],
+  "accentRule": [],
+  "provenance": {
+    "dataLicense": "synthetic-acceptance-only",
+    "inputs": 16,
+    "subjects": 16,
+    "licenses": {
+      "CC0-1.0": 16
+    },
+    "attributions": [
+      {
+        "source": "数値だけの自作fixture",
+        "author": "mc-blueprint",
+        "license": "CC0-1.0",
+        "url": "https://github.com/mc-blueprint/mc-blueprint"
+      }
+    ],
+    "snapshot": {
+      "id": "synthetic-modern-frame-only-not-observations",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "generator": {
+      "repository": "https://github.com/mc-blueprint/mc-blueprint",
+      "commit": "dabb0dc000000000000000000000000000000000"
+    }
+  }
+}

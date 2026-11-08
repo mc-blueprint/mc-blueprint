@@ -1,0 +1,6 @@
+{
+  "conditions": [
+    {"style": "modern", "buildingType": "house", "biome": "plains", "roles": ["frame"]},
+    {"style": "modern", "buildingType": "tower", "biome": "plains", "roles": ["frame"]}
+  ]
+}
