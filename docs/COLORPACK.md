@@ -209,3 +209,118 @@ pack規則ゼロは `value: null, status: n/a`。D28適合をpack適合へ加算
 同じ版の内容変更も拒否する。scene/editsのschema版は変えない。
 破損パックは計画・生成前に拒否し、既存成果を保持する。
 パック完全不在では従来のD28経路を使い、配色用のrun項目・評価項目を追加しない。
+
+## 統計受入れ実行器（#262）
+
+`scripts/evaluate_colorpack.py` は明示パスのパックと固定計画JSONを読み、
+全4版×schem/litematicの読戻しを行う。既存のparse_colorpack、Materialize、
+用途面色変換、Weatherとexporterを再利用し、新しいruntime依存は追加しない。
+手計算サンプラ試験は `tests/test_colorpack_acceptance.py` にある。
+
+Python 3.12の開発venvで、コマンド記録規約に従って実行する。
+
+```powershell
+python scripts/evaluate_colorpack.py `
+  --pack tests/data/colorpack/acceptance.json `
+  --plan tests/data/colorpack/acceptance-plan.json `
+  --output benchmarks/.tmp/colorpack-report.json
+```
+
+計画はsynthetic、seeds（重複のない整数集合）、mix、weatherAgeと、
+conditions（style/buildingType/biome/rolesの配列）を持つ。
+添付のダミー計画はseed=0〜255、mix=0/0.3、Weather age=0/既定0.2。
+variation=1、contrast=saturation=0.5、accent=1、明示色/材質なしを固定する。
+閾値はスクリプトのGATESに初期値を固定し、同じ系列の結果で変更しない。
+synthetic=falseの正式実行では、seed集合0〜255、mix集合0/0.3、Weather age集合0/0.2との
+一致を生成前に検査し、不足・重複・値の変更を拒否する。縮小系列はsynthetic=trueだけで使う。
+
+生成開始前にパック・計画・blockdata実内容・語彙・engine・実行器のhashと
+全条件の支持一覧をレポートへ記録し、各系列の終了時に追記する。
+completed=trueになって初めて全系列の測定完了となる。
+対象は直接支持subjects>=10かつnEff>=10の役割。低支持・欠損・候補不足を別記する。
+色/材質のselectionSourcesがpackでなければ例外にし、D28へ戻った結果を測定しない。
+採用whenと親分布の記録は各seedのselectionSourcesへ残す。
+
+条件のscopeを省略またはrolesにするとfull形状の役割単位Materializeプローブとなる。
+scope=buildingとbuildspec（例 `{"scale":"tiny"}`）を指定すると、既存のResolve・
+Site/Massing/Detail・Materialize・Weatherを通した住宅/塔の実建築を測定する。
+style/buildingType/biome/version/seedと配色設定は固定計画から適用する。
+rolesにはその建築が実際に使う役割を指定し、使わない役割は別のroles条件で測定する。
+明示色/材質は受け付けない。建築結果と役割単位結果はscopeで区別する。
+様式の候補材質と正確率の共通集合に条件付けた期待確率に対して、関係再選択前後の
+材質選択率と `max(0.05, 3*sqrt(p*(1-p)/seed数))` を報告する。256seedが正式な内部系列。
+候補材質に有効familyがない場合は候補不足として残し、確率を補造しない。
+
+最終Weather後の非air coreで、役割用途面の中央値をセル面積で重み付けした代表色を測る。
+そのseed集合の5/25/50/75/95%点、材質面積比、役割面積比、関係のΔL/ΔC/Δhを残す。
+同じ抽選目標色を、同じ材質で必要形状を持つ当該版のfull familyの用途面中央値へOKLab距離で
+最近傍投影し、実現可能な分布も別に報告する。同距離は安定ID順に解決する。
+元の統計の中央値への色差<=0.08と投影分布への色差<=0.03をそれぞれ判定し、
+投影側だけの合格ではpassedにならない。候補不足・面色欠損も合格扱いしない。
+
+関係は最終代表色からpack規則だけで再計算し、適用数・適合数・割合（内部目標0.9）、
+無彩色・低支持等の除外、規則なしを分離する。D28の適合数は加算しない。
+明示面積上限の違反件数、同入力/seedの再生成一致、両形式の読戻し一致も記録する。
+配置の比較はairを除外し、blockdataの既定状態を補完する。同seed再生成は世界座標で
+比較し、形式間は非air最小座標を原点へ移して、形式固有のoffset保存の差を除く。
+人工パックは全値が架空なので数値ゲートの合否は問わない。
+レポートのgAcceptanceEvidenceは常にfalseで、単独でGの完成を宣言する資料にはしない。
+
+## 一時配布物の検証
+
+`scripts/verify_colorpack_distribution.py` は実リポジトリからhatchlingでsdistを作り、
+その全収録ファイルを一時領域へ展開した中だけにパック・DATA_LICENSE・lock項目を注入する。
+実作業ツリーのdata/lock.jsonや既定データを書き換えない。
+docs・tests・ignore規則を含む実際のbackend選択を使い、再ビルドしたsdistが元の収録範囲と
+注入した2ファイルの和に一致すること、必要ファイルの内容hashを検査する。
+配布設定は元のままとし、評価記録が参照するリポジトリ自身のPNG等も保持する。
+wheel/sdistの検査ではjarと、Minecraft名前空間（assets/minecraft）のtextures・models・
+blockstatesを拒否する。評価画像をMojangの生テクスチャ・モデルと同一視しない。
+
+ネットワークが使える準備段階で、実行環境に対応した依存・build用wheelを取得する。
+続くビルド・クリーンvenvへのwheel/sdistインストールはno-indexで行い、
+読込/makeではsocket接続も拒否する。非editableのインストール先を確認し、
+`--plan`のconditionsに指定したstyle/buildingType/biome/rolesで、全4版×両形式の
+pack使用と成果出力を確かめる。配布スモークの計画は統計用のseed/mix系列とは独立である。
+確認軸はaxes（color/materialの配列、既定color）で指定する。modernの既存プリセットは
+材質を明示指定するため、材質priorの使用確認が必要な条件だけmaterialも選ぶ。
+選択された役割・軸がpack以外へ戻った場合は失敗する。
+面積上限に掛けるaccentは固定計画と同じ1にし、makeの品質終了コード0を確認する。
+このスモークの成功を実データの統計的適合の合格とは扱わない。
+
+```powershell
+python -m pip install build
+python -m pip download --dest benchmarks/.tmp/colorpack-wheelhouse `
+  numpy pyfastnoiselite==0.0.7 nbtlib jsonschema PyYAML hatchling
+python scripts/verify_colorpack_distribution.py `
+  --synthetic `
+  --pack tests/data/colorpack/modern-only.json `
+  --license tests/data/colorpack/DATA_LICENSE `
+  --plan tests/data/colorpack/distribution-plan.json `
+  --wheelhouse benchmarks/.tmp/colorpack-wheelhouse `
+  --venv-root ../.venv/colorpack-distribution `
+  --output benchmarks/.tmp/colorpack-distribution
+```
+
+outputは未使用の検証先を指定する。distribution.json、各導入環境のsmoke.json、
+一時配布物をローカル証跡として保全し、ダミー入りのwheel/sdistを公開しない。
+添付の配布用計画はmodern限定・frame限定の人工パックを使い、wall_mainやmedievalの
+支持がなくても指定した条件・役割で確認できることを検証する。実パックでは支持範囲に
+合わせてパック・ライセンス・計画を差し替える。
+
+## #231に残る実パックの受入れ
+
+1. C4〜C6の確定artifact・M3固定snapshotの支持範囲レポートを受領し、材質prior・accentの
+   観測由来、版、生成commit、snapshot/hashを照合する。D15に従いSA/NC等の除外・
+   DATA_LICENSE本文・帰属を確認する。fixtureの支持数で代用しない。
+2. 実パックとDATA_LICENSEをdata/colorpackへ同梱し、data/lock.jsonに生成元の確定commit、
+   pack/taxonomy/vocabulary版とpack/license/vocabularyのSHA-256を固定する。
+3. 支持のある全条件・役割と除外理由を計画へ記録し、パック/blockdata/engine/hashとともに
+   seed=0〜255の計画を生成前に確定する。synthetic=falseにし、上記実行器のpack/planを
+   差し替える。元統計・実現可能分布への未達と再選択トレードオフを残し、閾値で隠さない。
+4. 住宅/塔で実際に使う条件はscope=buildingで最終coreの同じ指標を測定し、make/build/resumeと
+   正規化配置の一致を確認する。上の役割プローブと配布smokeだけで統合適合を宣言しない。
+   未対応の地形等は役割単位の結果をHの接続試験へ引き継ぐ。
+5. 実データ入りのwheel/sdistでもクリーンなオフライン導入・make・同梱ファイルを確認し、
+   実パックの配布検証では--syntheticを外し、支持不足・候補不足・未解決の乖離をメインへ返す。
+   実配色の判定とG完了は#231で行う。
