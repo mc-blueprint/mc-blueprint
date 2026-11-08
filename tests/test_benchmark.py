@@ -3,6 +3,8 @@ from __future__ import annotations
 import hashlib
 import importlib.util
 import json
+import sys
+import tempfile
 from pathlib import Path
 
 from mcblueprint import blockdata, preview, schema
@@ -29,6 +31,59 @@ def test_benchmark_fixtures_cover_fixed_workloads_and_validate() -> None:
     for case in cases:
         path = Path(__file__).parents[1] / "benchmarks" / "fixtures" / f"{case['name']}.json"
         assert not validate(read_blueprint_json(path))
+
+
+def test_benchmark_record_paths_hide_machine_specific_absolute_paths() -> None:
+    assert benchmark._record_path(Path(benchmark.ROOT) / "benchmarks/make-baseline.json") == (
+        "benchmarks/make-baseline.json"
+    )
+    assert benchmark._record_path(Path(tempfile.gettempdir()) / "output.schem") == (
+        "<tmp>/output.schem"
+    )
+    pytest_temp = Path(tempfile.gettempdir()) / f"pytest-of-{Path.home().name}" / "result.schem"
+    recorded_temp = benchmark._record_path(pytest_temp)
+    assert recorded_temp.startswith("<tmp>/pytest-of-<user>/")
+    assert Path.home().name.lower() not in recorded_temp.lower()
+    assert benchmark._record_path(Path(sys.executable)) == "<python>"
+    assert benchmark._record_path(Path(sys.base_prefix) / "Lib/json/encoder.py") == (
+        "<stdlib>/json/encoder.py"
+    )
+    assert benchmark._record_path(Path.home() / ".codex/scripts/run_logged.py") == (
+        "<codex>/scripts/run_logged.py"
+    )
+    backslash = chr(92)
+    windows_temp = "C:" + backslash + "Users" + backslash + "example" + backslash
+    windows_temp += "AppData" + backslash + "Local" + backslash + "Temp" + backslash
+    windows_profile = "C:" + backslash + "Users" + backslash + "example" + backslash
+    posix_home = "/" + "home" + "/example/data.json"
+    text = benchmark._record_text(
+        windows_temp + "run" + backslash + "result.json "
+        + windows_profile + "profile" + backslash + "script.py " + posix_home + " "
+        + str(benchmark.ROOT / "tests/data/test.py")
+    )
+    assert "example" not in text
+    assert "<tmp>" in text
+    assert text.count("<home>/") == 2
+
+
+def test_make_worker_records_anonymous_output_path(tmp_path: Path, monkeypatch) -> None:
+    from types import SimpleNamespace
+
+    from mcblueprint import pipeline
+
+    def make(source, output, stage_hook):
+        output.write_bytes(b"result")
+        record = source.with_name("run.json")
+        record.write_text('{"config": {}}', encoding="utf-8")
+        return SimpleNamespace(code=0, diagnostics=[], record=record)
+
+    monkeypatch.setattr(pipeline, "make", make)
+    result = benchmark._make_worker(
+        "tower", "tiny", "1.21.11", "schem", str(tmp_path / "result.schem")
+    )
+    assert result["output_path"].startswith("<tmp>/")
+    assert Path.home().name.lower() not in result["output_path"].lower()
+    assert not Path(result["output_path"]).is_absolute()
 
 
 def test_generation_profiles_are_fixed_valid_and_deterministic(tmp_path: Path) -> None:

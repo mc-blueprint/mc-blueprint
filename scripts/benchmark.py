@@ -11,6 +11,7 @@ import io
 import json
 import os
 import platform
+import re
 import shutil
 import statistics
 import subprocess
@@ -462,13 +463,73 @@ def _make_worker(
             "process_peak_rss_bytes": _process_peak_rss(),
             "seconds": time.perf_counter() - start,
             "output_bytes": output.stat().st_size,
-            "output_path": str(output),
+            "output_path": _record_path(output),
             "input_sha256": input_hash,
             "config_sha256": hashlib.sha256(json.dumps(
                 run_record["config"], sort_keys=True, separators=(",", ":")
             ).encode()).hexdigest(),
             "stage_hook_samples": snapshots,
         }
+
+
+def _record_path(path: Path | str) -> str:
+    path = Path(path)
+    if path == Path(sys.executable):
+        return "<python>"
+    if path.is_relative_to(ROOT):
+        return path.relative_to(ROOT).as_posix()
+    codex = Path.home() / ".codex"
+    if path.is_relative_to(codex):
+        return "<codex>/" + path.relative_to(codex).as_posix()
+    if path.is_relative_to(Path(sys.base_prefix)):
+        relative = path.relative_to(Path(sys.base_prefix))
+        if relative.parts and relative.parts[0].lower() == "lib":
+            relative = Path(*relative.parts[1:])
+        return "<stdlib>/" + relative.as_posix()
+    if path.is_relative_to(Path(tempfile.gettempdir())):
+        relative = path.relative_to(Path(tempfile.gettempdir()))
+        value = "<tmp>" if not relative.parts else "<tmp>/" + relative.as_posix()
+        return _record_user(value)
+    return _record_user(path.name)
+
+
+def _record_user(value: str) -> str:
+    return re.sub(re.escape(Path.home().name), "<user>", value, flags=re.IGNORECASE)
+
+
+def _record_text(value: str) -> str:
+    root = str(ROOT)
+    value = value.replace(root, ".").replace(root.replace("\\", "/"), ".")
+
+    def replace_path(match: re.Match[str]) -> str:
+        path = match.group(0).rstrip(".:;")
+        suffix = match.group(0)[len(path):]
+        normalized = path.replace("\\", "/")
+        lowered = normalized.lower()
+        if lowered.endswith(("python.exe", "/python")):
+            replacement = "<python>"
+        elif "/appdata/local/temp/" in lowered:
+            replacement = "<tmp>/" + normalized[lowered.index("/appdata/local/temp/")
+                                                   + len("/appdata/local/temp/"):]
+        elif "/.codex/" in lowered:
+            replacement = "<codex>/" + normalized[lowered.index("/.codex/")
+                                                       + len("/.codex/"):]
+        elif "/lib/" in lowered and ("/python" in lowered or "/pythoncore" in lowered):
+            replacement = "<stdlib>/" + normalized[lowered.index("/lib/") + len("/lib/"):]
+        elif re.match(r"(?i)^[a-z]:/users/[^/]+/", normalized):
+            replacement = "<home>/" + normalized.split("/", 3)[3]
+        elif re.match(r"(?i)^/(?:users|home)/[^/]+/", normalized):
+            replacement = "<home>/" + normalized.split("/", 3)[3]
+        else:
+            replacement = "<path>"
+        return replacement + suffix
+
+    value = re.sub(
+        r"(?i)(?<![\w])(?:[a-z]:[\\/][^\s\"'<>|,;)]+|/(?:Users|home)/[^\s\"'<>|,;)]+)",
+        replace_path,
+        value,
+    )
+    return _record_user(value)
 
 
 def _process_rss() -> int | None:
@@ -592,10 +653,12 @@ def _run_profile_benchmark(output: Path) -> int:
             elapsed = time.perf_counter() - started
             try:
                 worker = json.loads(response.stdout) if response.returncode == 0 else {}
-                reason = None if response.returncode == 0 else response.stderr[-2000:]
+                reason = None if response.returncode == 0 else _record_text(response.stderr[-2000:])
             except json.JSONDecodeError:
                 worker = {}
-                reason = f"worker出力を解析できませんでした: {response.stderr[-2000:]}"
+                reason = _record_text(
+                    f"worker出力を解析できませんでした: {response.stderr[-2000:]}"
+                )
             samples.append(
                 {
                     "seconds": elapsed,

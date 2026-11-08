@@ -43,7 +43,7 @@
   ],
   "reference": {
     "path": "benchmarks/make-baseline.json",
-    "sha256": "35a521b0581a182a72f1e60d89aba5e146c7643ef1d1ae59611a46904ae096bc"
+    "sha256": "3f9f9f937ddc46f4bbaa99199fc87ca8cdffbd2f0e2c4bec81712e109e83cfc2"
   },
   "baseline_environment": {
     "os": "Windows-11-10.0.26200-SP0",
