@@ -1,5 +1,33 @@
 # 性能測定
 
+## NFR2の時間残差（Issue #261）
+
+`scripts/evaluate_region_performance.py` は `--base`・`--record`・`--work` で比較元commit、
+記録先、作業先を指定できる。`--phase paired` はケースごとにbefore→afterを交互に実行し、
+通常計時は各3反復、`--suite matrix` と `--profile` は各1反復とする。
+各試行は独立プロセスで、4種hash（配置・指標・構造化診断・展開scene JSON）を照合する。
+中断後は同じコマンドで不足する反復から再開できる。実装・計測器・入力のhashが変わった場合は
+新しい記録先を使う。既存の#243記録は更新しない。
+
+```powershell
+python scripts/evaluate_region_performance.py --base 4e9ce5e --phase paired --case tower-medium --case tower-large --case castle --case town --case underground_city-huge --record evaluation/records/region-performance-261.json --work benchmarks/.tmp/issue-261
+python scripts/evaluate_region_performance.py --base 4e9ce5e --phase paired --suite matrix --record evaluation/records/region-performance-261-matrix.json --work benchmarks/.tmp/issue-261
+python scripts/evaluate_region_performance.py --base 4e9ce5e --phase paired --profile --case castle-medium --case castle-huge --record evaluation/records/region-performance-261-profile-final.json --work benchmarks/.tmp/issue-261
+```
+
+小さい乱数バッチには標準ライブラリの`Random`を使い、大きいバッチには既存のNumPy実装を使う。
+同じ整数seedから同じ初回値を得るため、抽選列を変更しない。scene出典は領域内の属性添字ごとに
+一度だけ計算し、行をまたぐ同じ出典の再計算を省く。キャッシュは領域ごとに破棄し、出典IDと
+衝突検出、領域ごとの属性添字の意味を維持する。追加依存は使用しない。
+
+この端末では#262・#263のテストが並行し、本Issueの全件pytestや固定課題照合も一部並行する。
+前後を近い時間帯で交互に計測しても、CPU負荷の変動は除去できない。
+NFR2の最終判定は基準端末で#244が行う。
+
+計測値・残る支配段・完成条件との対応は[今回の記録](../evaluation/records/region-performance-261.md)を参照。
+
+## 合成fixture
+
 `benchmarks/fixtures/` に疎な配置、密な地形、大きな空気領域、反復Operationの4種類を3規模ずつ固定し、`scripts/benchmark.py` で段階ごとの基準を記録する。fixtureのSHA-256、入力サイズ、実セル数、Operation数、bounds寸法と体積、生成した `.schem` のサイズを各記録に残す。
 
 ## 実行

@@ -1,6 +1,7 @@
 """整数seedのRandom.random()初回値を、上限付きの配列でまとめて求める。"""
 
 import json
+import random
 from collections import OrderedDict
 from collections.abc import Iterator
 from itertools import islice
@@ -26,6 +27,10 @@ def first_draws(digests: np.ndarray) -> np.ndarray:
     digestsは(N, 8)のbig-endian uint32。呼出し側でバッチを制限する。
     先頭0ワードも標準Randomと同じseed長として扱う。
     """
+    # 小さいタイルでは配列演算の固定費より標準実装の初期化が安い。
+    if len(digests) <= 2048:
+        return np.fromiter((random.Random(int.from_bytes(row.tobytes(), 'big')).random()
+                            for row in digests), dtype=np.float64, count=len(digests))
     keys = digests.astype(np.uint32).T[::-1]
     lengths = np.maximum(1, 8 - np.argmax(digests != 0, axis=1))
     lengths[~np.any(digests, axis=1)] = 1

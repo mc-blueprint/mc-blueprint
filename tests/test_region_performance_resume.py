@@ -26,7 +26,8 @@ def measurement(tmp_path, monkeypatch):
     isolated = Mock(side_effect=lambda command: (0.1, {"process_peak_rss_bytes": 64}))
     monkeypatch.setattr(benchmark, "_isolated", isolated)
     monkeypatch.setattr(performance, "signature", lambda output: {"hash": "fixed"})
-    args = argparse.Namespace(phase="before", suite="timing", profile=False, case=None)
+    args = argparse.Namespace(phase="before", suite="timing", profile=False, case=None,
+                              repetitions=3)
     region.run(args)
     return region, args, source, provenance, isolated
 
@@ -35,6 +36,54 @@ def test_resume_reuses_only_matching_implementation_and_input(measurement):
     region, args, _, _, isolated = measurement
     region.run(args)
     assert isolated.call_count == 3
+
+
+def test_resume_adds_only_missing_repetitions(measurement):
+    region, args, _, _, isolated = measurement
+    record = json.loads(region.RECORD.read_bytes())
+    record["results"]["timing"]["before"]["house"]["samples"] = (
+        record["results"]["timing"]["before"]["house"]["samples"][:1]
+    )
+    region.RECORD.write_text(json.dumps(record), encoding="utf-8", newline="\n")
+    isolated.reset_mock()
+    region.run(args)
+    assert isolated.call_count == 2
+    result = json.loads(region.RECORD.read_bytes())["results"]["timing"]["before"]["house"]
+    assert len(result["samples"]) == 3
+
+
+def test_after_compares_matching_before(measurement):
+    region, args, _, _, isolated = measurement
+    args.phase = "after"
+    region.run(args)
+    result = json.loads(region.RECORD.read_bytes())["results"]["timing"]["after"]["house"]
+    assert result["matches_before"]
+    assert isolated.call_count == 6
+
+
+@pytest.mark.parametrize("field", ["base_commit", "python", "script_sha256",
+                                 "h01_script_sha256", "common_scripts_sha256",
+                                 "implementation", "input_sha256", "missing_before"])
+def test_after_rejects_mismatched_before_before_measurement(measurement, monkeypatch, field):
+    region, args, source, _, isolated = measurement
+    record = json.loads(region.RECORD.read_bytes())
+    before = record["results"]["timing"]["before"]["house"]
+    if field == "input_sha256":
+        source.write_text("seed: 73\n", encoding="utf-8", newline="\n")
+    elif field == "base_commit":
+        monkeypatch.setattr(region, "BASE", "changed")
+    elif field == "missing_before":
+        record["results"]["timing"].pop("before")
+    else:
+        before["provenance"][field] = "changed"
+    region.RECORD.write_text(json.dumps(record), encoding="utf-8", newline="\n")
+    saved = region.RECORD.read_bytes()
+    isolated.reset_mock()
+    args.phase = "after"
+    with pytest.raises(ValueError, match="before側"):
+        region.run(args)
+    isolated.assert_not_called()
+    assert region.RECORD.read_bytes() == saved
 
 
 @pytest.mark.parametrize("key", ["engine_sha256", "lock_sha256", "default_config_sha256", "commit"])
