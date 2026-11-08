@@ -1,0 +1,244 @@
+{
+  "formatVersion": 1,
+  "packVersion": "1.0.0",
+  "taxonomyVersion": "0.1.0",
+  "vocabularyVersion": "1.0.0",
+  "palettePrior": [
+    {
+      "when": {},
+      "roles": {
+        "wall_main": {
+          "oklab": {
+            "L": [
+              0.2,
+              0.3,
+              0.4,
+              0.5,
+              0.6
+            ],
+            "a": [
+              -0.1,
+              -0.05,
+              0,
+              0.05,
+              0.1
+            ],
+            "b": [
+              -0.1,
+              -0.05,
+              0,
+              0.05,
+              0.1
+            ]
+          },
+          "n": 16,
+          "subjects": 16,
+          "nEff": 16
+        },
+        "roof": {
+          "oklab": {
+            "L": [
+              0.2,
+              0.3,
+              0.4,
+              0.5,
+              0.6
+            ],
+            "a": [
+              -0.1,
+              -0.05,
+              0,
+              0.05,
+              0.1
+            ],
+            "b": [
+              -0.1,
+              -0.05,
+              0,
+              0.05,
+              0.1
+            ]
+          },
+          "n": 16,
+          "subjects": 16,
+          "nEff": 16
+        },
+        "frame": {
+          "oklab": {
+            "L": [
+              0.2,
+              0.3,
+              0.4,
+              0.5,
+              0.6
+            ],
+            "a": [
+              -0.1,
+              -0.05,
+              0,
+              0.05,
+              0.1
+            ],
+            "b": [
+              -0.1,
+              -0.05,
+              0,
+              0.05,
+              0.1
+            ]
+          },
+          "n": 16,
+          "subjects": 16,
+          "nEff": 16
+        },
+        "trim": {
+          "oklab": {
+            "L": [
+              0.2,
+              0.3,
+              0.4,
+              0.5,
+              0.6
+            ],
+            "a": [
+              -0.1,
+              -0.05,
+              0,
+              0.05,
+              0.1
+            ],
+            "b": [
+              -0.1,
+              -0.05,
+              0,
+              0.05,
+              0.1
+            ]
+          },
+          "n": 4,
+          "subjects": 2,
+          "nEff": 1.5
+        }
+      }
+    }
+  ],
+  "materialPrior": [
+    {
+      "when": {},
+      "roles": {
+        "wall_main": {
+          "stone": 0.6,
+          "brick": 0.4
+        },
+        "roof": {
+          "wood": 1.0
+        },
+        "frame": {
+          "stone": 0.5,
+          "wood": 0.5
+        }
+      }
+    }
+  ],
+  "relationRule": [
+    {
+      "when": {},
+      "pair": [
+        "wall_main",
+        "roof"
+      ],
+      "dL": [
+        -1,
+        -0.5,
+        0,
+        0.5,
+        1
+      ],
+      "dC": [
+        -0.56,
+        -0.3,
+        0,
+        0.3,
+        0.56
+      ],
+      "dh": {
+        "origin": 0,
+        "quantiles": [
+          -3.141592653589793,
+          -1,
+          0,
+          1,
+          3.141592653589793
+        ]
+      },
+      "n": 16,
+      "subjects": 16,
+      "nEff": 16
+    },
+    {
+      "when": {},
+      "pair": [
+        "wall_main",
+        "frame"
+      ],
+      "dL": [
+        -1,
+        -0.5,
+        0,
+        0.5,
+        1
+      ],
+      "dC": [
+        -0.56,
+        -0.3,
+        0,
+        0.3,
+        0.56
+      ],
+      "dh": {
+        "origin": 0,
+        "quantiles": [
+          -3.141592653589793,
+          -1,
+          0,
+          1,
+          3.141592653589793
+        ]
+      },
+      "n": 16,
+      "subjects": 16,
+      "nEff": 16
+    }
+  ],
+  "accentRule": [
+    {
+      "when": {},
+      "role": "roof",
+      "maxAreaRatio": 0.4
+    }
+  ],
+  "provenance": {
+    "dataLicense": "synthetic-acceptance-only",
+    "inputs": 16,
+    "subjects": 16,
+    "licenses": {
+      "CC0-1.0": 16
+    },
+    "attributions": [
+      {
+        "source": "数値だけの自作fixture",
+        "author": "mc-blueprint",
+        "license": "CC0-1.0",
+        "url": "https://github.com/mc-blueprint/mc-blueprint"
+      }
+    ],
+    "snapshot": {
+      "id": "synthetic-acceptance-not-observations",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    "generator": {
+      "repository": "https://github.com/mc-blueprint/mc-blueprint",
+      "commit": "dabb0dc000000000000000000000000000000000"
+    }
+  }
+}
