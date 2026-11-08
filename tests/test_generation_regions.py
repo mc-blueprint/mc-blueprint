@@ -256,10 +256,12 @@ def test_attribute_schema_and_seed_contract():
     assert derive_seed(42, "generate", "塔") == int.from_bytes(expected, "big")
 
 
-def test_vector_mt_matches_integer_seed_including_leading_zero_words():
+@pytest.mark.parametrize("count", [0, 1, 64, 2048, 2049, 32768])
+def test_vector_mt_matches_integer_seed_including_leading_zero_words(count):
     seeds = [0, 1, 2**32 - 1, 2**32, 2**64, 2**224, 2**256 - 1]
     seeds += [int.from_bytes(hashlib.sha256(str(i).encode()).digest(), 'big')
-              for i in range(2000)]
+              for i in range(count)]
+    seeds = seeds[:count]
     words = np.frombuffer(b''.join(seed.to_bytes(32, 'big') for seed in seeds), dtype='>u4')
     actual = first_draws(words.reshape(-1, 8))
     assert np.array_equal(actual, [random.Random(seed).random() for seed in seeds])

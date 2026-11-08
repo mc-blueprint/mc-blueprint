@@ -91,6 +91,29 @@ def test_scene_chunks_are_schema_valid_and_hash_uncompressed_json(tmp_path):
     assert np.all(ids > 0)
 
 
+def test_source_ids_preserve_rows_and_region_local_attribute_indices(tmp_path):
+    bounds = AABB(Vec3(-1, 0, 0), Vec3(0, 3, 1))
+    regions, expected, table = [], [], {}
+    for y in (0, 2):
+        core = AABB(Vec3(-1, y, 0), Vec3(0, y + 1, 1))
+        volume = RegionVolume(core)
+        attr = CellAttributes(element=f"house#{y + 1}", operation="wall")
+        volume.set_box(core, (BlockState.parse("stone"),), None, attr)
+        volume.set(core.min, BlockState.parse("air"), CellAttributes(role="wall_main"))
+        regions.append(GeneratedRegion(core, volume))
+        descriptor = _source_descriptor(attr, {})
+        raw = json.dumps(descriptor, ensure_ascii=False, sort_keys=True,
+                         separators=(",", ":")).encode()
+        ident = int.from_bytes(hashlib.sha256(raw).digest()[:4], "little") or 1
+        expected.extend([0, *[ident] * 7])
+        table[ident] = {**descriptor, "id": ident}
+    path = tmp_path / "sources"
+    actual = {}
+    assert list(capture_sources(regions, bounds, path, {}, actual)) == regions
+    assert actual == table
+    assert np.array_equal(np.frombuffer(path.read_bytes(), dtype="<u4"), expected)
+
+
 @pytest.mark.parametrize("version", blockdata.supported_versions())
 def test_scene_gzip_is_deterministic(tmp_path, version):
     bounds = AABB(Vec3(0, 0, 0), Vec3(0, 0, 0))
