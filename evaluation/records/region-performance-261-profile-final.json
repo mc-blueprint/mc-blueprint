@@ -72,7 +72,7 @@
                 }
               ],
               "implementation": {
-                "pipeline": "H:\\mc-blueprint\\worktrees\\mcb-261\\mc-blueprint\\src\\mcblueprint\\pipeline.py",
+                "pipeline": "<path>",
                 "environment": {
                   "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
                   "engine": "0.1.0",
@@ -98,7 +98,7 @@
             "total_calls": 99123592,
             "focus_functions": [
               {
-                "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\pathlib.py",
+                "file": "<stdlib>/pathlib.py",
                 "line": 1228,
                 "function": "resolve",
                 "primitive_calls": 7,
@@ -134,7 +134,7 @@
                 "cumulative_seconds": 0.35520850000000004
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\yaml\\resolver.py",
+                "file": "<path>",
                 "line": 143,
                 "function": "resolve",
                 "primitive_calls": 4532,
@@ -143,7 +143,7 @@
                 "cumulative_seconds": 0.0102825
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\referencing\\jsonschema.py",
+                "file": "<path>",
                 "line": 604,
                 "function": "resolve",
                 "primitive_calls": 772,
@@ -379,7 +379,7 @@
                 "cumulative_seconds": 25.809510900000003
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "file": "<path>",
                 "line": 349,
                 "function": "iter_errors",
                 "primitive_calls": 140,
@@ -388,7 +388,7 @@
                 "cumulative_seconds": 25.5391386
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "file": "<path>",
                 "line": 396,
                 "function": "descend",
                 "primitive_calls": 1134,
@@ -397,7 +397,7 @@
                 "cumulative_seconds": 25.533543700000003
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "file": "<path>",
                 "line": 290,
                 "function": "properties",
                 "primitive_calls": 444,
@@ -406,7 +406,7 @@
                 "cumulative_seconds": 25.5292464
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "file": "<path>",
                 "line": 274,
                 "function": "ref",
                 "primitive_calls": 2847,
@@ -424,7 +424,7 @@
                 "cumulative_seconds": 25.1878101
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "file": "<path>",
                 "line": 59,
                 "function": "items",
                 "primitive_calls": 990,
@@ -433,7 +433,7 @@
                 "cumulative_seconds": 25.1816761
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "file": "<path>",
                 "line": 332,
                 "function": "allOf",
                 "primitive_calls": 4642,
@@ -442,7 +442,7 @@
                 "cumulative_seconds": 23.051325300000002
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "file": "<path>",
                 "line": 382,
                 "function": "if_",
                 "primitive_calls": 157334,
@@ -478,7 +478,7 @@
                 "cumulative_seconds": 13.8221675
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "file": "<path>",
                 "line": 485,
                 "function": "is_valid",
                 "primitive_calls": 235537,
@@ -505,7 +505,7 @@
                 "cumulative_seconds": 7.884425200000001
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "file": "<path>",
                 "line": 339,
                 "function": "evolve",
                 "primitive_calls": 887786,
@@ -514,7 +514,7 @@
                 "cumulative_seconds": 5.8554187
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "file": "<path>",
                 "line": 459,
                 "function": "_validate_reference",
                 "primitive_calls": 60609,
@@ -523,7 +523,7 @@
                 "cumulative_seconds": 5.8269997
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\referencing\\_core.py",
+                "file": "<path>",
                 "line": 653,
                 "function": "lookup",
                 "primitive_calls": 60609,
@@ -541,7 +541,7 @@
                 "cumulative_seconds": 4.3843592000000005
               },
               {
-                "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\copy.py",
+                "file": "<stdlib>/copy.py",
                 "line": 118,
                 "function": "deepcopy",
                 "primitive_calls": 27391,
@@ -550,7 +550,7 @@
                 "cumulative_seconds": 4.1956824
               },
               {
-                "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\copy.py",
+                "file": "<stdlib>/copy.py",
                 "line": 217,
                 "function": "_deepcopy_dict",
                 "primitive_calls": 26387,
@@ -579,7 +579,7 @@
                 "cumulative_seconds": 13.8221675
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "file": "<path>",
                 "line": 396,
                 "function": "descend",
                 "primitive_calls": 1134,
@@ -588,7 +588,7 @@
                 "cumulative_seconds": 25.533543700000003
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "file": "<path>",
                 "line": 339,
                 "function": "evolve",
                 "primitive_calls": 887786,
@@ -606,7 +606,7 @@
                 "cumulative_seconds": 2.7669673
               },
               {
-                "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\copy.py",
+                "file": "<stdlib>/copy.py",
                 "line": 118,
                 "function": "deepcopy",
                 "primitive_calls": 27391,
@@ -615,7 +615,7 @@
                 "cumulative_seconds": 4.1956824
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "file": "<path>",
                 "line": 282,
                 "function": "__attrs_post_init__",
                 "primitive_calls": 887926,
@@ -678,7 +678,7 @@
                 "cumulative_seconds": 1.3478045
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\exceptions.py",
+                "file": "<path>",
                 "line": 165,
                 "function": "_set",
                 "primitive_calls": 459905,
@@ -696,7 +696,7 @@
                 "cumulative_seconds": 1.018775
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\referencing\\_core.py",
+                "file": "<path>",
                 "line": 165,
                 "function": "create_resource",
                 "primitive_calls": 968845,
@@ -705,7 +705,7 @@
                 "cumulative_seconds": 1.7614527000000002
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\exceptions.py",
+                "file": "<path>",
                 "line": 55,
                 "function": "__init__",
                 "primitive_calls": 230638,
@@ -714,7 +714,7 @@
                 "cumulative_seconds": 0.9164884000000001
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "file": "<path>",
                 "line": 485,
                 "function": "is_valid",
                 "primitive_calls": 235537,
@@ -985,7 +985,7 @@
                 }
               ],
               "implementation": {
-                "pipeline": "H:\\mc-blueprint\\worktrees\\mcb-261\\mc-blueprint\\src\\mcblueprint\\pipeline.py",
+                "pipeline": "<path>",
                 "environment": {
                   "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
                   "engine": "0.1.0",
@@ -1011,7 +1011,7 @@
             "total_calls": 805440592,
             "focus_functions": [
               {
-                "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\pathlib.py",
+                "file": "<stdlib>/pathlib.py",
                 "line": 1228,
                 "function": "resolve",
                 "primitive_calls": 7,
@@ -1038,7 +1038,7 @@
                 "cumulative_seconds": 0.015599400000000001
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\referencing\\jsonschema.py",
+                "file": "<path>",
                 "line": 604,
                 "function": "resolve",
                 "primitive_calls": 772,
@@ -1101,7 +1101,7 @@
                 "cumulative_seconds": 803.526603
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\yaml\\resolver.py",
+                "file": "<path>",
                 "line": 143,
                 "function": "resolve",
                 "primitive_calls": 4532,
@@ -1373,7 +1373,7 @@
                 "cumulative_seconds": 45.335483100000005
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "file": "<path>",
                 "line": 349,
                 "function": "iter_errors",
                 "primitive_calls": 140,
@@ -1382,7 +1382,7 @@
                 "cumulative_seconds": 44.5687901
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "file": "<path>",
                 "line": 396,
                 "function": "descend",
                 "primitive_calls": 1134,
@@ -1391,7 +1391,7 @@
                 "cumulative_seconds": 44.5613076
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "file": "<path>",
                 "line": 290,
                 "function": "properties",
                 "primitive_calls": 444,
@@ -1400,7 +1400,7 @@
                 "cumulative_seconds": 44.5565159
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "file": "<path>",
                 "line": 274,
                 "function": "ref",
                 "primitive_calls": 2847,
@@ -1418,7 +1418,7 @@
                 "cumulative_seconds": 44.0967622
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "file": "<path>",
                 "line": 59,
                 "function": "items",
                 "primitive_calls": 990,
@@ -1445,7 +1445,7 @@
                 "cumulative_seconds": 41.7560286
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "file": "<path>",
                 "line": 332,
                 "function": "allOf",
                 "primitive_calls": 8044,
@@ -1454,7 +1454,7 @@
                 "cumulative_seconds": 40.212294500000006
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "file": "<path>",
                 "line": 382,
                 "function": "if_",
                 "primitive_calls": 273002,
@@ -1900,7 +1900,7 @@
                 }
               ],
               "implementation": {
-                "pipeline": "H:\\mc-blueprint\\worktrees\\mcb-261\\mc-blueprint\\src\\mcblueprint\\pipeline.py",
+                "pipeline": "<path>",
                 "environment": {
                   "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
                   "engine": "0.1.0",
@@ -1927,7 +1927,7 @@
             "total_calls": 77278644,
             "focus_functions": [
               {
-                "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\pathlib.py",
+                "file": "<stdlib>/pathlib.py",
                 "line": 1228,
                 "function": "resolve",
                 "primitive_calls": 7,
@@ -1945,7 +1945,7 @@
                 "cumulative_seconds": 0.015162700000000001
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\referencing\\jsonschema.py",
+                "file": "<path>",
                 "line": 604,
                 "function": "resolve",
                 "primitive_calls": 772,
@@ -2053,7 +2053,7 @@
                 "cumulative_seconds": 8.910058300000001
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\yaml\\resolver.py",
+                "file": "<path>",
                 "line": 143,
                 "function": "resolve",
                 "primitive_calls": 4532,
@@ -2091,7 +2091,7 @@
                 "cumulative_seconds": 24.1533826
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "file": "<path>",
                 "line": 349,
                 "function": "iter_errors",
                 "primitive_calls": 140,
@@ -2100,7 +2100,7 @@
                 "cumulative_seconds": 24.094653500000003
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "file": "<path>",
                 "line": 396,
                 "function": "descend",
                 "primitive_calls": 1134,
@@ -2109,7 +2109,7 @@
                 "cumulative_seconds": 24.088016800000002
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "file": "<path>",
                 "line": 290,
                 "function": "properties",
                 "primitive_calls": 444,
@@ -2118,7 +2118,7 @@
                 "cumulative_seconds": 24.0845877
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "file": "<path>",
                 "line": 274,
                 "function": "ref",
                 "primitive_calls": 2847,
@@ -2136,7 +2136,7 @@
                 "cumulative_seconds": 23.6996895
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "file": "<path>",
                 "line": 59,
                 "function": "items",
                 "primitive_calls": 990,
@@ -2145,7 +2145,7 @@
                 "cumulative_seconds": 23.693583500000003
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "file": "<path>",
                 "line": 332,
                 "function": "allOf",
                 "primitive_calls": 4642,
@@ -2154,7 +2154,7 @@
                 "cumulative_seconds": 21.1974114
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "file": "<path>",
                 "line": 382,
                 "function": "if_",
                 "primitive_calls": 157334,
@@ -2172,7 +2172,7 @@
                 "cumulative_seconds": 17.094378000000003
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "file": "<path>",
                 "line": 485,
                 "function": "is_valid",
                 "primitive_calls": 235537,
@@ -2217,7 +2217,7 @@
                 "cumulative_seconds": 8.871505500000001
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "file": "<path>",
                 "line": 459,
                 "function": "_validate_reference",
                 "primitive_calls": 60609,
@@ -2226,7 +2226,7 @@
                 "cumulative_seconds": 5.6196627
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\referencing\\_core.py",
+                "file": "<path>",
                 "line": 653,
                 "function": "lookup",
                 "primitive_calls": 60609,
@@ -2235,7 +2235,7 @@
                 "cumulative_seconds": 5.5519787
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "file": "<path>",
                 "line": 339,
                 "function": "evolve",
                 "primitive_calls": 887786,
@@ -2262,7 +2262,7 @@
                 "cumulative_seconds": 4.8886686
               },
               {
-                "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\copy.py",
+                "file": "<stdlib>/copy.py",
                 "line": 118,
                 "function": "deepcopy",
                 "primitive_calls": 27391,
@@ -2271,7 +2271,7 @@
                 "cumulative_seconds": 4.7642884
               },
               {
-                "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\copy.py",
+                "file": "<stdlib>/copy.py",
                 "line": 217,
                 "function": "_deepcopy_dict",
                 "primitive_calls": 26387,
@@ -2325,7 +2325,7 @@
                 "cumulative_seconds": 3.6532206
               },
               {
-                "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\copy.py",
+                "file": "<stdlib>/copy.py",
                 "line": 191,
                 "function": "_deepcopy_list",
                 "primitive_calls": 49568,
@@ -2370,7 +2370,7 @@
                 "cumulative_seconds": 3.2072143000000004
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "file": "<path>",
                 "line": 278,
                 "function": "dynamicRef",
                 "primitive_calls": 772,
@@ -2379,7 +2379,7 @@
                 "cumulative_seconds": 3.0384513
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\referencing\\_core.py",
+                "file": "<path>",
                 "line": 456,
                 "function": "anchor",
                 "primitive_calls": 1544,
@@ -2390,7 +2390,7 @@
             ],
             "top_own": [
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "file": "<path>",
                 "line": 396,
                 "function": "descend",
                 "primitive_calls": 1134,
@@ -2399,7 +2399,7 @@
                 "cumulative_seconds": 24.088016800000002
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "file": "<path>",
                 "line": 339,
                 "function": "evolve",
                 "primitive_calls": 887786,
@@ -2408,7 +2408,7 @@
                 "cumulative_seconds": 5.4329049000000005
               },
               {
-                "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\copy.py",
+                "file": "<stdlib>/copy.py",
                 "line": 118,
                 "function": "deepcopy",
                 "primitive_calls": 27391,
@@ -2435,7 +2435,7 @@
                 "cumulative_seconds": 3.2072143000000004
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "file": "<path>",
                 "line": 282,
                 "function": "__attrs_post_init__",
                 "primitive_calls": 887926,
@@ -2480,7 +2480,7 @@
                 "cumulative_seconds": 1.2669338
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\exceptions.py",
+                "file": "<path>",
                 "line": 165,
                 "function": "_set",
                 "primitive_calls": 459905,
@@ -2489,7 +2489,7 @@
                 "cumulative_seconds": 1.4277429000000001
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\referencing\\_core.py",
+                "file": "<path>",
                 "line": 165,
                 "function": "create_resource",
                 "primitive_calls": 968845,
@@ -2498,7 +2498,7 @@
                 "cumulative_seconds": 1.6636515
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\exceptions.py",
+                "file": "<path>",
                 "line": 55,
                 "function": "__init__",
                 "primitive_calls": 230638,
@@ -2516,7 +2516,7 @@
                 "cumulative_seconds": 0.8007176
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "file": "<path>",
                 "line": 485,
                 "function": "is_valid",
                 "primitive_calls": 235537,
@@ -2534,7 +2534,7 @@
                 "cumulative_seconds": 0.8306692
               },
               {
-                "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\copy.py",
+                "file": "<stdlib>/copy.py",
                 "line": 217,
                 "function": "_deepcopy_dict",
                 "primitive_calls": 26387,
@@ -2543,7 +2543,7 @@
                 "cumulative_seconds": 4.6797665
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "file": "<path>",
                 "line": 290,
                 "function": "properties",
                 "primitive_calls": 444,
@@ -2552,7 +2552,7 @@
                 "cumulative_seconds": 24.0845877
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "file": "<path>",
                 "line": 349,
                 "function": "iter_errors",
                 "primitive_calls": 140,
@@ -2561,7 +2561,7 @@
                 "cumulative_seconds": 24.094653500000003
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_types.py",
+                "file": "<path>",
                 "line": 94,
                 "function": "is_type",
                 "primitive_calls": 463677,
@@ -2814,7 +2814,7 @@
                 }
               ],
               "implementation": {
-                "pipeline": "H:\\mc-blueprint\\worktrees\\mcb-261\\mc-blueprint\\src\\mcblueprint\\pipeline.py",
+                "pipeline": "<path>",
                 "environment": {
                   "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
                   "engine": "0.1.0",
@@ -2841,7 +2841,7 @@
             "total_calls": 325076261,
             "focus_functions": [
               {
-                "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\pathlib.py",
+                "file": "<stdlib>/pathlib.py",
                 "line": 1228,
                 "function": "resolve",
                 "primitive_calls": 7,
@@ -2877,7 +2877,7 @@
                 "cumulative_seconds": 7.1420798
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\yaml\\resolver.py",
+                "file": "<path>",
                 "line": 143,
                 "function": "resolve",
                 "primitive_calls": 4532,
@@ -2913,7 +2913,7 @@
                 "cumulative_seconds": 1.6069856
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\referencing\\jsonschema.py",
+                "file": "<path>",
                 "line": 604,
                 "function": "resolve",
                 "primitive_calls": 772,
@@ -3104,7 +3104,7 @@
                 "cumulative_seconds": 49.090785000000004
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "file": "<path>",
                 "line": 349,
                 "function": "iter_errors",
                 "primitive_calls": 140,
@@ -3113,7 +3113,7 @@
                 "cumulative_seconds": 48.6417433
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "file": "<path>",
                 "line": 396,
                 "function": "descend",
                 "primitive_calls": 1134,
@@ -3122,7 +3122,7 @@
                 "cumulative_seconds": 48.6329031
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "file": "<path>",
                 "line": 290,
                 "function": "properties",
                 "primitive_calls": 444,
@@ -3131,7 +3131,7 @@
                 "cumulative_seconds": 48.6270468
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "file": "<path>",
                 "line": 274,
                 "function": "ref",
                 "primitive_calls": 2847,
@@ -3149,7 +3149,7 @@
                 "cumulative_seconds": 48.0301613
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "file": "<path>",
                 "line": 59,
                 "function": "items",
                 "primitive_calls": 990,
@@ -3176,7 +3176,7 @@
                 "cumulative_seconds": 47.5269995
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "file": "<path>",
                 "line": 332,
                 "function": "allOf",
                 "primitive_calls": 8044,
@@ -3194,7 +3194,7 @@
                 "cumulative_seconds": 42.4773628
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+                "file": "<path>",
                 "line": 382,
                 "function": "if_",
                 "primitive_calls": 273002,
@@ -3266,7 +3266,7 @@
                 "cumulative_seconds": 19.6384699
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "file": "<path>",
                 "line": 485,
                 "function": "is_valid",
                 "primitive_calls": 351205,
@@ -3394,7 +3394,7 @@
                 "cumulative_seconds": 6.3205092
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "file": "<path>",
                 "line": 396,
                 "function": "descend",
                 "primitive_calls": 1134,
@@ -3403,7 +3403,7 @@
                 "cumulative_seconds": 48.6329031
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "file": "<path>",
                 "line": 339,
                 "function": "evolve",
                 "primitive_calls": 1323746,
@@ -3430,7 +3430,7 @@
                 "cumulative_seconds": 4.5798547
               },
               {
-                "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\copy.py",
+                "file": "<stdlib>/copy.py",
                 "line": 118,
                 "function": "deepcopy",
                 "primitive_calls": 40999,
@@ -3475,7 +3475,7 @@
                 "cumulative_seconds": 3.4073035000000003
               },
               {
-                "file": "H:\\mc-blueprint\\worktrees\\mcb-261\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+                "file": "<path>",
                 "line": 282,
                 "function": "__attrs_post_init__",
                 "primitive_calls": 1323886,

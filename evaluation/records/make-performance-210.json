@@ -354,7 +354,7 @@
         "total_calls": 180379446,
         "focus_functions": [
           {
-            "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\pathlib.py",
+            "file": "<stdlib>/pathlib.py",
             "line": 1228,
             "function": "resolve",
             "primitive_calls": 7,
@@ -381,7 +381,7 @@
             "cumulative_seconds": 7.6725319
           },
           {
-            "file": "H:\\mc-blueprint\\worktrees\\mcb-210\\.venv\\Lib\\site-packages\\referencing\\jsonschema.py",
+            "file": "<path>",
             "line": 604,
             "function": "resolve",
             "primitive_calls": 182,
@@ -444,7 +444,7 @@
             "cumulative_seconds": 3.8408727000000003
           },
           {
-            "file": "H:\\mc-blueprint\\worktrees\\mcb-210\\.venv\\Lib\\site-packages\\yaml\\resolver.py",
+            "file": "<path>",
             "line": 143,
             "function": "resolve",
             "primitive_calls": 494,
@@ -662,7 +662,7 @@
             "cumulative_seconds": 16.5740261
           },
           {
-            "file": "H:\\mc-blueprint\\worktrees\\mcb-210\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+            "file": "<path>",
             "line": 349,
             "function": "iter_errors",
             "primitive_calls": 9,
@@ -671,7 +671,7 @@
             "cumulative_seconds": 16.2548982
           },
           {
-            "file": "H:\\mc-blueprint\\worktrees\\mcb-210\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+            "file": "<path>",
             "line": 396,
             "function": "descend",
             "primitive_calls": 47,
@@ -680,7 +680,7 @@
             "cumulative_seconds": 16.254598
           },
           {
-            "file": "H:\\mc-blueprint\\worktrees\\mcb-210\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+            "file": "<path>",
             "line": 290,
             "function": "properties",
             "primitive_calls": 13,
@@ -689,7 +689,7 @@
             "cumulative_seconds": 16.254594
           },
           {
-            "file": "H:\\mc-blueprint\\worktrees\\mcb-210\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+            "file": "<path>",
             "line": 274,
             "function": "ref",
             "primitive_calls": 141,
@@ -707,7 +707,7 @@
             "cumulative_seconds": 16.2458437
           },
           {
-            "file": "H:\\mc-blueprint\\worktrees\\mcb-210\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+            "file": "<path>",
             "line": 59,
             "function": "items",
             "primitive_calls": 72,
@@ -716,7 +716,7 @@
             "cumulative_seconds": 16.241834100000002
           },
           {
-            "file": "H:\\mc-blueprint\\worktrees\\mcb-210\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+            "file": "<path>",
             "line": 332,
             "function": "allOf",
             "primitive_calls": 2,
@@ -725,7 +725,7 @@
             "cumulative_seconds": 16.0135899
           },
           {
-            "file": "H:\\mc-blueprint\\worktrees\\mcb-210\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+            "file": "<path>",
             "line": 382,
             "function": "if_",
             "primitive_calls": 34,
@@ -880,7 +880,7 @@
             "cumulative_seconds": 19.1987409
           },
           {
-            "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\json\\encoder.py",
+            "file": "<stdlib>/json/encoder.py",
             "line": 205,
             "function": "iterencode",
             "primitive_calls": 1332651,
@@ -889,7 +889,7 @@
             "cumulative_seconds": 2.190108
           },
           {
-            "file": "H:\\mc-blueprint\\worktrees\\mcb-210\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+            "file": "<path>",
             "line": 396,
             "function": "descend",
             "primitive_calls": 47,
@@ -898,7 +898,7 @@
             "cumulative_seconds": 16.254598
           },
           {
-            "file": "H:\\mc-blueprint\\worktrees\\mcb-210\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+            "file": "<path>",
             "line": 339,
             "function": "evolve",
             "primitive_calls": 1022267,
@@ -952,7 +952,7 @@
             "cumulative_seconds": 1.4825562
           },
           {
-            "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\json\\__init__.py",
+            "file": "<stdlib>/json/__init__.py",
             "line": 183,
             "function": "dumps",
             "primitive_calls": 1381665,
@@ -961,7 +961,7 @@
             "cumulative_seconds": 5.7299265
           },
           {
-            "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\copy.py",
+            "file": "<stdlib>/copy.py",
             "line": 118,
             "function": "deepcopy",
             "primitive_calls": 26126,
@@ -988,7 +988,7 @@
             "cumulative_seconds": 1.2199628
           },
           {
-            "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\json\\encoder.py",
+            "file": "<stdlib>/json/encoder.py",
             "line": 183,
             "function": "encode",
             "primitive_calls": 1381665,
@@ -1069,7 +1069,7 @@
         "total_calls": 1223733402,
         "focus_functions": [
           {
-            "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\pathlib.py",
+            "file": "<stdlib>/pathlib.py",
             "line": 1228,
             "function": "resolve",
             "primitive_calls": 7,
@@ -1105,7 +1105,7 @@
             "cumulative_seconds": 50.7268515
           },
           {
-            "file": "H:\\mc-blueprint\\worktrees\\mcb-210\\.venv\\Lib\\site-packages\\referencing\\jsonschema.py",
+            "file": "<path>",
             "line": 604,
             "function": "resolve",
             "primitive_calls": 362,
@@ -1114,7 +1114,7 @@
             "cumulative_seconds": 0.0028607000000000003
           },
           {
-            "file": "H:\\mc-blueprint\\worktrees\\mcb-210\\.venv\\Lib\\site-packages\\yaml\\resolver.py",
+            "file": "<path>",
             "line": 143,
             "function": "resolve",
             "primitive_calls": 494,
@@ -1467,7 +1467,7 @@
             "cumulative_seconds": 72.34599440000001
           },
           {
-            "file": "H:\\mc-blueprint\\worktrees\\mcb-210\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+            "file": "<path>",
             "line": 349,
             "function": "iter_errors",
             "primitive_calls": 9,
@@ -1476,7 +1476,7 @@
             "cumulative_seconds": 71.2280149
           },
           {
-            "file": "H:\\mc-blueprint\\worktrees\\mcb-210\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+            "file": "<path>",
             "line": 290,
             "function": "properties",
             "primitive_calls": 13,
@@ -1485,7 +1485,7 @@
             "cumulative_seconds": 71.2277469
           },
           {
-            "file": "H:\\mc-blueprint\\worktrees\\mcb-210\\.venv\\Lib\\site-packages\\jsonschema\\validators.py",
+            "file": "<path>",
             "line": 396,
             "function": "descend",
             "primitive_calls": 47,
@@ -1494,7 +1494,7 @@
             "cumulative_seconds": 71.22773570000001
           },
           {
-            "file": "H:\\mc-blueprint\\worktrees\\mcb-210\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+            "file": "<path>",
             "line": 274,
             "function": "ref",
             "primitive_calls": 177,
@@ -1512,7 +1512,7 @@
             "cumulative_seconds": 71.2186073
           },
           {
-            "file": "H:\\mc-blueprint\\worktrees\\mcb-210\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+            "file": "<path>",
             "line": 59,
             "function": "items",
             "primitive_calls": 108,
@@ -1521,7 +1521,7 @@
             "cumulative_seconds": 71.21250280000001
           },
           {
-            "file": "H:\\mc-blueprint\\worktrees\\mcb-210\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+            "file": "<path>",
             "line": 332,
             "function": "allOf",
             "primitive_calls": 2,
@@ -1530,7 +1530,7 @@
             "cumulative_seconds": 70.8057632
           },
           {
-            "file": "H:\\mc-blueprint\\worktrees\\mcb-210\\.venv\\Lib\\site-packages\\jsonschema\\_keywords.py",
+            "file": "<path>",
             "line": 382,
             "function": "if_",
             "primitive_calls": 34,
@@ -1568,7 +1568,7 @@
             "cumulative_seconds": 214.8263192
           },
           {
-            "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\json\\encoder.py",
+            "file": "<stdlib>/json/encoder.py",
             "line": 205,
             "function": "iterencode",
             "primitive_calls": 12114964,
@@ -1622,7 +1622,7 @@
             "cumulative_seconds": 182.0000865
           },
           {
-            "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\json\\__init__.py",
+            "file": "<stdlib>/json/__init__.py",
             "line": 183,
             "function": "dumps",
             "primitive_calls": 12551560,
@@ -1676,7 +1676,7 @@
             "cumulative_seconds": 13.815683300000002
           },
           {
-            "file": "C:\\Users\\<user>\\AppData\\Local\\Python\\pythoncore-3.12-64\\Lib\\json\\encoder.py",
+            "file": "<stdlib>/json/encoder.py",
             "line": 183,
             "function": "encode",
             "primitive_calls": 12551560,
@@ -4529,11 +4529,11 @@
   "references": [
     {
       "path": "benchmarks/make-baseline.json",
-      "sha256": "35a521b0581a182a72f1e60d89aba5e146c7643ef1d1ae59611a46904ae096bc"
+      "sha256": "3f9f9f937ddc46f4bbaa99199fc87ca8cdffbd2f0e2c4bec81712e109e83cfc2"
     },
     {
       "path": "evaluation/records/structure-detail-performance.json",
-      "sha256": "3dc7c5ed6a1120d2b9cb1aa9e4217847125cf1d683f6140a5e868ee118fe1f0c"
+      "sha256": "4036f19590cf08ae97f4092775ffc8a62ab712c9384bbc759364a70df4f41f35"
     }
   ],
   "recommended_targets_seconds": {

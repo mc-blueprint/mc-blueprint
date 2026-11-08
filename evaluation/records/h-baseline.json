@@ -9,7 +9,7 @@
   },
   "script": {
     "path": "scripts/evaluate_make_performance.py",
-    "sha256": "2b45c7c38960c3fc43fc97376d6d29eefef5e9bd377f017c99d8c252c8c61ea3",
+    "sha256": "e85c9a327134a2085c22174e52cd872db4aaa10fbb9b410f779033df97e69dd1",
     "measurement_sha256": "974fa9cd1351fb59f4c322bcbc5d55a7e65fcfcb36cdc7cd05b5aab0896e93d7",
     "line_ending_normalization": "測定時CRLFからLFへ変換。Python ASTは一致。"
   },

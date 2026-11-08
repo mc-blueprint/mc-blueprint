@@ -39,7 +39,7 @@
           "process_peak_rss_bytes": 78512128,
           "seconds": 1.278733099985402,
           "output_bytes": 980,
-          "output_path": "C:\\Users\\<user>\\AppData\\Local\\Temp\\mcblueprint-make-bench-parent-jbzz3pkb\\result.schem",
+          "output_path": "<tmp>/mcblueprint-make-bench-parent-jbzz3pkb/result.schem",
           "input_sha256": "967c7b7fb8846af6029c44cece4d7a84de9d388d20a41cafb612efd835ba7b7f",
           "config_sha256": "f32d10a7cc34722c90b46034a371acb6cb6be1775dbd0b723962e377cc829f96",
           "stage_hook_samples": [
@@ -104,7 +104,7 @@
           "process_peak_rss_bytes": 78209024,
           "seconds": 1.2469168999814428,
           "output_bytes": 980,
-          "output_path": "C:\\Users\\<user>\\AppData\\Local\\Temp\\mcblueprint-make-bench-parent-5drn7xok\\result.schem",
+          "output_path": "<tmp>/mcblueprint-make-bench-parent-5drn7xok/result.schem",
           "input_sha256": "967c7b7fb8846af6029c44cece4d7a84de9d388d20a41cafb612efd835ba7b7f",
           "config_sha256": "f32d10a7cc34722c90b46034a371acb6cb6be1775dbd0b723962e377cc829f96",
           "stage_hook_samples": [
@@ -169,7 +169,7 @@
           "process_peak_rss_bytes": 78544896,
           "seconds": 1.240368099999614,
           "output_bytes": 980,
-          "output_path": "C:\\Users\\<user>\\AppData\\Local\\Temp\\mcblueprint-make-bench-parent-w1rlrusi\\result.schem",
+          "output_path": "<tmp>/mcblueprint-make-bench-parent-w1rlrusi/result.schem",
           "input_sha256": "967c7b7fb8846af6029c44cece4d7a84de9d388d20a41cafb612efd835ba7b7f",
           "config_sha256": "f32d10a7cc34722c90b46034a371acb6cb6be1775dbd0b723962e377cc829f96",
           "stage_hook_samples": [
@@ -250,7 +250,7 @@
           "process_peak_rss_bytes": 80400384,
           "seconds": 1.2483036000048742,
           "output_bytes": 1100,
-          "output_path": "C:\\Users\\<user>\\AppData\\Local\\Temp\\mcblueprint-make-bench-parent-b7hj6svx\\result.schem",
+          "output_path": "<tmp>/mcblueprint-make-bench-parent-b7hj6svx/result.schem",
           "input_sha256": "bd45af93ddd81a09eac66f6b82f4d221800e318aa0f2f51b18d73fcb3b26bdc0",
           "config_sha256": "f32d10a7cc34722c90b46034a371acb6cb6be1775dbd0b723962e377cc829f96",
           "stage_hook_samples": [
@@ -311,7 +311,7 @@
           "process_peak_rss_bytes": 80642048,
           "seconds": 1.2453254999709316,
           "output_bytes": 1100,
-          "output_path": "C:\\Users\\<user>\\AppData\\Local\\Temp\\mcblueprint-make-bench-parent-umiud3ax\\result.schem",
+          "output_path": "<tmp>/mcblueprint-make-bench-parent-umiud3ax/result.schem",
           "input_sha256": "bd45af93ddd81a09eac66f6b82f4d221800e318aa0f2f51b18d73fcb3b26bdc0",
           "config_sha256": "f32d10a7cc34722c90b46034a371acb6cb6be1775dbd0b723962e377cc829f96",
           "stage_hook_samples": [
@@ -372,7 +372,7 @@
           "process_peak_rss_bytes": 80302080,
           "seconds": 1.294611299992539,
           "output_bytes": 1100,
-          "output_path": "C:\\Users\\<user>\\AppData\\Local\\Temp\\mcblueprint-make-bench-parent-mzlbxlqb\\result.schem",
+          "output_path": "<tmp>/mcblueprint-make-bench-parent-mzlbxlqb/result.schem",
           "input_sha256": "bd45af93ddd81a09eac66f6b82f4d221800e318aa0f2f51b18d73fcb3b26bdc0",
           "config_sha256": "f32d10a7cc34722c90b46034a371acb6cb6be1775dbd0b723962e377cc829f96",
           "stage_hook_samples": [
@@ -449,7 +449,7 @@
           "process_peak_rss_bytes": 191631360,
           "seconds": 29.710118799994234,
           "output_bytes": 10308,
-          "output_path": "C:\\Users\\<user>\\AppData\\Local\\Temp\\mcblueprint-make-bench-parent-ivimh4kc\\result.schem",
+          "output_path": "<tmp>/mcblueprint-make-bench-parent-ivimh4kc/result.schem",
           "input_sha256": "da579621ea40aa3335b09c54318758afda2d668d45e183a8d27ab1811d40bf7d",
           "config_sha256": "f32d10a7cc34722c90b46034a371acb6cb6be1775dbd0b723962e377cc829f96",
           "stage_hook_samples": [
@@ -514,7 +514,7 @@
           "process_peak_rss_bytes": 191500288,
           "seconds": 29.682383200037293,
           "output_bytes": 10308,
-          "output_path": "C:\\Users\\<user>\\AppData\\Local\\Temp\\mcblueprint-make-bench-parent-a2ysrehx\\result.schem",
+          "output_path": "<tmp>/mcblueprint-make-bench-parent-a2ysrehx/result.schem",
           "input_sha256": "da579621ea40aa3335b09c54318758afda2d668d45e183a8d27ab1811d40bf7d",
           "config_sha256": "f32d10a7cc34722c90b46034a371acb6cb6be1775dbd0b723962e377cc829f96",
           "stage_hook_samples": [
@@ -579,7 +579,7 @@
           "process_peak_rss_bytes": 191434752,
           "seconds": 29.341783299983945,
           "output_bytes": 10308,
-          "output_path": "C:\\Users\\<user>\\AppData\\Local\\Temp\\mcblueprint-make-bench-parent-n0czd5oq\\result.schem",
+          "output_path": "<tmp>/mcblueprint-make-bench-parent-n0czd5oq/result.schem",
           "input_sha256": "da579621ea40aa3335b09c54318758afda2d668d45e183a8d27ab1811d40bf7d",
           "config_sha256": "f32d10a7cc34722c90b46034a371acb6cb6be1775dbd0b723962e377cc829f96",
           "stage_hook_samples": [
@@ -660,7 +660,7 @@
           "process_peak_rss_bytes": 169275392,
           "seconds": 21.149302800011355,
           "output_bytes": 15761,
-          "output_path": "C:\\Users\\<user>\\AppData\\Local\\Temp\\mcblueprint-make-bench-parent-2s4gv93x\\result.schem",
+          "output_path": "<tmp>/mcblueprint-make-bench-parent-2s4gv93x/result.schem",
           "input_sha256": "78c6050d83d912b92e19d6e5897dfe330aa03a23791d2e4deae36af24f64bc14",
           "config_sha256": "f32d10a7cc34722c90b46034a371acb6cb6be1775dbd0b723962e377cc829f96",
           "stage_hook_samples": [
@@ -721,7 +721,7 @@
           "process_peak_rss_bytes": 169693184,
           "seconds": 21.37432380003156,
           "output_bytes": 15761,
-          "output_path": "C:\\Users\\<user>\\AppData\\Local\\Temp\\mcblueprint-make-bench-parent-bnky_qrp\\result.schem",
+          "output_path": "<tmp>/mcblueprint-make-bench-parent-bnky_qrp/result.schem",
           "input_sha256": "78c6050d83d912b92e19d6e5897dfe330aa03a23791d2e4deae36af24f64bc14",
           "config_sha256": "f32d10a7cc34722c90b46034a371acb6cb6be1775dbd0b723962e377cc829f96",
           "stage_hook_samples": [
@@ -782,7 +782,7 @@
           "process_peak_rss_bytes": 169820160,
           "seconds": 21.467756900005043,
           "output_bytes": 15761,
-          "output_path": "C:\\Users\\<user>\\AppData\\Local\\Temp\\mcblueprint-make-bench-parent-pq9hbsfl\\result.schem",
+          "output_path": "<tmp>/mcblueprint-make-bench-parent-pq9hbsfl/result.schem",
           "input_sha256": "78c6050d83d912b92e19d6e5897dfe330aa03a23791d2e4deae36af24f64bc14",
           "config_sha256": "f32d10a7cc34722c90b46034a371acb6cb6be1775dbd0b723962e377cc829f96",
           "stage_hook_samples": [
@@ -859,7 +859,7 @@
           "process_peak_rss_bytes": 202489856,
           "seconds": 182.46311589999823,
           "output_bytes": 40508,
-          "output_path": "C:\\Users\\<user>\\AppData\\Local\\Temp\\mcblueprint-make-bench-parent-jvvf2m43\\result.schem",
+          "output_path": "<tmp>/mcblueprint-make-bench-parent-jvvf2m43/result.schem",
           "input_sha256": "59de976c842ee7d4fa7bca12fc33327fcb6007b7fba8466ba04a64d3d74c206f",
           "config_sha256": "f32d10a7cc34722c90b46034a371acb6cb6be1775dbd0b723962e377cc829f96",
           "stage_hook_samples": [
@@ -924,7 +924,7 @@
           "process_peak_rss_bytes": 202645504,
           "seconds": 184.11017659999197,
           "output_bytes": 40508,
-          "output_path": "C:\\Users\\<user>\\AppData\\Local\\Temp\\mcblueprint-make-bench-parent-kp2zkhv0\\result.schem",
+          "output_path": "<tmp>/mcblueprint-make-bench-parent-kp2zkhv0/result.schem",
           "input_sha256": "59de976c842ee7d4fa7bca12fc33327fcb6007b7fba8466ba04a64d3d74c206f",
           "config_sha256": "f32d10a7cc34722c90b46034a371acb6cb6be1775dbd0b723962e377cc829f96",
           "stage_hook_samples": [
@@ -989,7 +989,7 @@
           "process_peak_rss_bytes": 203198464,
           "seconds": 183.59484330000123,
           "output_bytes": 40508,
-          "output_path": "C:\\Users\\<user>\\AppData\\Local\\Temp\\mcblueprint-make-bench-parent-kxg9t5l7\\result.schem",
+          "output_path": "<tmp>/mcblueprint-make-bench-parent-kxg9t5l7/result.schem",
           "input_sha256": "59de976c842ee7d4fa7bca12fc33327fcb6007b7fba8466ba04a64d3d74c206f",
           "config_sha256": "f32d10a7cc34722c90b46034a371acb6cb6be1775dbd0b723962e377cc829f96",
           "stage_hook_samples": [
@@ -1070,7 +1070,7 @@
           "process_peak_rss_bytes": 186097664,
           "seconds": 155.7362677999772,
           "output_bytes": 97012,
-          "output_path": "C:\\Users\\<user>\\AppData\\Local\\Temp\\mcblueprint-make-bench-parent-gizj34j0\\result.schem",
+          "output_path": "<tmp>/mcblueprint-make-bench-parent-gizj34j0/result.schem",
           "input_sha256": "0415b0b1009fb4fcfc15dbf400bd1b4b04d402eeb9498f158aeff5b846bc1562",
           "config_sha256": "f32d10a7cc34722c90b46034a371acb6cb6be1775dbd0b723962e377cc829f96",
           "stage_hook_samples": [
@@ -1131,7 +1131,7 @@
           "process_peak_rss_bytes": 186073088,
           "seconds": 156.3172923999955,
           "output_bytes": 97012,
-          "output_path": "C:\\Users\\<user>\\AppData\\Local\\Temp\\mcblueprint-make-bench-parent-ioqtu4jc\\result.schem",
+          "output_path": "<tmp>/mcblueprint-make-bench-parent-ioqtu4jc/result.schem",
           "input_sha256": "0415b0b1009fb4fcfc15dbf400bd1b4b04d402eeb9498f158aeff5b846bc1562",
           "config_sha256": "f32d10a7cc34722c90b46034a371acb6cb6be1775dbd0b723962e377cc829f96",
           "stage_hook_samples": [
@@ -1192,7 +1192,7 @@
           "process_peak_rss_bytes": 186146816,
           "seconds": 154.72607780003455,
           "output_bytes": 97012,
-          "output_path": "C:\\Users\\<user>\\AppData\\Local\\Temp\\mcblueprint-make-bench-parent-b3rpl8dq\\result.schem",
+          "output_path": "<tmp>/mcblueprint-make-bench-parent-b3rpl8dq/result.schem",
           "input_sha256": "0415b0b1009fb4fcfc15dbf400bd1b4b04d402eeb9498f158aeff5b846bc1562",
           "config_sha256": "f32d10a7cc34722c90b46034a371acb6cb6be1775dbd0b723962e377cc829f96",
           "stage_hook_samples": [

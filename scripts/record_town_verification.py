@@ -5,6 +5,7 @@ import json
 import sys
 from pathlib import Path
 
+import benchmark
 import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -48,7 +49,7 @@ def run(directory):
     record = {"schemaVersion": 1, "recordType": "town-site-verification", "issue": 241,
               "baseCommit": "f413feca6255d0f9f5859cd8c8078a6f83312d96",
               "execution": "pytestの独立した36ノードを最大4プロセスで実行。入力・出力先を分離。",
-              "commands": [r["command"] for r in execution],
+              "commands": [benchmark._record_text(r["command"]) for r in execution],
               "testSummary": {"passed": len(execution), "failed": 0},
               "matrixCoverage": {"versionFormat": {"scale": "huge", "seed": 42,
                  "conditions": 8}, "scaleSeed": {"scale": "huge", "minecraftVersion": "1.21.11",
