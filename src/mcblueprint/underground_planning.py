@@ -14,7 +14,7 @@ from mcblueprint.parcels import split_frontage
 from mcblueprint.plan_contract import hierarchy, plan_buildings
 from mcblueprint.planning import PlanningResult, _plan_overrides, _ref, _tag
 from mcblueprint.site_planning import _place
-from mcblueprint.terrain_density import plan_density
+from mcblueprint.terrain_density import CaveNode, plan_density
 from mcblueprint.terrain_field import plan_terrain
 from mcblueprint.town_planning import _corners, street_route
 
@@ -153,6 +153,61 @@ def _surface_access(density, tops, start, floor, headroom, ident):
     return operation, columns, [x, top + 1, z]
 
 
+def _city_space(field, plots, buildings, footprints, rules, width, entrances):
+    """区画と実外形を内包する空洞群を、殻厚2内の共通床候補から求める。"""
+    bounds = field.bounds
+    center = Vec3(*((bounds.min[i] + bounds.max[i] + 1) // 2 for i in range(3)))
+    radius = Vec3(*(min(center[i] - bounds.min[i], bounds.max[i] - center[i]) - 2
+                    for i in range(3)))
+    central = CaveNode("cave#0", center, radius)
+    headroom, clearance = rules["floorClearance"][0], rules["ceilingClearance"][0]
+    failure = BlueprintError("Site: 要求された地下区画の床・天井余裕がsizeの主空洞に収まりません")
+    candidates = range(bounds.min.y + 3, bounds.max.y - headroom - 1)
+    for floor in sorted(candidates, key=lambda y: (abs(y - (center.y - headroom)), y)):
+        chambers = [central]
+        for index, ((x, z, east, south), box) in enumerate(
+                zip(plots, footprints.values(), strict=True)):
+            cx, cz = (x + east) // 2, (z + south) // 2
+            dx = max(cx - x, east - cx, cx - box.min.x, box.max.x - cx)
+            dz = max(cz - z, south - cz, cz - box.min.z, box.max.z - cz)
+            max_rx = min(cx - bounds.min.x - 2, bounds.max.x - cx - 2)
+            max_rz = min(cz - bounds.min.z - 2, bounds.max.z - cz - 2)
+            rx = min(math.ceil(math.sqrt(3) * dx), max_rx)
+            rz = min(math.ceil(math.sqrt(3) * dz), max_rz)
+            if rx <= dx or rz <= dz:
+                break
+            remaining = 1 - (dx / rx) ** 2 - (dz / rz) ** 2
+            dy = max(abs(floor + 1 - center.y),
+                     abs(floor + max(headroom, box.max.y + clearance) - center.y))
+            if remaining <= 0 or dy ** 2 > radius.y ** 2 * remaining:
+                rx, rz = max_rx, max_rz
+                remaining = 1 - (dx / rx) ** 2 - (dz / rz) ** 2
+            if remaining <= 0:
+                break
+            ry = max(1, math.ceil(dy / math.sqrt(remaining)))
+            if ry > radius.y:
+                break
+            chambers.append(CaveNode(f"cave.chamber#{index + 1}", Vec3(cx, center.y, cz),
+                                     Vec3(rx, ry, rz)))
+        if len(chambers) != len(plots) + 1:
+            continue
+        density = plan_density(field, main_cave=True, overhangs=False,
+                               entrances=entrances, chambers=tuple(chambers))
+        bottom, ceiling = cave_surfaces(density)
+        tops = np.maximum(field.heights, cave_surfaces(density, margin=2)[1])
+        ends = [n for n in density.nodes if n.id.startswith("cave.entrance#")
+                and (n.center.x in (bounds.min.x, bounds.max.x)
+                     or n.center.z in (bounds.min.z, bounds.max.z))]
+        try:
+            selected = _floor(density, bottom, ceiling, tops, rules, plots, buildings,
+                              footprints, width, ends)
+        except BlueprintError as exc:
+            failure = exc
+            continue
+        return density, bottom, ceiling, tops, ends, selected
+    raise failure
+
+
 def plan_underground(resolved) -> PlanningResult:
     """cave/underground_cityの内部計画v2を返す。入力は変更しない。
 
@@ -180,8 +235,6 @@ def plan_underground(resolved) -> PlanningResult:
         plot_width = rules["plotWidth"][0]
         depth = rules["plotDepth"][0]
         columns = math.ceil(count / 2)
-        if columns * plot_width + 4 >= 2 * main.radius.x or 2 * depth + width >= 2 * main.radius.z:
-            raise BlueprintError("Site: 要求された地下区画・道路がsizeの主空洞に収まりません")
         west = main.center.x - columns * plot_width // 2
         rows = [main.center.z - width // 2 - depth - 1, main.center.z + width // 2 + 2]
         for row in rows:
@@ -195,7 +248,15 @@ def plan_underground(resolved) -> PlanningResult:
     ends = [n for n in density.nodes if n.center.x in (0, size[0] - 1)
             or n.center.z in (0, size[2] - 1)]
     tops = np.maximum(field.heights, cave_surfaces(density, margin=2)[1])
-    floor = _floor(density, bottom, ceiling, tops, rules, plots, probes[0], footprints, width, ends)
+    try:
+        floor = _floor(density, bottom, ceiling, tops, rules, plots, probes[0], footprints,
+                       width, ends)
+    except BlueprintError:
+        if not plots:
+            raise
+        density, bottom, ceiling, tops, ends, floor = _city_space(
+            field, plots, probes[0], footprints, rules, width, features["entrances"])
+        main = density.nodes[0]
     buildings, wrappers, parcels, palettes, diagnostics = _houses(resolved, plots, floor, bounds)
     # 地表場は密度計画に保持し、地下床の場は独立して保存する。
     ground = replace(field, heights=np.maximum(bottom - 1, floor),

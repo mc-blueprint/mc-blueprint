@@ -1,0 +1,427 @@
+{
+  "issue": 269,
+  "purpose": "補助空洞の水平余地を使い、収容可能な低天井入力を拒否しない。",
+  "method": "従来の半径で必要な垂直半径が収まる場合は維持する。不足時だけ、殻厚2内の最大水平半径から垂直半径を決定的に再計算する。",
+  "engine_before": "1f3f158f9a3c5dcc3b632d2680611ab0189e700b1bd36333e2c2f185cb88abe4",
+  "engine_after": "c99794c3de07c9c9d8a4452f130da538dafcf3d86dfd79fc5737a038c3f87154",
+  "source_sha256": {
+    "src/mcblueprint/underground_planning.py": "71e9da60c1e7d181e608fab4c7f619b3d306df72facb4e1099193688e55bf47d",
+    "tests/test_underground_planning.py": "3d8adb4a8e74f0f5d45cb6ab901f8c1427a9fa4d1be4b57c09b6bea6f2aa2dd5",
+    "docs/UNDERGROUND.md": "c872278f8cbdc7968d69f734786efcec5d7e2d9ed87414f3c520e0eb8180f002"
+  },
+  "shape_comparison": {
+    "method": "Site・Massing・Detail・Blueprint・palette全体のキー整列compact JSONをSHA-256で比較。",
+    "count": 58,
+    "unchanged": true,
+    "cases": [
+      {
+        "case": "cave-128-101",
+        "sha256": "1d810ad7640fd96955f4f666f308aa283609236759ebe9bf9d558aecf9be7c8e"
+      },
+      {
+        "case": "cave-128-42",
+        "sha256": "0ce20833e1a4055e89c9fab0b4eaa7499df7e20721df215a4b4aa1e253b98159"
+      },
+      {
+        "case": "cave-128-73",
+        "sha256": "28645d545b96756900ce93fc61c33b4615ae3ac1ff9165c5ec46aa377fe5d340"
+      },
+      {
+        "case": "cave-40-101",
+        "sha256": "336c4cf91d67bf2dc03a0472685b4254fbeba599417a62f10eadab5a8a6a8214"
+      },
+      {
+        "case": "cave-40-42",
+        "sha256": "fa3fe3d9c9426a094ff6ce928d85c54de870764b4b2900ebe3fe34bcb89b3e41"
+      },
+      {
+        "case": "cave-40-73",
+        "sha256": "08269ea557795a7369dc7d0bc10c00c98e7018d8dc13be09799157c087f59bac"
+      },
+      {
+        "case": "cave-48-101",
+        "sha256": "1784de443d6069ac3aafe8cfda9de9c7c4c864b55c3d99c9146ba3af173ca07a"
+      },
+      {
+        "case": "cave-48-42",
+        "sha256": "2e8378b5a39ed246ee2f898e560c4157b6867165e2918daa6f2cb4e7ec755e62"
+      },
+      {
+        "case": "cave-48-73",
+        "sha256": "7f264b1dfa150366783c06e6708f806124d2c137a083a14d7024c17fee6e01fc"
+      },
+      {
+        "case": "huge-101-1.21.11-litematic",
+        "sha256": "ad17781423b241c87719f6a4fec775dd11bcd8cf54897ab4994c1e71abe60cfb"
+      },
+      {
+        "case": "huge-101-1.21.11-schem",
+        "sha256": "ad17781423b241c87719f6a4fec775dd11bcd8cf54897ab4994c1e71abe60cfb"
+      },
+      {
+        "case": "huge-101-26.1.2-litematic",
+        "sha256": "080db6cb9dc412b6f677ea34191c7e91f8747d9059bf9255a84ae905683f623a"
+      },
+      {
+        "case": "huge-101-26.1.2-schem",
+        "sha256": "080db6cb9dc412b6f677ea34191c7e91f8747d9059bf9255a84ae905683f623a"
+      },
+      {
+        "case": "huge-101-26.2-litematic",
+        "sha256": "69a5d32e4a3f3950da09481569b39db3fe1b155ae401ffffa3b79f2ab8192969"
+      },
+      {
+        "case": "huge-101-26.2-schem",
+        "sha256": "69a5d32e4a3f3950da09481569b39db3fe1b155ae401ffffa3b79f2ab8192969"
+      },
+      {
+        "case": "huge-101-26.3-litematic",
+        "sha256": "c554f8eb49eac95ab47ce31a64796d7441decfe1403daac8037e94ea1d42ceb5"
+      },
+      {
+        "case": "huge-101-26.3-schem",
+        "sha256": "c554f8eb49eac95ab47ce31a64796d7441decfe1403daac8037e94ea1d42ceb5"
+      },
+      {
+        "case": "huge-42-1.21.11-litematic",
+        "sha256": "0df7538dc2d2a7b3af6358e2a736b9df4fab6b998503af7ed7283f934890d9a9"
+      },
+      {
+        "case": "huge-42-1.21.11-schem",
+        "sha256": "0df7538dc2d2a7b3af6358e2a736b9df4fab6b998503af7ed7283f934890d9a9"
+      },
+      {
+        "case": "huge-42-26.1.2-litematic",
+        "sha256": "f17e4e14d6c790b6db9da40604f38e60fa6747633ddbc10021ba80ffa45f80ac"
+      },
+      {
+        "case": "huge-42-26.1.2-schem",
+        "sha256": "f17e4e14d6c790b6db9da40604f38e60fa6747633ddbc10021ba80ffa45f80ac"
+      },
+      {
+        "case": "huge-42-26.2-litematic",
+        "sha256": "8e1f97fe2cbd1423160792e22605136324c5a5c31570d34dfe1bc14cc1d0263c"
+      },
+      {
+        "case": "huge-42-26.2-schem",
+        "sha256": "8e1f97fe2cbd1423160792e22605136324c5a5c31570d34dfe1bc14cc1d0263c"
+      },
+      {
+        "case": "huge-42-26.3-litematic",
+        "sha256": "f26514b4c7721cc3cc6198f3ab39d33db162ed755d4a8e0dd9d2601b9abda8ae"
+      },
+      {
+        "case": "huge-42-26.3-schem",
+        "sha256": "f26514b4c7721cc3cc6198f3ab39d33db162ed755d4a8e0dd9d2601b9abda8ae"
+      },
+      {
+        "case": "huge-73-1.21.11-litematic",
+        "sha256": "3b14f38603fd5a4b535758e17cdba100c60244f70025b824726c2cd8e8e24f73"
+      },
+      {
+        "case": "huge-73-1.21.11-schem",
+        "sha256": "3b14f38603fd5a4b535758e17cdba100c60244f70025b824726c2cd8e8e24f73"
+      },
+      {
+        "case": "huge-73-26.1.2-litematic",
+        "sha256": "13bf717d8a935e82ebf6f89ce2add0fef872365731329f59021d61c3a0adadaf"
+      },
+      {
+        "case": "huge-73-26.1.2-schem",
+        "sha256": "13bf717d8a935e82ebf6f89ce2add0fef872365731329f59021d61c3a0adadaf"
+      },
+      {
+        "case": "huge-73-26.2-litematic",
+        "sha256": "13f4a08b1471b5b9db583ad6e6f8f4cdcb1092ab50a80b544552ec1f570e2d63"
+      },
+      {
+        "case": "huge-73-26.2-schem",
+        "sha256": "13f4a08b1471b5b9db583ad6e6f8f4cdcb1092ab50a80b544552ec1f570e2d63"
+      },
+      {
+        "case": "huge-73-26.3-litematic",
+        "sha256": "3e03a9660f9e88f5c8db4702f07bb60eadc809bd6f417cf3abcaf5bcce96c5e3"
+      },
+      {
+        "case": "huge-73-26.3-schem",
+        "sha256": "3e03a9660f9e88f5c8db4702f07bb60eadc809bd6f417cf3abcaf5bcce96c5e3"
+      },
+      {
+        "case": "medium-101-1.21.11-litematic",
+        "sha256": "e486f671a598425c0f46ee7cc27c6e10fddea44bb4ced9d0f87c8ef1e7d930d8"
+      },
+      {
+        "case": "medium-101-1.21.11-schem",
+        "sha256": "e486f671a598425c0f46ee7cc27c6e10fddea44bb4ced9d0f87c8ef1e7d930d8"
+      },
+      {
+        "case": "medium-101-26.1.2-litematic",
+        "sha256": "cb8d5808f924a3c294bf62f08e9856660c4f582a880c4499c48821b673319759"
+      },
+      {
+        "case": "medium-101-26.1.2-schem",
+        "sha256": "cb8d5808f924a3c294bf62f08e9856660c4f582a880c4499c48821b673319759"
+      },
+      {
+        "case": "medium-101-26.2-litematic",
+        "sha256": "af9fec018c22e94a83859ef04d3188dd586ea64834b640e5b9b760ae9901a06a"
+      },
+      {
+        "case": "medium-101-26.2-schem",
+        "sha256": "af9fec018c22e94a83859ef04d3188dd586ea64834b640e5b9b760ae9901a06a"
+      },
+      {
+        "case": "medium-101-26.3-litematic",
+        "sha256": "b92b0c477d2df6a3c72d42169f5bbff86311bfb22046a2465fcf44d3157aefd3"
+      },
+      {
+        "case": "medium-101-26.3-schem",
+        "sha256": "b92b0c477d2df6a3c72d42169f5bbff86311bfb22046a2465fcf44d3157aefd3"
+      },
+      {
+        "case": "medium-42-1.21.11-litematic",
+        "sha256": "d816b12a94ffde2afee64ce5b303346b5d1cdd18b297b036de73108a42219f61"
+      },
+      {
+        "case": "medium-42-1.21.11-schem",
+        "sha256": "d816b12a94ffde2afee64ce5b303346b5d1cdd18b297b036de73108a42219f61"
+      },
+      {
+        "case": "medium-42-26.1.2-litematic",
+        "sha256": "5f1d396c100043a3dfc0531e004e3cdce1d7dbf5ebb355838027d4f657ac75df"
+      },
+      {
+        "case": "medium-42-26.1.2-schem",
+        "sha256": "5f1d396c100043a3dfc0531e004e3cdce1d7dbf5ebb355838027d4f657ac75df"
+      },
+      {
+        "case": "medium-42-26.2-litematic",
+        "sha256": "3011114bc85c172d20008af6b1dcb7aae1c8b2146df8c19909f53e799a7ded0b"
+      },
+      {
+        "case": "medium-42-26.2-schem",
+        "sha256": "3011114bc85c172d20008af6b1dcb7aae1c8b2146df8c19909f53e799a7ded0b"
+      },
+      {
+        "case": "medium-42-26.3-litematic",
+        "sha256": "e0162220c4df3b81c1908b98ba4b5d95cefbc798d1eafd6f560b52824d622f30"
+      },
+      {
+        "case": "medium-42-26.3-schem",
+        "sha256": "e0162220c4df3b81c1908b98ba4b5d95cefbc798d1eafd6f560b52824d622f30"
+      },
+      {
+        "case": "medium-73-1.21.11-litematic",
+        "sha256": "b812b989efdf676dea56aab7c10ed482e64ede3be926b7b02c646940d9c3faf8"
+      },
+      {
+        "case": "medium-73-1.21.11-schem",
+        "sha256": "b812b989efdf676dea56aab7c10ed482e64ede3be926b7b02c646940d9c3faf8"
+      },
+      {
+        "case": "medium-73-26.1.2-litematic",
+        "sha256": "7ebdb22145c8328687bc02be4029d47c0985f5cbf1fac2bb3df8d430fed3d7d5"
+      },
+      {
+        "case": "medium-73-26.1.2-schem",
+        "sha256": "7ebdb22145c8328687bc02be4029d47c0985f5cbf1fac2bb3df8d430fed3d7d5"
+      },
+      {
+        "case": "medium-73-26.2-litematic",
+        "sha256": "a7a3e839c58f239648623c6a01017770b4fc2e4fea275a2dde4ab290193be392"
+      },
+      {
+        "case": "medium-73-26.2-schem",
+        "sha256": "a7a3e839c58f239648623c6a01017770b4fc2e4fea275a2dde4ab290193be392"
+      },
+      {
+        "case": "medium-73-26.3-litematic",
+        "sha256": "411cb1721d80fcb21d4a8d4bfe2e54a5da29dbc35d13c0c0b6a4cfd2056f3f16"
+      },
+      {
+        "case": "medium-73-26.3-schem",
+        "sha256": "411cb1721d80fcb21d4a8d4bfe2e54a5da29dbc35d13c0c0b6a4cfd2056f3f16"
+      },
+      {
+        "case": "single-house",
+        "sha256": "be90776351d1ef99695d704eec577810719dd38cf54908eb507af1db18872f54"
+      }
+    ]
+  },
+  "boundary": [
+    {
+      "size": [
+        64,
+        26,
+        64
+      ],
+      "seeds": [
+        42,
+        73,
+        101
+      ],
+      "floor_y": 8,
+      "buildings": 8,
+      "supports": 2,
+      "surface_targets": 16,
+      "roof_clearance": true,
+      "routes": "reachable",
+      "result": "成功（完成セル）"
+    },
+    {
+      "size": [
+        64,
+        24,
+        64
+      ],
+      "seeds": [
+        42,
+        73,
+        101
+      ],
+      "result": "天井不足として拒否"
+    }
+  ],
+  "verification": {
+    "related": {
+      "passed": 25,
+      "deselected": 39
+    },
+    "pytest": {
+      "passed": 3283,
+      "skipped": 1,
+      "skip_reason": "tiktoken未導入のSkillトークン数検査",
+      "collection_count": 3284,
+      "groups": [
+        {
+          "name": "castle_planning",
+          "files": [
+            "tests/test_castle_planning.py"
+          ],
+          "count": 43,
+          "passed": 43,
+          "skipped": 0,
+          "exit_code": 0
+        },
+        {
+          "name": "town_planning",
+          "files": [
+            "tests/test_town_planning.py"
+          ],
+          "count": 36,
+          "passed": 36,
+          "skipped": 0,
+          "exit_code": 0
+        },
+        {
+          "name": "underground_planning",
+          "files": [
+            "tests/test_underground_planning.py"
+          ],
+          "count": 64,
+          "passed": 64,
+          "skipped": 0,
+          "exit_code": 0
+        },
+        {
+          "name": "other",
+          "files": [
+            "tests/test_assets.py",
+            "tests/test_benchmark.py",
+            "tests/test_blockdata.py",
+            "tests/test_checking.py",
+            "tests/test_cli.py",
+            "tests/test_colorpack_acceptance.py",
+            "tests/test_colorpack_distribution.py",
+            "tests/test_colorpack_loading.py",
+            "tests/test_colorpack_materialize.py",
+            "tests/test_colorpack_pipeline.py",
+            "tests/test_colorpack_schema.py",
+            "tests/test_components.py",
+            "tests/test_config.py",
+            "tests/test_critic.py",
+            "tests/test_design.py",
+            "tests/test_designs.py",
+            "tests/test_detail.py",
+            "tests/test_edits.py",
+            "tests/test_edits_file.py",
+            "tests/test_evaluation_records.py",
+            "tests/test_evaluation_usage.py",
+            "tests/test_examples.py",
+            "tests/test_exporter_litematic.py",
+            "tests/test_exporter_schem.py",
+            "tests/test_facade_projection.py",
+            "tests/test_foundation.py",
+            "tests/test_generated_region_export.py",
+            "tests/test_generation_regions.py",
+            "tests/test_hierarchical_planning.py",
+            "tests/test_import_diff.py",
+            "tests/test_junction_planning.py",
+            "tests/test_loader.py",
+            "tests/test_materialize.py",
+            "tests/test_model.py",
+            "tests/test_operations_arch.py",
+            "tests/test_operations_base.py",
+            "tests/test_operations_basic.py",
+            "tests/test_operations_bridge.py",
+            "tests/test_operations_building.py",
+            "tests/test_operations_building_junction.py",
+            "tests/test_operations_building_layout.py",
+            "tests/test_operations_edit.py",
+            "tests/test_operations_garden.py",
+            "tests/test_operations_gate.py",
+            "tests/test_operations_join_buildings.py",
+            "tests/test_operations_joined_roof.py",
+            "tests/test_operations_landform.py",
+            "tests/test_operations_nested.py",
+            "tests/test_operations_path.py",
+            "tests/test_operations_room.py",
+            "tests/test_operations_shapes.py",
+            "tests/test_operations_tower.py",
+            "tests/test_output_lock.py",
+            "tests/test_patterns.py",
+            "tests/test_pipeline.py",
+            "tests/test_planning.py",
+            "tests/test_preview.py",
+            "tests/test_region_export.py",
+            "tests/test_region_optimization.py",
+            "tests/test_region_performance_resume.py",
+            "tests/test_render.py",
+            "tests/test_scene.py",
+            "tests/test_schema.py",
+            "tests/test_skill_sync.py",
+            "tests/test_snapshot_regions.py",
+            "tests/test_support.py",
+            "tests/test_surface_path.py",
+            "tests/test_terrain.py",
+            "tests/test_terrain_density.py",
+            "tests/test_terrain_field.py",
+            "tests/test_terrain_generation.py",
+            "tests/test_transform.py",
+            "tests/test_traversal.py",
+            "tests/test_validation_report.py",
+            "tests/test_validator.py",
+            "tests/test_version.py",
+            "tests/test_viewer_bundle.py",
+            "tests/test_viewer_input.py",
+            "tests/test_viewer_schema.py",
+            "tests/test_viewer_server.py",
+            "tests/test_volume.py",
+            "tests/test_weather.py"
+          ],
+          "count": 3141,
+          "passed": 3140,
+          "skipped": 1,
+          "exit_code": 0
+        }
+      ]
+    },
+    "ruff": "成功",
+    "strict": "25 files checked: 0 error(s), 0 warning(s)"
+  },
+  "matrix_reuse": {
+    "record": "evaluation/records/underground-269-regression.json",
+    "rerun": false,
+    "reason": "固定48条件の計画全体・形状が完全一致し、ユーザー指定の条件に従い既存48条件の実生成記録を再利用する。記録内のengine/hashは旧実装による実測のまま保持する。現行実装の指紋と検証は本記録を参照する。"
+  }
+}

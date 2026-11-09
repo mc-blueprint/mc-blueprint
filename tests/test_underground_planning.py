@@ -15,6 +15,7 @@ from mcblueprint.errors import BlueprintError
 from mcblueprint.generator import GeneratedRegion, GenerationLimits, generate, generate_regions
 from mcblueprint.materialize import materialize_plan
 from mcblueprint.model import AABB, BlockState, Vec3
+from mcblueprint.operations.registry import build_operation
 from mcblueprint.pipeline import STAGES, make
 from mcblueprint.plan_contract import plan_buildings
 from mcblueprint.planning import plan_buildspec
@@ -42,9 +43,10 @@ def concrete_plan(tmp_path, **changes):
 
 
 @pytest.mark.parametrize("seed", (42, 73, 101))
-@pytest.mark.parametrize("archetype", ("cave", "underground_city"))
-def test_underground_reproducible_surfaces_and_reservations(tmp_path, seed, archetype):
-    raw = underground_spec(archetype, seed=seed)
+@pytest.mark.parametrize("archetype,scale", (("cave", "medium"),
+    ("underground_city", "medium"), ("underground_city", "huge")))
+def test_underground_reproducible_surfaces_and_reservations(tmp_path, seed, archetype, scale):
+    raw = underground_spec(archetype, seed=seed, scale=scale)
     if archetype == "cave" and seed == 101:
         raw["features"] = {"entrances": 4}
     resolved = resolve_buildspec(raw, project_dir=tmp_path)
@@ -54,6 +56,7 @@ def test_underground_reproducible_surfaces_and_reservations(tmp_path, seed, arch
     assert resolved.buildspec == before
     assert len(plan_buildings(result.massing)) == (8 if archetype == "underground_city" else 0)
     density = TerrainDensity.from_dict(result.site["density"])
+    assert bool(density.chambers) == (archetype == "underground_city" and scale == "medium")
     bottom, ceiling = cave_surfaces(density)
     ground = TerrainField.from_dict(result.site["groundHeight"]["field"])
     assert not np.array_equal(ground.heights, density.field.heights)
@@ -107,6 +110,57 @@ def test_underground_routes_preserve_buildings(tmp_path):
     assert tested > 100
 
 
+@pytest.mark.parametrize("seed", (42, 73, 101))
+@pytest.mark.parametrize("height", (48, 26))
+def test_medium_city_completed_clearance_supports_and_surface_routes(tmp_path, seed, height):
+    result, bp = concrete_plan(tmp_path, scale="medium", size=[64, height, 64], seed=seed)
+    volume = generate(bp)
+    density = TerrainDensity.from_dict(result.site["density"])
+    _, ceiling = cave_surfaces(density)
+    nodes = {n["id"]: Vec3.from_seq(n["position"])
+             for n in result.massing["connections"]["nodes"]}
+    surface = nodes["site#1.entry.surface"]
+    targets = [Vec3.from_seq(point) for building in plan_buildings(result.massing)
+               for point in [building["entrance"], *building["arrivals"]]]
+    assert len(targets) == 16
+    for point in targets:
+        assert check_route(volume, surface, point, bp.minecraft_version).status == "reachable"
+    wrappers = [op for op in result.blueprint["operations"] if op["type"] == "translate"]
+    assert len(wrappers) == 8
+    clearance = result.site["layoutRules"]["ceilingClearance"][0]
+    for wrapper in wrappers:
+        box = build_operation(wrapper, "test.clearance").bounds()
+        assert np.all(ceiling[box.min.z:box.max.z + 1, box.min.x:box.max.x + 1]
+                      >= box.max.y + clearance)
+        for y in range(box.max.y + 1, box.max.y + clearance + 1):
+            for z in range(box.min.z, box.max.z + 1):
+                for x in range(box.min.x, box.max.x + 1):
+                    assert volume.get(Vec3(x, y, z)).id == "minecraft:air"
+    assert len(result.site["supports"]) == 2
+    for support in result.site["supports"]:
+        x, low, z = support["from"]
+        for y in range(low, support["to"][1] + 1):
+            point = Vec3(x, y, z)
+            assert volume.get(point).id != "minecraft:air"
+            assert volume.attributes(point).reserved == "structure"
+            assert volume.attributes(point).owner == support["owner"]
+    assert any(state.id == "minecraft:glowstone" for _, state in volume)
+
+
+@pytest.mark.parametrize("core,reverse", ((16, False), (32, True), (7, True)))
+def test_medium_city_completed_partition_attributes(tmp_path, core, reverse):
+    _, bp = concrete_plan(tmp_path, scale="medium")
+    expected = next(generate_regions(bp, limits=GenerationLimits((64, None, 64), 0))).volume
+    count = 0
+    for region in generate_regions(bp, limits=GenerationLimits((core, None, core), 0),
+                                   reverse=reverse):
+        for point, state in region.volume:
+            assert expected.get(point) == state
+            assert expected.attributes(point) == region.volume.attributes(point)
+            count += 1
+    assert count == bp.bounds().volume
+
+
 @pytest.mark.parametrize("archetype", ("cave", "underground_city"))
 @pytest.mark.parametrize("version", ("1.21.11", "26.1.2", "26.2", "26.3"))
 @pytest.mark.parametrize("fmt", ("schem", "litematic"))
@@ -138,18 +192,25 @@ def test_underground_other_seeds_and_branches(tmp_path, archetype, seed):
 
 
 @pytest.mark.parametrize("changes, message", [
-    ({"size": [64, 48, 64]}, "主空洞"),
-    ({"size": [256, 32, 256]}, "天井"),
+    ({"size": [48, 48, 48]}, "区画|主空洞"),
+    ({"scale": "medium", "features": {"buildings": 12}}, "区画|主空洞"),
     ({"config": {"terrain": {"water_level": 100}}}, "水没"),
     ({"features": {"entrances": 5}}, "入口数"),
     ({"elements": {"house#1": {"width": 20}}}, "区画"),
-    ({"size": [256, 64, 256], "elements": {"house#1": {"floors": 2,
-                                                       "floor_height": 5}}}, "天井"),
+    ({"size": [64, 24, 64], "elements": {"house#1": {"floors": 2,
+                                                      "floor_height": 5}}}, "天井"),
     ({"elements": {"missing#1": {"width": 9}}}, "未知"),
 ])
 def test_underground_rejects_unusable_sites(tmp_path, changes, message):
     with pytest.raises(BlueprintError, match=message):
         plan_buildspec(resolve_buildspec(underground_spec(**changes), project_dir=tmp_path))
+
+
+@pytest.mark.parametrize("seed", (42, 73, 101))
+def test_low_city_rejects_insufficient_ceiling(tmp_path, seed):
+    with pytest.raises(BlueprintError, match="天井"):
+        plan_buildspec(resolve_buildspec(underground_spec(size=[64, 24, 64], seed=seed),
+                                        project_dir=tmp_path))
 
 
 @pytest.mark.parametrize("target", ("support", "footing", "bearing", "entrance", "surface"))
