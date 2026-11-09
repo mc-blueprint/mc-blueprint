@@ -90,4 +90,10 @@ town/city は [街並み](TOWN.md)、cave/underground_city は [地下](UNDERGRO
 地下都市は従来空洞に収まらない場合、区画と棟の実外形から共通中心高の空洞群を
 計画する。密度計画v2のchambersに入力形状を保存し、復元時に接続グラフも照合する。
 外部BuildSpec/scene/editsと内部計画v2の形式は変更しない。
-terrain の専用plannerは未実装であり Site/Massing 段で明示的に拒否する。
+terrain は `terrain_planning.plan_terrain_buildspec` が既存の地形場・密度計画から
+`terrain_density` Operationを作る。主空洞とchambersは空とし、棟・接合・歩行対象を
+持たない内部計画v2を返す。親Operationにはroleを付けず、`terrain.ground`・
+`terrain.opening`・`terrain.support`・`terrain.water`・`terrain.vegetation`を保持する。
+Siteには密度計画、offset、floorYと密度変位前の地表heightfieldを保持する。
+Weatherはこの地表場を基準とし、完成地形から高さを逆算しない。
+通常makeはSiteとBlueprintの密度計画を照合し、Weather後coreで保証アーチを検査する。

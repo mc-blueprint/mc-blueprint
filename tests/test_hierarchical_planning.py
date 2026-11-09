@@ -174,7 +174,8 @@ def test_pipeline_preserves_terrain_only_na(tmp_path, monkeypatch, archetype):
     terrain = hierarchy(archetype, [])
     critic = CriticAccumulator(plan_from_metadata(terrain)).finalize()
     monkeypatch.setattr(pipeline, "_support", lambda *args: (0, None))
-    context = {"massing": terrain, "resolved": {"config": {"limits": {}}}}
+    context = {"massing": terrain, "site": {"density": {"arches": False}},
+               "resolved": {"config": {"limits": {}}}}
     failed, lines, metrics, diagnostics = pipeline._evaluate(
         None, SimpleNamespace(minecraft_version="1.21.11"), context,
         tmp_path / "terrain.yaml", 100, critic,
@@ -264,7 +265,7 @@ def test_feature_templates_roundtrip(tmp_path, capsys, archetype):
 
 @pytest.mark.parametrize("archetype", ["castle", "town", "city", "terrain", "cave",
                                      "underground_city"])
-def test_closed_features_and_unimplemented_planner(tmp_path, archetype):
+def test_closed_features_and_supported_planners(tmp_path, archetype):
     resolved = resolve_buildspec({"minecraftVersion": "1.21.11", "archetype": archetype,
                                   "scale": "huge"}, project_dir=tmp_path)
     if "buildings" in resolved.buildspec["features"]:
@@ -275,11 +276,8 @@ def test_closed_features_and_unimplemented_planner(tmp_path, archetype):
         assert len(single_plan(resolved).massing["parcels"]) == 12
     elif archetype == "underground_city":
         assert len(plan_buildings(single_plan(resolved).massing)) == 12
-    elif archetype == "cave":
+    elif archetype in ("cave", "terrain"):
         assert not plan_buildings(single_plan(resolved).massing)
-    else:
-        with pytest.raises(BlueprintError, match="Site/Massing.*未対応"):
-            single_plan(resolved)
     with pytest.raises(BlueprintError, match="未知"):
         resolve_buildspec({"minecraftVersion": "1.21.11", "archetype": archetype,
                            "features": {"unknown": True}}, project_dir=tmp_path)

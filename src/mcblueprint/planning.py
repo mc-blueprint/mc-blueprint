@@ -334,7 +334,7 @@ def _plan_overrides(spec, scene_bounds):
 
 
 def plan_buildspec(resolved: ResolveResult) -> PlanningResult:
-    """Resolve結果から住宅・塔・城郭・街並み・地下を計画する。入力は変更せず生成しない。
+    """Resolve結果から住宅・塔・城郭・街並み・地下・地形を計画する。入力は変更せず生成しない。
 
     寸法不足・未知のelements/param・不正なoverrideはBlueprintError。
     予約へのoverrideは生成時にも検査される。snapshotは領域読取用spoolを保持し、
@@ -343,6 +343,10 @@ def plan_buildspec(resolved: ResolveResult) -> PlanningResult:
     if resolved.buildspec is None:
         raise BlueprintError("Site: BuildSpecが必要です")
     spec = copy.deepcopy(resolved.buildspec)
+    if spec["archetype"] == "terrain":
+        from mcblueprint.terrain_planning import plan_terrain_buildspec
+
+        return plan_terrain_buildspec(resolved)
     if spec["archetype"] == "castle":
         from mcblueprint.castle_planning import plan_castle
 

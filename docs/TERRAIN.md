@@ -1,5 +1,28 @@
 # 地形計画とオフライン地形スナップショット
 
+## 地形単独の生成
+
+`mcblueprint spec-template terrain` でBuildSpecを作り、次のように地形を指定する。
+
+```yaml
+minecraftVersion: "1.21.11"
+archetype: terrain
+scale: medium
+seed: 42
+site:
+  terrain: mountain
+features:
+  overhangs: true
+  arches: true
+```
+
+`mcblueprint make terrain.yaml -o output/terrain.schem --emit blueprint` で
+計画・生成・評価・出力する。flat/hill/mountain/plateau/valley/islandに対応し、
+noneはflatとして扱う。空洞主体の依頼はcave/underground_cityを使う。
+既存地形ファイルの単独編集、建物追加、elementsによる地形編集は対象外。
+overrideは範囲内で適用し、保証アーチを壊した完成形状は品質FAIL（終了コード3）になる。
+emit Blueprintのbuild、各計画段からのresume、出典terrain#1へのnote編集は既存経路を使う。
+
 ## 生成地形の2D計画（H04）
 
 `terrain_field.plan_terrain(bounds, kind, settings, seed, clearance=0)` は
@@ -94,13 +117,14 @@ Blueprintの `terrain_density` Operationには `plan`（上記JSON）と
 `minecraftVersion`（Blueprintと同じ版）が必須。Operationのseedはplanのfield.seedで
 確定し、build時の乱数seedで変更しない。旧landformやトップレベルterrainとは独立し、
 通常のemitされたBlueprintをvalidate/buildして同じ地形を再現できる。
-make・Siteへの接続と造成はH06/H07で行う。
+terrain単独のmake・Site接続は専用planner、複合敷地の造成は各Site plannerが担当する。
 
 施工時の作業領域は最大XZ32×32・Y16（樹冠候補の照会はXZ各2の余裕）に分ける。
 高さ方向の走査で2Dの最上面だけを保持し、表層下3層を土/砂岩、支持部を石にする。
 表層材と植生候補はH04のcolumnを再利用する。水は非地盤セルの世界座標水位以下へ
 置き、主空洞の既定水位はなし。明示した水位だけ主空洞にも適用する。
 木・草は最上面がcolumn.topと一致するときだけ配置し、樹冠も隣接領域へ切り出す。
+アーチの保証支持部として石になった地表候補には木・草を置かない。
 木の幹が地盤と衝突する候補は採用しない。
 樹冠も密度が空気のセルだけに置き、隣接列の地盤や必須支持部を上書きしない。
 

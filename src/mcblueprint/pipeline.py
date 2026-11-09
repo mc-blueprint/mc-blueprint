@@ -431,7 +431,7 @@ def export_generated_blueprint(
         raise BlueprintError(f"Blueprintの出力に失敗しました: {exc}") from exc
 
 
-def _evaluate(window, blueprint, context, source, max_nodes, critic):
+def _evaluate(window, blueprint, context, source, max_nodes, critic, density_failures=()):
     buildings = plan_buildings(context["massing"])
     root = buildings[0]["element"] if len(buildings) == 1 else context["massing"]["element"]
     metrics = dict(critic.metrics)
@@ -458,6 +458,15 @@ def _evaluate(window, blueprint, context, source, max_nodes, critic):
     metrics["support"] = {"value": support_count}
     diagnostic("support", "support", "fail" if support_count else "ok", support_count, 0,
                detail=first)
+    if context["massing"]["archetype"] == "terrain":
+        if context["site"]["density"]["arches"]:
+            metrics["terrain_shape"] = {"value": not bool(density_failures)}
+            diagnostic("terrain_shape", "terrain_shape", "fail" if density_failures else "ok",
+                       not bool(density_failures), True, element="terrain#1",
+                       detail=" ".join(sorted(density_failures)))
+        else:
+            metrics["terrain_shape"] = {"value": None, "status": "n/a",
+                                        "reason": "arches=falseのため保証アーチなし"}
     plan = context["massing"]
     plan_buildings(plan)
     nodes = {node["id"]: node for node in plan["connections"]["nodes"]}
@@ -769,9 +778,23 @@ def make(
                 max_area_ratios=context["maxAreaRatios"] if colorpack is not None else None,
                 building_area_ratios=context.get("buildingMaxAreaRatios", {}),
             )
+            density_plan = None
+            density_failures = set()
+            if spec["archetype"] == "terrain":
+                from mcblueprint.terrain_density import check_density_region
+
+                density_ops = [op for op in blueprint.operations if op.type == "terrain_density"]
+                if (len(density_ops) != 1
+                        or density_ops[0].plan.to_dict() != context["site"]["density"]):
+                    raise BlueprintError("地形のSiteとBlueprintの密度計画が一致しません")
+                density_plan = density_ops[0].plan
 
             def consume_regions():
                 for region in regions:
+                    if density_plan is not None and density_plan.arches:
+                        density_failures.update(check_density_region(
+                            density_plan, region.volume, region.core,
+                        ))
                     accumulator.consume(region)
                     check_tables()
                     yield region
@@ -797,6 +820,7 @@ def make(
                 failed, lines, metrics, structured = _evaluate(
                     window, blueprint, context, source, max_nodes=max(1, int(budget // 2 // 2048)),
                     critic=critic_result,
+                    density_failures=density_failures,
                 )
                 for diagnostic in context["detail"]["diagnostics"]:
                     structured.append(diagnostic)
