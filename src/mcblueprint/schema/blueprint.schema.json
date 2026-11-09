@@ -3349,11 +3349,12 @@
               "entrances",
               "caveGraph",
               "arch",
-              "sha256"
+              "sha256",
+              "chambers"
             ],
             "properties": {
               "formatVersion": {
-                "const": 1
+                "const": 2
               },
               "field": {
                 "type": "object"
@@ -3408,6 +3409,41 @@
               "sha256": {
                 "type": "string",
                 "pattern": "^[a-f0-9]{64}$"
+              },
+              "chambers": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "id",
+                    "center",
+                    "radius"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "center": {
+                      "type": "array",
+                      "items": {
+                        "type": "integer"
+                      },
+                      "minItems": 3,
+                      "maxItems": 3
+                    },
+                    "radius": {
+                      "type": "array",
+                      "items": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "minItems": 3,
+                      "maxItems": 3
+                    }
+                  }
+                }
               }
             }
           }

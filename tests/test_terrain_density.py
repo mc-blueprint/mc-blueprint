@@ -15,7 +15,7 @@ from mcblueprint.generator import GenerationLimits, generate, generate_regions
 from mcblueprint.importers import read_terrain
 from mcblueprint.loader import load_blueprint_dict
 from mcblueprint.model import AABB, BlockState, Vec3
-from mcblueprint.terrain_density import TerrainDensity, check_density_region, plan_density
+from mcblueprint.terrain_density import CaveNode, TerrainDensity, check_density_region, plan_density
 from mcblueprint.terrain_field import plan_terrain
 from mcblueprint.validator import validate
 from mcblueprint.volume import CellAttributes, RegionVolume
@@ -33,7 +33,10 @@ def blueprint(plan):
                             "plan": plan.to_dict()}]}
 
 
-@pytest.mark.parametrize("features", [{}, {"arches": True}, {"main_cave": True, "entrances": 4}])
+@pytest.mark.parametrize("features", [{}, {"arches": True}, {"main_cave": True, "entrances": 4},
+    {"main_cave": True, "chambers": (
+        CaveNode("central", Vec3(13, 14, 27), Vec3(14, 12, 12)),
+        CaveNode("auxiliary", Vec3(23, 14, 27), Vec3(7, 10, 9)))}])
 @pytest.mark.parametrize("core", [16, 32, 64, 7])
 def test_density_partition_reverse_restart(features, core):
     plan = plan_density(field(caves=0.7), **features)
@@ -180,6 +183,44 @@ def test_invalid_plan_shape_bounds_and_budget():
     loaded = load_blueprint_dict(blueprint(plan))
     with pytest.raises(BlueprintError, match="収まりません"):
         next(generate_regions(loaded, limits=GenerationLimits(max_memory_mb=1)))
+
+
+@pytest.mark.parametrize("node", [
+    CaveNode(7, Vec3(23, 14, 27), Vec3(7, 10, 9)),
+    CaveNode("central", Vec3(23, 14, 27), Vec3(7, 10, 9)),
+    CaveNode("cave.entrance#0", Vec3(23, 14, 27), Vec3(7, 10, 9)),
+    CaveNode("auxiliary", Vec3(23, 15, 27), Vec3(7, 10, 9)),
+    CaveNode("auxiliary", Vec3(23, 14, 27), Vec3(9, 10, 9)),
+    CaveNode("auxiliary", Vec3(23, 14, 27), Vec3(0, 10, 9)),
+    CaveNode("auxiliary", Vec3(28, 14, 40), Vec3(2, 10, 2)),
+])
+def test_chambers_reject_invalid_geometry(node):
+    central = CaveNode("central", Vec3(13, 14, 27), Vec3(14, 12, 12))
+    with pytest.raises(BlueprintError, match="chambers"):
+        plan_density(field(), main_cave=True, chambers=(central, node))
+
+
+def test_chambers_roundtrip_tampering_and_old_version():
+    chambers = (CaveNode("central", Vec3(13, 14, 27), Vec3(14, 12, 12)),
+                CaveNode("auxiliary", Vec3(23, 14, 27), Vec3(7, 10, 9)))
+    plan = plan_density(field(), main_cave=True, chambers=chambers)
+    assert plan.chambers == chambers
+    assert ("central", "auxiliary") in plan.edges
+    assert not validate(blueprint(plan))
+    for key in ("chambers", "caveGraph", "sha256", "formatVersion"):
+        data = plan.to_dict()
+        if key == "chambers":
+            data[key][1]["radius"][0] -= 1
+        elif key == "caveGraph":
+            data[key]["edges"].pop()
+        elif key == "sha256":
+            data[key] = "0" * 64
+        else:
+            data[key] = 1
+        with pytest.raises(BlueprintError, match="再生成"):
+            TerrainDensity.from_dict(data)
+    with pytest.raises(BlueprintError, match="主空洞"):
+        plan_density(field(), chambers=chambers)
 
 
 @pytest.mark.parametrize("features", [{"main_cave": True}, {"arches": True}])

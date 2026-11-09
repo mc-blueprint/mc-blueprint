@@ -60,11 +60,13 @@ class TerrainDensity:
     nodes: tuple[CaveNode, ...]
     edges: tuple[tuple[str, str], ...]
     arch: AABB | None
+    chambers: tuple[CaveNode, ...]
 
     def to_dict(self) -> dict[str, Any]:
-        data = {"formatVersion": 1, "field": self.field.to_dict(),
+        data = {"formatVersion": 2, "field": self.field.to_dict(),
                 "overhangs": self.overhangs, "arches": self.arches,
                 "mainCave": self.main_cave, "entrances": self.entrances,
+                "chambers": [n.to_dict() for n in self.chambers],
                 "caveGraph": {"nodes": [n.to_dict() for n in self.nodes],
                               "edges": [list(edge) for edge in self.edges]},
                 "arch": None if self.arch is None else {
@@ -75,6 +77,8 @@ class TerrainDensity:
     def from_dict(cls, data: dict[str, Any]) -> TerrainDensity:
         """破損・未知版・形状不一致はBlueprintError。旧計画の移行は行わない。"""
         try:
+            if data["formatVersion"] != 2:
+                raise BlueprintError("密度計画の版が不一致です。再生成してください")
             field = TerrainField.from_dict(data["field"])
             validate_schema({"terrain": field.settings}, load_schema("config.schema.json"))
             if (field.heights.shape != (field.bounds.size.z, field.bounds.size.x)
@@ -84,7 +88,10 @@ class TerrainDensity:
                     or not field.bounds.min.y <= field.water_level <= field.band_top):
                 raise BlueprintError("密度計画の2D場と範囲が不一致です。再生成してください")
             plan = plan_density(field, overhangs=data["overhangs"], arches=data["arches"],
-                                main_cave=data["mainCave"], entrances=data["entrances"])
+                                main_cave=data["mainCave"], entrances=data["entrances"],
+                                chambers=tuple(CaveNode(n["id"], Vec3.from_seq(n["center"]),
+                                                        Vec3.from_seq(n["radius"]))
+                                               for n in data["chambers"]))
             if plan.to_dict() != data:
                 raise BlueprintError("密度計画のhashまたは形状が不一致です。再生成してください")
             return plan
@@ -156,17 +163,24 @@ class TerrainDensity:
 
 
 def plan_density(field: TerrainField, *, overhangs: bool = True, arches: bool = False,
-                 main_cave: bool = False, entrances: int = 1) -> TerrainDensity:
+                 main_cave: bool = False, entrances: int = 1,
+                 chambers: tuple[CaveNode, ...] = ()) -> TerrainDensity:
     """必須空洞・アーチを計画する。収まらない寸法や入口数はエラー。
 
     主空洞は中央の楕円体と入口までの楕円体列で保証し、caves=0でも維持する。
     入口は西・東・北・南の順で最大4個。枝洞ノイズは接続保証の対象外。
+    chambersは内部用の楕円体列で、先頭を中央空洞とする。中心高を揃え、殻厚2を
+    bounds内に確保し、各補助空洞を中央空洞と共通の内部セルで接続する。
+    空列は従来形状。保存形式は密度計画のみv2で、入力列もhashに含める。
     """
     if any(type(v) is not bool for v in (overhangs, arches, main_cave)):
         raise BlueprintError("密度形状の指定は真偽値が必要です")
     if type(entrances) is not int or not 1 <= entrances <= 4:
         raise BlueprintError("主空洞の入口数は1〜4が必要です")
     bounds = field.bounds
+    chambers = tuple(chambers)
+    if chambers and not main_cave:
+        raise BlueprintError("chambersには主空洞の指定が必要です")
     band = field.band_top - bounds.min.y
     if (main_cave or arches) and (min(bounds.size.x, bounds.size.z) < 15 or band < 16):
         raise BlueprintError("必須空洞・アーチにはXZ各15以上・地形帯16以上が必要です")
@@ -176,14 +190,45 @@ def plan_density(field: TerrainField, *, overhangs: bool = True, arches: bool = 
         radius = Vec3(max(3, bounds.size.x // 4), max(3, band // 5),
                       max(3, bounds.size.z // 4))
         center = Vec3(cx, bounds.min.y + radius.y + 3, cz)
-        nodes.append(CaveNode("cave#0", center, radius))
+        if chambers:
+            ids = set()
+            for node in chambers:
+                if (type(node.id) is not str or not node.id or node.id in ids
+                        or node.id.startswith("cave.entrance#")
+                        or any(type(v) is not int for v in (*node.center, *node.radius))
+                        or min(node.radius) <= 0
+                        or node.center.y != chambers[0].center.y
+                        or not bounds.contains(node.center - node.radius - Vec3(2, 2, 2))
+                        or not bounds.contains(node.center + node.radius + Vec3(2, 2, 2))):
+                    raise BlueprintError("chambersのID・中心高・半径・殻厚2が不正です")
+                ids.add(node.id)
+                if node is not chambers[0]:
+                    first = chambers[0]
+                    x, z = np.meshgrid(
+                        np.arange(max(first.center.x - first.radius.x,
+                                      node.center.x - node.radius.x),
+                                  min(first.center.x + first.radius.x,
+                                      node.center.x + node.radius.x) + 1),
+                        np.arange(max(first.center.z - first.radius.z,
+                                      node.center.z - node.radius.z),
+                                  min(first.center.z + first.radius.z,
+                                      node.center.z + node.radius.z) + 1))
+                    if not np.any(_ellipsoid(x, first.center.y + 1, z, first) &
+                                  _ellipsoid(x, first.center.y + 1, z, node)):
+                        raise BlueprintError("chambersの補助空洞が中央空洞に接続していません")
+                    edges.append((first.id, node.id))
+            nodes.extend(chambers)
+            center, radius = chambers[0].center, chambers[0].radius
+            cx, cz = center.x, center.z
+        else:
+            nodes.append(CaveNode("cave#0", center, radius))
         ends = [Vec3(bounds.min.x, center.y, cz), Vec3(bounds.max.x, center.y, cz),
                 Vec3(cx, center.y, bounds.min.z), Vec3(cx, center.y, bounds.max.z)]
         r = max(2, min(radius.y, radius.x, radius.z) // 2)
         for entrance, end in enumerate(ends[:entrances]):
             distance = max(abs(end.x - cx), abs(end.z - cz))
             steps = math.ceil(distance / r)
-            previous = "cave#0"
+            previous = nodes[0].id
             for step in range(1, steps + 1):
                 p = Vec3(round(cx + (end.x - cx) * step / steps), center.y,
                          round(cz + (end.z - cz) * step / steps))
@@ -199,7 +244,7 @@ def plan_density(field: TerrainField, *, overhangs: bool = True, arches: bool = 
         if main_cave:
             raise BlueprintError("主空洞とアーチは別の密度計画で指定してください")
     return TerrainDensity(field, overhangs, arches, main_cave, entrances,
-                          tuple(nodes), tuple(edges), arch)
+                          tuple(nodes), tuple(edges), arch, chambers)
 
 
 def check_density_region(plan: TerrainDensity, volume: BlockVolume | RegionVolume,

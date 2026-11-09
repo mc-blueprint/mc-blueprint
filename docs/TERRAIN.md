@@ -58,7 +58,7 @@ Weatherの植生とは独立。候補をブロックへ展開しcoreへ切り出
 ## 局所3D密度と必須形状（H05）
 
 `terrain_density.plan_density(field, overhangs=True, arches=False, main_cave=False,
-entrances=1)` はH04の `TerrainField` を共有し、密度計画を返す。
+entrances=1, chambers=())` はH04の `TerrainField` を共有し、密度計画を返す。
 基礎密度は `height(x,z)−y`、0以上が地盤。overhangs指定時はH04と同じ固定版の
 3D世界座標ノイズを地形帯の `0.12×amplitude` 倍で加える。
 波長・オクターブ・振幅比は2D場と同じ換算を使う。変位と掘削は別々で、
@@ -70,6 +70,11 @@ main_caveは中央の楕円体と入口までの楕円体列を作り、隣接�
 小さい半径以下にして内部を重ねる。中心・整数半径・安定IDと接続辺を保持する。
 入口は西・東・北・南の順で1〜4個。楕円体の外側2ブロックの殻も地盤にし、
 主空洞と入口の和集合を最後に掘る。枝洞ノイズで必須空間や殻を失わない。
+内部引数chambersはCaveNodeの列で、main_cave=Trueの場合だけ指定できる。
+空列では従来形状を使う。指定時は先頭を中央空洞とし、各補助空洞は中央と
+共通の内部セルを持つ。中心高は共通、半径は正整数、IDは一意で入口用の
+`cave.entrance#`接頭辞を使わず、入力した各空洞はbounds内に殻厚2を確保する。
+入口列は中央空洞から生成する。外部BuildSpecにchambersは追加しない。
 archesは底面から立つ2本の支持部と楕円形の開口・上部を確保する。
 開口は地形のZ両端まで掘り抜き、前後の地盤に閉じ込められないようにする。
 主空洞とアーチは別計画で扱う。いずれもXZ各15以上・地形帯16以上を要求し、
@@ -81,6 +86,9 @@ density/cavity/support/opening配列を返す。openingは外部までの必須�
 計画には3D配列・全体連結ラベルを保持せず、2D場と形状・接続グラフだけを持つ。
 `to_dict()` / `TerrainDensity.from_dict()` は2D場を含むJSONとSHA-256で再開する。
 未知版、hash・形状・接続グラフの不一致は再生成を要求する。
+密度計画だけformatVersion=2とし、入力chambers（空列を含む）も保存して
+plan_densityから再構築・照合する。旧v1の密度計画を含むBlueprintとcheckpointは
+BuildSpecから再生成する。Blueprint外枠v1・内部階層計画v2は維持し、移行処理は設けない。
 
 Blueprintの `terrain_density` Operationには `plan`（上記JSON）と
 `minecraftVersion`（Blueprintと同じ版）が必須。Operationのseedはplanのfield.seedで

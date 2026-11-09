@@ -87,5 +87,7 @@ castle は [城郭の生成](CASTLE.md) に従って専用Site plannerで計画�
 town/city は [街並み](TOWN.md)、cave/underground_city は [地下](UNDERGROUND.md) の
 専用Site plannerで計画する。地下床のWeather基準場は既存のheightfield形式を使う。
 空洞の密度計画は地表場を保持し、造成・通路の列だけ地下床基準場の高さを更新する。
+地下都市は従来空洞に収まらない場合、区画と棟の実外形から共通中心高の空洞群を
+計画する。密度計画v2のchambersに入力形状を保存し、復元時に接続グラフも照合する。
 外部BuildSpec/scene/editsと内部計画v2の形式は変更しない。
 terrain の専用plannerは未実装であり Site/Massing 段で明示的に拒否する。
