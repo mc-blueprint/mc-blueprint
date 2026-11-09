@@ -9,6 +9,7 @@ designs/local/*
 output/*
 !output/.gitkeep
 preview/
+evaluation/artifacts/
 
 # Minecraft assets（再配布しない）
 *.jar

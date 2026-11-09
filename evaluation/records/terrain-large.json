@@ -1,0 +1,4947 @@
+{
+  "schemaVersion": 1,
+  "recordType": "terrain-large-functional-matrix",
+  "issue": 263,
+  "planSha256": "698a515d7bf3511559ac11af4d5ffb80f5b13a3d48b7b7265beb515853c49252",
+  "scriptSha256": "b0c9aaa5c3efbe7b45ff19b039feb283dc14e8023191ad8d0276633751ba1e5f",
+  "benchmarkScriptSha256": "e85c9a327134a2085c22174e52cd872db4aaa10fbb9b410f779033df97e69dd1",
+  "provenance": {
+    "commit": "746c51736c49c09cd0f0643c0f44f5efd78476d7",
+    "engine_sha256": "d76227340cb4453fe986b02554a14edf60e5207f9bca0e5bb108feecc685ba66",
+    "lock_sha256": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+    "default_config_sha256": "17f5c240ead94ebb8c410f045b3344f07d07ec9c29a8a769645f853b5ea28d64"
+  },
+  "colorpack": {
+    "kind": "default"
+  },
+  "measuredAt": "2026-11-09T02:58:55.103000+00:00",
+  "results": [
+    {
+      "case": "terrain-mountain-flat-no-erosion",
+      "scale": "medium",
+      "seed": 42,
+      "version": "1.21.11",
+      "format": "schem",
+      "frozenInputSha256": "3015d8f1a8f495207634a59c3389218dec70753ddfc849c25b18dec604275ecb",
+      "actualInputSha256": "b909e0dd0ed40b99244d5c4ac8b9751d8d3c121e9bbccd87be676546a7c20364",
+      "runnerSha256": "b824a1ecf760da780a25e25f5ca7e6e9811a7e331fd1adfe8ad550f39be3d413",
+      "provenance": {
+        "commit": "4e9ce5eebdb71c25542f86a6f199f0fdfeaf7477",
+        "engine_sha256": "5c32ecd5ecea9dccc47ad9859bd02b81b5cbfd6199e4e19b019884ed65c2defd",
+        "lock_sha256": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "default_config_sha256": "17f5c240ead94ebb8c410f045b3344f07d07ec9c29a8a769645f853b5ea28d64"
+      },
+      "runtime": {
+        "python": "3.12.15",
+        "implementation": "CPython",
+        "dependencies": {
+          "numpy": "2.5.4",
+          "pyfastnoiselite": "0.0.7",
+          "nbtlib": "2.0.4",
+          "jsonschema": "4.26.0",
+          "PyYAML": "6.0.3"
+        }
+      },
+      "implementation": {
+        "engine": "0.1.0",
+        "planVersion": 2,
+        "engineHash": "3c7fe0127b92e9c5a68bbb6714ba73b7955f879d402d13358f1d1131560a52aa",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608"
+      },
+      "status": "error",
+      "failureReason": "PipelineError: Resolve: Site/Massing: terrain plannerは未対応です",
+      "failureArtifacts": "evaluation/artifacts/issue-263/failures/terrain-mountain-flat-no-erosion-medium-s42-1.21.11-schem-3015d8f1a8-20261108T164112171706",
+      "inputSha256": "3015d8f1a8f495207634a59c3389218dec70753ddfc849c25b18dec604275ecb"
+    },
+    {
+      "case": "underground-city-medieval",
+      "scale": "medium",
+      "seed": 42,
+      "version": "1.21.11",
+      "format": "schem",
+      "frozenInputSha256": "c4315c39f3001c8639f6eb9bcd2d45631e880734772c0eb36b4d27ef57197037",
+      "actualInputSha256": "be7a4a7dac6ae5c0cc41468b97a571b47d881c5e3c6bf17107e8403fc975e237",
+      "runnerSha256": "b824a1ecf760da780a25e25f5ca7e6e9811a7e331fd1adfe8ad550f39be3d413",
+      "provenance": {
+        "commit": "4e9ce5eebdb71c25542f86a6f199f0fdfeaf7477",
+        "engine_sha256": "5c32ecd5ecea9dccc47ad9859bd02b81b5cbfd6199e4e19b019884ed65c2defd",
+        "lock_sha256": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "default_config_sha256": "17f5c240ead94ebb8c410f045b3344f07d07ec9c29a8a769645f853b5ea28d64"
+      },
+      "runtime": {
+        "python": "3.12.15",
+        "implementation": "CPython",
+        "dependencies": {
+          "numpy": "2.5.4",
+          "pyfastnoiselite": "0.0.7",
+          "nbtlib": "2.0.4",
+          "jsonschema": "4.26.0",
+          "PyYAML": "6.0.3"
+        }
+      },
+      "implementation": {
+        "engine": "0.1.0",
+        "planVersion": 2,
+        "engineHash": "3c7fe0127b92e9c5a68bbb6714ba73b7955f879d402d13358f1d1131560a52aa",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608"
+      },
+      "status": "error",
+      "failureReason": "PipelineError: Resolve: Site: 要求された地下区画・道路がsizeの主空洞に収まりません",
+      "failureArtifacts": "evaluation/artifacts/issue-263/failures/underground-city-medieval-medium-s42-1.21.11-schem-c4315c39f3-20261108T164128097120",
+      "inputSha256": "c4315c39f3001c8639f6eb9bcd2d45631e880734772c0eb36b4d27ef57197037"
+    },
+    {
+      "case": "castle-medieval",
+      "scale": "medium",
+      "seed": 42,
+      "version": "1.21.11",
+      "format": "schem",
+      "frozenInputSha256": "0ebc8caac94eb70084007e6415921db11acbc870e8f7f70fc30ba4a89418586a",
+      "actualInputSha256": "86ff0828c8f0dbbfddb4025917b02ce3df523f8dde707cf10ed36f41d07de4a1",
+      "implementation": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "3c7fe0127b92e9c5a68bbb6714ba73b7955f879d402d13358f1d1131560a52aa",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "provenance": {
+        "commit": "4e9ce5eebdb71c25542f86a6f199f0fdfeaf7477",
+        "engine_sha256": "5c32ecd5ecea9dccc47ad9859bd02b81b5cbfd6199e4e19b019884ed65c2defd",
+        "lock_sha256": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "default_config_sha256": "17f5c240ead94ebb8c410f045b3344f07d07ec9c29a8a769645f853b5ea28d64"
+      },
+      "runtime": {
+        "python": "3.12.15",
+        "implementation": "CPython",
+        "dependencies": {
+          "numpy": "2.5.4",
+          "pyfastnoiselite": "0.0.7",
+          "nbtlib": "2.0.4",
+          "jsonschema": "4.26.0",
+          "PyYAML": "6.0.3"
+        }
+      },
+      "runnerSha256": "b824a1ecf760da780a25e25f5ca7e6e9811a7e331fd1adfe8ad550f39be3d413",
+      "colorpack": null,
+      "makeCode": 0,
+      "runStatus": "passed",
+      "metrics": {
+        "beam_continuity": {
+          "denominator": 17,
+          "numerator": 17,
+          "value": 1.0
+        },
+        "column_continuity": {
+          "denominator": 68,
+          "numerator": 68,
+          "value": 1.0
+        },
+        "decoration_density": {
+          "house#1.facade.east.floor#2:east": {
+            "denominator": 34,
+            "numerator": 10,
+            "value": 29.41176470588235
+          },
+          "house#1.facade.north.floor#1:north": {
+            "denominator": 34,
+            "numerator": 11,
+            "value": 32.35294117647059
+          },
+          "house#1.facade.north.floor#2:north": {
+            "denominator": 34,
+            "numerator": 11,
+            "value": 32.35294117647059
+          },
+          "house#1.facade.south.floor#1:south": {
+            "denominator": 34,
+            "numerator": 11,
+            "value": 32.35294117647059
+          },
+          "house#1.facade.south.floor#2:south": {
+            "denominator": 34,
+            "numerator": 11,
+            "value": 32.35294117647059
+          },
+          "house#1.facade.west.floor#1:west": {
+            "denominator": 36,
+            "numerator": 12,
+            "value": 33.333333333333336
+          },
+          "house#1.facade.west.floor#2:west": {
+            "denominator": 36,
+            "numerator": 12,
+            "value": 33.333333333333336
+          },
+          "house#2.facade.north.floor#1:north": {
+            "denominator": 30,
+            "numerator": 6,
+            "value": 20.0
+          },
+          "house#2.facade.south.floor#1:south": {
+            "denominator": 30,
+            "numerator": 11,
+            "value": 36.666666666666664
+          },
+          "house#3.facade.east.floor#1:east": {
+            "denominator": 34,
+            "numerator": 10,
+            "value": 29.41176470588235
+          },
+          "house#3.facade.north.floor#1:north": {
+            "denominator": 30,
+            "numerator": 6,
+            "value": 20.0
+          },
+          "house#3.facade.south.floor#1:south": {
+            "denominator": 30,
+            "numerator": 11,
+            "value": 36.666666666666664
+          },
+          "tower#1.facade.segment#1.floor#1:south": {
+            "denominator": 22,
+            "numerator": 8,
+            "value": 36.36363636363637
+          },
+          "tower#1.facade.segment#1.floor#2:south": {
+            "denominator": 17,
+            "numerator": 5,
+            "value": 29.41176470588235
+          },
+          "tower#1.facade.segment#2.floor#1:south": {
+            "denominator": 12,
+            "numerator": 3,
+            "value": 25.0
+          },
+          "tower#1.facade.segment#2.floor#2:south": {
+            "denominator": 9,
+            "numerator": 3,
+            "value": 33.333333333333336
+          },
+          "tower#1.facade.segment#3.floor#1:west": {
+            "denominator": 23,
+            "numerator": 7,
+            "value": 30.434782608695652
+          },
+          "tower#1.facade.segment#3.floor#2:west": {
+            "denominator": 17,
+            "numerator": 5,
+            "value": 29.41176470588235
+          },
+          "tower#1.facade.segment#4.floor#1:west": {
+            "denominator": 12,
+            "numerator": 4,
+            "value": 33.333333333333336
+          },
+          "tower#1.facade.segment#4.floor#2:west": {
+            "denominator": 9,
+            "numerator": 3,
+            "value": 33.333333333333336
+          },
+          "tower#1.facade.segment#5.floor#1:north": {
+            "denominator": 16,
+            "numerator": 5,
+            "value": 31.25
+          },
+          "tower#1.facade.segment#5.floor#2:north": {
+            "denominator": 12,
+            "numerator": 4,
+            "value": 33.333333333333336
+          },
+          "tower#1.facade.segment#6.floor#1:north": {
+            "denominator": 19,
+            "numerator": 6,
+            "value": 31.57894736842105
+          },
+          "tower#1.facade.segment#6.floor#2:north": {
+            "denominator": 14,
+            "numerator": 4,
+            "value": 28.571428571428573
+          },
+          "tower#1.facade.segment#7.floor#1:east": {
+            "denominator": 16,
+            "numerator": 5,
+            "value": 31.25
+          },
+          "tower#1.facade.segment#7.floor#2:east": {
+            "denominator": 12,
+            "numerator": 4,
+            "value": 33.333333333333336
+          },
+          "tower#1.facade.segment#8.floor#1:east": {
+            "denominator": 19,
+            "numerator": 6,
+            "value": 31.57894736842105
+          },
+          "tower#1.facade.segment#8.floor#2:east": {
+            "denominator": 14,
+            "numerator": 4,
+            "value": 28.571428571428573
+          },
+          "tower#2.facade.segment#1.floor#1:south": {
+            "denominator": 22,
+            "numerator": 8,
+            "value": 36.36363636363637
+          },
+          "tower#2.facade.segment#1.floor#2:south": {
+            "denominator": 17,
+            "numerator": 5,
+            "value": 29.41176470588235
+          },
+          "tower#2.facade.segment#2.floor#1:south": {
+            "denominator": 12,
+            "numerator": 4,
+            "value": 33.333333333333336
+          },
+          "tower#2.facade.segment#2.floor#2:south": {
+            "denominator": 9,
+            "numerator": 3,
+            "value": 33.333333333333336
+          },
+          "tower#2.facade.segment#3.floor#1:west": {
+            "denominator": 23,
+            "numerator": 7,
+            "value": 30.434782608695652
+          },
+          "tower#2.facade.segment#3.floor#2:west": {
+            "denominator": 17,
+            "numerator": 5,
+            "value": 29.41176470588235
+          },
+          "tower#2.facade.segment#4.floor#1:west": {
+            "denominator": 12,
+            "numerator": 4,
+            "value": 33.333333333333336
+          },
+          "tower#2.facade.segment#4.floor#2:west": {
+            "denominator": 9,
+            "numerator": 3,
+            "value": 33.333333333333336
+          },
+          "tower#2.facade.segment#5.floor#1:north": {
+            "denominator": 16,
+            "numerator": 5,
+            "value": 31.25
+          },
+          "tower#2.facade.segment#5.floor#2:north": {
+            "denominator": 12,
+            "numerator": 4,
+            "value": 33.333333333333336
+          },
+          "tower#2.facade.segment#6.floor#1:north": {
+            "denominator": 19,
+            "numerator": 6,
+            "value": 31.57894736842105
+          },
+          "tower#2.facade.segment#6.floor#2:north": {
+            "denominator": 14,
+            "numerator": 4,
+            "value": 28.571428571428573
+          },
+          "tower#2.facade.segment#7.floor#1:east": {
+            "denominator": 16,
+            "numerator": 5,
+            "value": 31.25
+          },
+          "tower#2.facade.segment#7.floor#2:east": {
+            "denominator": 12,
+            "numerator": 4,
+            "value": 33.333333333333336
+          },
+          "tower#2.facade.segment#8.floor#1:east": {
+            "denominator": 19,
+            "numerator": 6,
+            "value": 31.57894736842105
+          },
+          "tower#2.facade.segment#8.floor#2:east": {
+            "denominator": 14,
+            "numerator": 4,
+            "value": 28.571428571428573
+          },
+          "tower#3.facade.segment#1.floor#1:north": {
+            "denominator": 22,
+            "numerator": 8,
+            "value": 36.36363636363637
+          },
+          "tower#3.facade.segment#1.floor#2:north": {
+            "denominator": 17,
+            "numerator": 5,
+            "value": 29.41176470588235
+          },
+          "tower#3.facade.segment#2.floor#1:north": {
+            "denominator": 12,
+            "numerator": 4,
+            "value": 33.333333333333336
+          },
+          "tower#3.facade.segment#2.floor#2:north": {
+            "denominator": 9,
+            "numerator": 3,
+            "value": 33.333333333333336
+          },
+          "tower#3.facade.segment#3.floor#1:east": {
+            "denominator": 23,
+            "numerator": 7,
+            "value": 30.434782608695652
+          },
+          "tower#3.facade.segment#3.floor#2:east": {
+            "denominator": 17,
+            "numerator": 5,
+            "value": 29.41176470588235
+          },
+          "tower#3.facade.segment#4.floor#1:east": {
+            "denominator": 12,
+            "numerator": 4,
+            "value": 33.333333333333336
+          },
+          "tower#3.facade.segment#4.floor#2:east": {
+            "denominator": 9,
+            "numerator": 3,
+            "value": 33.333333333333336
+          },
+          "tower#3.facade.segment#5.floor#1:south": {
+            "denominator": 16,
+            "numerator": 5,
+            "value": 31.25
+          },
+          "tower#3.facade.segment#5.floor#2:south": {
+            "denominator": 12,
+            "numerator": 4,
+            "value": 33.333333333333336
+          },
+          "tower#3.facade.segment#6.floor#1:south": {
+            "denominator": 19,
+            "numerator": 6,
+            "value": 31.57894736842105
+          },
+          "tower#3.facade.segment#6.floor#2:south": {
+            "denominator": 14,
+            "numerator": 4,
+            "value": 28.571428571428573
+          },
+          "tower#3.facade.segment#7.floor#1:west": {
+            "denominator": 16,
+            "numerator": 5,
+            "value": 31.25
+          },
+          "tower#3.facade.segment#7.floor#2:west": {
+            "denominator": 12,
+            "numerator": 4,
+            "value": 33.333333333333336
+          },
+          "tower#3.facade.segment#8.floor#1:west": {
+            "denominator": 19,
+            "numerator": 6,
+            "value": 31.57894736842105
+          },
+          "tower#3.facade.segment#8.floor#2:west": {
+            "denominator": 14,
+            "numerator": 4,
+            "value": 28.571428571428573
+          },
+          "tower#4.facade.segment#1.floor#1:north": {
+            "denominator": 22,
+            "numerator": 8,
+            "value": 36.36363636363637
+          },
+          "tower#4.facade.segment#1.floor#2:north": {
+            "denominator": 17,
+            "numerator": 5,
+            "value": 29.41176470588235
+          },
+          "tower#4.facade.segment#2.floor#1:north": {
+            "denominator": 12,
+            "numerator": 4,
+            "value": 33.333333333333336
+          },
+          "tower#4.facade.segment#2.floor#2:north": {
+            "denominator": 9,
+            "numerator": 3,
+            "value": 33.333333333333336
+          },
+          "tower#4.facade.segment#3.floor#1:east": {
+            "denominator": 23,
+            "numerator": 7,
+            "value": 30.434782608695652
+          },
+          "tower#4.facade.segment#3.floor#2:east": {
+            "denominator": 17,
+            "numerator": 5,
+            "value": 29.41176470588235
+          },
+          "tower#4.facade.segment#4.floor#1:east": {
+            "denominator": 12,
+            "numerator": 4,
+            "value": 33.333333333333336
+          },
+          "tower#4.facade.segment#4.floor#2:east": {
+            "denominator": 9,
+            "numerator": 3,
+            "value": 33.333333333333336
+          },
+          "tower#4.facade.segment#5.floor#1:south": {
+            "denominator": 16,
+            "numerator": 5,
+            "value": 31.25
+          },
+          "tower#4.facade.segment#5.floor#2:south": {
+            "denominator": 12,
+            "numerator": 4,
+            "value": 33.333333333333336
+          },
+          "tower#4.facade.segment#6.floor#1:south": {
+            "denominator": 19,
+            "numerator": 6,
+            "value": 31.57894736842105
+          },
+          "tower#4.facade.segment#6.floor#2:south": {
+            "denominator": 14,
+            "numerator": 4,
+            "value": 28.571428571428573
+          },
+          "tower#4.facade.segment#7.floor#1:west": {
+            "denominator": 16,
+            "numerator": 5,
+            "value": 31.25
+          },
+          "tower#4.facade.segment#7.floor#2:west": {
+            "denominator": 12,
+            "numerator": 4,
+            "value": 33.333333333333336
+          },
+          "tower#4.facade.segment#8.floor#1:west": {
+            "denominator": 19,
+            "numerator": 6,
+            "value": 31.57894736842105
+          },
+          "tower#4.facade.segment#8.floor#2:west": {
+            "denominator": 14,
+            "numerator": 4,
+            "value": 28.571428571428573
+          },
+          "tower#5.facade.segment#1.floor#1:east": {
+            "denominator": 22,
+            "numerator": 8,
+            "value": 36.36363636363637
+          },
+          "tower#5.facade.segment#1.floor#2:east": {
+            "denominator": 17,
+            "numerator": 5,
+            "value": 29.41176470588235
+          },
+          "tower#5.facade.segment#2.floor#1:east": {
+            "denominator": 12,
+            "numerator": 4,
+            "value": 33.333333333333336
+          },
+          "tower#5.facade.segment#2.floor#2:east": {
+            "denominator": 9,
+            "numerator": 3,
+            "value": 33.333333333333336
+          },
+          "tower#5.facade.segment#3.floor#1:south": {
+            "denominator": 23,
+            "numerator": 7,
+            "value": 30.434782608695652
+          },
+          "tower#5.facade.segment#3.floor#2:south": {
+            "denominator": 17,
+            "numerator": 5,
+            "value": 29.41176470588235
+          },
+          "tower#5.facade.segment#4.floor#1:south": {
+            "denominator": 12,
+            "numerator": 4,
+            "value": 33.333333333333336
+          },
+          "tower#5.facade.segment#4.floor#2:south": {
+            "denominator": 9,
+            "numerator": 3,
+            "value": 33.333333333333336
+          },
+          "tower#5.facade.segment#5.floor#1:west": {
+            "denominator": 16,
+            "numerator": 5,
+            "value": 31.25
+          },
+          "tower#5.facade.segment#5.floor#2:west": {
+            "denominator": 12,
+            "numerator": 4,
+            "value": 33.333333333333336
+          },
+          "tower#5.facade.segment#6.floor#1:west": {
+            "denominator": 19,
+            "numerator": 6,
+            "value": 31.57894736842105
+          },
+          "tower#5.facade.segment#6.floor#2:west": {
+            "denominator": 14,
+            "numerator": 4,
+            "value": 28.571428571428573
+          },
+          "tower#5.facade.segment#7.floor#1:north": {
+            "denominator": 16,
+            "numerator": 5,
+            "value": 31.25
+          },
+          "tower#5.facade.segment#7.floor#2:north": {
+            "denominator": 12,
+            "numerator": 4,
+            "value": 33.333333333333336
+          },
+          "tower#5.facade.segment#8.floor#1:north": {
+            "denominator": 19,
+            "numerator": 6,
+            "value": 31.57894736842105
+          },
+          "tower#5.facade.segment#8.floor#2:north": {
+            "denominator": 14,
+            "numerator": 4,
+            "value": 28.571428571428573
+          },
+          "tower#6.facade.segment#1.floor#1:west": {
+            "denominator": 22,
+            "numerator": 8,
+            "value": 36.36363636363637
+          },
+          "tower#6.facade.segment#1.floor#2:west": {
+            "denominator": 17,
+            "numerator": 5,
+            "value": 29.41176470588235
+          },
+          "tower#6.facade.segment#2.floor#1:west": {
+            "denominator": 12,
+            "numerator": 4,
+            "value": 33.333333333333336
+          },
+          "tower#6.facade.segment#2.floor#2:west": {
+            "denominator": 9,
+            "numerator": 3,
+            "value": 33.333333333333336
+          },
+          "tower#6.facade.segment#3.floor#1:north": {
+            "denominator": 23,
+            "numerator": 7,
+            "value": 30.434782608695652
+          },
+          "tower#6.facade.segment#3.floor#2:north": {
+            "denominator": 17,
+            "numerator": 5,
+            "value": 29.41176470588235
+          },
+          "tower#6.facade.segment#4.floor#1:north": {
+            "denominator": 12,
+            "numerator": 4,
+            "value": 33.333333333333336
+          },
+          "tower#6.facade.segment#4.floor#2:north": {
+            "denominator": 9,
+            "numerator": 3,
+            "value": 33.333333333333336
+          },
+          "tower#6.facade.segment#5.floor#1:east": {
+            "denominator": 16,
+            "numerator": 5,
+            "value": 31.25
+          },
+          "tower#6.facade.segment#5.floor#2:east": {
+            "denominator": 12,
+            "numerator": 4,
+            "value": 33.333333333333336
+          },
+          "tower#6.facade.segment#6.floor#1:east": {
+            "denominator": 19,
+            "numerator": 6,
+            "value": 31.57894736842105
+          },
+          "tower#6.facade.segment#6.floor#2:east": {
+            "denominator": 14,
+            "numerator": 4,
+            "value": 28.571428571428573
+          },
+          "tower#6.facade.segment#7.floor#1:south": {
+            "denominator": 16,
+            "numerator": 5,
+            "value": 31.25
+          },
+          "tower#6.facade.segment#7.floor#2:south": {
+            "denominator": 12,
+            "numerator": 4,
+            "value": 33.333333333333336
+          },
+          "tower#6.facade.segment#8.floor#1:south": {
+            "denominator": 19,
+            "numerator": 6,
+            "value": 31.57894736842105
+          },
+          "tower#6.facade.segment#8.floor#2:south": {
+            "denominator": 14,
+            "numerator": 4,
+            "value": 28.571428571428573
+          }
+        },
+        "facade_mix": {
+          "house#1.facade.east.floor#2:east:wall_main": {
+            "denominator": 25,
+            "numerator": 13,
+            "value": 0.52
+          },
+          "house#1.facade.north.floor#1:north:wall_main": {
+            "denominator": 19,
+            "numerator": 14,
+            "value": 0.7368421052631579
+          },
+          "house#1.facade.north.floor#2:north:wall_main": {
+            "denominator": 28,
+            "numerator": 15,
+            "value": 0.5357142857142857
+          },
+          "house#1.facade.south.floor#1:south:wall_main": {
+            "denominator": 19,
+            "numerator": 16,
+            "value": 0.8421052631578947
+          },
+          "house#1.facade.south.floor#2:south:wall_main": {
+            "denominator": 28,
+            "numerator": 20,
+            "value": 0.7142857142857143
+          },
+          "house#1.facade.west.floor#1:west:wall_main": {
+            "denominator": 27,
+            "numerator": 19,
+            "value": 0.7037037037037037
+          },
+          "house#1.facade.west.floor#2:west:wall_main": {
+            "denominator": 27,
+            "numerator": 20,
+            "value": 0.7407407407407407
+          },
+          "house#2.facade.north.floor#1:north:wall_main": {
+            "denominator": 26,
+            "numerator": 14,
+            "value": 0.5384615384615384
+          },
+          "house#2.facade.south.floor#1:south:wall_main": {
+            "denominator": 26,
+            "numerator": 17,
+            "value": 0.6538461538461539
+          },
+          "house#3.facade.east.floor#1:east:wall_main": {
+            "denominator": 25,
+            "numerator": 16,
+            "value": 0.64
+          },
+          "house#3.facade.north.floor#1:north:wall_main": {
+            "denominator": 27,
+            "numerator": 21,
+            "value": 0.7777777777777778
+          },
+          "house#3.facade.south.floor#1:south:wall_main": {
+            "denominator": 27,
+            "numerator": 18,
+            "value": 0.6666666666666666
+          },
+          "tower#1.facade.segment#1.floor#1:south:wall_main": {
+            "denominator": 21,
+            "numerator": 18,
+            "value": 0.8571428571428571
+          },
+          "tower#1.facade.segment#1.floor#2:south:wall_main": {
+            "denominator": 14,
+            "numerator": 8,
+            "value": 0.5714285714285714
+          },
+          "tower#1.facade.segment#2.floor#1:south:wall_main": {
+            "denominator": 17,
+            "numerator": 13,
+            "value": 0.7647058823529411
+          },
+          "tower#1.facade.segment#2.floor#2:south:wall_main": {
+            "denominator": 11,
+            "numerator": 10,
+            "value": 0.9090909090909091
+          },
+          "tower#1.facade.segment#3.floor#1:west:wall_main": {
+            "denominator": 18,
+            "numerator": 14,
+            "value": 0.7777777777777778
+          },
+          "tower#1.facade.segment#3.floor#2:west:wall_main": {
+            "denominator": 12,
+            "numerator": 11,
+            "value": 0.9166666666666666
+          },
+          "tower#1.facade.segment#4.floor#1:west:wall_main": {
+            "denominator": 14,
+            "numerator": 7,
+            "value": 0.5
+          },
+          "tower#1.facade.segment#4.floor#2:west:wall_main": {
+            "denominator": 9,
+            "numerator": 7,
+            "value": 0.7777777777777778
+          },
+          "tower#1.facade.segment#5.floor#1:north:wall_main": {
+            "denominator": 14,
+            "numerator": 8,
+            "value": 0.5714285714285714
+          },
+          "tower#1.facade.segment#5.floor#2:north:wall_main": {
+            "denominator": 9,
+            "numerator": 8,
+            "value": 0.8888888888888888
+          },
+          "tower#1.facade.segment#6.floor#1:north:wall_main": {
+            "denominator": 19,
+            "numerator": 12,
+            "value": 0.631578947368421
+          },
+          "tower#1.facade.segment#6.floor#2:north:wall_main": {
+            "denominator": 12,
+            "numerator": 7,
+            "value": 0.5833333333333334
+          },
+          "tower#1.facade.segment#7.floor#1:east:wall_main": {
+            "denominator": 17,
+            "numerator": 10,
+            "value": 0.5882352941176471
+          },
+          "tower#1.facade.segment#7.floor#2:east:wall_main": {
+            "denominator": 11,
+            "numerator": 6,
+            "value": 0.5454545454545454
+          },
+          "tower#1.facade.segment#8.floor#1:east:wall_main": {
+            "denominator": 21,
+            "numerator": 18,
+            "value": 0.8571428571428571
+          },
+          "tower#1.facade.segment#8.floor#2:east:wall_main": {
+            "denominator": 14,
+            "numerator": 8,
+            "value": 0.5714285714285714
+          },
+          "tower#2.facade.segment#1.floor#1:south:wall_main": {
+            "denominator": 21,
+            "numerator": 17,
+            "value": 0.8095238095238095
+          },
+          "tower#2.facade.segment#1.floor#2:south:wall_main": {
+            "denominator": 14,
+            "numerator": 9,
+            "value": 0.6428571428571429
+          },
+          "tower#2.facade.segment#2.floor#1:south:wall_main": {
+            "denominator": 17,
+            "numerator": 12,
+            "value": 0.7058823529411765
+          },
+          "tower#2.facade.segment#2.floor#2:south:wall_main": {
+            "denominator": 11,
+            "numerator": 9,
+            "value": 0.8181818181818182
+          },
+          "tower#2.facade.segment#3.floor#1:west:wall_main": {
+            "denominator": 18,
+            "numerator": 13,
+            "value": 0.7222222222222222
+          },
+          "tower#2.facade.segment#3.floor#2:west:wall_main": {
+            "denominator": 12,
+            "numerator": 9,
+            "value": 0.75
+          },
+          "tower#2.facade.segment#4.floor#1:west:wall_main": {
+            "denominator": 14,
+            "numerator": 10,
+            "value": 0.7142857142857143
+          },
+          "tower#2.facade.segment#4.floor#2:west:wall_main": {
+            "denominator": 9,
+            "numerator": 5,
+            "value": 0.5555555555555556
+          },
+          "tower#2.facade.segment#5.floor#1:north:wall_main": {
+            "denominator": 14,
+            "numerator": 10,
+            "value": 0.7142857142857143
+          },
+          "tower#2.facade.segment#5.floor#2:north:wall_main": {
+            "denominator": 9,
+            "numerator": 6,
+            "value": 0.6666666666666666
+          },
+          "tower#2.facade.segment#6.floor#1:north:wall_main": {
+            "denominator": 19,
+            "numerator": 16,
+            "value": 0.8421052631578947
+          },
+          "tower#2.facade.segment#6.floor#2:north:wall_main": {
+            "denominator": 12,
+            "numerator": 9,
+            "value": 0.75
+          },
+          "tower#2.facade.segment#7.floor#1:east:wall_main": {
+            "denominator": 17,
+            "numerator": 14,
+            "value": 0.8235294117647058
+          },
+          "tower#2.facade.segment#7.floor#2:east:wall_main": {
+            "denominator": 11,
+            "numerator": 8,
+            "value": 0.7272727272727273
+          },
+          "tower#2.facade.segment#8.floor#1:east:wall_main": {
+            "denominator": 21,
+            "numerator": 17,
+            "value": 0.8095238095238095
+          },
+          "tower#2.facade.segment#8.floor#2:east:wall_main": {
+            "denominator": 14,
+            "numerator": 9,
+            "value": 0.6428571428571429
+          },
+          "tower#3.facade.segment#1.floor#1:north:wall_main": {
+            "denominator": 21,
+            "numerator": 19,
+            "value": 0.9047619047619048
+          },
+          "tower#3.facade.segment#1.floor#2:north:wall_main": {
+            "denominator": 14,
+            "numerator": 8,
+            "value": 0.5714285714285714
+          },
+          "tower#3.facade.segment#2.floor#1:north:wall_main": {
+            "denominator": 17,
+            "numerator": 13,
+            "value": 0.7647058823529411
+          },
+          "tower#3.facade.segment#2.floor#2:north:wall_main": {
+            "denominator": 11,
+            "numerator": 9,
+            "value": 0.8181818181818182
+          },
+          "tower#3.facade.segment#3.floor#1:east:wall_main": {
+            "denominator": 18,
+            "numerator": 14,
+            "value": 0.7777777777777778
+          },
+          "tower#3.facade.segment#3.floor#2:east:wall_main": {
+            "denominator": 12,
+            "numerator": 9,
+            "value": 0.75
+          },
+          "tower#3.facade.segment#4.floor#1:east:wall_main": {
+            "denominator": 14,
+            "numerator": 9,
+            "value": 0.6428571428571429
+          },
+          "tower#3.facade.segment#4.floor#2:east:wall_main": {
+            "denominator": 9,
+            "numerator": 6,
+            "value": 0.6666666666666666
+          },
+          "tower#3.facade.segment#5.floor#1:south:wall_main": {
+            "denominator": 14,
+            "numerator": 9,
+            "value": 0.6428571428571429
+          },
+          "tower#3.facade.segment#5.floor#2:south:wall_main": {
+            "denominator": 9,
+            "numerator": 7,
+            "value": 0.7777777777777778
+          },
+          "tower#3.facade.segment#6.floor#1:south:wall_main": {
+            "denominator": 19,
+            "numerator": 15,
+            "value": 0.7894736842105263
+          },
+          "tower#3.facade.segment#6.floor#2:south:wall_main": {
+            "denominator": 12,
+            "numerator": 10,
+            "value": 0.8333333333333334
+          },
+          "tower#3.facade.segment#7.floor#1:west:wall_main": {
+            "denominator": 17,
+            "numerator": 14,
+            "value": 0.8235294117647058
+          },
+          "tower#3.facade.segment#7.floor#2:west:wall_main": {
+            "denominator": 11,
+            "numerator": 9,
+            "value": 0.8181818181818182
+          },
+          "tower#3.facade.segment#8.floor#1:west:wall_main": {
+            "denominator": 21,
+            "numerator": 19,
+            "value": 0.9047619047619048
+          },
+          "tower#3.facade.segment#8.floor#2:west:wall_main": {
+            "denominator": 14,
+            "numerator": 8,
+            "value": 0.5714285714285714
+          },
+          "tower#4.facade.segment#1.floor#1:north:wall_main": {
+            "denominator": 21,
+            "numerator": 14,
+            "value": 0.6666666666666666
+          },
+          "tower#4.facade.segment#1.floor#2:north:wall_main": {
+            "denominator": 14,
+            "numerator": 11,
+            "value": 0.7857142857142857
+          },
+          "tower#4.facade.segment#2.floor#1:north:wall_main": {
+            "denominator": 17,
+            "numerator": 12,
+            "value": 0.7058823529411765
+          },
+          "tower#4.facade.segment#2.floor#2:north:wall_main": {
+            "denominator": 11,
+            "numerator": 6,
+            "value": 0.5454545454545454
+          },
+          "tower#4.facade.segment#3.floor#1:east:wall_main": {
+            "denominator": 18,
+            "numerator": 13,
+            "value": 0.7222222222222222
+          },
+          "tower#4.facade.segment#3.floor#2:east:wall_main": {
+            "denominator": 12,
+            "numerator": 6,
+            "value": 0.5
+          },
+          "tower#4.facade.segment#4.floor#1:east:wall_main": {
+            "denominator": 14,
+            "numerator": 10,
+            "value": 0.7142857142857143
+          },
+          "tower#4.facade.segment#4.floor#2:east:wall_main": {
+            "denominator": 9,
+            "numerator": 6,
+            "value": 0.6666666666666666
+          },
+          "tower#4.facade.segment#5.floor#1:south:wall_main": {
+            "denominator": 14,
+            "numerator": 9,
+            "value": 0.6428571428571429
+          },
+          "tower#4.facade.segment#5.floor#2:south:wall_main": {
+            "denominator": 9,
+            "numerator": 6,
+            "value": 0.6666666666666666
+          },
+          "tower#4.facade.segment#6.floor#1:south:wall_main": {
+            "denominator": 19,
+            "numerator": 15,
+            "value": 0.7894736842105263
+          },
+          "tower#4.facade.segment#6.floor#2:south:wall_main": {
+            "denominator": 12,
+            "numerator": 9,
+            "value": 0.75
+          },
+          "tower#4.facade.segment#7.floor#1:west:wall_main": {
+            "denominator": 17,
+            "numerator": 13,
+            "value": 0.7647058823529411
+          },
+          "tower#4.facade.segment#7.floor#2:west:wall_main": {
+            "denominator": 11,
+            "numerator": 8,
+            "value": 0.7272727272727273
+          },
+          "tower#4.facade.segment#8.floor#1:west:wall_main": {
+            "denominator": 21,
+            "numerator": 14,
+            "value": 0.6666666666666666
+          },
+          "tower#4.facade.segment#8.floor#2:west:wall_main": {
+            "denominator": 14,
+            "numerator": 11,
+            "value": 0.7857142857142857
+          },
+          "tower#5.facade.segment#1.floor#1:east:wall_main": {
+            "denominator": 21,
+            "numerator": 12,
+            "value": 0.5714285714285714
+          },
+          "tower#5.facade.segment#1.floor#2:east:wall_main": {
+            "denominator": 14,
+            "numerator": 9,
+            "value": 0.6428571428571429
+          },
+          "tower#5.facade.segment#2.floor#1:east:wall_main": {
+            "denominator": 17,
+            "numerator": 10,
+            "value": 0.5882352941176471
+          },
+          "tower#5.facade.segment#2.floor#2:east:wall_main": {
+            "denominator": 11,
+            "numerator": 8,
+            "value": 0.7272727272727273
+          },
+          "tower#5.facade.segment#3.floor#1:south:wall_main": {
+            "denominator": 18,
+            "numerator": 11,
+            "value": 0.6111111111111112
+          },
+          "tower#5.facade.segment#3.floor#2:south:wall_main": {
+            "denominator": 12,
+            "numerator": 9,
+            "value": 0.75
+          },
+          "tower#5.facade.segment#4.floor#1:south:wall_main": {
+            "denominator": 14,
+            "numerator": 11,
+            "value": 0.7857142857142857
+          },
+          "tower#5.facade.segment#4.floor#2:south:wall_main": {
+            "denominator": 9,
+            "numerator": 6,
+            "value": 0.6666666666666666
+          },
+          "tower#5.facade.segment#5.floor#1:west:wall_main": {
+            "denominator": 14,
+            "numerator": 11,
+            "value": 0.7857142857142857
+          },
+          "tower#5.facade.segment#5.floor#2:west:wall_main": {
+            "denominator": 9,
+            "numerator": 6,
+            "value": 0.6666666666666666
+          },
+          "tower#5.facade.segment#6.floor#1:west:wall_main": {
+            "denominator": 19,
+            "numerator": 13,
+            "value": 0.6842105263157895
+          },
+          "tower#5.facade.segment#6.floor#2:west:wall_main": {
+            "denominator": 12,
+            "numerator": 5,
+            "value": 0.4166666666666667
+          },
+          "tower#5.facade.segment#7.floor#1:north:wall_main": {
+            "denominator": 17,
+            "numerator": 13,
+            "value": 0.7647058823529411
+          },
+          "tower#5.facade.segment#7.floor#2:north:wall_main": {
+            "denominator": 11,
+            "numerator": 5,
+            "value": 0.45454545454545453
+          },
+          "tower#5.facade.segment#8.floor#1:north:wall_main": {
+            "denominator": 21,
+            "numerator": 12,
+            "value": 0.5714285714285714
+          },
+          "tower#5.facade.segment#8.floor#2:north:wall_main": {
+            "denominator": 14,
+            "numerator": 9,
+            "value": 0.6428571428571429
+          },
+          "tower#6.facade.segment#1.floor#1:west:wall_main": {
+            "denominator": 21,
+            "numerator": 14,
+            "value": 0.6666666666666666
+          },
+          "tower#6.facade.segment#1.floor#2:west:wall_main": {
+            "denominator": 14,
+            "numerator": 10,
+            "value": 0.7142857142857143
+          },
+          "tower#6.facade.segment#2.floor#1:west:wall_main": {
+            "denominator": 17,
+            "numerator": 12,
+            "value": 0.7058823529411765
+          },
+          "tower#6.facade.segment#2.floor#2:west:wall_main": {
+            "denominator": 11,
+            "numerator": 8,
+            "value": 0.7272727272727273
+          },
+          "tower#6.facade.segment#3.floor#1:north:wall_main": {
+            "denominator": 18,
+            "numerator": 13,
+            "value": 0.7222222222222222
+          },
+          "tower#6.facade.segment#3.floor#2:north:wall_main": {
+            "denominator": 12,
+            "numerator": 9,
+            "value": 0.75
+          },
+          "tower#6.facade.segment#4.floor#1:north:wall_main": {
+            "denominator": 14,
+            "numerator": 12,
+            "value": 0.8571428571428571
+          },
+          "tower#6.facade.segment#4.floor#2:north:wall_main": {
+            "denominator": 9,
+            "numerator": 6,
+            "value": 0.6666666666666666
+          },
+          "tower#6.facade.segment#5.floor#1:east:wall_main": {
+            "denominator": 14,
+            "numerator": 11,
+            "value": 0.7857142857142857
+          },
+          "tower#6.facade.segment#5.floor#2:east:wall_main": {
+            "denominator": 9,
+            "numerator": 5,
+            "value": 0.5555555555555556
+          },
+          "tower#6.facade.segment#6.floor#1:east:wall_main": {
+            "denominator": 19,
+            "numerator": 15,
+            "value": 0.7894736842105263
+          },
+          "tower#6.facade.segment#6.floor#2:east:wall_main": {
+            "denominator": 12,
+            "numerator": 6,
+            "value": 0.5
+          },
+          "tower#6.facade.segment#7.floor#1:south:wall_main": {
+            "denominator": 17,
+            "numerator": 13,
+            "value": 0.7647058823529411
+          },
+          "tower#6.facade.segment#7.floor#2:south:wall_main": {
+            "denominator": 11,
+            "numerator": 6,
+            "value": 0.5454545454545454
+          },
+          "tower#6.facade.segment#8.floor#1:south:wall_main": {
+            "denominator": 21,
+            "numerator": 14,
+            "value": 0.6666666666666666
+          },
+          "tower#6.facade.segment#8.floor#2:south:wall_main": {
+            "denominator": 14,
+            "numerator": 10,
+            "value": 0.7142857142857143
+          }
+        },
+        "facade_surface_missing": {
+          "denominator": 1854,
+          "value": 0
+        },
+        "flat_ratio": {
+          "denominator": 180,
+          "numerator": 2,
+          "value": 0.011111111111111112
+        },
+        "palette_relation": {
+          "value": true
+        },
+        "support": {
+          "value": 0
+        },
+        "walkability": {
+          "routes": [
+            {
+              "element": "house#1",
+              "from": [
+                23,
+                11,
+                28
+              ],
+              "status": "reachable",
+              "to": [
+                23,
+                11,
+                29
+              ]
+            },
+            {
+              "element": "house#1",
+              "from": [
+                23,
+                11,
+                29
+              ],
+              "status": "reachable",
+              "to": [
+                20,
+                15,
+                34
+              ]
+            },
+            {
+              "element": "house#2",
+              "from": [
+                31,
+                11,
+                28
+              ],
+              "status": "reachable",
+              "to": [
+                31,
+                11,
+                29
+              ]
+            },
+            {
+              "element": "house#3",
+              "from": [
+                39,
+                11,
+                28
+              ],
+              "status": "reachable",
+              "to": [
+                39,
+                11,
+                29
+              ]
+            },
+            {
+              "element": "tower#1",
+              "from": [
+                14,
+                11,
+                14
+              ],
+              "status": "reachable",
+              "to": [
+                14,
+                11,
+                13
+              ]
+            },
+            {
+              "element": "tower#1",
+              "from": [
+                14,
+                11,
+                13
+              ],
+              "status": "reachable",
+              "to": [
+                14,
+                15,
+                10
+              ]
+            },
+            {
+              "element": "tower#1",
+              "from": [
+                14,
+                15,
+                10
+              ],
+              "status": "reachable",
+              "to": [
+                14,
+                19,
+                10
+              ]
+            },
+            {
+              "element": "tower#2",
+              "from": [
+                49,
+                11,
+                14
+              ],
+              "status": "reachable",
+              "to": [
+                49,
+                11,
+                13
+              ]
+            },
+            {
+              "element": "tower#2",
+              "from": [
+                49,
+                11,
+                13
+              ],
+              "status": "reachable",
+              "to": [
+                49,
+                15,
+                10
+              ]
+            },
+            {
+              "element": "tower#2",
+              "from": [
+                49,
+                15,
+                10
+              ],
+              "status": "reachable",
+              "to": [
+                49,
+                19,
+                10
+              ]
+            },
+            {
+              "element": "tower#3",
+              "from": [
+                49,
+                11,
+                49
+              ],
+              "status": "reachable",
+              "to": [
+                49,
+                11,
+                50
+              ]
+            },
+            {
+              "element": "tower#3",
+              "from": [
+                49,
+                11,
+                50
+              ],
+              "status": "reachable",
+              "to": [
+                49,
+                15,
+                53
+              ]
+            },
+            {
+              "element": "tower#3",
+              "from": [
+                49,
+                15,
+                53
+              ],
+              "status": "reachable",
+              "to": [
+                49,
+                19,
+                53
+              ]
+            },
+            {
+              "element": "tower#4",
+              "from": [
+                14,
+                11,
+                49
+              ],
+              "status": "reachable",
+              "to": [
+                14,
+                11,
+                50
+              ]
+            },
+            {
+              "element": "tower#4",
+              "from": [
+                14,
+                11,
+                50
+              ],
+              "status": "reachable",
+              "to": [
+                14,
+                15,
+                53
+              ]
+            },
+            {
+              "element": "tower#4",
+              "from": [
+                14,
+                15,
+                53
+              ],
+              "status": "reachable",
+              "to": [
+                14,
+                19,
+                53
+              ]
+            },
+            {
+              "element": "tower#5",
+              "from": [
+                14,
+                11,
+                31
+              ],
+              "status": "reachable",
+              "to": [
+                13,
+                11,
+                31
+              ]
+            },
+            {
+              "element": "tower#5",
+              "from": [
+                13,
+                11,
+                31
+              ],
+              "status": "reachable",
+              "to": [
+                10,
+                15,
+                31
+              ]
+            },
+            {
+              "element": "tower#5",
+              "from": [
+                10,
+                15,
+                31
+              ],
+              "status": "reachable",
+              "to": [
+                10,
+                19,
+                31
+              ]
+            },
+            {
+              "element": "tower#6",
+              "from": [
+                49,
+                11,
+                31
+              ],
+              "status": "reachable",
+              "to": [
+                50,
+                11,
+                31
+              ]
+            },
+            {
+              "element": "tower#6",
+              "from": [
+                50,
+                11,
+                31
+              ],
+              "status": "reachable",
+              "to": [
+                53,
+                15,
+                31
+              ]
+            },
+            {
+              "element": "tower#6",
+              "from": [
+                53,
+                15,
+                31
+              ],
+              "status": "reachable",
+              "to": [
+                53,
+                19,
+                31
+              ]
+            },
+            {
+              "element": "house#1",
+              "from": [
+                26,
+                11,
+                35
+              ],
+              "status": "reachable",
+              "to": [
+                23,
+                11,
+                28
+              ]
+            },
+            {
+              "element": "house#2",
+              "from": [
+                28,
+                11,
+                35
+              ],
+              "status": "reachable",
+              "to": [
+                31,
+                11,
+                28
+              ]
+            },
+            {
+              "element": "house#1",
+              "from": [
+                26,
+                11,
+                35
+              ],
+              "status": "reachable",
+              "to": [
+                28,
+                11,
+                35
+              ]
+            },
+            {
+              "element": "house#2",
+              "from": [
+                34,
+                11,
+                35
+              ],
+              "status": "reachable",
+              "to": [
+                31,
+                11,
+                28
+              ]
+            },
+            {
+              "element": "house#3",
+              "from": [
+                36,
+                11,
+                35
+              ],
+              "status": "reachable",
+              "to": [
+                39,
+                11,
+                28
+              ]
+            },
+            {
+              "element": "house#2",
+              "from": [
+                34,
+                11,
+                35
+              ],
+              "status": "reachable",
+              "to": [
+                36,
+                11,
+                35
+              ]
+            },
+            {
+              "element": "site#1",
+              "from": [
+                31,
+                11,
+                0
+              ],
+              "status": "reachable",
+              "to": [
+                31,
+                11,
+                19
+              ]
+            },
+            {
+              "element": "site#1",
+              "from": [
+                31,
+                11,
+                19
+              ],
+              "status": "reachable",
+              "to": [
+                23,
+                11,
+                28
+              ]
+            },
+            {
+              "element": "site#1",
+              "from": [
+                31,
+                11,
+                19
+              ],
+              "status": "reachable",
+              "to": [
+                31,
+                11,
+                28
+              ]
+            },
+            {
+              "element": "site#1",
+              "from": [
+                31,
+                11,
+                19
+              ],
+              "status": "reachable",
+              "to": [
+                39,
+                11,
+                28
+              ]
+            },
+            {
+              "element": "site#1",
+              "from": [
+                31,
+                11,
+                19
+              ],
+              "status": "reachable",
+              "to": [
+                14,
+                11,
+                14
+              ]
+            },
+            {
+              "element": "site#1",
+              "from": [
+                31,
+                11,
+                19
+              ],
+              "status": "reachable",
+              "to": [
+                49,
+                11,
+                14
+              ]
+            },
+            {
+              "element": "site#1",
+              "from": [
+                31,
+                11,
+                19
+              ],
+              "status": "reachable",
+              "to": [
+                49,
+                11,
+                49
+              ]
+            },
+            {
+              "element": "site#1",
+              "from": [
+                31,
+                11,
+                19
+              ],
+              "status": "reachable",
+              "to": [
+                14,
+                11,
+                49
+              ]
+            },
+            {
+              "element": "site#1",
+              "from": [
+                31,
+                11,
+                19
+              ],
+              "status": "reachable",
+              "to": [
+                14,
+                11,
+                31
+              ]
+            },
+            {
+              "element": "site#1",
+              "from": [
+                31,
+                11,
+                19
+              ],
+              "status": "reachable",
+              "to": [
+                49,
+                11,
+                31
+              ]
+            }
+          ]
+        }
+      },
+      "diagnostics": [
+        {
+          "actual": 0.8571428571428571,
+          "code": "E305",
+          "element": "tower#1.facade.segment#1.floor#1",
+          "expected": 0.85,
+          "face": "south",
+          "metric": "facade_mix",
+          "repairPaths": [
+            "config.palette.mix"
+          ],
+          "role": "wall_main",
+          "severity": "warn",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": 0.8571428571428571,
+          "code": "E305",
+          "element": "tower#1.facade.segment#8.floor#1",
+          "expected": 0.85,
+          "face": "east",
+          "metric": "facade_mix",
+          "repairPaths": [
+            "config.palette.mix"
+          ],
+          "role": "wall_main",
+          "severity": "warn",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": 0.8571428571428571,
+          "code": "E305",
+          "element": "tower#6.facade.segment#4.floor#1",
+          "expected": 0.85,
+          "face": "north",
+          "metric": "facade_mix",
+          "repairPaths": [
+            "config.palette.mix"
+          ],
+          "role": "wall_main",
+          "severity": "warn",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": 0.9047619047619048,
+          "code": "E305",
+          "element": "tower#3.facade.segment#1.floor#1",
+          "expected": 0.85,
+          "face": "north",
+          "metric": "facade_mix",
+          "repairPaths": [
+            "config.palette.mix"
+          ],
+          "role": "wall_main",
+          "severity": "warn",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": 0.9047619047619048,
+          "code": "E305",
+          "element": "tower#3.facade.segment#8.floor#1",
+          "expected": 0.85,
+          "face": "west",
+          "metric": "facade_mix",
+          "repairPaths": [
+            "config.palette.mix"
+          ],
+          "role": "wall_main",
+          "severity": "warn",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": 0.8888888888888888,
+          "code": "E305",
+          "element": "tower#1.facade.segment#5.floor#2",
+          "expected": 0.85,
+          "face": "north",
+          "metric": "facade_mix",
+          "repairPaths": [
+            "config.palette.mix"
+          ],
+          "role": "wall_main",
+          "severity": "warn",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": 0.9090909090909091,
+          "code": "E305",
+          "element": "tower#1.facade.segment#2.floor#2",
+          "expected": 0.85,
+          "face": "south",
+          "metric": "facade_mix",
+          "repairPaths": [
+            "config.palette.mix"
+          ],
+          "role": "wall_main",
+          "severity": "warn",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": 0.9166666666666666,
+          "code": "E305",
+          "element": "tower#1.facade.segment#3.floor#2",
+          "expected": 0.85,
+          "face": "west",
+          "metric": "facade_mix",
+          "repairPaths": [
+            "config.palette.mix"
+          ],
+          "role": "wall_main",
+          "severity": "warn",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": 0,
+          "code": "support",
+          "detail": null,
+          "element": "site#1",
+          "expected": 0,
+          "metric": "support",
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "house#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            23,
+            11,
+            29
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "house#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            20,
+            15,
+            34
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "house#2",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            31,
+            11,
+            29
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "house#3",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            39,
+            11,
+            29
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "tower#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            14,
+            11,
+            13
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "tower#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            14,
+            15,
+            10
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "tower#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            14,
+            19,
+            10
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "tower#2",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            49,
+            11,
+            13
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "tower#2",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            49,
+            15,
+            10
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "tower#2",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            49,
+            19,
+            10
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "tower#3",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            49,
+            11,
+            50
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "tower#3",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            49,
+            15,
+            53
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "tower#3",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            49,
+            19,
+            53
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "tower#4",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            14,
+            11,
+            50
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "tower#4",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            14,
+            15,
+            53
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "tower#4",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            14,
+            19,
+            53
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "tower#5",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            13,
+            11,
+            31
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "tower#5",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            10,
+            15,
+            31
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "tower#5",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            10,
+            19,
+            31
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "tower#6",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            50,
+            11,
+            31
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "tower#6",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            53,
+            15,
+            31
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "tower#6",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            53,
+            19,
+            31
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "house#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            23,
+            11,
+            28
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "house#2",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            31,
+            11,
+            28
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "house#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            28,
+            11,
+            35
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "house#2",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            31,
+            11,
+            28
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "house#3",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            39,
+            11,
+            28
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "house#2",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            36,
+            11,
+            35
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "site#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            31,
+            11,
+            19
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "site#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            23,
+            11,
+            28
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "site#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            31,
+            11,
+            28
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "site#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            39,
+            11,
+            28
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "site#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            14,
+            11,
+            14
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "site#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            49,
+            11,
+            14
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "site#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            49,
+            11,
+            49
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "site#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            14,
+            11,
+            49
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "site#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            14,
+            11,
+            31
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "site#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            49,
+            11,
+            31
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ncn7bkik/castle-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "house#1.opening#1.5",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "house#1.opening#1.6",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "house#1.opening#2.5",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "house#2.opening#1.5",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "house#2.opening#1.6",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "house#3.opening#1.5",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "house#3.opening#1.6",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "tower#1.opening#33",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "tower#2.opening#33",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "tower#3.opening#33",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "tower#4.opening#33",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "tower#5.opening#33",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "tower#6.opening#33",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
+        }
+      ],
+      "signature": {
+        "placement_sha256": "72be0ba5857df42093856e8bdba9422198b19096b0f4e71b32d15610e494462c",
+        "metrics_sha256": "df7f9e69277c3b367e4ad4a325b1ed717a30b2107b4eb0ea02e19bcb2d17c245",
+        "structured_diagnostics_sha256": "8cddbe79b6d4a764154c696626682fc52e3fdd414161c71e2ce4b29714785084",
+        "scene_json_sha256": "db5b00334625dabfc6b86f77f13128ff6ac1370748580a02d1f44562e38c0214"
+      },
+      "buildCode": 0,
+      "buildMatches": true,
+      "resume": {
+        "resolve": {
+          "code": 0,
+          "signature": {
+            "placement_sha256": "72be0ba5857df42093856e8bdba9422198b19096b0f4e71b32d15610e494462c",
+            "metrics_sha256": "df7f9e69277c3b367e4ad4a325b1ed717a30b2107b4eb0ea02e19bcb2d17c245",
+            "structured_diagnostics_sha256": "8cddbe79b6d4a764154c696626682fc52e3fdd414161c71e2ce4b29714785084",
+            "scene_json_sha256": "db5b00334625dabfc6b86f77f13128ff6ac1370748580a02d1f44562e38c0214"
+          },
+          "matches": {
+            "placement_sha256": true,
+            "metrics_sha256": true,
+            "structured_diagnostics_sha256": true,
+            "scene_json_sha256": true
+          }
+        },
+        "site": {
+          "code": 0,
+          "signature": {
+            "placement_sha256": "72be0ba5857df42093856e8bdba9422198b19096b0f4e71b32d15610e494462c",
+            "metrics_sha256": "df7f9e69277c3b367e4ad4a325b1ed717a30b2107b4eb0ea02e19bcb2d17c245",
+            "structured_diagnostics_sha256": "8cddbe79b6d4a764154c696626682fc52e3fdd414161c71e2ce4b29714785084",
+            "scene_json_sha256": "db5b00334625dabfc6b86f77f13128ff6ac1370748580a02d1f44562e38c0214"
+          },
+          "matches": {
+            "placement_sha256": true,
+            "metrics_sha256": true,
+            "structured_diagnostics_sha256": true,
+            "scene_json_sha256": true
+          }
+        },
+        "massing": {
+          "code": 0,
+          "signature": {
+            "placement_sha256": "72be0ba5857df42093856e8bdba9422198b19096b0f4e71b32d15610e494462c",
+            "metrics_sha256": "df7f9e69277c3b367e4ad4a325b1ed717a30b2107b4eb0ea02e19bcb2d17c245",
+            "structured_diagnostics_sha256": "8cddbe79b6d4a764154c696626682fc52e3fdd414161c71e2ce4b29714785084",
+            "scene_json_sha256": "db5b00334625dabfc6b86f77f13128ff6ac1370748580a02d1f44562e38c0214"
+          },
+          "matches": {
+            "placement_sha256": true,
+            "metrics_sha256": true,
+            "structured_diagnostics_sha256": true,
+            "scene_json_sha256": true
+          }
+        },
+        "detail": {
+          "code": 0,
+          "signature": {
+            "placement_sha256": "72be0ba5857df42093856e8bdba9422198b19096b0f4e71b32d15610e494462c",
+            "metrics_sha256": "df7f9e69277c3b367e4ad4a325b1ed717a30b2107b4eb0ea02e19bcb2d17c245",
+            "structured_diagnostics_sha256": "8cddbe79b6d4a764154c696626682fc52e3fdd414161c71e2ce4b29714785084",
+            "scene_json_sha256": "db5b00334625dabfc6b86f77f13128ff6ac1370748580a02d1f44562e38c0214"
+          },
+          "matches": {
+            "placement_sha256": true,
+            "metrics_sha256": true,
+            "structured_diagnostics_sha256": true,
+            "scene_json_sha256": true
+          }
+        },
+        "blueprint": {
+          "code": 0,
+          "signature": {
+            "placement_sha256": "72be0ba5857df42093856e8bdba9422198b19096b0f4e71b32d15610e494462c",
+            "metrics_sha256": "df7f9e69277c3b367e4ad4a325b1ed717a30b2107b4eb0ea02e19bcb2d17c245",
+            "structured_diagnostics_sha256": "8cddbe79b6d4a764154c696626682fc52e3fdd414161c71e2ce4b29714785084",
+            "scene_json_sha256": "db5b00334625dabfc6b86f77f13128ff6ac1370748580a02d1f44562e38c0214"
+          },
+          "matches": {
+            "placement_sha256": true,
+            "metrics_sha256": true,
+            "structured_diagnostics_sha256": true,
+            "scene_json_sha256": true
+          }
+        }
+      },
+      "edits": {
+        "status": "passed",
+        "code": 0,
+        "notes": [
+          {
+            "id": "issue-263-note",
+            "element": "tower#5",
+            "text": "機能行列の編集経路を確認"
+          }
+        ],
+        "signature": {
+          "placement_sha256": "72be0ba5857df42093856e8bdba9422198b19096b0f4e71b32d15610e494462c",
+          "metrics_sha256": "df7f9e69277c3b367e4ad4a325b1ed717a30b2107b4eb0ea02e19bcb2d17c245",
+          "structured_diagnostics_sha256": "8cddbe79b6d4a764154c696626682fc52e3fdd414161c71e2ce4b29714785084",
+          "scene_json_sha256": "db5b00334625dabfc6b86f77f13128ff6ac1370748580a02d1f44562e38c0214"
+        },
+        "matches": {
+          "placement_sha256": true,
+          "metrics_sha256": true,
+          "structured_diagnostics_sha256": true,
+          "scene_json_sha256": true
+        }
+      },
+      "inputSha256": "0ebc8caac94eb70084007e6415921db11acbc870e8f7f70fc30ba4a89418586a"
+    },
+    {
+      "case": "town-medieval",
+      "scale": "medium",
+      "seed": 42,
+      "version": "1.21.11",
+      "format": "schem",
+      "frozenInputSha256": "d380b036a29e97b19ddfeea984d7a5d27426b5806d1ef594549d4401a6605dc3",
+      "actualInputSha256": "e4c941e2a4881c683a763cb8b9b0b74d0d8edc6742601ebde80c758167345ef6",
+      "implementation": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "3c7fe0127b92e9c5a68bbb6714ba73b7955f879d402d13358f1d1131560a52aa",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "provenance": {
+        "commit": "4e9ce5eebdb71c25542f86a6f199f0fdfeaf7477",
+        "engine_sha256": "5c32ecd5ecea9dccc47ad9859bd02b81b5cbfd6199e4e19b019884ed65c2defd",
+        "lock_sha256": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "default_config_sha256": "17f5c240ead94ebb8c410f045b3344f07d07ec9c29a8a769645f853b5ea28d64"
+      },
+      "runtime": {
+        "python": "3.12.15",
+        "implementation": "CPython",
+        "dependencies": {
+          "numpy": "2.5.4",
+          "pyfastnoiselite": "0.0.7",
+          "nbtlib": "2.0.4",
+          "jsonschema": "4.26.0",
+          "PyYAML": "6.0.3"
+        }
+      },
+      "runnerSha256": "b824a1ecf760da780a25e25f5ca7e6e9811a7e331fd1adfe8ad550f39be3d413",
+      "colorpack": null,
+      "makeCode": 0,
+      "runStatus": "passed",
+      "metrics": {
+        "beam_continuity": {
+          "denominator": 12,
+          "numerator": 12,
+          "value": 1.0
+        },
+        "column_continuity": {
+          "denominator": 80,
+          "numerator": 80,
+          "value": 1.0
+        },
+        "decoration_density": {
+          "house#1.facade.east.floor#1:east": {
+            "denominator": 42,
+            "numerator": 13,
+            "value": 30.952380952380953
+          },
+          "house#1.facade.north.floor#1:north": {
+            "denominator": 34,
+            "numerator": 11,
+            "value": 32.35294117647059
+          },
+          "house#1.facade.south.floor#1:south": {
+            "denominator": 34,
+            "numerator": 11,
+            "value": 32.35294117647059
+          },
+          "house#1.facade.west.floor#1:west": {
+            "denominator": 44,
+            "numerator": 14,
+            "value": 31.818181818181817
+          },
+          "house#2.facade.east.floor#1:east": {
+            "denominator": 42,
+            "numerator": 13,
+            "value": 30.952380952380953
+          },
+          "house#2.facade.east.floor#2:east": {
+            "denominator": 42,
+            "numerator": 13,
+            "value": 30.952380952380953
+          },
+          "house#2.facade.north.floor#1:north": {
+            "denominator": 34,
+            "numerator": 11,
+            "value": 32.35294117647059
+          },
+          "house#2.facade.north.floor#2:north": {
+            "denominator": 34,
+            "numerator": 11,
+            "value": 32.35294117647059
+          },
+          "house#2.facade.south.floor#1:south": {
+            "denominator": 34,
+            "numerator": 11,
+            "value": 32.35294117647059
+          },
+          "house#2.facade.south.floor#2:south": {
+            "denominator": 34,
+            "numerator": 11,
+            "value": 32.35294117647059
+          },
+          "house#2.facade.west.floor#1:west": {
+            "denominator": 44,
+            "numerator": 14,
+            "value": 31.818181818181817
+          },
+          "house#2.facade.west.floor#2:west": {
+            "denominator": 44,
+            "numerator": 14,
+            "value": 31.818181818181817
+          },
+          "house#3.facade.east.floor#1:east": {
+            "denominator": 42,
+            "numerator": 13,
+            "value": 30.952380952380953
+          },
+          "house#3.facade.north.floor#1:north": {
+            "denominator": 34,
+            "numerator": 11,
+            "value": 32.35294117647059
+          },
+          "house#3.facade.south.floor#1:south": {
+            "denominator": 34,
+            "numerator": 11,
+            "value": 32.35294117647059
+          },
+          "house#3.facade.west.floor#1:west": {
+            "denominator": 44,
+            "numerator": 14,
+            "value": 31.818181818181817
+          },
+          "house#4.facade.east.floor#1:east": {
+            "denominator": 42,
+            "numerator": 13,
+            "value": 30.952380952380953
+          },
+          "house#4.facade.east.floor#2:east": {
+            "denominator": 42,
+            "numerator": 13,
+            "value": 30.952380952380953
+          },
+          "house#4.facade.north.floor#1:north": {
+            "denominator": 34,
+            "numerator": 11,
+            "value": 32.35294117647059
+          },
+          "house#4.facade.north.floor#2:north": {
+            "denominator": 34,
+            "numerator": 11,
+            "value": 32.35294117647059
+          },
+          "house#4.facade.south.floor#1:south": {
+            "denominator": 34,
+            "numerator": 11,
+            "value": 32.35294117647059
+          },
+          "house#4.facade.south.floor#2:south": {
+            "denominator": 34,
+            "numerator": 11,
+            "value": 32.35294117647059
+          },
+          "house#4.facade.west.floor#1:west": {
+            "denominator": 44,
+            "numerator": 14,
+            "value": 31.818181818181817
+          },
+          "house#4.facade.west.floor#2:west": {
+            "denominator": 44,
+            "numerator": 14,
+            "value": 31.818181818181817
+          },
+          "house#5.facade.east.floor#1:east": {
+            "denominator": 42,
+            "numerator": 13,
+            "value": 30.952380952380953
+          },
+          "house#5.facade.north.floor#1:north": {
+            "denominator": 34,
+            "numerator": 11,
+            "value": 32.35294117647059
+          },
+          "house#5.facade.south.floor#1:south": {
+            "denominator": 34,
+            "numerator": 11,
+            "value": 32.35294117647059
+          },
+          "house#5.facade.west.floor#1:west": {
+            "denominator": 44,
+            "numerator": 14,
+            "value": 31.818181818181817
+          },
+          "house#6.facade.east.floor#1:east": {
+            "denominator": 42,
+            "numerator": 13,
+            "value": 30.952380952380953
+          },
+          "house#6.facade.east.floor#2:east": {
+            "denominator": 42,
+            "numerator": 13,
+            "value": 30.952380952380953
+          },
+          "house#6.facade.north.floor#1:north": {
+            "denominator": 34,
+            "numerator": 11,
+            "value": 32.35294117647059
+          },
+          "house#6.facade.north.floor#2:north": {
+            "denominator": 34,
+            "numerator": 11,
+            "value": 32.35294117647059
+          },
+          "house#6.facade.south.floor#1:south": {
+            "denominator": 34,
+            "numerator": 11,
+            "value": 32.35294117647059
+          },
+          "house#6.facade.south.floor#2:south": {
+            "denominator": 34,
+            "numerator": 11,
+            "value": 32.35294117647059
+          },
+          "house#6.facade.west.floor#1:west": {
+            "denominator": 44,
+            "numerator": 14,
+            "value": 31.818181818181817
+          },
+          "house#6.facade.west.floor#2:west": {
+            "denominator": 44,
+            "numerator": 14,
+            "value": 31.818181818181817
+          },
+          "house#7.facade.east.floor#1:east": {
+            "denominator": 42,
+            "numerator": 13,
+            "value": 30.952380952380953
+          },
+          "house#7.facade.north.floor#1:north": {
+            "denominator": 34,
+            "numerator": 11,
+            "value": 32.35294117647059
+          },
+          "house#7.facade.south.floor#1:south": {
+            "denominator": 34,
+            "numerator": 11,
+            "value": 32.35294117647059
+          },
+          "house#7.facade.west.floor#1:west": {
+            "denominator": 44,
+            "numerator": 14,
+            "value": 31.818181818181817
+          },
+          "house#8.facade.east.floor#1:east": {
+            "denominator": 42,
+            "numerator": 13,
+            "value": 30.952380952380953
+          },
+          "house#8.facade.east.floor#2:east": {
+            "denominator": 42,
+            "numerator": 13,
+            "value": 30.952380952380953
+          },
+          "house#8.facade.north.floor#1:north": {
+            "denominator": 34,
+            "numerator": 11,
+            "value": 32.35294117647059
+          },
+          "house#8.facade.north.floor#2:north": {
+            "denominator": 34,
+            "numerator": 11,
+            "value": 32.35294117647059
+          },
+          "house#8.facade.south.floor#1:south": {
+            "denominator": 34,
+            "numerator": 11,
+            "value": 32.35294117647059
+          },
+          "house#8.facade.south.floor#2:south": {
+            "denominator": 34,
+            "numerator": 11,
+            "value": 32.35294117647059
+          },
+          "house#8.facade.west.floor#1:west": {
+            "denominator": 44,
+            "numerator": 14,
+            "value": 31.818181818181817
+          },
+          "house#8.facade.west.floor#2:west": {
+            "denominator": 44,
+            "numerator": 14,
+            "value": 31.818181818181817
+          }
+        },
+        "facade_mix": {
+          "house#1.facade.east.floor#1:east:wall_main": {
+            "denominator": 31,
+            "numerator": 22,
+            "value": 0.7096774193548387
+          },
+          "house#1.facade.north.floor#1:north:wall_main": {
+            "denominator": 19,
+            "numerator": 12,
+            "value": 0.631578947368421
+          },
+          "house#1.facade.south.floor#1:south:wall_main": {
+            "denominator": 19,
+            "numerator": 14,
+            "value": 0.7368421052631579
+          },
+          "house#1.facade.west.floor#1:west:wall_main": {
+            "denominator": 33,
+            "numerator": 22,
+            "value": 0.6666666666666666
+          },
+          "house#2.facade.east.floor#1:east:wall_main": {
+            "denominator": 31,
+            "numerator": 23,
+            "value": 0.7419354838709677
+          },
+          "house#2.facade.east.floor#2:east:wall_main": {
+            "denominator": 31,
+            "numerator": 25,
+            "value": 0.8064516129032258
+          },
+          "house#2.facade.north.floor#1:north:wall_main": {
+            "denominator": 19,
+            "numerator": 13,
+            "value": 0.6842105263157895
+          },
+          "house#2.facade.north.floor#2:north:wall_main": {
+            "denominator": 19,
+            "numerator": 14,
+            "value": 0.7368421052631579
+          },
+          "house#2.facade.south.floor#1:south:wall_main": {
+            "denominator": 19,
+            "numerator": 11,
+            "value": 0.5789473684210527
+          },
+          "house#2.facade.south.floor#2:south:wall_main": {
+            "denominator": 19,
+            "numerator": 16,
+            "value": 0.8421052631578947
+          },
+          "house#2.facade.west.floor#1:west:wall_main": {
+            "denominator": 33,
+            "numerator": 17,
+            "value": 0.5151515151515151
+          },
+          "house#2.facade.west.floor#2:west:wall_main": {
+            "denominator": 33,
+            "numerator": 21,
+            "value": 0.6363636363636364
+          },
+          "house#3.facade.east.floor#1:east:wall_main": {
+            "denominator": 31,
+            "numerator": 22,
+            "value": 0.7096774193548387
+          },
+          "house#3.facade.north.floor#1:north:wall_main": {
+            "denominator": 19,
+            "numerator": 12,
+            "value": 0.631578947368421
+          },
+          "house#3.facade.south.floor#1:south:wall_main": {
+            "denominator": 19,
+            "numerator": 14,
+            "value": 0.7368421052631579
+          },
+          "house#3.facade.west.floor#1:west:wall_main": {
+            "denominator": 33,
+            "numerator": 19,
+            "value": 0.5757575757575758
+          },
+          "house#4.facade.east.floor#1:east:wall_main": {
+            "denominator": 31,
+            "numerator": 16,
+            "value": 0.5161290322580645
+          },
+          "house#4.facade.east.floor#2:east:wall_main": {
+            "denominator": 31,
+            "numerator": 17,
+            "value": 0.5483870967741935
+          },
+          "house#4.facade.north.floor#1:north:wall_main": {
+            "denominator": 19,
+            "numerator": 10,
+            "value": 0.5263157894736842
+          },
+          "house#4.facade.north.floor#2:north:wall_main": {
+            "denominator": 19,
+            "numerator": 13,
+            "value": 0.6842105263157895
+          },
+          "house#4.facade.south.floor#1:south:wall_main": {
+            "denominator": 19,
+            "numerator": 9,
+            "value": 0.47368421052631576
+          },
+          "house#4.facade.south.floor#2:south:wall_main": {
+            "denominator": 19,
+            "numerator": 12,
+            "value": 0.631578947368421
+          },
+          "house#4.facade.west.floor#1:west:wall_main": {
+            "denominator": 33,
+            "numerator": 16,
+            "value": 0.48484848484848486
+          },
+          "house#4.facade.west.floor#2:west:wall_main": {
+            "denominator": 33,
+            "numerator": 15,
+            "value": 0.45454545454545453
+          },
+          "house#5.facade.east.floor#1:east:wall_main": {
+            "denominator": 31,
+            "numerator": 22,
+            "value": 0.7096774193548387
+          },
+          "house#5.facade.north.floor#1:north:wall_main": {
+            "denominator": 19,
+            "numerator": 17,
+            "value": 0.8947368421052632
+          },
+          "house#5.facade.south.floor#1:south:wall_main": {
+            "denominator": 19,
+            "numerator": 15,
+            "value": 0.7894736842105263
+          },
+          "house#5.facade.west.floor#1:west:wall_main": {
+            "denominator": 33,
+            "numerator": 28,
+            "value": 0.8484848484848485
+          },
+          "house#6.facade.east.floor#1:east:wall_main": {
+            "denominator": 31,
+            "numerator": 20,
+            "value": 0.6451612903225806
+          },
+          "house#6.facade.east.floor#2:east:wall_main": {
+            "denominator": 31,
+            "numerator": 24,
+            "value": 0.7741935483870968
+          },
+          "house#6.facade.north.floor#1:north:wall_main": {
+            "denominator": 19,
+            "numerator": 15,
+            "value": 0.7894736842105263
+          },
+          "house#6.facade.north.floor#2:north:wall_main": {
+            "denominator": 19,
+            "numerator": 17,
+            "value": 0.8947368421052632
+          },
+          "house#6.facade.south.floor#1:south:wall_main": {
+            "denominator": 19,
+            "numerator": 15,
+            "value": 0.7894736842105263
+          },
+          "house#6.facade.south.floor#2:south:wall_main": {
+            "denominator": 19,
+            "numerator": 13,
+            "value": 0.6842105263157895
+          },
+          "house#6.facade.west.floor#1:west:wall_main": {
+            "denominator": 33,
+            "numerator": 22,
+            "value": 0.6666666666666666
+          },
+          "house#6.facade.west.floor#2:west:wall_main": {
+            "denominator": 33,
+            "numerator": 26,
+            "value": 0.7878787878787878
+          },
+          "house#7.facade.east.floor#1:east:wall_main": {
+            "denominator": 31,
+            "numerator": 19,
+            "value": 0.6129032258064516
+          },
+          "house#7.facade.north.floor#1:north:wall_main": {
+            "denominator": 19,
+            "numerator": 14,
+            "value": 0.7368421052631579
+          },
+          "house#7.facade.south.floor#1:south:wall_main": {
+            "denominator": 19,
+            "numerator": 11,
+            "value": 0.5789473684210527
+          },
+          "house#7.facade.west.floor#1:west:wall_main": {
+            "denominator": 33,
+            "numerator": 22,
+            "value": 0.6666666666666666
+          },
+          "house#8.facade.east.floor#1:east:wall_main": {
+            "denominator": 31,
+            "numerator": 24,
+            "value": 0.7741935483870968
+          },
+          "house#8.facade.east.floor#2:east:wall_main": {
+            "denominator": 31,
+            "numerator": 22,
+            "value": 0.7096774193548387
+          },
+          "house#8.facade.north.floor#1:north:wall_main": {
+            "denominator": 19,
+            "numerator": 16,
+            "value": 0.8421052631578947
+          },
+          "house#8.facade.north.floor#2:north:wall_main": {
+            "denominator": 19,
+            "numerator": 10,
+            "value": 0.5263157894736842
+          },
+          "house#8.facade.south.floor#1:south:wall_main": {
+            "denominator": 19,
+            "numerator": 13,
+            "value": 0.6842105263157895
+          },
+          "house#8.facade.south.floor#2:south:wall_main": {
+            "denominator": 19,
+            "numerator": 14,
+            "value": 0.7368421052631579
+          },
+          "house#8.facade.west.floor#1:west:wall_main": {
+            "denominator": 33,
+            "numerator": 22,
+            "value": 0.6666666666666666
+          },
+          "house#8.facade.west.floor#2:west:wall_main": {
+            "denominator": 33,
+            "numerator": 20,
+            "value": 0.6060606060606061
+          }
+        },
+        "facade_surface_missing": {
+          "denominator": 1848,
+          "value": 0
+        },
+        "flat_ratio": {
+          "denominator": 144,
+          "numerator": 0,
+          "value": 0.0
+        },
+        "palette_relation": {
+          "value": true
+        },
+        "support": {
+          "value": 0
+        },
+        "walkability": {
+          "routes": [
+            {
+              "element": "house#1",
+              "from": [
+                8,
+                5,
+                10
+              ],
+              "status": "reachable",
+              "to": [
+                8,
+                5,
+                11
+              ]
+            },
+            {
+              "element": "house#2",
+              "from": [
+                20,
+                5,
+                10
+              ],
+              "status": "reachable",
+              "to": [
+                20,
+                5,
+                11
+              ]
+            },
+            {
+              "element": "house#2",
+              "from": [
+                20,
+                5,
+                11
+              ],
+              "status": "reachable",
+              "to": [
+                17,
+                9,
+                16
+              ]
+            },
+            {
+              "element": "house#3",
+              "from": [
+                44,
+                5,
+                10
+              ],
+              "status": "reachable",
+              "to": [
+                44,
+                5,
+                11
+              ]
+            },
+            {
+              "element": "house#4",
+              "from": [
+                56,
+                5,
+                10
+              ],
+              "status": "reachable",
+              "to": [
+                56,
+                5,
+                11
+              ]
+            },
+            {
+              "element": "house#4",
+              "from": [
+                56,
+                5,
+                11
+              ],
+              "status": "reachable",
+              "to": [
+                53,
+                9,
+                16
+              ]
+            },
+            {
+              "element": "house#5",
+              "from": [
+                8,
+                5,
+                42
+              ],
+              "status": "reachable",
+              "to": [
+                8,
+                5,
+                43
+              ]
+            },
+            {
+              "element": "house#6",
+              "from": [
+                20,
+                5,
+                42
+              ],
+              "status": "reachable",
+              "to": [
+                20,
+                5,
+                43
+              ]
+            },
+            {
+              "element": "house#6",
+              "from": [
+                20,
+                5,
+                43
+              ],
+              "status": "reachable",
+              "to": [
+                17,
+                9,
+                48
+              ]
+            },
+            {
+              "element": "house#7",
+              "from": [
+                44,
+                5,
+                42
+              ],
+              "status": "reachable",
+              "to": [
+                44,
+                5,
+                43
+              ]
+            },
+            {
+              "element": "house#8",
+              "from": [
+                56,
+                5,
+                42
+              ],
+              "status": "reachable",
+              "to": [
+                56,
+                5,
+                43
+              ]
+            },
+            {
+              "element": "house#8",
+              "from": [
+                56,
+                5,
+                43
+              ],
+              "status": "reachable",
+              "to": [
+                53,
+                9,
+                48
+              ]
+            },
+            {
+              "element": "site#1",
+              "from": [
+                4,
+                5,
+                4
+              ],
+              "status": "reachable",
+              "to": [
+                8,
+                5,
+                6
+              ]
+            },
+            {
+              "element": "site#1",
+              "from": [
+                8,
+                5,
+                6
+              ],
+              "status": "reachable",
+              "to": [
+                8,
+                5,
+                10
+              ]
+            },
+            {
+              "element": "site#1",
+              "from": [
+                4,
+                5,
+                4
+              ],
+              "status": "reachable",
+              "to": [
+                20,
+                5,
+                6
+              ]
+            },
+            {
+              "element": "site#1",
+              "from": [
+                20,
+                5,
+                6
+              ],
+              "status": "reachable",
+              "to": [
+                20,
+                5,
+                10
+              ]
+            },
+            {
+              "element": "site#1",
+              "from": [
+                4,
+                5,
+                4
+              ],
+              "status": "reachable",
+              "to": [
+                44,
+                5,
+                6
+              ]
+            },
+            {
+              "element": "site#1",
+              "from": [
+                44,
+                5,
+                6
+              ],
+              "status": "reachable",
+              "to": [
+                44,
+                5,
+                10
+              ]
+            },
+            {
+              "element": "site#1",
+              "from": [
+                4,
+                5,
+                4
+              ],
+              "status": "reachable",
+              "to": [
+                56,
+                5,
+                6
+              ]
+            },
+            {
+              "element": "site#1",
+              "from": [
+                56,
+                5,
+                6
+              ],
+              "status": "reachable",
+              "to": [
+                56,
+                5,
+                10
+              ]
+            },
+            {
+              "element": "site#1",
+              "from": [
+                4,
+                5,
+                4
+              ],
+              "status": "reachable",
+              "to": [
+                8,
+                5,
+                38
+              ]
+            },
+            {
+              "element": "site#1",
+              "from": [
+                8,
+                5,
+                38
+              ],
+              "status": "reachable",
+              "to": [
+                8,
+                5,
+                42
+              ]
+            },
+            {
+              "element": "site#1",
+              "from": [
+                4,
+                5,
+                4
+              ],
+              "status": "reachable",
+              "to": [
+                20,
+                5,
+                38
+              ]
+            },
+            {
+              "element": "site#1",
+              "from": [
+                20,
+                5,
+                38
+              ],
+              "status": "reachable",
+              "to": [
+                20,
+                5,
+                42
+              ]
+            },
+            {
+              "element": "site#1",
+              "from": [
+                4,
+                5,
+                4
+              ],
+              "status": "reachable",
+              "to": [
+                44,
+                5,
+                38
+              ]
+            },
+            {
+              "element": "site#1",
+              "from": [
+                44,
+                5,
+                38
+              ],
+              "status": "reachable",
+              "to": [
+                44,
+                5,
+                42
+              ]
+            },
+            {
+              "element": "site#1",
+              "from": [
+                4,
+                5,
+                4
+              ],
+              "status": "reachable",
+              "to": [
+                56,
+                5,
+                38
+              ]
+            },
+            {
+              "element": "site#1",
+              "from": [
+                56,
+                5,
+                38
+              ],
+              "status": "reachable",
+              "to": [
+                56,
+                5,
+                42
+              ]
+            }
+          ]
+        }
+      },
+      "diagnostics": [
+        {
+          "actual": 0.8947368421052632,
+          "code": "E305",
+          "element": "house#5.facade.north.floor#1",
+          "expected": 0.85,
+          "face": "north",
+          "metric": "facade_mix",
+          "repairPaths": [
+            "config.palette.mix"
+          ],
+          "role": "wall_main",
+          "severity": "warn",
+          "source": "<tmp>/terrain-large-ik9hzs4s/town-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": 0.8947368421052632,
+          "code": "E305",
+          "element": "house#6.facade.north.floor#2",
+          "expected": 0.85,
+          "face": "north",
+          "metric": "facade_mix",
+          "repairPaths": [
+            "config.palette.mix"
+          ],
+          "role": "wall_main",
+          "severity": "warn",
+          "source": "<tmp>/terrain-large-ik9hzs4s/town-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": 0,
+          "code": "support",
+          "detail": null,
+          "element": "site#1",
+          "expected": 0,
+          "metric": "support",
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ik9hzs4s/town-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "house#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            8,
+            5,
+            11
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ik9hzs4s/town-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "house#2",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            20,
+            5,
+            11
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ik9hzs4s/town-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "house#2",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            17,
+            9,
+            16
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ik9hzs4s/town-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "house#3",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            44,
+            5,
+            11
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ik9hzs4s/town-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "house#4",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            56,
+            5,
+            11
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ik9hzs4s/town-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "house#4",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            53,
+            9,
+            16
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ik9hzs4s/town-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "house#5",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            8,
+            5,
+            43
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ik9hzs4s/town-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "house#6",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            20,
+            5,
+            43
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ik9hzs4s/town-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "house#6",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            17,
+            9,
+            48
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ik9hzs4s/town-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "house#7",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            44,
+            5,
+            43
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ik9hzs4s/town-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "house#8",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            56,
+            5,
+            43
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ik9hzs4s/town-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "house#8",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            53,
+            9,
+            48
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ik9hzs4s/town-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "site#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            8,
+            5,
+            6
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ik9hzs4s/town-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "site#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            8,
+            5,
+            10
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ik9hzs4s/town-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "site#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            20,
+            5,
+            6
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ik9hzs4s/town-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "site#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            20,
+            5,
+            10
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ik9hzs4s/town-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "site#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            44,
+            5,
+            6
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ik9hzs4s/town-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "site#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            44,
+            5,
+            10
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ik9hzs4s/town-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "site#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            56,
+            5,
+            6
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ik9hzs4s/town-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "site#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            56,
+            5,
+            10
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ik9hzs4s/town-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "site#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            8,
+            5,
+            38
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ik9hzs4s/town-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "site#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            8,
+            5,
+            42
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ik9hzs4s/town-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "site#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            20,
+            5,
+            38
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ik9hzs4s/town-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "site#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            20,
+            5,
+            42
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ik9hzs4s/town-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "site#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            44,
+            5,
+            38
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ik9hzs4s/town-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "site#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            44,
+            5,
+            42
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ik9hzs4s/town-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "site#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            56,
+            5,
+            38
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ik9hzs4s/town-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "site#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            56,
+            5,
+            42
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-ik9hzs4s/town-medieval-1.21.11-schem.yaml"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "house#1.opening#1.5",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "house#1.opening#1.6",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "house#2.opening#1.5",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "house#2.opening#1.6",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "house#2.opening#2.5",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "house#3.opening#1.5",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "house#3.opening#1.6",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "house#4.opening#1.5",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "house#4.opening#1.6",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "house#4.opening#2.5",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "house#5.opening#1.5",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "house#5.opening#1.6",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "house#6.opening#1.5",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "house#6.opening#1.6",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "house#6.opening#2.5",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "house#7.opening#1.5",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "house#7.opening#1.6",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "house#8.opening#1.5",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "house#8.opening#1.6",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
+        },
+        {
+          "actual": 0,
+          "code": "opening_recess_blocked",
+          "element": "house#8.opening#2.5",
+          "expected": 1,
+          "metric": "opening_recess",
+          "reason": "後退域が構造または通路の予約と重なるため後退量を0にしました",
+          "repairPaths": [
+            "config.decoration.depth"
+          ],
+          "severity": "warn",
+          "source": "config.decoration.depth"
+        }
+      ],
+      "signature": {
+        "placement_sha256": "7a6a994aa5b4da6f2ccaf77a553c36c4ddac7cff221d451a49266c14ef862f1b",
+        "metrics_sha256": "a555ca68bbf78e79fed9d00b4953da2fdbe30c0cc53c51e312a366e7fb73fa1a",
+        "structured_diagnostics_sha256": "8aa404694aa7718123617ac486f43dbe3195d1b79a24a666118a5219c03eaf3c",
+        "scene_json_sha256": "3c9ba8de2ca4a58e15482882b178d67580aa114284945b8a1a31219e24a11fda"
+      },
+      "buildCode": 0,
+      "buildMatches": true,
+      "resume": {
+        "resolve": {
+          "code": 0,
+          "signature": {
+            "placement_sha256": "7a6a994aa5b4da6f2ccaf77a553c36c4ddac7cff221d451a49266c14ef862f1b",
+            "metrics_sha256": "a555ca68bbf78e79fed9d00b4953da2fdbe30c0cc53c51e312a366e7fb73fa1a",
+            "structured_diagnostics_sha256": "8aa404694aa7718123617ac486f43dbe3195d1b79a24a666118a5219c03eaf3c",
+            "scene_json_sha256": "3c9ba8de2ca4a58e15482882b178d67580aa114284945b8a1a31219e24a11fda"
+          },
+          "matches": {
+            "placement_sha256": true,
+            "metrics_sha256": true,
+            "structured_diagnostics_sha256": true,
+            "scene_json_sha256": true
+          }
+        },
+        "site": {
+          "code": 0,
+          "signature": {
+            "placement_sha256": "7a6a994aa5b4da6f2ccaf77a553c36c4ddac7cff221d451a49266c14ef862f1b",
+            "metrics_sha256": "a555ca68bbf78e79fed9d00b4953da2fdbe30c0cc53c51e312a366e7fb73fa1a",
+            "structured_diagnostics_sha256": "8aa404694aa7718123617ac486f43dbe3195d1b79a24a666118a5219c03eaf3c",
+            "scene_json_sha256": "3c9ba8de2ca4a58e15482882b178d67580aa114284945b8a1a31219e24a11fda"
+          },
+          "matches": {
+            "placement_sha256": true,
+            "metrics_sha256": true,
+            "structured_diagnostics_sha256": true,
+            "scene_json_sha256": true
+          }
+        },
+        "massing": {
+          "code": 0,
+          "signature": {
+            "placement_sha256": "7a6a994aa5b4da6f2ccaf77a553c36c4ddac7cff221d451a49266c14ef862f1b",
+            "metrics_sha256": "a555ca68bbf78e79fed9d00b4953da2fdbe30c0cc53c51e312a366e7fb73fa1a",
+            "structured_diagnostics_sha256": "8aa404694aa7718123617ac486f43dbe3195d1b79a24a666118a5219c03eaf3c",
+            "scene_json_sha256": "3c9ba8de2ca4a58e15482882b178d67580aa114284945b8a1a31219e24a11fda"
+          },
+          "matches": {
+            "placement_sha256": true,
+            "metrics_sha256": true,
+            "structured_diagnostics_sha256": true,
+            "scene_json_sha256": true
+          }
+        },
+        "detail": {
+          "code": 0,
+          "signature": {
+            "placement_sha256": "7a6a994aa5b4da6f2ccaf77a553c36c4ddac7cff221d451a49266c14ef862f1b",
+            "metrics_sha256": "a555ca68bbf78e79fed9d00b4953da2fdbe30c0cc53c51e312a366e7fb73fa1a",
+            "structured_diagnostics_sha256": "8aa404694aa7718123617ac486f43dbe3195d1b79a24a666118a5219c03eaf3c",
+            "scene_json_sha256": "3c9ba8de2ca4a58e15482882b178d67580aa114284945b8a1a31219e24a11fda"
+          },
+          "matches": {
+            "placement_sha256": true,
+            "metrics_sha256": true,
+            "structured_diagnostics_sha256": true,
+            "scene_json_sha256": true
+          }
+        },
+        "blueprint": {
+          "code": 0,
+          "signature": {
+            "placement_sha256": "7a6a994aa5b4da6f2ccaf77a553c36c4ddac7cff221d451a49266c14ef862f1b",
+            "metrics_sha256": "a555ca68bbf78e79fed9d00b4953da2fdbe30c0cc53c51e312a366e7fb73fa1a",
+            "structured_diagnostics_sha256": "8aa404694aa7718123617ac486f43dbe3195d1b79a24a666118a5219c03eaf3c",
+            "scene_json_sha256": "3c9ba8de2ca4a58e15482882b178d67580aa114284945b8a1a31219e24a11fda"
+          },
+          "matches": {
+            "placement_sha256": true,
+            "metrics_sha256": true,
+            "structured_diagnostics_sha256": true,
+            "scene_json_sha256": true
+          }
+        }
+      },
+      "edits": {
+        "status": "passed",
+        "code": 0,
+        "notes": [
+          {
+            "id": "issue-263-note",
+            "element": "site#1.road#2",
+            "text": "機能行列の編集経路を確認"
+          }
+        ],
+        "signature": {
+          "placement_sha256": "7a6a994aa5b4da6f2ccaf77a553c36c4ddac7cff221d451a49266c14ef862f1b",
+          "metrics_sha256": "a555ca68bbf78e79fed9d00b4953da2fdbe30c0cc53c51e312a366e7fb73fa1a",
+          "structured_diagnostics_sha256": "8aa404694aa7718123617ac486f43dbe3195d1b79a24a666118a5219c03eaf3c",
+          "scene_json_sha256": "3c9ba8de2ca4a58e15482882b178d67580aa114284945b8a1a31219e24a11fda"
+        },
+        "matches": {
+          "placement_sha256": true,
+          "metrics_sha256": true,
+          "structured_diagnostics_sha256": true,
+          "scene_json_sha256": true
+        }
+      },
+      "inputSha256": "d380b036a29e97b19ddfeea984d7a5d27426b5806d1ef594549d4401a6605dc3"
+    },
+    {
+      "case": "cave",
+      "scale": "medium",
+      "seed": 42,
+      "version": "1.21.11",
+      "format": "schem",
+      "frozenInputSha256": "90fa89b8321ad4c32e29121a6b49ea91246f7d94ab3da71fd128b386a57c5965",
+      "actualInputSha256": "32383b1c76af8329b90fbc8a706847a20bb2fa5f15c8e0f6e6c3e3fe13bd7eb3",
+      "implementation": {
+        "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608",
+        "engine": "0.1.0",
+        "engineHash": "307295ae42febcd04f563fc076bc9b53708eb38b17d5cc6e1ceee095c41214d6",
+        "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "planVersion": 2
+      },
+      "composedConfigSha256": "dcd65d36868faa857d49d79290eba05f2bb4cdcac2777c415621c8b36daa45d7",
+      "provenance": {
+        "commit": "746c51736c49c09cd0f0643c0f44f5efd78476d7",
+        "engine_sha256": "d76227340cb4453fe986b02554a14edf60e5207f9bca0e5bb108feecc685ba66",
+        "lock_sha256": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+        "default_config_sha256": "17f5c240ead94ebb8c410f045b3344f07d07ec9c29a8a769645f853b5ea28d64"
+      },
+      "runtime": {
+        "python": "3.12.15",
+        "implementation": "CPython",
+        "dependencies": {
+          "numpy": "2.5.4",
+          "pyfastnoiselite": "0.0.7",
+          "nbtlib": "2.0.4",
+          "jsonschema": "4.26.0",
+          "PyYAML": "6.0.3"
+        }
+      },
+      "runnerSha256": "b0c9aaa5c3efbe7b45ff19b039feb283dc14e8023191ad8d0276633751ba1e5f",
+      "evaluationScriptsSha256": {
+        "evaluate_terrain_large.py": "b0c9aaa5c3efbe7b45ff19b039feb283dc14e8023191ad8d0276633751ba1e5f",
+        "evaluate_make_performance.py": "e85c9a327134a2085c22174e52cd872db4aaa10fbb9b410f779033df97e69dd1",
+        "evaluate_structure.py": "2f50fcf13604f4d9e5c8dbce4b68a8a4a6b402fd64e5e098370df346495d33e8",
+        "benchmark.py": "6334d4f03e8ed84621cbbe458fff92cd2ab76b20bf28219805a80fe404ba1b90"
+      },
+      "colorpack": null,
+      "makeCode": 0,
+      "runStatus": "passed",
+      "metrics": {
+        "beam_continuity": {
+          "denominator": 0,
+          "numerator": 0,
+          "reason": "計画梁なし",
+          "status": "n/a",
+          "value": null
+        },
+        "column_continuity": {
+          "denominator": 2,
+          "numerator": 2,
+          "value": 1.0
+        },
+        "decoration_density": {
+          "reason": "棟なしの敷地計画",
+          "status": "n/a",
+          "value": null
+        },
+        "facade_mix": {
+          "reason": "棟なしの敷地計画",
+          "status": "n/a",
+          "value": null
+        },
+        "facade_surface_missing": {
+          "reason": "棟なしの敷地計画",
+          "status": "n/a",
+          "value": null
+        },
+        "flat_ratio": {
+          "reason": "棟なしの敷地計画",
+          "status": "n/a",
+          "value": null
+        },
+        "palette_relation": {
+          "reason": "対象建物なし",
+          "status": "n/a",
+          "value": null
+        },
+        "support": {
+          "value": 0
+        },
+        "walkability": {
+          "routes": [
+            {
+              "from": [
+                0,
+                9,
+                31
+              ],
+              "status": "reachable",
+              "to": [
+                31,
+                9,
+                31
+              ]
+            },
+            {
+              "from": [
+                0,
+                8,
+                24
+              ],
+              "status": "reachable",
+              "to": [
+                0,
+                9,
+                31
+              ]
+            }
+          ]
+        }
+      },
+      "diagnostics": [
+        {
+          "actual": 0,
+          "code": "support",
+          "detail": null,
+          "element": "site#1",
+          "expected": 0,
+          "metric": "support",
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-r9tf2uvk/cave-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "site#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            31,
+            9,
+            31
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-r9tf2uvk/cave-1.21.11-schem.yaml"
+        },
+        {
+          "actual": "reachable",
+          "code": "walkability",
+          "detail": "",
+          "element": "site#1",
+          "expected": "reachable",
+          "metric": "walkability",
+          "position": [
+            0,
+            9,
+            31
+          ],
+          "repairPaths": [],
+          "severity": "ok",
+          "source": "<tmp>/terrain-large-r9tf2uvk/cave-1.21.11-schem.yaml"
+        }
+      ],
+      "signature": {
+        "placement_sha256": "5c7ea73027e272c81e0e366c3fc9da8c24e80c3e536b1337a34499c87e183750",
+        "metrics_sha256": "dc0408d7550866a59aaa8d64e8c27c649ebae9466be6c5d5388808fdfa98d5a9",
+        "structured_diagnostics_sha256": "3f38cc5c36415b2d628fb01014f4afa4b83fc57a251d54fa25958e26efd122ce",
+        "scene_json_sha256": "7378cc1390f95477c153004fad99126630b8c9ee7be78ed3b75cbd42b7fa6ce7"
+      },
+      "buildCode": 0,
+      "buildMatches": true,
+      "resume": {
+        "resolve": {
+          "code": 0,
+          "signature": {
+            "placement_sha256": "5c7ea73027e272c81e0e366c3fc9da8c24e80c3e536b1337a34499c87e183750",
+            "metrics_sha256": "dc0408d7550866a59aaa8d64e8c27c649ebae9466be6c5d5388808fdfa98d5a9",
+            "structured_diagnostics_sha256": "3f38cc5c36415b2d628fb01014f4afa4b83fc57a251d54fa25958e26efd122ce",
+            "scene_json_sha256": "7378cc1390f95477c153004fad99126630b8c9ee7be78ed3b75cbd42b7fa6ce7"
+          },
+          "matches": {
+            "placement_sha256": true,
+            "metrics_sha256": true,
+            "structured_diagnostics_sha256": true,
+            "scene_json_sha256": true
+          }
+        },
+        "site": {
+          "code": 0,
+          "signature": {
+            "placement_sha256": "5c7ea73027e272c81e0e366c3fc9da8c24e80c3e536b1337a34499c87e183750",
+            "metrics_sha256": "dc0408d7550866a59aaa8d64e8c27c649ebae9466be6c5d5388808fdfa98d5a9",
+            "structured_diagnostics_sha256": "3f38cc5c36415b2d628fb01014f4afa4b83fc57a251d54fa25958e26efd122ce",
+            "scene_json_sha256": "7378cc1390f95477c153004fad99126630b8c9ee7be78ed3b75cbd42b7fa6ce7"
+          },
+          "matches": {
+            "placement_sha256": true,
+            "metrics_sha256": true,
+            "structured_diagnostics_sha256": true,
+            "scene_json_sha256": true
+          }
+        },
+        "massing": {
+          "code": 0,
+          "signature": {
+            "placement_sha256": "5c7ea73027e272c81e0e366c3fc9da8c24e80c3e536b1337a34499c87e183750",
+            "metrics_sha256": "dc0408d7550866a59aaa8d64e8c27c649ebae9466be6c5d5388808fdfa98d5a9",
+            "structured_diagnostics_sha256": "3f38cc5c36415b2d628fb01014f4afa4b83fc57a251d54fa25958e26efd122ce",
+            "scene_json_sha256": "7378cc1390f95477c153004fad99126630b8c9ee7be78ed3b75cbd42b7fa6ce7"
+          },
+          "matches": {
+            "placement_sha256": true,
+            "metrics_sha256": true,
+            "structured_diagnostics_sha256": true,
+            "scene_json_sha256": true
+          }
+        },
+        "detail": {
+          "code": 0,
+          "signature": {
+            "placement_sha256": "5c7ea73027e272c81e0e366c3fc9da8c24e80c3e536b1337a34499c87e183750",
+            "metrics_sha256": "dc0408d7550866a59aaa8d64e8c27c649ebae9466be6c5d5388808fdfa98d5a9",
+            "structured_diagnostics_sha256": "3f38cc5c36415b2d628fb01014f4afa4b83fc57a251d54fa25958e26efd122ce",
+            "scene_json_sha256": "7378cc1390f95477c153004fad99126630b8c9ee7be78ed3b75cbd42b7fa6ce7"
+          },
+          "matches": {
+            "placement_sha256": true,
+            "metrics_sha256": true,
+            "structured_diagnostics_sha256": true,
+            "scene_json_sha256": true
+          }
+        },
+        "blueprint": {
+          "code": 0,
+          "signature": {
+            "placement_sha256": "5c7ea73027e272c81e0e366c3fc9da8c24e80c3e536b1337a34499c87e183750",
+            "metrics_sha256": "dc0408d7550866a59aaa8d64e8c27c649ebae9466be6c5d5388808fdfa98d5a9",
+            "structured_diagnostics_sha256": "3f38cc5c36415b2d628fb01014f4afa4b83fc57a251d54fa25958e26efd122ce",
+            "scene_json_sha256": "7378cc1390f95477c153004fad99126630b8c9ee7be78ed3b75cbd42b7fa6ce7"
+          },
+          "matches": {
+            "placement_sha256": true,
+            "metrics_sha256": true,
+            "structured_diagnostics_sha256": true,
+            "scene_json_sha256": true
+          }
+        }
+      },
+      "edits": {
+        "status": "passed",
+        "code": 0,
+        "notes": [
+          {
+            "id": "issue-263-note",
+            "element": "site#1.entrance#1",
+            "text": "機能行列の編集経路を確認"
+          }
+        ],
+        "signature": {
+          "placement_sha256": "5c7ea73027e272c81e0e366c3fc9da8c24e80c3e536b1337a34499c87e183750",
+          "metrics_sha256": "dc0408d7550866a59aaa8d64e8c27c649ebae9466be6c5d5388808fdfa98d5a9",
+          "structured_diagnostics_sha256": "3f38cc5c36415b2d628fb01014f4afa4b83fc57a251d54fa25958e26efd122ce",
+          "scene_json_sha256": "7378cc1390f95477c153004fad99126630b8c9ee7be78ed3b75cbd42b7fa6ce7"
+        },
+        "matches": {
+          "placement_sha256": true,
+          "metrics_sha256": true,
+          "structured_diagnostics_sha256": true,
+          "scene_json_sha256": true
+        },
+        "generationConflict": {
+          "status": "rejected",
+          "case": "changed-input",
+          "errorType": "BlueprintError",
+          "reason": "edits: scene生成後に入力が変更されています"
+        }
+      },
+      "inputSha256": "90fa89b8321ad4c32e29121a6b49ea91246f7d94ab3da71fd128b386a57c5965"
+    }
+  ],
+  "completionPassed": false,
+  "reuseAudit": {
+    "implementation": {
+      "engine": "0.1.0",
+      "planVersion": 2,
+      "engineHash": "307295ae42febcd04f563fc076bc9b53708eb38b17d5cc6e1ceee095c41214d6",
+      "lockHash": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+      "dataHash": "d4d56348ff3baf14d73b6006d826d33a6630d6ccc0a604f0f524ae1dd1ed3608"
+    },
+    "sources": [
+      {
+        "path": "evaluation/records/terrain-large.json",
+        "provenance": {
+          "commit": "746c51736c49c09cd0f0643c0f44f5efd78476d7",
+          "engine_sha256": "d76227340cb4453fe986b02554a14edf60e5207f9bca0e5bb108feecc685ba66",
+          "lock_sha256": "a183cd7b07f641365f8c34b34a2e9cc8b6d938c4ce19cd8c2cdd1228dc7236f3",
+          "default_config_sha256": "17f5c240ead94ebb8c410f045b3344f07d07ec9c29a8a769645f853b5ea28d64"
+        },
+        "runnerSha256": "0459898bfa4e901aa131c8b438054edef245ecafc8cc889e81d5a2ce98880872",
+        "runtime": {
+          "python": "3.12.15",
+          "implementation": "CPython",
+          "dependencies": {
+            "numpy": "2.5.4",
+            "pyfastnoiselite": "0.0.7",
+            "nbtlib": "2.0.4",
+            "jsonschema": "4.26.0",
+            "PyYAML": "6.0.3"
+          }
+        },
+        "rows": 5
+      },
+      {
+        "path": "evaluation/records/castle-240.json",
+        "provenance": null,
+        "runnerSha256": null,
+        "runtime": null,
+        "rows": 15
+      },
+      {
+        "path": "evaluation/records/town-241.json",
+        "provenance": null,
+        "runnerSha256": null,
+        "runtime": null,
+        "rows": 13
+      },
+      {
+        "path": "evaluation/records/underground-242.json",
+        "provenance": null,
+        "runnerSha256": null,
+        "runtime": null,
+        "rows": 20
+      }
+    ],
+    "reusedCount": 0,
+    "reused": [],
+    "matrixCount": 576,
+    "selectedCount": 1,
+    "remainingCount": 1
+  },
+  "recordPath": "evaluation/records/terrain-large.json",
+  "runtime": {
+    "python": "3.12.15",
+    "implementation": "CPython",
+    "dependencies": {
+      "numpy": "2.5.4",
+      "pyfastnoiselite": "0.0.7",
+      "nbtlib": "2.0.4",
+      "jsonschema": "4.26.0",
+      "PyYAML": "6.0.3"
+    }
+  },
+  "evaluationScriptsSha256": {
+    "evaluate_terrain_large.py": "b0c9aaa5c3efbe7b45ff19b039feb283dc14e8023191ad8d0276633751ba1e5f",
+    "evaluate_make_performance.py": "e85c9a327134a2085c22174e52cd872db4aaa10fbb9b410f779033df97e69dd1",
+    "evaluate_structure.py": "2f50fcf13604f4d9e5c8dbce4b68a8a4a6b402fd64e5e098370df346495d33e8",
+    "benchmark.py": "6334d4f03e8ed84621cbbe458fff92cd2ab76b20bf28219805a80fe404ba1b90"
+  }
+}
