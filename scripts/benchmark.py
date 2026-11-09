@@ -518,6 +518,8 @@ def _record_text(value: str) -> str:
             replacement = "<stdlib>/" + normalized[lowered.index("/lib/") + len("/lib/"):]
         elif re.match(r"(?i)^[a-z]:/users/[^/]+/", normalized):
             replacement = "<home>/" + normalized.split("/", 3)[3]
+        elif re.match(r"^/(?:tmp|var/folders)/", normalized):
+            replacement = "<tmp>/" + normalized.split("/", 2)[2]
         elif re.match(r"(?i)^/(?:users|home)/[^/]+/", normalized):
             replacement = "<home>/" + normalized.split("/", 3)[3]
         else:
@@ -525,7 +527,7 @@ def _record_text(value: str) -> str:
         return replacement + suffix
 
     value = re.sub(
-        r"(?i)(?<![\w])(?:[a-z]:[\\/][^\s\"'<>|,;)]+|/(?:Users|home)/[^\s\"'<>|,;)]+)",
+        r"(?i)(?<![\w])(?:[a-z]:[\\/][^\s\"'<>|,;)]+|/(?:Users|home|tmp|var/folders)/[^\s\"'<>|,;)]+)",
         replace_path,
         value,
     )

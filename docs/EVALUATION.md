@@ -381,3 +381,19 @@ WIP `227a65b` を保存してから `origin/develop` の `f4a8ff2` をmergeし�
 #230の配色パック接続・関係/accent集計と、#235の地形場の追加試験も含めて成功した。
 ruff、strict検証（22ファイル、エラー・警告0）、wheelビルド、git diff --checkも成功した。
 WIPとmergeの2コミットは書き換えず、追加差分は再検証スクリプト・記録・本文書だけとする。
+
+## H 地形・大規模の機能行列（Issue #263）
+
+[`evaluate_terrain_large.py`](../scripts/evaluate_terrain_large.py) は `large-scale.json` の固定入力12件から、
+medium/huge・seed 42/73/101・4つのMinecraft版・schem/litematicの576条件を作る。
+固定BuildSpec hash・合成後の設定hash・実行器と共通評価スクリプトの指紋・実行環境が一致する成功記録だけを再利用する。各結果に生成環境、配色情報、
+make/buildの配置hash、指標・診断、5段階resumeとeditsの一致を保存する。
+配色パックは `--colorpack <path> --record <path>` で配色別の記録先を指定して差し替え、
+`--case <case-id>` と `--limit <件数>` で条件を絞れる。
+既定の並列数は4で、`--workers 1..4` で調整する。各条件の完了時に記録を原子的に更新し、
+失敗時は生成途中のファイルを匿名化して `evaluation/artifacts/issue-263/failures/`
+へ保全する。結果は [`terrain-large.json`](../evaluation/records/terrain-large.json) から再開できる。
+
+この行列は配色を除く生成・出力・再開の接続確認であり、NFR2/3の性能判定や確定配色の最終判定は行わない。
+#263では地形・城郭・街並み・洞窟・地下都市の少数条件を実行する。全576条件の実行は#266で行う。
+#244ではG確定配色で再実行し、基準端末でNFR2/3を判定する。
