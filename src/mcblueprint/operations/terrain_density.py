@@ -137,6 +137,10 @@ class TerrainDensityOperation(Operation):
                     continue
                 if tops[z - expanded.min.z, x - expanded.min.x] != column.top:
                     continue
+                base = Vec3(x, column.top, z)
+                if (self.plan.arch is not None
+                        and self.plan.sample(AABB(base, base)).support.item()):
+                    continue
                 if column.vegetation == "grass":
                     canopy = AABB(Vec3(x, column.top + 1, z), Vec3(x, column.top + 1, z))
                 else:

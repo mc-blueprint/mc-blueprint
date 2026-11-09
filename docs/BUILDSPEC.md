@@ -20,8 +20,8 @@ scaleの外形上限はtiny `[16,16,16]`、small `[32,32,32]`、medium `[64,48,6
 
 BuildSpecの`materials`は材質名（`stone`）、固定ブロックID（`minecraft:stone`）、または`{color: [L,a,b], material: ...}`です。object形式は`color`・`material`の少なくとも一方を指定します。色だけなら様式の当該役割の材質候補から選びます。固定IDは選び直さず、必要な別形状だけ同じfamilyから解決し、混色率を0にします。必要形状がなければエラーです。Lは0〜1、a/bは−0.4〜0.4です。YAML重複キー、未知の設定、型・範囲違反は読み込み時にエラーになります。材質・配色解決の詳細は [Materialize](OPERATIONS.md#materialize-前の役割入力) を参照してください。
 
-生成はhouse・tower・castle・town/city・cave・underground_cityに対応します。
-terrainはResolve・`spec-template`で扱いますが、planner未実装のためSite/Massing段で拒否します。
+生成はhouse・tower・castle・town/city・terrain・cave・underground_cityに対応します。
+terrain単独の生成は [地形](TERRAIN.md#地形単独の生成) を参照してください。
 指定数を黙って減らしたり、空計画を成功にしません。
 
 | archetype | features（括弧内は既定値） |
@@ -39,7 +39,8 @@ size だけを指定した場合は small の既定数を使います。city は
 castle・town/cityは生成地形にも対応します（[城郭](CASTLE.md)・[街並み](TOWN.md)）。
 cave・underground_cityはnone/flat/caveから主空洞と地下床を計画します
 （[地下の生成](UNDERGROUND.md)）。
-他のarchetypeの地形生成はSite段で未対応です。
+terrainはnone（flat扱い）/flat/hill/mountain/plateau/valley/islandを生成します。
+terrain単独の既存地形ファイル編集とelementsによる地形パラメータ編集は対象外です。
 furnished内装はDetail段で未対応として拒否します。
 
 ## Resolve API
