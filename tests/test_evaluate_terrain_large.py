@@ -6,6 +6,7 @@ import hashlib
 import json
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -254,7 +255,7 @@ def test_make_record_supports_pack_specific_external_destination(tmp_path: Path)
 
 
 def test_record_and_failure_artifacts_anonymize_user_paths(tmp_path: Path) -> None:
-    absolute = str(Path.home() / "AppData/Local/Temp/issue-263/spec.yaml")
+    absolute = str(Path(tempfile.gettempdir()) / "issue-263/spec.yaml")
     payload = {"diagnostics": [{"source": absolute, "detail": f"failed: {absolute}"}]}
     record_path = tmp_path / "record.json"
     runner.write_json(record_path, payload)
