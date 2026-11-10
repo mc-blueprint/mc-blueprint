@@ -406,6 +406,7 @@ WIPとmergeの2コミットは書き換えず、追加差分は再検証スク�
 
 [`evaluate_terrain_large.py`](../scripts/evaluate_terrain_large.py) は `large-scale.json` の固定入力12件から、
 medium/huge・seed 42/73/101・4つのMinecraft版・schem/litematicの576条件を作る。
+今回の記録の `planSha256` はWindows checkout時のCRLF bytesを対象とする。改行コードに依存するhashの扱いは#274で整理する。
 固定BuildSpec hash・合成後の設定hash・実行器と共通評価スクリプトの指紋・実行環境が一致する成功記録だけを再利用する。各結果に生成環境、配色情報、
 make/buildの配置hash、指標・診断、5段階resumeとeditsの一致を保存する。
 配色パックは `--colorpack <path> --record <path>` で配色別の記録先を指定して差し替え、
